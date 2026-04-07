@@ -102,38 +102,39 @@ function mapRolToKey(nombreRol: string | undefined): Role | null {
 }
 ```
 
-### 3.2 En Server Components — leer rol desde las cookies
+### 3.2 En Server Components — leer rol de forma segura
+
+> ⚠️ **NUNCA usar `getSession()` en Server Components.** Lee directo de la cookie sin verificar con Supabase Auth — es inseguro. Usar siempre `getUser()`.
 
 ```typescript
-// En cualquier page.tsx (Server Component)
+// ✅ CORRECTO en Server Components (page.tsx)
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export default async function AlgunaPage() {
-  const supabase = createClient()
-  const { data: { session } } = await supabase.auth.getSession()
+  const supabase = await createClient()
+  const { data: { user }, error } = await supabase.auth.getUser()
 
-  if (!session) redirect('/login')
+  if (!user || error) redirect('/login')
 
   // El rol viene del JWT — sin query adicional a la BD
-  const rawRol = session.user.app_metadata?.rol as string
-  const rol = mapRolToKey(rawRol) // 'admin' | 'docente' | 'estudiante' | 'padre'
+  const rol = mapRolToKey(
+    user.app_metadata?.rol as string | undefined,
+    user.user_metadata?.idRol as number | undefined
+  )
 
   // Guard de servidor
-  if (rol !== 'admin') redirect('/dashboard')
+  if (rol !== 'admin') redirect('/general')
 
   // ...
 }
+```
 
-function mapRolToKey(nombreRol: string): 'admin' | 'docente' | 'estudiante' | 'padre' {
-  const map: Record<string, string> = {
-    'Administrador': 'admin',
-    'Profesor':      'docente',
-    'Estudiante':    'estudiante',
-    'Padre':         'padre',
-  }
-  return (map[nombreRol] ?? 'padre') as any
-}
+```typescript
+// ✅ CORRECTO en Client Components / Hooks (browser)
+// getSession() sí es válido en el cliente porque el browser gestiona su propia sesión
+const { data: { session } } = await supabase.auth.getSession()
+const rol = mapRolToKey(session?.user?.app_metadata?.rol)
 ```
 
 ---
@@ -318,15 +319,15 @@ export function Sidebar() {
 ```typescript
 // Patrón estándar para páginas con guard de rol
 export default async function UsuariosPage() {
-  const supabase = createClient()
-  const { data: { session } } = await supabase.auth.getSession()
+  const supabase = await createClient()
+  const { data: { user }, error } = await supabase.auth.getUser()
 
-  if (!session) redirect('/login')
+  if (!user || error) redirect('/login')
 
-  const rol = mapRolToKey(session.user.app_metadata?.rol)
+  const rol = mapRolToKey(user.app_metadata?.rol)
 
   // Redirige si el rol no tiene acceso — antes de cualquier query
-  if (rol !== 'admin') redirect('/dashboard')
+  if (rol !== 'admin') redirect('/general')
 
   const users = await getUsers()
   return <UserTable initialData={users} />
@@ -336,11 +337,11 @@ export default async function UsuariosPage() {
 ```typescript
 // Página con contenido diferente por rol (sin redirect)
 export default async function QRPage() {
-  const supabase = createClient()
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) redirect('/login')
+  const supabase = await createClient()
+  const { data: { user }, error } = await supabase.auth.getUser()
+  if (!user || error) redirect('/login')
 
-  const rol = mapRolToKey(session.user.app_metadata?.rol)
+  const rol = mapRolToKey(user.app_metadata?.rol)
 
   if (rol === 'admin') {
     const qrList = await getQRsByAdmin()
@@ -359,7 +360,7 @@ export default async function QRPage() {
   }
 
   // Docente y Padre no tienen acceso a /qr
-  redirect('/dashboard')
+  redirect('/general')
 }
 ```
 

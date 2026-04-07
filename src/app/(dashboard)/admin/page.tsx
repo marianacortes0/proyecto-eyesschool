@@ -5,13 +5,13 @@ import AdminDashboardClient from './AdminDashboardClient'
 
 export default async function AdminPage() {
   const supabase = await createClient()
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { user }, error } = await supabase.auth.getUser()
 
-  if (!session) redirect('/login')
+  if (!user || error) redirect('/login')
 
   const role = mapRolToKey(
-    session.user.app_metadata?.rol as string | undefined,
-    session.user.user_metadata?.idRol as number | undefined
+    user.app_metadata?.rol as string | undefined,
+    user.user_metadata?.idRol as number | undefined
   )
 
   if (role !== 'admin') redirect('/login')

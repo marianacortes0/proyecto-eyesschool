@@ -61,7 +61,7 @@ export function RegisterForm() {
             required
             className="block w-full px-3 py-2 bg-slate-50/50 dark:bg-zinc-900/50 border border-slate-200 dark:border-zinc-800 rounded-xl text-[11px] outline-none transition-all cursor-pointer"
           >
-            <option value="1">Admin</option>
+            <option value="1">Administrador</option>
             <option value="2">Profesor</option>
             <option value="3">Estudiante</option>
             <option value="4">Padre</option>
