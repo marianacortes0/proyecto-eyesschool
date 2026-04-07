@@ -32,7 +32,7 @@ export async function login(prevState: any, formData: FormData) {
 
   if (userError || !userData) {
     console.error("Error obteniendo idRol:", userError)
-    redirect('/dashboard')
+    redirect('/admin')
   }
 
   // 3. Redirección basada en idRol
