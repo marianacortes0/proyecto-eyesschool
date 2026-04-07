@@ -23,6 +23,17 @@ export async function login(prevState: any, formData: FormData) {
     return { error: authError?.message ?? 'Credenciales inválidas, intenta nuevamente.' }
   }
 
+  // 2. Consultar la tabla "usuario" usando el email
+  const { data: userData, error: userError } = await supabase
+    .from('usuario')
+    .select('idRol')
+    .eq('correo', email)
+    .single()
+
+  if (userError || !userData) {
+    console.error("Error obteniendo idRol:", userError)
+    redirect('/admin')
+  }
   // 2. Leer idRol directo del JWT — ya fue guardado en user_metadata al registrarse
   const idRol = authData.user.user_metadata?.idRol as number | undefined
 
