@@ -1,26 +1,20 @@
-"use client";
+import { createClient } from '@/services/supabase/server'
+import { redirect } from 'next/navigation'
+import { mapRolToKey } from '@/lib/utils/permissions'
+import AdminDashboardClient from './AdminDashboardClient'
 
-import { useDashboard } from "../../../hooks/useDashboard";
-import { StatsCard } from "../../../components/dashboard/StastCard";
-import { DashboardCharts } from "../../../components/dashboard/DashboardCharts";
+export default async function AdminPage() {
+  const supabase = await createClient()
+  const { data: { session } } = await supabase.auth.getSession()
 
-export default function AdminDashboard() {
-  const { stats, charts, loading } = useDashboard();
+  if (!session) redirect('/login')
 
-  if (loading) return <p>Cargando...</p>;
+  const role = mapRolToKey(
+    session.user.app_metadata?.rol as string | undefined,
+    session.user.user_metadata?.idRol as number | undefined
+  )
 
-  return (
-    <div className="p-6 space-y-6">
-      {/* Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <StatsCard title="Promedio General" value={stats.promedio} />
-        <StatsCard title="Aprobación" value={`${stats.aprobacion}%`} />
-        <StatsCard title="Estudiantes Activos" value={stats.estudiantes} />
-        <StatsCard title="Asistencia Promedio" value={`${stats.asistencia}%`} />
-      </div>
+  if (role !== 'admin') redirect('/login')
 
-      {/* Gráficas */}
-      <DashboardCharts data={charts} />
-    </div>
-  );
+  return <AdminDashboardClient />
 }
