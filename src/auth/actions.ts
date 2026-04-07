@@ -23,25 +23,37 @@ export async function login(prevState: any, formData: FormData) {
     return { error: authError?.message ?? 'Credenciales inválidas, intenta nuevamente.' }
   }
 
-  // 2. Consultar la tabla "usuario" usando el email
-  const { data: userData, error: userError } = await supabase
-    .from('usuario')
-    .select('idRol')
-    .eq('correo', email)
-    .single()
+  // 2. Intentar leer idRol directo del JWT
+  let idRol = authData.user.user_metadata?.idRol as number | undefined
 
-  if (userError || !userData) {
-    console.error("Error obteniendo idRol:", userError)
-    redirect('/admin')
-  }
-  // 2. Leer idRol directo del JWT — ya fue guardado en user_metadata al registrarse
-  const idRol = authData.user.user_metadata?.idRol as number | undefined
+  // Si no está en JWT, buscar en base de datos de forma segura
+  if (!idRol) {
+    const { data: userData, error: userError } = await supabase
+      .from('usuario')
+      .select('idRol')
+      .eq('correo', email)
+      .single()
 
-  // 3. Redirección basada en idRol: admin → /admin, resto → /general
-  if (idRol === 1) {
-    redirect('/admin')
+    if (userError || !userData) {
+      console.error("Error obteniendo idRol:", userError)
+      redirect('/admin')
+    }
+    idRol = userData.idRol
   }
-  redirect('/general')
+
+  // 3. Redirección basada en idRol
+  switch (idRol) {
+    case 1:
+      redirect('/admin')
+    case 2:
+      redirect('/teacher')
+    case 3:
+      redirect('/general')
+    case 4:
+      redirect('/parents')
+    default:
+      redirect('/dashboard')
+  }
 }
 
 export async function forgotPassword(prevState: any, formData: FormData) {
