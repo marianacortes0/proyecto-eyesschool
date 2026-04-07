@@ -3,14 +3,12 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { mapRolToKey, type Role } from '@/lib/utils/permissions'
 
 /** Routes that require authentication */
-const PROTECTED_ROUTES = ['/admin', '/teacher', '/student', '/parents']
+const PROTECTED_ROUTES = ['/admin', '/general']
 
-/** Roles allowed for each protected route */
-const ROUTE_ROLES: Record<string, Role> = {
+/** Roles allowed for each protected route (null = any authenticated role) */
+const ROUTE_ROLES: Record<string, Role | null> = {
   '/admin':   'admin',
-  '/teacher': 'docente',
-  '/student': 'estudiante',
-  '/parents': 'padre',
+  '/general': null, // docente, estudiante, padre
 }
 
 export async function updateSession(request: NextRequest) {
@@ -59,7 +57,8 @@ export async function updateSession(request: NextRequest) {
   const matchedRoute = PROTECTED_ROUTES.find(r => pathname.startsWith(r))
   if (matchedRoute) {
     const requiredRole = ROUTE_ROLES[matchedRoute]
-    if (role !== requiredRole) {
+    // requiredRole === null means any authenticated user is allowed
+    if (requiredRole !== null && role !== requiredRole) {
       // Redirect to the user's own dashboard
       const url = request.nextUrl.clone()
       url.pathname = getRoleDashboard(role)
@@ -71,11 +70,7 @@ export async function updateSession(request: NextRequest) {
 }
 
 function getRoleDashboard(role: Role | null): string {
-  switch (role) {
-    case 'admin':       return '/admin'
-    case 'docente':     return '/teacher'
-    case 'estudiante':  return '/student'
-    case 'padre':       return '/parents'
-    default:            return '/login'
-  }
+  if (role === 'admin') return '/admin'
+  if (role) return '/general'
+  return '/login'
 }

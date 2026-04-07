@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const token_hash = searchParams.get('token_hash')
   const type = searchParams.get('type') as EmailOtpType | null
-  const next = searchParams.get('next') ?? '/pages/login?confirmed=true'
+  const next = searchParams.get('next') ?? '/login?confirmed=true'
 
   if (token_hash && type) {
     const supabase = await createClient()
@@ -25,5 +25,5 @@ export async function GET(request: NextRequest) {
   }
 
   // Redirigir a la página de error si algo falla
-  redirect('/pages/login?error=token_invalido')
+  redirect('/login?error=token_invalido')
 }
