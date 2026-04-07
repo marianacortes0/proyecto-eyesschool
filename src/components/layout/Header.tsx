@@ -83,7 +83,7 @@ export default function Header() {
             </Link>
 
             <a
-              href="/nosotros"
+              href="/home/nosotros"
               onClick={() => setOpen(false)}
               className="hover:text-black dark:hover:text-white transition"
             >
@@ -91,7 +91,7 @@ export default function Header() {
             </a>
 
             <a
-              href="/beneficios"
+              href="/home/beneficios"
               onClick={() => setOpen(false)}
               className="hover:text-black dark:hover:text-white transition"
             >

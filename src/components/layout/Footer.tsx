@@ -43,12 +43,12 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/nosotros" className="hover:text-black dark:hover:text-white transition">
+                <a href="/home/nosotros" className="hover:text-black dark:hover:text-white transition">
                   Nosotros
                 </a>
               </li>
               <li>
-                <a href="/beneficios" className="hover:text-black dark:hover:text-white transition">
+                <a href="/home/beneficios" className="hover:text-black dark:hover:text-white transition">
                   Beneficios
                 </a>
               </li>
@@ -92,7 +92,7 @@ export default function Footer() {
               </li>
 
               <li>
-                <a href="/support" className="hover:text-black dark:hover:text-white transition">
+                <a href="/home/support" className="hover:text-black dark:hover:text-white transition">
                   Soporte
                 </a>
               </li>
