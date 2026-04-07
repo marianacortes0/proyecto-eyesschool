@@ -775,6 +775,7 @@ export type Database = {
       }
       usuario: {
         Row: {
+          auth_id: string | null
           correo: string | null
           direccion: string | null
           estado: boolean
@@ -782,6 +783,7 @@ export type Database = {
           genero: string | null
           idRol: number
           idUsuario: number
+          idUsuario_uuid: string | null
           numeroDocumento: string
           password: string | null
           primerApellido: string
@@ -793,6 +795,7 @@ export type Database = {
           ultimoAcceso: string | null
         }
         Insert: {
+          auth_id?: string | null
           correo?: string | null
           direccion?: string | null
           estado?: boolean
@@ -800,6 +803,7 @@ export type Database = {
           genero?: string | null
           idRol: number
           idUsuario?: number
+          idUsuario_uuid?: string | null
           numeroDocumento: string
           password?: string | null
           primerApellido: string
@@ -811,6 +815,7 @@ export type Database = {
           ultimoAcceso?: string | null
         }
         Update: {
+          auth_id?: string | null
           correo?: string | null
           direccion?: string | null
           estado?: boolean
@@ -818,6 +823,7 @@ export type Database = {
           genero?: string | null
           idRol?: number
           idUsuario?: number
+          idUsuario_uuid?: string | null
           numeroDocumento?: string
           password?: string | null
           primerApellido?: string
@@ -843,8 +849,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      custom_access_token_hook: { Args: { event: Json }; Returns: Json }
       get_current_user_id: { Args: never; Returns: number }
       get_current_user_rol: { Args: never; Returns: number }
+      get_my_idusuario: { Args: never; Returns: number }
+      get_my_rol: { Args: never; Returns: string }
+      get_my_role: { Args: never; Returns: string }
       is_admin: { Args: never; Returns: boolean }
     }
     Enums: {

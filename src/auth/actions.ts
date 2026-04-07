@@ -20,7 +20,7 @@ export async function login(prevState: any, formData: FormData) {
 
   // Revisar si hubo error en las credenciales
   if (authError || !authData.user) {
-    return { error: 'Credenciales inválidas, intenta nuevamente.' }
+    return { error: authError?.message ?? 'Credenciales inválidas, intenta nuevamente.' }
   }
 
   // 2. Consultar la tabla "usuario" usando el email
@@ -34,20 +34,14 @@ export async function login(prevState: any, formData: FormData) {
     console.error("Error obteniendo idRol:", userError)
     redirect('/admin')
   }
+  // 2. Leer idRol directo del JWT — ya fue guardado en user_metadata al registrarse
+  const idRol = authData.user.user_metadata?.idRol as number | undefined
 
-  // 3. Redirección basada en idRol
-  switch (userData.idRol) {
-    case 1:
-      redirect('/admin')
-    case 2:
-      redirect('/teacher')
-    case 3:
-      redirect('/student')
-    case 4:
-      redirect('/parents')
-    default:
-      redirect('/dashboard')
+  // 3. Redirección basada en idRol: admin → /admin, resto → /general
+  if (idRol === 1) {
+    redirect('/admin')
   }
+  redirect('/general')
 }
 
 export async function forgotPassword(prevState: any, formData: FormData) {
@@ -60,7 +54,7 @@ export async function forgotPassword(prevState: any, formData: FormData) {
   const supabase = await createClient()
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/pages/reset-password`,
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`,
   })
 
   if (error) {
@@ -98,6 +92,13 @@ export async function resetPassword(prevState: any, formData: FormData) {
   return { success: 'Contraseña actualizada correctamente. Ahora puedes iniciar sesión.' }
 }
 
+const ROL_TEXT: Record<number, string> = {
+  1: 'Administrador',
+  2: 'Profesor',
+  3: 'Estudiante',
+  4: 'Padre',
+}
+
 export async function register(prevState: any, formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
@@ -111,8 +112,13 @@ export async function register(prevState: any, formData: FormData) {
     return { error: 'Por favor, completa todos los campos' }
   }
 
+  const rolText = ROL_TEXT[roleId]
+  if (!rolText) {
+    return { error: 'Rol inválido.' }
+  }
+
   const supabase = await createClient()
-  
+
   const headersList = await (await import('next/headers')).headers()
   const currentOrigin = headersList.get('origin')
 
@@ -125,7 +131,10 @@ export async function register(prevState: any, formData: FormData) {
       data: {
         primerNombre: firstName,
         primerApellido: lastName,
+        // Almacenar tanto el número (idRol) como el texto (rol) para que el
+        // custom_access_token_hook y mapRolToKey() tengan ambas fuentes
         idRol: roleId,
+        rol: rolText,
         tipoDocumento: docType,
         numeroDocumento: docNumber
       }
@@ -136,17 +145,19 @@ export async function register(prevState: any, formData: FormData) {
     return { error: `Error en el registro: ${authError.message}` }
   }
 
-  // 2. Insertar en la tabla "usuario" manualmente 
+  // 2. Insertar en la tabla "usuario" con auth_id para que el custom_access_token_hook
+  //    pueda relacionar el JWT con el rol del usuario
   const { error: dbError } = await supabase
     .from('usuario')
     .insert({
       correo: email,
-      password: password, 
+      password: password,
       primerNombre: firstName,
       primerApellido: lastName,
       numeroDocumento: docNumber,
       tipoDocumento: docType,
       idRol: roleId,
+      auth_id: authData.user?.id ?? null,
       estado: true
     })
 
