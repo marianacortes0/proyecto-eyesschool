@@ -4,21 +4,27 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useSidebar } from '@/components/layout/SidebarContext';
+import { usePermissions } from '@/hooks/usePermissions';
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
   const { signOut } = useAuth();
   const { isOpen } = useSidebar();
+  const { can } = usePermissions();
 
+  // Opciones de navegación dinámicas, filtradas por los permisos del usuario
   const navItems = [
-    { name: 'Cursos', href: '/admin/cursos' },
-    { name: 'Asistencias', href: '/admin/asistencias' },
-    { name: 'Estadísticas', href: '/admin' },
-    { name: 'Códigos QR', href: '/admin/qr' },
-    { name: 'Alumnos', href: '/admin/alumnos' },
-    { name: 'Profesores', href: '/admin/profesores' },
-    { name: 'Administrativos', href: '/admin/administrativos' },
-  ];
+    { name: 'Dashboard', href: '/admin', show: can('read', 'usuarios') },
+    { name: 'Dashboard', href: '/general', show: !can('read', 'usuarios') },
+    { name: 'Usuarios', href: '/usuarios', show: can('read', 'usuarios') },
+    { name: 'Códigos QR', href: '/qr', show: can('read', 'qr') },
+    { name: 'Escanear QR', href: '/qr/escanear', show: can('create', 'qr:escanear') },
+    { name: 'Asistencia', href: '/asistencia', show: can('read', 'asistencia') },
+    { name: 'Notas', href: '/notas', show: can('read', 'notas') },
+    { name: 'Novedades', href: '/novedades', show: can('read', 'novedades') },
+    { name: 'Horarios', href: '/horarios', show: can('read', 'horarios') },
+    { name: 'Reportes', href: '/reportes', show: can('read', 'reportes') },
+  ].filter(item => item.show);
 
   return (
     <aside 
@@ -37,7 +43,7 @@ export default function DashboardSidebar() {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
             <Link
-              key={item.name}
+              key={item.href}
               href={item.href}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
