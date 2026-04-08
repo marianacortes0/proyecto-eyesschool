@@ -1,8 +1,13 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useDashboard } from '../../../hooks/useDashboard'
 import { StatsCard } from '../../../components/dashboard/StastCard'
-import { DashboardCharts } from '../../../components/dashboard/DashboardCharts'
+
+const DashboardCharts = dynamic(
+  () => import('../../../components/dashboard/DashboardCharts').then((mod) => mod.DashboardCharts),
+  { ssr: false, loading: () => <div className="h-[300px] bg-slate-100 dark:bg-[#1f1f1f] animate-pulse rounded-2xl w-full"></div> }
+)
 
 export default function AdminDashboardClient() {
   const { stats, charts, loading } = useDashboard()

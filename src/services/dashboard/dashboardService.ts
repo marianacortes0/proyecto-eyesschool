@@ -2,14 +2,14 @@ import { createClient } from "../supabase/client";
 
 // PROMEDIO
 export const getPromedioGeneral = async () => {
-  const supabase = createClient(); // 👈 CLAVE
+  const supabase = createClient();
 
   const { data, error } = await supabase
     .from("notas")
     .select("nota");
 
   if (error) throw error;
-  if (!data) return 0;
+  if (!data || data.length === 0) return 0;
 
   const promedio =
     data.reduce((acc: number, curr: any) => acc + curr.nota, 0) / data.length;
@@ -26,7 +26,7 @@ export const getAprobacion = async () => {
     .select("nota");
 
   if (error) throw error;
-  if (!data) return 0;
+  if (!data || data.length === 0) return 0;
 
   const aprobados = data.filter((n: any) => n.nota >= 3);
 
@@ -37,13 +37,15 @@ export const getAprobacion = async () => {
 export const getEstudiantesActivos = async () => {
   const supabase = createClient();
 
+  // El RLS o la falta de un campo count a veces causa problemas si no está soportado así,
+  // pero mantendremos este query porque parece válido para supabase.
   const { count, error } = await supabase
     .from("estudiantes")
     .select("*", { count: "exact", head: true });
 
   if (error) throw error;
 
-  return count;
+  return count ?? 0;
 };
 
 // ASISTENCIA
@@ -55,9 +57,12 @@ export const getAsistenciaPromedio = async () => {
     .select("estado");
 
   if (error) throw error;
-  if (!data) return 0;
+  if (!data || data.length === 0) return 0;
 
-  const asistencias = data.filter((a: any) => a.asistio === true);
+  // Según planeacion, estado in ('Presente', 'Ausente', 'Tarde', 'Excusa', 'Suspensión')
+  const asistencias = data.filter((a: any) => 
+    a.estado === 'Presente' || a.estado === 'Retraso' || a.estado === 'Tarde' || a.estado === 'Excusa'
+  );
 
   return Math.round((asistencias.length / data.length) * 100);
 };
@@ -68,27 +73,28 @@ export const getNotasPorPeriodo = async () => {
 
   const { data, error } = await supabase
     .from("notas")
-    .select("periodo, nota");
+    .select("idPeriodo, nota"); // planeacion dice idPeriodo, no periodo
 
   if (error) throw error;
-  if (!data) return [];
+  if (!data || data.length === 0) return [];
 
   const grouped: any = {};
 
   data.forEach((item: any) => {
-    if (!grouped[item.periodo]) {
-      grouped[item.periodo] = [];
+    const p = item.idPeriodo || '1';
+    if (!grouped[p]) {
+      grouped[p] = [];
     }
-    grouped[item.periodo].push(item.nota);
+    grouped[p].push(item.nota);
   });
 
   return Object.keys(grouped).map(periodo => {
     const notas = grouped[periodo];
     const promedio =
-      notas.reduce((a: number, b: number) => a + b, 0) / notas.length;
+      notas.reduce((a: number, b: number) => a + Number(b), 0) / notas.length;
 
     return {
-      periodo,
+      periodo: `Periodo ${periodo}`,
       promedio: Number(promedio.toFixed(2)),
     };
   });
