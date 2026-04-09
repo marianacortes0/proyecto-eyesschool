@@ -1,3 +1,4 @@
+import { createClient } from "../services/supabase/client";
 import { useEffect, useState } from "react";
 import {
   getPromedioGeneral,
@@ -6,6 +7,7 @@ import {
   getAsistenciaPromedio,
   getNotasPorPeriodo,
 } from "@/services/dashboard/dashboardService";
+
 
 type ChartData = {
   periodo: string;
@@ -24,40 +26,41 @@ export const useDashboard = () => {
 
   const [charts, setCharts] = useState<ChartData[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [
-          promedio,
-          aprobacion,
-          estudiantes,
-          asistencia,
-          chartData,
-        ] = await Promise.all([
-          getPromedioGeneral(),
-          getAprobacion(),
-          getEstudiantesActivos(),
-          getAsistenciaPromedio(),
-          getNotasPorPeriodo(),
-        ]);
+useEffect(() => {
+ 
+  const fetchData = async () => {
+    try {
+      const [
+        promedio,
+        aprobacion,
+        estudiantes,
+        asistencia,
+        chartData,
+      ] = await Promise.all([
+        getPromedioGeneral(),
+        getAprobacion(),
+        getEstudiantesActivos(),
+        getAsistenciaPromedio(),
+        getNotasPorPeriodo(),
+      ]);
 
-        setStats({
-          promedio,
-          aprobacion,
-          estudiantes: estudiantes ?? 0, // 👈 FIX
-          asistencia,
-        });
+      setStats({
+        promedio,
+        aprobacion,
+        estudiantes: estudiantes ?? 0,
+        asistencia,
+      });
 
-        setCharts(chartData);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      setCharts(chartData);
+    } catch (error) {
+      console.error("ERROR DASHBOARD:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchData();
-  }, []);
+  fetchData();
+}, []);
 
   return { stats, charts, loading };
 };
