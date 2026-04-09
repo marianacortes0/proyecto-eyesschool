@@ -37,6 +37,8 @@ export const getAprobacion = async () => {
 export const getEstudiantesActivos = async () => {
   const supabase = createClient();
 
+  // El RLS o la falta de un campo count a veces causa problemas si no está soportado así,
+  // pero mantendremos este query porque parece válido para supabase.
   const { count, error } = await supabase
     .from("estudiantes")
     .select("*", { count: "exact", head: true });
@@ -89,7 +91,7 @@ export const getNotasPorPeriodo = async () => {
     const notas = grouped[Number(periodo)];
 
     const promedio =
-      notas.reduce((a: number, b: number) => a + b, 0) / notas.length;
+      notas.reduce((a: number, b: number) => a + Number(b), 0) / notas.length;
 
     return {
       periodo, // puedes luego mostrar "Periodo 1", etc.
