@@ -20,10 +20,11 @@ export function useAuth() {
 
       if (session) {
         setUser(session.user)
-        const rol = mapRolToKey(
-          session.user.app_metadata?.rol as string | undefined,
-          session.user.user_metadata?.idRol as number | undefined
-        )
+        // Prioridad: app_metadata.rol (hook) → user_metadata.rol (registro) → user_metadata.idRol (fallback)
+        const nombreRol =
+          (session.user.app_metadata?.rol as string | undefined) ??
+          (session.user.user_metadata?.rol as string | undefined)
+        const rol = mapRolToKey(nombreRol, session.user.user_metadata?.idRol as number | undefined)
         setRole(rol)
         setUserId(session.user.id)
       } else {
@@ -39,10 +40,10 @@ export function useAuth() {
 
       if (session) {
         setUser(session.user)
-        const rol = mapRolToKey(
-          session.user.app_metadata?.rol as string | undefined,
-          session.user.user_metadata?.idRol as number | undefined
-        )
+        const nombreRol =
+          (session.user.app_metadata?.rol as string | undefined) ??
+          (session.user.user_metadata?.rol as string | undefined)
+        const rol = mapRolToKey(nombreRol, session.user.user_metadata?.idRol as number | undefined)
         setRole(rol)
         setUserId(session.user.id)
       } else {

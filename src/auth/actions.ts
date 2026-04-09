@@ -2,6 +2,7 @@
 
 import { createClient } from '../services/supabase/server'
 import { redirect } from 'next/navigation'
+import { mapRolToKey } from '@/lib/utils/permissions'
 
 export async function login(prevState: any, formData: FormData) {
   const email = formData.get('email') as string
@@ -12,48 +13,42 @@ export async function login(prevState: any, formData: FormData) {
 
   const supabase = await createClient()
 
-  // 1. Iniciar sesión usando Supabase Auth (verifica contraseñas)
+  // 1. Iniciar sesión — Supabase escribe el JWT en las cookies de la respuesta
   const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
 
-  // Revisar si hubo error en las credenciales
   if (authError || !authData.user) {
     return { error: authError?.message ?? 'Credenciales inválidas, intenta nuevamente.' }
   }
 
-  // 2. Intentar leer idRol directo del JWT
-  let idRol = authData.user.user_metadata?.idRol as number | undefined
+  // 2. Leer rol del JWT:
+  //    - app_metadata.rol  → 'Administrador' | 'Profesor' | ...  (requiere hook de Supabase Auth)
+  //    - user_metadata.rol → igual, guardado al registrarse (fallback sin hook)
+  //    - user_metadata.idRol → número guardado al registrarse   (fallback numérico)
+  const nombreRol =
+    (authData.user.app_metadata?.rol as string | undefined) ??
+    (authData.user.user_metadata?.rol as string | undefined)
 
-  // Si no está en JWT, buscar en base de datos de forma segura
-  if (!idRol) {
-    const { data: userData, error: userError } = await supabase
+  const idRol = authData.user.user_metadata?.idRol as number | undefined
+
+  let role = mapRolToKey(nombreRol, idRol)
+
+  // 3. Si el rol no está en el JWT, buscarlo en la BD como último recurso
+  if (!role) {
+    const { data: userData } = await supabase
       .from('usuario')
       .select('idRol')
       .eq('correo', email)
       .single()
 
-    if (userError || !userData) {
-      console.error("Error obteniendo idRol:", userError)
-      redirect('/admin')
-    }
-    idRol = userData.idRol
+    role = mapRolToKey(undefined, userData?.idRol as number | undefined)
   }
 
-  // 3. Redirección basada en idRol
-  switch (idRol) {
-    case 1:
-      redirect('/admin')
-    case 2:
-      redirect('/teacher')
-    case 3:
-      redirect('/general')
-    case 4:
-      redirect('/parents')
-    default:
-      redirect('/dashboard')
-  }
+  // 4. Redirección basada en rol
+  if (role === 'admin') redirect('/admin')
+  redirect('/general')
 }
 
 export async function forgotPassword(prevState: any, formData: FormData) {

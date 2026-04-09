@@ -9,10 +9,10 @@ export default async function AdminPage() {
 
   if (!user || error) redirect('/login')
 
-  const role = mapRolToKey(
-    user.app_metadata?.rol as string | undefined,
-    user.user_metadata?.idRol as number | undefined
-  )
+  const nombreRol =
+    (user.app_metadata?.rol as string | undefined) ??
+    (user.user_metadata?.rol as string | undefined)
+  const role = mapRolToKey(nombreRol, user.user_metadata?.idRol as number | undefined)
 
   if (role !== 'admin') redirect('/login')
 

@@ -5,9 +5,13 @@ import { mapRolToKey, type Role } from '@/lib/utils/permissions'
 /** Routes that require authentication */
 const PROTECTED_ROUTES = ['/admin', '/general']
 
-/** Roles allowed for each protected route (null = any authenticated role) */
-const ROUTE_ROLES: Record<string, Role | null> = {
-  '/admin':   'admin',
+/**
+ * Roles permitidos por ruta.
+ * - null  → cualquier usuario autenticado puede entrar
+ * - Role[] → solo esos roles (agrega más según necesites)
+ */
+const ROUTE_ROLES: Record<string, Role[] | null> = {
+  '/admin':   ['admin'],
   '/general': null, // docente, estudiante, padre
 }
 
@@ -47,19 +51,18 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // Resolve the user's role from JWT metadata
-  const role = mapRolToKey(
-    user.app_metadata?.rol as string | undefined,
-    user.user_metadata?.idRol as number | undefined
-  )
+  // Resolver rol desde el JWT: app_metadata.rol (hook) → user_metadata.rol (registro) → user_metadata.idRol
+  const nombreRol =
+    (user.app_metadata?.rol as string | undefined) ??
+    (user.user_metadata?.rol as string | undefined)
+  const role = mapRolToKey(nombreRol, user.user_metadata?.idRol as number | undefined)
 
   // Find the base route that matched
   const matchedRoute = PROTECTED_ROUTES.find(r => pathname.startsWith(r))
   if (matchedRoute) {
-    const requiredRole = ROUTE_ROLES[matchedRoute]
-    // requiredRole === null means any authenticated user is allowed
-    if (requiredRole !== null && role !== requiredRole) {
-      // Redirect to the user's own dashboard
+    const allowedRoles = ROUTE_ROLES[matchedRoute]
+    // null = cualquier usuario autenticado puede entrar
+    if (allowedRoles !== null && (!role || !allowedRoles.includes(role))) {
       const url = request.nextUrl.clone()
       url.pathname = getRoleDashboard(role)
       return NextResponse.redirect(url)

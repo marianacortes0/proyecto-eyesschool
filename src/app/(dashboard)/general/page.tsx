@@ -8,10 +8,10 @@ export default async function GeneralDashboardPage() {
 
   if (!user || error) redirect('/login')
 
-  const role = mapRolToKey(
-    user.app_metadata?.rol as string | undefined,
-    user.user_metadata?.idRol as number | undefined
-  )
+  const nombreRol =
+    (user.app_metadata?.rol as string | undefined) ??
+    (user.user_metadata?.rol as string | undefined)
+  const role = mapRolToKey(nombreRol, user.user_metadata?.idRol as number | undefined)
 
   // Admin tiene su propio dashboard
   if (role === 'admin') redirect('/admin')
