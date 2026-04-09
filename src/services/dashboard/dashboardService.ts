@@ -45,7 +45,7 @@ export const getEstudiantesActivos = async () => {
 
   if (error) throw error;
 
-  return count ?? 0;
+  return count ?? 0; //
 };
 
 // ASISTENCIA
@@ -53,15 +53,15 @@ export const getAsistenciaPromedio = async () => {
   const supabase = createClient();
 
   const { data, error } = await supabase
-    .from("Asistencia")
-    .select("estado");
+    .from("Asistencia") //
+    .select("estado"); //
 
   if (error) throw error;
   if (!data || data.length === 0) return 0;
 
-  // Según planeacion, estado in ('Presente', 'Ausente', 'Tarde', 'Excusa', 'Suspensión')
-  const asistencias = data.filter((a: any) => 
-    a.estado === 'Presente' || a.estado === 'Retraso' || a.estado === 'Tarde' || a.estado === 'Excusa'
+  // 🔴 CAMBIO: lógica según tus valores reales
+  const asistencias = data.filter(
+    (a: any) => a.estado === "Presente" || a.estado === "Tarde"
   );
 
   return Math.round((asistencias.length / data.length) * 100);
@@ -73,28 +73,28 @@ export const getNotasPorPeriodo = async () => {
 
   const { data, error } = await supabase
     .from("notas")
-    .select("idPeriodo, nota"); // planeacion dice idPeriodo, no periodo
+    .select("idPeriodo, nota"); //
 
   if (error) throw error;
   if (!data || data.length === 0) return [];
 
-  const grouped: any = {};
+  const grouped: Record<number, number[]> = {}; //
 
   data.forEach((item: any) => {
-    const p = item.idPeriodo || '1';
-    if (!grouped[p]) {
-      grouped[p] = [];
+    if (!grouped[item.idPeriodo]) {
+      grouped[item.idPeriodo] = [];
     }
-    grouped[p].push(item.nota);
+    grouped[item.idPeriodo].push(item.nota);
   });
 
-  return Object.keys(grouped).map(periodo => {
-    const notas = grouped[periodo];
+  return Object.keys(grouped).map((periodo) => {
+    const notas = grouped[Number(periodo)];
+
     const promedio =
       notas.reduce((a: number, b: number) => a + Number(b), 0) / notas.length;
 
     return {
-      periodo: `Periodo ${periodo}`,
+      periodo, // puedes luego mostrar "Periodo 1", etc.
       promedio: Number(promedio.toFixed(2)),
     };
   });
