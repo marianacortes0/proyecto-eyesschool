@@ -2,14 +2,14 @@ import { createClient } from "../supabase/client";
 
 // PROMEDIO
 export const getPromedioGeneral = async () => {
-  const supabase = createClient(); // 👈 CLAVE
+  const supabase = createClient();
 
   const { data, error } = await supabase
     .from("notas")
     .select("nota");
 
   if (error) throw error;
-  if (!data) return 0;
+  if (!data || data.length === 0) return 0;
 
   const promedio =
     data.reduce((acc: number, curr: any) => acc + curr.nota, 0) / data.length;
@@ -26,7 +26,7 @@ export const getAprobacion = async () => {
     .select("nota");
 
   if (error) throw error;
-  if (!data) return 0;
+  if (!data || data.length === 0) return 0;
 
   const aprobados = data.filter((n: any) => n.nota >= 3);
 
@@ -43,7 +43,7 @@ export const getEstudiantesActivos = async () => {
 
   if (error) throw error;
 
-  return count;
+  return count ?? 0; //
 };
 
 // ASISTENCIA
@@ -51,13 +51,16 @@ export const getAsistenciaPromedio = async () => {
   const supabase = createClient();
 
   const { data, error } = await supabase
-    .from("Asistencia")
-    .select("estado");
+    .from("Asistencia") //
+    .select("estado"); //
 
   if (error) throw error;
-  if (!data) return 0;
+  if (!data || data.length === 0) return 0;
 
-  const asistencias = data.filter((a: any) => a.asistio === true);
+  // 🔴 CAMBIO: lógica según tus valores reales
+  const asistencias = data.filter(
+    (a: any) => a.estado === "Presente" || a.estado === "Tarde"
+  );
 
   return Math.round((asistencias.length / data.length) * 100);
 };
@@ -68,27 +71,28 @@ export const getNotasPorPeriodo = async () => {
 
   const { data, error } = await supabase
     .from("notas")
-    .select("periodo, nota");
+    .select("idPeriodo, nota"); //
 
   if (error) throw error;
-  if (!data) return [];
+  if (!data || data.length === 0) return [];
 
-  const grouped: any = {};
+  const grouped: Record<number, number[]> = {}; //
 
   data.forEach((item: any) => {
-    if (!grouped[item.periodo]) {
-      grouped[item.periodo] = [];
+    if (!grouped[item.idPeriodo]) {
+      grouped[item.idPeriodo] = [];
     }
-    grouped[item.periodo].push(item.nota);
+    grouped[item.idPeriodo].push(item.nota);
   });
 
-  return Object.keys(grouped).map(periodo => {
-    const notas = grouped[periodo];
+  return Object.keys(grouped).map((periodo) => {
+    const notas = grouped[Number(periodo)];
+
     const promedio =
       notas.reduce((a: number, b: number) => a + b, 0) / notas.length;
 
     return {
-      periodo,
+      periodo, // puedes luego mostrar "Periodo 1", etc.
       promedio: Number(promedio.toFixed(2)),
     };
   });
