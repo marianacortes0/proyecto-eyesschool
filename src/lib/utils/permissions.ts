@@ -51,6 +51,23 @@ export function can(role: Role, action: Action, resource: Resource): boolean {
   return PERMISSIONS[role]?.[resource]?.includes(action) ?? false
 }
 
+// ── Helpers de alto nivel ────────────────────────────────────────────────────
+
+/** El rol puede leer el recurso */
+export function canRead(role: Role, resource: Resource): boolean {
+  return can(role, 'read', resource)
+}
+
+/** El rol puede crear o editar el recurso */
+export function canWrite(role: Role, resource: Resource): boolean {
+  return can(role, 'create', resource) || can(role, 'update', resource)
+}
+
+/** El rol puede eliminar registros del recurso */
+export function canDelete(role: Role, resource: Resource): boolean {
+  return can(role, 'delete', resource)
+}
+
 /**
  * Maps the Supabase role string or numeric idRol to the internal Role key.
  * Supports:
