@@ -46,11 +46,11 @@ export async function login(prevState: any, formData: FormData) {
     case 1:
       redirect('/admin')
     case 2:
-      redirect('/teacher')
+      redirect('/general')
     case 3:
       redirect('/general')
     case 4:
-      redirect('/parents')
+      redirect('/general')
     default:
       redirect('/dashboard')
   }
