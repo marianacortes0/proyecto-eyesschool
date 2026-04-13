@@ -6,6 +6,7 @@ import {
   getEstudiantesActivos,
   getAsistenciaPromedio,
   getNotasPorPeriodo,
+  getDistribucionUsuarios,
 } from "@/services/dashboard/dashboardService";
 
 
@@ -25,6 +26,7 @@ export const useDashboard = () => {
   });
 
   const [charts, setCharts] = useState<ChartData[]>([]);
+  const [distribucionUsuarios, setDistribucionUsuarios] = useState<{ name: string; value: number }[]>([]);
 
 useEffect(() => {
  
@@ -40,12 +42,14 @@ useEffect(() => {
         estudiantes,
         asistencia,
         chartData,
+        distribucion,
       ] = await Promise.all([
         getPromedioGeneral(),
         getAprobacion(),
         getEstudiantesActivos(),
         getAsistenciaPromedio(),
         getNotasPorPeriodo(),
+        getDistribucionUsuarios(),
       ]);
 
       setStats({
@@ -56,6 +60,7 @@ useEffect(() => {
       });
 
       setCharts(chartData);
+      setDistribucionUsuarios(distribucion);
     } catch (error) {
       console.error("ERROR DASHBOARD:", error);
     } finally {
@@ -66,5 +71,5 @@ useEffect(() => {
   fetchData();
 }, []);
 
-  return { stats, charts, loading };
+  return { stats, charts, distribucionUsuarios, loading };
 };

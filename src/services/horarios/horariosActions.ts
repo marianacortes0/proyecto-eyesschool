@@ -8,6 +8,7 @@ import type {
   Especializacion,
   ProfesorOpt,
   AsignacionProfesor,
+  Asignacion,
 } from './horariosService'
 
 // ── Horarios (bypass RLS) ────────────────────────────────────────────────────
@@ -142,5 +143,31 @@ export async function getAsignacionesProfesoresAction(): Promise<AsignacionProfe
     nombreProfesor: row.profesores?.usuario
       ? `${row.profesores.usuario.primerNombre} ${row.profesores.usuario.primerApellido}`
       : `Profesor #${row.idProfesor}`,
+  }))
+}
+
+// ── Asignaciones (bypass RLS) ────────────────────────────────────────────────
+
+export async function getAsignacionesAction(): Promise<Asignacion[]> {
+  const supabase = createAdminClient()
+  const { data, error } = await supabase
+    .from('asignaciones')
+    .select(`
+      *,
+      profesores ( usuario ( primerNombre, primerApellido ) ),
+      cursos ( nombreCurso ),
+      materias ( nombreMateria )
+    `)
+    .order('fechaAsignacion', { ascending: false })
+
+  if (error) throw new Error(error.message)
+
+  return ((data ?? []) as any[]).map(row => ({
+    ...row,
+    nombreProfesor: row.profesores?.usuario
+      ? `${row.profesores.usuario.primerNombre} ${row.profesores.usuario.primerApellido}`
+      : `Profesor #${row.idProfesor}`,
+    nombreCurso: row.cursos?.nombreCurso ?? '',
+    nombreMateria: row.materias?.nombreMateria ?? '',
   }))
 }

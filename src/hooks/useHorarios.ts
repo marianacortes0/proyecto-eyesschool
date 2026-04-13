@@ -15,12 +15,17 @@ import {
   updateEspecializacion,
   deleteEspecializacion,
   asignarProfesorHorario,
+  getAsignaciones,
+  createAsignacion,
+  updateAsignacion,
+  deleteAsignacion,
   type Horario,
   type Curso,
   type Materia,
   type Especializacion,
   type ProfesorOpt,
   type AsignacionProfesor,
+  type Asignacion,
 } from '@/services/horarios/horariosService'
 import {
   getHorariosAction,
@@ -31,6 +36,7 @@ import {
   getEspecializacionesAction,
   getProfesoresAction,
   getAsignacionesProfesoresAction,
+  getAsignacionesAction,
 } from '@/services/horarios/horariosActions'
 
 export type ModalMode = 'create' | 'edit' | null
@@ -44,6 +50,7 @@ export function useHorarios() {
   const [especializaciones, setEspecializaciones] = useState<Especializacion[]>([])
   const [profesores, setProfesores] = useState<ProfesorOpt[]>([])
   const [asignaciones, setAsignaciones] = useState<AsignacionProfesor[]>([])
+  const [asignacionesList, setAsignacionesList] = useState<Asignacion[]>([])
 
   // Modal materias
   const [materiasModalOpen, setMateriasModalOpen] = useState(false)
@@ -56,9 +63,11 @@ export function useHorarios() {
   const [especializacionModalMode, setEspecializacionModalMode] = useState<ModalMode>(null)
   const [selectedEspecializacion, setSelectedEspecializacion] = useState<Especializacion | null>(null)
   const [savingEspecializacion, setSavingEspecializacion] = useState(false)
+
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [savingCurso, setSavingCurso] = useState(false)
+  const [savingAsignacion, setSavingAsignacion] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   // Vista
@@ -74,17 +83,29 @@ export function useHorarios() {
   const [selected, setSelected] = useState<Horario | null>(null)
 
   // Modal cursos
+  const [cursosModalOpen, setCursosModalOpen] = useState(false)
   const [cursoModalMode, setCursoModalMode] = useState<ModalMode>(null)
   const [selectedCurso, setSelectedCurso] = useState<Curso | null>(null)
-  const [cursosModalOpen, setCursosModalOpen] = useState(false)
+
+  // Modal asignaciones
+  const [asignacionesModalOpen, setAsignacionesModalOpen] = useState(false)
+  const [asignacionModalMode, setAsignacionModalMode] = useState<ModalMode>(null)
+  const [selectedAsignacion, setSelectedAsignacion] = useState<Asignacion | null>(null)
 
   const fetchAll = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
-      const [h, c, m, am, ac, profs, asigns, esps] = await Promise.all([
-        getHorariosAction(), getCursosAction(), getMateriasAction(), getAllMateriasAction(), getAllCursosAction(),
-        getProfesoresAction(), getAsignacionesProfesoresAction(), getEspecializacionesAction(),
+      const [h, c, m, am, ac, profs, asigns, esps, asigList] = await Promise.all([
+        getHorariosAction(),
+        getCursosAction(),
+        getMateriasAction(),
+        getAllMateriasAction(),
+        getAllCursosAction(),
+        getProfesoresAction(),
+        getAsignacionesProfesoresAction(),
+        getEspecializacionesAction(),
+        getAsignacionesAction(),
       ])
       setHorarios(h)
       setCursos(c)
@@ -94,6 +115,7 @@ export function useHorarios() {
       setProfesores(profs)
       setAsignaciones(asigns)
       setEspecializaciones(esps)
+      setAsignacionesList(asigList)
     } catch (e: any) {
       setError(e.message ?? 'Error al cargar horarios')
     } finally {
@@ -323,6 +345,50 @@ export function useHorarios() {
     }
   }
 
+  // ── Asignación CRUD ──────────────────────────────────────────────────────────
+
+  const openAsignacionesModal = () => setAsignacionesModalOpen(true)
+  const closeAsignacionesModal = () => { setAsignacionesModalOpen(false); setAsignacionModalMode(null); setSelectedAsignacion(null) }
+  const openCreateAsignacion = () => { setSelectedAsignacion(null); setAsignacionModalMode('create') }
+  const openEditAsignacion = (a: Asignacion) => { setSelectedAsignacion(a); setAsignacionModalMode('edit') }
+  const closeAsignacionForm = () => { setSelectedAsignacion(null); setAsignacionModalMode(null) }
+
+  const handleCreateAsignacion = async (payload: Omit<Asignacion, 'idAsignacion' | 'nombreProfesor' | 'nombreCurso' | 'nombreMateria'>) => {
+    setSavingAsignacion(true)
+    try {
+      await createAsignacion(payload)
+      await fetchAll()
+      closeAsignacionForm()
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setSavingAsignacion(false)
+    }
+  }
+
+  const handleUpdateAsignacion = async (idAsignacion: number, payload: Partial<Omit<Asignacion, 'idAsignacion'>>) => {
+    setSavingAsignacion(true)
+    try {
+      await updateAsignacion(idAsignacion, payload)
+      await fetchAll()
+      closeAsignacionForm()
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setSavingAsignacion(false)
+    }
+  }
+
+  const handleDeleteAsignacion = async (idAsignacion: number) => {
+    if (!confirm('¿Eliminar esta asignación?')) return
+    try {
+      await deleteAsignacion(idAsignacion)
+      await fetchAll()
+    } catch (e: any) {
+      setError(e.message)
+    }
+  }
+
   return {
     horarios: filtered,
     cursos,
@@ -331,11 +397,13 @@ export function useHorarios() {
     allMaterias,
     especializaciones,
     profesores,
+    asignacionesList,
     loading,
     saving,
     savingCurso,
     savingMateria,
     savingEspecializacion,
+    savingAsignacion,
     error,
     vista, setVista,
     filterCurso, setFilterCurso,
@@ -386,5 +454,17 @@ export function useHorarios() {
     handleCreateEspecializacion,
     handleUpdateEspecializacion,
     handleDeleteEspecializacion,
+    // asignacion crud
+    asignacionesModalOpen,
+    asignacionModalMode,
+    selectedAsignacion,
+    openAsignacionesModal,
+    closeAsignacionesModal,
+    openCreateAsignacion,
+    openEditAsignacion,
+    closeAsignacionForm,
+    handleCreateAsignacion,
+    handleUpdateAsignacion,
+    handleDeleteAsignacion,
   }
 }
