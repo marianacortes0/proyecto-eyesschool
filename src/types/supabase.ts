@@ -113,6 +113,9 @@ export type Database = {
           idEstudiante: number
           observacion: string | null
           registradoPor: number
+          codigo_qr: string | null
+          tipo: string | null
+          activo: boolean
         }
         Insert: {
           estado: string
@@ -122,6 +125,9 @@ export type Database = {
           idEstudiante: number
           observacion?: string | null
           registradoPor: number
+          codigo_qr?: string | null
+          tipo?: string | null
+          activo?: boolean
         }
         Update: {
           estado?: string
@@ -131,6 +137,9 @@ export type Database = {
           idEstudiante?: number
           observacion?: string | null
           registradoPor?: number
+          codigo_qr?: string | null
+          tipo?: string | null
+          activo?: boolean
         }
         Relationships: [
           {
@@ -725,6 +734,54 @@ export type Database = {
           {
             foreignKeyName: "fk_reportes_administrador"
             columns: ["idAdministrador"]
+            isOneToOne: false
+            referencedRelation: "administrador"
+            referencedColumns: ["idAdministrador"]
+          },
+        ]
+      }
+      codigos_qr: {
+        Row: {
+          idCodigo: number
+          idEstudiante: number
+          tipo: 'ingreso' | 'salida' | 'ambos'
+          codigo: string
+          activo: boolean
+          fechaCreacion: string
+          fechaVencimiento: string | null
+          creadoPor: number | null
+        }
+        Insert: {
+          idCodigo?: number
+          idEstudiante: number
+          tipo?: 'ingreso' | 'salida' | 'ambos'
+          codigo: string
+          activo?: boolean
+          fechaCreacion?: string
+          fechaVencimiento?: string | null
+          creadoPor?: number | null
+        }
+        Update: {
+          idCodigo?: number
+          idEstudiante?: number
+          tipo?: 'ingreso' | 'salida' | 'ambos'
+          codigo?: string
+          activo?: boolean
+          fechaCreacion?: string
+          fechaVencimiento?: string | null
+          creadoPor?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "codigos_qr_idEstudiante_fkey"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "estudiantes"
+            referencedColumns: ["idEstudiante"]
+          },
+          {
+            foreignKeyName: "codigos_qr_creadoPor_fkey"
+            columns: ["creadoPor"]
             isOneToOne: false
             referencedRelation: "administrador"
             referencedColumns: ["idAdministrador"]

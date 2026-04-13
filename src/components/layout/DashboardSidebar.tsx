@@ -19,11 +19,12 @@ export default function DashboardSidebar() {
     { name: 'Usuarios', href: '/usuarios', show: can('read', 'usuarios') },
     { name: 'Códigos QR', href: '/qr', show: can('read', 'qr') },
     { name: 'Escanear QR', href: '/qr/escanear', show: can('create', 'qr:escanear') },
-    { name: 'Asistencia', href: '/asistencia', show: can('read', 'asistencia') },
-    { name: 'Notas', href: '/notas', show: can('read', 'notas') },
+    { name: 'Asistencia', href: '/asistencia', show: can('read', 'asistencia') || can('read', 'asistencia:propia') },
+    { name: 'Notas', href: '/notas', show: can('read', 'notas') || can('read', 'notas:propias') },
     { name: 'Novedades', href: '/novedades', show: can('read', 'novedades') },
     { name: 'Horarios', href: '/horarios', show: can('read', 'horarios') },
     { name: 'Reportes', href: '/reportes', show: can('read', 'reportes') },
+    { name: 'Mi Perfil', href: '/perfil', show: true },
   ].filter(item => item.show);
 
   return (
