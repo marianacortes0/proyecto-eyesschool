@@ -102,6 +102,25 @@ export const getNotasPorPeriodo = async () => {
   });
 };
 
+// DISTRIBUCIÓN USUARIOS (Admin)
+export const getDistribucionUsuarios = async () => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("usuario")
+    .select("roles(nombreRol)");
+
+  if (error) throw error;
+  if (!data) return [];
+
+  const counts: Record<string, number> = {};
+  data.forEach((item: any) => {
+    const role = item.roles?.nombreRol || "Desconocido";
+    counts[role] = (counts[role] || 0) + 1;
+  });
+
+  return Object.entries(counts).map(([name, value]) => ({ name, value }));
+};
+
 // ─── Helpers internos ─────────────────────────────────────────────────────────
 
 async function resolveIdUsuario(): Promise<number | null> {
@@ -170,6 +189,7 @@ export type DocenteStats = {
   notasPorPeriodo: { periodo: string; promedio: number }[]
   horariosHoy: HorarioHoy[]
   topEstudiantes: TopEstudiante[]
+  distribucionNotas: { name: string; value: number }[]
 }
 
 export type NotaMateria = {
@@ -209,6 +229,7 @@ export type HijoStats = {
   novedadesActivas: number
   notasPorMateria: NotaMateria[]
   notasPorPeriodo: { periodo: string; promedio: number }[]
+  asistenciaEstados: { estado: string; cantidad: number }[]
   novedadesRecientes: NovedadResumen[]
 }
 
@@ -311,6 +332,10 @@ export const getDashboardDocente = async (db?: AnySupabaseClient): Promise<Docen
     notasPorPeriodo:     groupNotasByPeriodo(notas),
     horariosHoy,
     topEstudiantes,
+    distribucionNotas: [
+      { name: 'Aprobados', value: notas.filter(n => n.nota >= 3).length },
+      { name: 'Reprobados', value: notas.filter(n => n.nota < 3).length },
+    ],
   }
 }
 
@@ -424,11 +449,24 @@ export async function getDashboardDocenteServer(
     notasPorPeriodo:     groupNotasByPeriodo(notas),
     horariosHoy,
     topEstudiantes,
+    distribucionNotas: [
+      { name: 'Aprobados', value: notas.filter(n => n.nota >= 3).length },
+      { name: 'Reprobados', value: notas.filter(n => n.nota < 3).length },
+    ],
   }
 }
 
 function emptyDocenteStats(): DocenteStats {
-  return { promedioNotas: 0, aprobacion: 0, estudiantesCount: 0, novedadesPendientes: 0, notasPorPeriodo: [], horariosHoy: [], topEstudiantes: [] }
+  return {
+    promedioNotas: 0,
+    aprobacion: 0,
+    estudiantesCount: 0,
+    novedadesPendientes: 0,
+    notasPorPeriodo: [],
+    horariosHoy: [],
+    topEstudiantes: [],
+    distribucionNotas: []
+  }
 }
 
 // ─── DASHBOARD ESTUDIANTE ─────────────────────────────────────────────────────
@@ -642,6 +680,11 @@ async function buildHijoStats(
       promedio:      Number((ns.reduce((a, b) => a + b, 0) / ns.length).toFixed(2)),
     })).sort((a, b) => b.promedio - a.promedio),
     notasPorPeriodo:     groupNotasByPeriodo(notas),
+    asistenciaEstados: (() => {
+      const map: Record<string, number> = {}
+      asistencias.forEach(a => { map[a.estado] = (map[a.estado] ?? 0) + 1 })
+      return Object.entries(map).map(([estado, cantidad]) => ({ estado, cantidad }))
+    })(),
     novedadesRecientes:  novedades.map((n: any) => ({
       idNovedad:   n.idNovedad,
       descripcion: n.descripcion,

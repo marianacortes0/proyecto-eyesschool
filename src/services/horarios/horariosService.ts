@@ -27,6 +27,20 @@ export type AsignacionProfesor = {
   nombreProfesor: string
 }
 
+export type Asignacion = {
+  idAsignacion: number
+  idProfesor: number
+  idCurso: number
+  idMateria: number
+  fechaAsignacion: string
+  fechaFinalizacion: string | null
+  activo: boolean
+  // joined
+  nombreProfesor?: string
+  nombreCurso?: string
+  nombreMateria?: string
+}
+
 export type Curso = {
   idCurso: number
   nombreCurso: string
@@ -267,4 +281,48 @@ export async function getAsignacionesProfesores(): Promise<AsignacionProfesor[]>
       ? `${row.profesores.usuario.primerNombre} ${row.profesores.usuario.primerApellido}`
       : `Profesor #${row.idProfesor}`,
   }))
+}
+
+// ── ASIGNACIONES ─────────────────────────────────────────────────────────────
+
+export async function getAsignaciones(): Promise<Asignacion[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('asignaciones')
+    .select(`
+      *,
+      profesores ( usuario ( primerNombre, primerApellido ) ),
+      cursos ( nombreCurso ),
+      materias ( nombreMateria )
+    `)
+    .order('fechaAsignacion', { ascending: false })
+
+  if (error) throw error
+
+  return ((data ?? []) as any[]).map(row => ({
+    ...row,
+    nombreProfesor: row.profesores?.usuario
+      ? `${row.profesores.usuario.primerNombre} ${row.profesores.usuario.primerApellido}`
+      : `Profesor #${row.idProfesor}`,
+    nombreCurso: row.cursos?.nombreCurso ?? '',
+    nombreMateria: row.materias?.nombreMateria ?? '',
+  }))
+}
+
+export async function createAsignacion(payload: Omit<Asignacion, 'idAsignacion' | 'nombreProfesor' | 'nombreCurso' | 'nombreMateria'>) {
+  const supabase = createClient()
+  const { error } = await supabase.from('asignaciones').insert(payload)
+  if (error) throw error
+}
+
+export async function updateAsignacion(idAsignacion: number, payload: Partial<Omit<Asignacion, 'idAsignacion'>>) {
+  const supabase = createClient()
+  const { error } = await supabase.from('asignaciones').update(payload).eq('idAsignacion', idAsignacion)
+  if (error) throw error
+}
+
+export async function deleteAsignacion(idAsignacion: number) {
+  const supabase = createClient()
+  const { error } = await supabase.from('asignaciones').delete().eq('idAsignacion', idAsignacion)
+  if (error) throw error
 }

@@ -2,6 +2,7 @@ import DashboardHeader from "@/components/layout/DashboardHeader";
 import DashboardSidebar from "@/components/layout/DashboardSidebar";
 import DashboardFooter from "@/components/layout/DashboardFooter";
 import { SidebarProvider } from "@/components/layout/SidebarContext";
+import { BackgroundDecorations } from "@/components/layout/BackgroundDecorations";
 
 export default function DashboardLayout({
   children,
@@ -10,7 +11,9 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-full bg-[#a5b9c9] dark:bg-[#253444] text-slate-800 dark:text-white overflow-hidden transition-colors duration-500">
+      <div className="flex h-screen w-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-white overflow-hidden transition-colors duration-500">
+        {/* Capa decorativa didáctica */}
+        <BackgroundDecorations />
         
         {/* Sidebar manejado por el Context */}
         <DashboardSidebar />

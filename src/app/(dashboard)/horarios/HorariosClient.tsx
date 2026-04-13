@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { useHorarios } from '@/hooks/useHorarios'
-import { DIAS_SEMANA, type Horario, type Curso, type Materia, type Especializacion, type ProfesorOpt } from '@/services/horarios/horariosService'
+import { DIAS_SEMANA, type Horario, type Curso, type Materia, type Especializacion, type ProfesorOpt, type Asignacion } from '@/services/horarios/horariosService'
 import { can, type Role } from '@/lib/utils/permissions'
 
 const JORNADAS = ['Mañana', 'Tarde', 'Noche', 'Completa']
@@ -50,6 +50,12 @@ export default function HorariosClient({ role }: Props) {
     openEspecializacionesModal, closeEspecializacionesModal,
     openCreateEspecializacion, openEditEspecializacion, closeEspecializacionForm,
     handleCreateEspecializacion, handleUpdateEspecializacion, handleDeleteEspecializacion,
+    // asignacion crud
+    asignacionesList, savingAsignacion,
+    asignacionesModalOpen, asignacionModalMode, selectedAsignacion,
+    openAsignacionesModal, closeAsignacionesModal,
+    openCreateAsignacion, openEditAsignacion, closeAsignacionForm,
+    handleCreateAsignacion, handleUpdateAsignacion, handleDeleteAsignacion,
   } = useHorarios()
 
   const [filterJornada, setFilterJornada] = useState('')
@@ -98,6 +104,14 @@ export default function HorariosClient({ role }: Props) {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          {canCreate && (
+            <button
+              onClick={openAsignacionesModal}
+              className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/15 text-slate-700 dark:text-white text-sm font-semibold rounded-xl transition-colors"
+            >
+              Asignaciones
+            </button>
+          )}
           {canCreate && (
             <button
               onClick={openEspecializacionesModal}
@@ -448,6 +462,29 @@ export default function HorariosClient({ role }: Props) {
           onCreate={handleCreateEspecializacion}
           onUpdate={handleUpdateEspecializacion}
           onDelete={handleDeleteEspecializacion}
+        />
+      )}
+
+      {/* ── Modal gestión asignaciones ───────────────────────────────────────── */}
+      {asignacionesModalOpen && (
+        <AsignacionesModal
+          asignaciones={asignacionesList}
+          asignacionModalMode={asignacionModalMode}
+          selectedAsignacion={selectedAsignacion}
+          profesores={profesores}
+          cursos={allCursos}
+          materias={allMaterias}
+          saving={savingAsignacion}
+          canUpdate={canUpdate}
+          canDelete={canDelete}
+          canCreate={canCreate}
+          onClose={closeAsignacionesModal}
+          onOpenCreate={openCreateAsignacion}
+          onOpenEdit={openEditAsignacion}
+          onCloseForm={closeAsignacionForm}
+          onCreate={handleCreateAsignacion}
+          onUpdate={handleUpdateAsignacion}
+          onDelete={handleDeleteAsignacion}
         />
       )}
     </div>
@@ -1197,6 +1234,201 @@ function EspecializacionForm({ mode, especializacion, saving, onClose, onCreate,
         </div>
         <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{activo ? 'Activo' : 'Inactivo'}</span>
       </label>
+      <div className="flex justify-end gap-3 pt-2">
+        <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">Cancelar</button>
+        <button type="submit" disabled={saving} className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">{saving ? 'Guardando...' : mode === 'create' ? 'Crear' : 'Guardar'}</button>
+      </div>
+    </form>
+  )
+}
+
+// ── Modal gestión de asignaciones ──────────────────────────────────────────────
+
+interface AsignacionesModalProps {
+  asignaciones: Asignacion[]
+  asignacionModalMode: 'create' | 'edit' | null
+  selectedAsignacion: Asignacion | null
+  profesores: ProfesorOpt[]
+  cursos: Curso[]
+  materias: Materia[]
+  saving: boolean
+  canCreate: boolean
+  canUpdate: boolean
+  canDelete: boolean
+  onClose: () => void
+  onOpenCreate: () => void
+  onOpenEdit: (a: Asignacion) => void
+  onCloseForm: () => void
+  onCreate: (p: Omit<Asignacion, 'idAsignacion' | 'nombreProfesor' | 'nombreCurso' | 'nombreMateria'>) => void
+  onUpdate: (id: number, p: Partial<Omit<Asignacion, 'idAsignacion'>>) => void
+  onDelete: (id: number) => void
+}
+
+function AsignacionesModal({
+  asignaciones, asignacionModalMode, selectedAsignacion, profesores, cursos, materias, saving,
+  canCreate, canUpdate, canDelete,
+  onClose, onOpenCreate, onOpenEdit, onCloseForm,
+  onCreate, onUpdate, onDelete,
+}: AsignacionesModalProps) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+      <div className="w-full max-w-4xl bg-white dark:bg-[#1a1a1a] rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[85vh]">
+        <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between shrink-0">
+          <h2 className="text-lg font-bold text-slate-800 dark:text-white">Gestionar asignaciones de profesores</h2>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl font-bold">×</button>
+        </div>
+        <div className="flex-1 overflow-y-auto">
+          {asignacionModalMode ? (
+            <AsignacionForm
+              mode={asignacionModalMode}
+              asignacion={selectedAsignacion}
+              profesores={profesores}
+              cursos={cursos}
+              materias={materias}
+              saving={saving}
+              onClose={onCloseForm}
+              onCreate={onCreate}
+              onUpdate={onUpdate}
+            />
+          ) : (
+            <div className="p-6 space-y-4">
+              {canCreate && (
+                <button onClick={onOpenCreate} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors">+ Nueva asignación</button>
+              )}
+              <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-white/10">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wide">
+                      <th className="px-4 py-3 text-left">Profesor</th>
+                      <th className="px-4 py-3 text-left">Curso</th>
+                      <th className="px-4 py-3 text-left">Materia</th>
+                      <th className="px-4 py-3 text-left">Fecha Asig.</th>
+                      <th className="px-4 py-3 text-left">Estado</th>
+                      {(canUpdate || canDelete) && <th className="px-4 py-3 text-right">Acciones</th>}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {asignaciones.length === 0 && <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-400 text-xs">No hay asignaciones registradas.</td></tr>}
+                    {asignaciones.map(a => (
+                      <tr key={a.idAsignacion} className={`border-b border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors ${!a.activo ? 'opacity-50' : ''}`}>
+                        <td className="px-4 py-3 font-semibold text-slate-800 dark:text-white">{a.nombreProfesor}</td>
+                        <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{a.nombreCurso}</td>
+                        <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{a.nombreMateria}</td>
+                        <td className="px-4 py-3 text-slate-500 dark:text-slate-400 text-xs">{new Date(a.fechaAsignacion).toLocaleDateString()}</td>
+                        <td className="px-4 py-3">
+                          <span className={`px-2 py-1 rounded-lg text-xs font-semibold ${a.activo ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300' : 'bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-400'}`}>{a.activo ? 'Activa' : 'Inactiva'}</span>
+                        </td>
+                        {(canUpdate || canDelete) && (
+                          <td className="px-4 py-3 text-right">
+                            <div className="flex justify-end gap-2">
+                              {canUpdate && <button onClick={() => onOpenEdit(a)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-300 text-xs font-semibold transition-colors">Editar</button>}
+                              {canDelete && <button onClick={() => onDelete(a.idAsignacion)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-red-100 dark:hover:bg-red-500/20 text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-300 text-xs font-semibold transition-colors">Eliminar</button>}
+                            </div>
+                          </td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── AsignacionForm ────────────────────────────────────────────────────────────
+
+function AsignacionForm({ mode, asignacion, profesores, cursos, materias, saving, onClose, onCreate, onUpdate }: {
+  mode: 'create' | 'edit'; asignacion: Asignacion | null; profesores: ProfesorOpt[]; cursos: Curso[]; materias: Materia[]; saving: boolean
+  onClose: () => void
+  onCreate: (p: Omit<Asignacion, 'idAsignacion' | 'nombreProfesor' | 'nombreCurso' | 'nombreMateria'>) => void
+  onUpdate: (id: number, p: Partial<Omit<Asignacion, 'idAsignacion'>>) => void
+}) {
+  const SEL = 'w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
+  
+  const [idProfesor, setIdProfesor] = useState(String(asignacion?.idProfesor ?? ''))
+  const [idCurso, setIdCurso] = useState(String(asignacion?.idCurso ?? ''))
+  const [idMateria, setIdMateria] = useState(String(asignacion?.idMateria ?? ''))
+  const [fechaAsignacion, setFechaAsignacion] = useState(asignacion?.fechaAsignacion?.slice(0, 10) ?? new Date().toISOString().slice(0, 10))
+  const [fechaFinalizacion, setFechaFinalizacion] = useState(asignacion?.fechaFinalizacion ?? '')
+  const [activo, setActivo] = useState(asignacion?.activo ?? true)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!idProfesor || !idCurso || !idMateria) {
+      setError('Por favor selecciona todos los campos requeridos.')
+      return
+    }
+    const payload = {
+      idProfesor: Number(idProfesor),
+      idCurso: Number(idCurso),
+      idMateria: Number(idMateria),
+      fechaAsignacion: new Date(fechaAsignacion).toISOString(),
+      fechaFinalizacion: fechaFinalizacion || null,
+      activo
+    }
+    mode === 'create' ? onCreate(payload) : onUpdate(asignacion!.idAsignacion, payload)
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
+      <div className="flex items-center gap-2 mb-2">
+        <button type="button" onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-sm font-semibold">← Volver</button>
+        <span className="text-slate-300 dark:text-slate-600">|</span>
+        <span className="text-sm font-bold text-slate-700 dark:text-white">{mode === 'create' ? 'Nueva asignación' : 'Editar asignación'}</span>
+      </div>
+
+      <div>
+        <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Profesor</label>
+        <select required value={idProfesor} onChange={e => setIdProfesor(e.target.value)} className={SEL}>
+          <option value="">Seleccionar profesor...</option>
+          {profesores.map(p => <option key={p.idProfesor} value={p.idProfesor}>{p.nombre}</option>)}
+        </select>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Curso</label>
+          <select required value={idCurso} onChange={e => setIdCurso(e.target.value)} className={SEL}>
+            <option value="">Seleccionar curso...</option>
+            {cursos.map(c => <option key={c.idCurso} value={c.idCurso}>{c.nombreCurso} — {c.grado}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Materia</label>
+          <select required value={idMateria} onChange={e => setIdMateria(e.target.value)} className={SEL}>
+            <option value="">Seleccionar materia...</option>
+            {materias.map(m => <option key={m.idMateria} value={m.idMateria}>{m.nombreMateria}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Fecha Asignación</label>
+          <input type="date" required value={fechaAsignacion} onChange={e => setFechaAsignacion(e.target.value)} className={SEL} />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Fecha Finalización (Opcional)</label>
+          <input type="date" value={fechaFinalizacion} onChange={e => setFechaFinalizacion(e.target.value)} className={SEL} />
+        </div>
+      </div>
+
+      <label className="flex items-center gap-3 cursor-pointer pt-2">
+        <div className="relative">
+          <input type="checkbox" className="sr-only" checked={activo} onChange={e => setActivo(e.target.checked)} />
+          <div className={`w-10 h-6 rounded-full transition-colors ${activo ? 'bg-blue-600' : 'bg-slate-300 dark:bg-white/20'}`} />
+          <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${activo ? 'translate-x-5' : 'translate-x-1'}`} />
+        </div>
+        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{activo ? 'Activo' : 'Inactivo'}</span>
+      </label>
+
+      {error && <p className="text-xs text-red-500">{error}</p>}
+
       <div className="flex justify-end gap-3 pt-2">
         <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">Cancelar</button>
         <button type="submit" disabled={saving} className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">{saving ? 'Guardando...' : mode === 'create' ? 'Crear' : 'Guardar'}</button>
