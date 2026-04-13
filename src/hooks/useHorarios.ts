@@ -2,11 +2,6 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import {
-  getHorarios,
-  getCursos,
-  getAllCursos,
-  getMaterias,
-  getAllMaterias,
   createHorario,
   updateHorario,
   deleteHorario,
@@ -16,12 +11,9 @@ import {
   createMateria,
   updateMateria,
   deleteMateria,
-  getEspecializaciones,
   createEspecializacion,
   updateEspecializacion,
   deleteEspecializacion,
-  getProfesores,
-  getAsignacionesProfesores,
   asignarProfesorHorario,
   type Horario,
   type Curso,
@@ -30,6 +22,16 @@ import {
   type ProfesorOpt,
   type AsignacionProfesor,
 } from '@/services/horarios/horariosService'
+import {
+  getHorariosAction,
+  getCursosAction,
+  getAllCursosAction,
+  getMateriasAction,
+  getAllMateriasAction,
+  getEspecializacionesAction,
+  getProfesoresAction,
+  getAsignacionesProfesoresAction,
+} from '@/services/horarios/horariosActions'
 
 export type ModalMode = 'create' | 'edit' | null
 
@@ -81,8 +83,8 @@ export function useHorarios() {
     setError(null)
     try {
       const [h, c, m, am, ac, profs, asigns, esps] = await Promise.all([
-        getHorarios(), getCursos(), getMaterias(), getAllMaterias(), getAllCursos(),
-        getProfesores(), getAsignacionesProfesores(), getEspecializaciones(),
+        getHorariosAction(), getCursosAction(), getMateriasAction(), getAllMateriasAction(), getAllCursosAction(),
+        getProfesoresAction(), getAsignacionesProfesoresAction(), getEspecializacionesAction(),
       ])
       setHorarios(h)
       setCursos(c)

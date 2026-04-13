@@ -38,8 +38,15 @@ export default function AsistenciaModal({
 
   const jornadas = useMemo(() => {
     const seen = new Set<string>()
+    // Forzar opciones estándar
+    seen.add('mañana')
+    seen.add('tarde')
+    
     for (const e of estudiantes) {
-      if (e.jornada) seen.add(e.jornada)
+      if (e.jornada) {
+        const j = e.jornada.toLowerCase()
+        seen.add(j)
+      }
     }
     return [...seen].sort()
   }, [estudiantes])

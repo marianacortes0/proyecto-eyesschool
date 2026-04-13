@@ -1,7 +1,10 @@
 'use client'
 
+import { useEffect, useState, useCallback } from 'react'
 import { useEscanear } from '@/hooks/useEscanear'
 import { useAsistencia } from '@/hooks/useAsistencia'
+import { getRegistrosAsistenciaAction } from '@/services/qr/qrActions'
+import type { RegistroAsistencia } from '@/services/qr/qrService'
 import QRScannerView from '@/components/qr/QRScannerView'
 import AsistenciaModal from '@/components/asistencia/AsistenciaModal'
 import { type Role } from '@/lib/utils/permissions'
@@ -38,6 +41,27 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
     closeModal,
     handleCreate,
   } = useAsistencia(idUsuarioRegistrador)
+
+  // ── Registros de hoy desde la BD ──────────────────────────────────────────
+  const [todayRecords, setTodayRecords] = useState<RegistroAsistencia[]>([])
+
+  const fetchToday = useCallback(async () => {
+    try {
+      const hoy = new Date().toISOString().split('T')[0]
+      const data = await getRegistrosAsistenciaAction(hoy)
+      setTodayRecords(data)
+    } catch {
+      // silently ignore
+    }
+  }, [])
+
+  // Cargar al montar
+  useEffect(() => { fetchToday() }, [fetchToday])
+
+  // Recargar cuando se completa un escaneo exitoso
+  useEffect(() => {
+    if (status === 'success') fetchToday()
+  }, [status, fetchToday])
 
   const info = ROLE_LABEL[role] ?? ROLE_LABEL.admin!
 
@@ -80,6 +104,7 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
         pending={pending}
         lastResult={lastResult}
         recentScans={recentScans}
+        todayRecords={todayRecords}
         onCapture={processCapture}
         onConfirm={confirmRegistration}
         onCancel={cancelPending}
@@ -99,3 +124,4 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
     </div>
   )
 }
+

@@ -1,12 +1,17 @@
 import { createClient } from '@/services/supabase/server'
+import { createAdminClient } from '@/services/supabase/admin'
 import { redirect } from 'next/navigation'
 import { mapRolToKey } from '@/lib/utils/permissions'
-import { getDashboardData } from '@/services/dashboard/dashboardGeneralService'
-import KPICard from '@/components/dashboard/KPICard'
-import type {
-  EstudianteDashboardData,
-  ProfesorDashboardData
-} from '@/types/dashboard'
+import dynamic from 'next/dynamic'
+import { 
+  getDashboardPadreServer, 
+  getDashboardDocenteServer, 
+  getDashboardEstudianteServer 
+} from '@/services/dashboard/dashboardService'
+
+const DocenteDashboardClient   = dynamic(() => import('@/components/dashboard/DocenteDashboardClient'))
+const EstudianteDashboardClient = dynamic(() => import('@/components/dashboard/EstudianteDashboardClient'))
+const PadreDashboardClient      = dynamic(() => import('@/components/dashboard/PadreDashboardClient'))
 
 export default async function GeneralDashboardPage() {
   const supabase = await createClient()
@@ -21,69 +26,32 @@ export default async function GeneralDashboardPage() {
 
   if (role === 'admin') redirect('/admin')
 
-  const data = await getDashboardData(role as string)
+  // Fetch data on the server based on role
+  if (role === 'docente') {
+    const adminDb = createAdminClient()
+    const initialData = await getDashboardDocenteServer(adminDb, user.id)
+    return <DocenteDashboardClient initialData={initialData} />
+  }
 
+  if (role === 'estudiante') {
+    const adminDb = createAdminClient()
+    const initialData = await getDashboardEstudianteServer(adminDb, user.id)
+    return <EstudianteDashboardClient initialData={initialData} />
+  }
+  
+  if (role === 'padre') {
+    const adminDb = createAdminClient()
+    const initialData = await getDashboardPadreServer(adminDb, user.id)
+    return <PadreDashboardClient initialData={initialData} />
+  }
+
+  // Rol desconocido — vista de espera
   return (
-    <div className="p-8 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-800">
-          Dashboard General
-        </h1>
-        <p className="text-gray-500 mt-2">
-          Rol activo:{' '}
-          <span className="font-semibold text-blue-600">
-            {role ?? 'desconocido'}
-          </span>
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        {/* ===== ESTUDIANTE ===== */}
-        {role === 'estudiante' && data && (
-          (() => {
-            const d = data as EstudianteDashboardData
-
-            return (
-              <>
-                <KPICard title="Promedio" value={d.promedio} />
-                <KPICard title="Asistencia" value={`${d.asistencia}%`} />
-                <KPICard title="Novedades" value={d.novedades} />
-              </>
-            )
-          })()
-        )}
-
-        {/* ===== PADRE ===== */}
-        {role === 'padre' && data && (
-          (() => {
-            const d = data as EstudianteDashboardData
-
-            return (
-              <>
-                <KPICard title="Promedio del hijo" value={d.promedio} />
-                <KPICard title="Asistencia" value={`${d.asistencia}%`} />
-                <KPICard title="Novedades" value={d.novedades} />
-              </>
-            )
-          })()
-        )}
-
-        {/* ===== PROFESOR ===== */}
-        {role === 'docente' && data && (
-          (() => {
-            const d = data as ProfesorDashboardData
-
-            return (
-              <KPICard
-                title="Total Estudiantes"
-                value={d.totalEstudiantes}
-              />
-            )
-          })()
-        )}
-
-      </div>
+    <div className="p-8">
+      <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
+      <p className="text-gray-500 mt-2">
+        Tu cuenta no tiene un rol asignado. Contacta al administrador.
+      </p>
     </div>
   )
 }

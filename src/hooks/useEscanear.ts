@@ -3,10 +3,12 @@
 import { useState, useCallback } from 'react'
 import {
   readQRFromImage,
-  getCodigoQRByValue,
-  createAsistencia,
   type CodigoQRConEstudiante,
 } from '@/services/qr/qrService'
+import {
+  getCodigoQRByValueAction,
+  createAsistenciaAction,
+} from '@/services/qr/qrActions'
 
 export type ScanEstado = 'Presente' | 'Ausente' | 'Tarde'
 
@@ -57,7 +59,7 @@ export function useEscanear(idUsuarioRegistrador: number) {
         }
 
         // Buscar en codigos_qr
-        const qrData = await getCodigoQRByValue(codigoTexto)
+        const qrData = await getCodigoQRByValueAction(codigoTexto)
         if (!qrData) {
           setErrorMsg('Código QR no reconocido, inactivo o vencido.')
           setStatus('error')
@@ -103,7 +105,7 @@ export function useEscanear(idUsuarioRegistrador: number) {
           ? observacion.trim()
           : `Registro por QR (${tipoLabel}) a las ${hora}`
 
-        await createAsistencia({
+        await createAsistenciaAction({
           idEstudiante:  pending.qrData.idEstudiante,
           estado,
           fecha:         new Date().toISOString().split('T')[0],
