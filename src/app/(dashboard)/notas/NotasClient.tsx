@@ -5,9 +5,9 @@ import { useNotas, type EstudianteOpt, type MateriaOpt, type CursoOpt } from '@/
 import { PERIODOS, notaColor, NOTA_APROBACION, type Nota } from '@/services/notas/notasService'
 import { can, type Role } from '@/lib/utils/permissions'
 
-interface Props { role: Role }
+interface Props { role: Role; idUsuarioRegistrador: number }
 
-export default function NotasClient({ role }: Props) {
+export default function NotasClient({ role, idUsuarioRegistrador }: Props) {
   const {
     notas, totalNotas, estudiantes, materias, cursos,
     loading, saving, error, stats,
@@ -18,7 +18,7 @@ export default function NotasClient({ role }: Props) {
     modalMode, selected,
     openCreate, openEdit, closeModal,
     handleCreate, handleUpdate, handleDelete,
-  } = useNotas()
+  } = useNotas(idUsuarioRegistrador)
 
   const canCreate = can(role, 'create', 'notas')
   const canUpdate = can(role, 'update', 'notas')

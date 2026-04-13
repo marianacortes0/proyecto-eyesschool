@@ -2,17 +2,18 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import {
-  getNotas,
-  getEstudiantesParaNotas,
-  getMateriasParaNotas,
-  getCursosParaNotas,
   updateNota,
   deleteNota,
   PERIODOS,
   type Nota,
 } from '@/services/notas/notasService'
-import { createNotaAction } from '@/services/notas/notasActions'
-import { useAuth } from './useAuth'
+import {
+  createNotaAction,
+  getNotasAction,
+  getEstudiantesAction,
+  getMateriasAction,
+  getCursosAction,
+} from '@/services/notas/notasActions'
 
 export type ModalMode = 'create' | 'edit' | null
 
@@ -20,8 +21,7 @@ export type EstudianteOpt = { idEstudiante: number; codigoEstudiante: string; no
 export type MateriaOpt = { idMateria: number; nombreMateria: string }
 export type CursoOpt = { idCurso: number; nombreCurso: string; grado: string; jornada: string }
 
-export function useNotas() {
-  const { userId } = useAuth()
+export function useNotas(idUsuarioRegistrador: number) {
 
   const [notas, setNotas] = useState<Nota[]>([])
   const [estudiantes, setEstudiantes] = useState<EstudianteOpt[]>([])
@@ -46,10 +46,10 @@ export function useNotas() {
     setError(null)
     try {
       const [n, e, m, c] = await Promise.all([
-        getNotas(),
-        getEstudiantesParaNotas(),
-        getMateriasParaNotas(),
-        getCursosParaNotas(),
+        getNotasAction(),
+        getEstudiantesAction(),
+        getMateriasAction(),
+        getCursosAction(),
       ])
       setNotas(n)
       setEstudiantes(e)
@@ -98,10 +98,10 @@ export function useNotas() {
   const handleCreate = async (
     payload: Pick<Nota, 'idEstudiante' | 'idMateria' | 'idPeriodo' | 'nota' | 'observacion'>
   ) => {
-    if (!userId) return
+    if (!idUsuarioRegistrador) return
     setSaving(true)
     try {
-      await createNotaAction({ ...payload, registradoPor: Number(userId) })
+      await createNotaAction({ ...payload, registradoPor: idUsuarioRegistrador })
       await fetchAll()
       closeModal()
     } catch (e: any) {

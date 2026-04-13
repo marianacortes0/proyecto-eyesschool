@@ -16,5 +16,12 @@ export default async function NotasPage() {
 
   if (!role) redirect('/login')
 
-  return <NotasClient role={role} />
+  // Obtener idUsuario interno para registradoPor
+  const { data: usuarioRow } = await supabase
+    .from('usuario')
+    .select('idUsuario')
+    .eq('auth_id', user.id)
+    .single()
+
+  return <NotasClient role={role} idUsuarioRegistrador={usuarioRow?.idUsuario ?? 0} />
 }
