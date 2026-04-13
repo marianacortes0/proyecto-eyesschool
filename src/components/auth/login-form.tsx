@@ -9,7 +9,9 @@ import { useToggle } from '@/hooks/useToggle'
 export function LoginForm() {
   const [state, formAction, pending] = useActionState(login, null)
   const searchParams = useSearchParams()
-  const justRegistered = searchParams.get('registered') === 'true'
+  const registeredParam = searchParams.get('registered')
+  const justRegistered = registeredParam === 'true'
+  const justRegisteredPending = registeredParam === 'pending'
   const [showPassword, togglePassword] = useToggle(false)
 
   return (
@@ -34,7 +36,12 @@ export function LoginForm() {
 
         {justRegistered && (
           <div className="p-2 bg-green-500/10 text-green-600 dark:text-green-400 text-[9px] font-bold rounded-lg border border-green-500/20 text-center animate-in fade-in zoom-in">
-            ¡Registro completado!
+            ¡Registro completado! Ya puedes iniciar sesión.
+          </div>
+        )}
+        {justRegisteredPending && (
+          <div className="p-2 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[9px] font-bold rounded-lg border border-amber-500/20 text-center animate-in fade-in zoom-in">
+            Registro enviado. Tu cuenta está pendiente de validación por el administrador.
           </div>
         )}
         

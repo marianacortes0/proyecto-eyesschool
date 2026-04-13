@@ -8,6 +8,8 @@ export const getPromedioGeneral = async () => {
     .from("notas")
     .select("nota");
 
+  console.log("[notas]", { data, error });
+
   if (error) throw error;
   if (!data || data.length === 0) return 0;
 
@@ -42,6 +44,8 @@ export const getEstudiantesActivos = async () => {
   const { count, error } = await supabase
     .from("estudiantes")
     .select("*", { count: "exact", head: true });
+
+  console.log("[estudiantes]", { count, error })
 
   if (error) throw error;
 
