@@ -85,10 +85,11 @@ export function mapRolToKey(nombreRol?: string, idRol?: number): Role | null {
     return byName[nombreRol] ?? null
   }
   if (idRol !== undefined) {
+    // Roles reales en la BD: 1=Profesor | 2=Estudiante | 3=Administrador | 4=Padre
     const byId: Record<number, Role> = {
-      1: 'admin',
-      2: 'docente',
-      3: 'estudiante',
+      1: 'docente',
+      2: 'estudiante',
+      3: 'admin',
       4: 'padre',
     }
     return byId[idRol] ?? null

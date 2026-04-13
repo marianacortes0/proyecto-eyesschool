@@ -30,6 +30,10 @@ useEffect(() => {
  
   const fetchData = async () => {
     try {
+      const { data: { session } } = await createClient().auth.getSession()
+      console.log("[JWT app_metadata]", session?.user?.app_metadata)
+      console.log("[JWT user_metadata]", session?.user?.user_metadata)
+
       const [
         promedio,
         aprobacion,

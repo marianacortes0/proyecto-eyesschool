@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npx supabase:*)",
-      "Bash(ls c:/Users/maria/proyecto-eyesschool/.env*)"
+      "Bash(ls c:/Users/maria/proyecto-eyesschool/.env*)",
+      "Bash(npm install:*)"
     ]
   }
 }

@@ -5,21 +5,19 @@ import Footer from "@/components/Layout/Footer";
 
 export default function BeneficiosPage() {
   return (
-   <main className="relative min-h-screen flex flex-col bg-[#a5b9c9] dark:bg-[#253444] transition-colors duration-500 overflow-hidden">
+    <main className="relative min-h-screen flex flex-col overflow-hidden">
 
-  {/* EFECTOS DE FONDO GLOBALES */}
-  <div className="absolute w-[700px] h-[700px] bg-blue-400/20 dark:bg-blue-500/10 rounded-full blur-3xl top-[-200px] left-[-200px]" />
-  <div className="absolute w-[600px] h-[600px] bg-purple-400/20 dark:bg-purple-500/10 rounded-full blur-3xl bottom-[-200px] right-[-200px]" />
+      {/* Fondo modo claro */}
+      <div className="absolute inset-0 -z-10 bg-[url('/images/pattern.png')] bg-repeat dark:hidden" />
 
-  <Header />
+      {/* Fondo modo oscuro */}
+      <div className="absolute inset-0 -z-10 bg-[url('/images/pattern-dark.png')] bg-repeat hidden dark:block" />
 
-  {/* HERO */}
-  <section className="relative flex items-center justify-center text-center py-40 px-6">
-        
-        <div className="absolute w-[600px] h-[600px] bg-blue-400/30 dark:bg-blue-500/10 rounded-full blur-3xl top-[-150px] left-[-150px]" />
-        <div className="absolute w-[500px] h-[500px] bg-purple-400/30 dark:bg-purple-500/10 rounded-full blur-3xl bottom-[-150px] right-[-150px]" />
+      <Header />
 
-        <div className="relative bg-white/80 dark:bg-[#141414] backdrop-blur-xl p-16 rounded-3xl shadow-xl border border-white/20 dark:border-white/10 max-w-4xl">
+      {/* HERO */}
+      <section className="relative flex items-center justify-center text-center py-40 px-6">
+        <div className="relative bg-[#d7e0e9] dark:bg-[#141414] backdrop-blur-xl p-16 rounded-3xl shadow-xl border border-white/20 dark:border-white/10 max-w-4xl">
           <h1 className="text-5xl md:text-7xl font-bold text-gray-800 dark:text-white mb-8">
             Todo lo que tu colegio necesita 📚
           </h1>
@@ -29,12 +27,10 @@ export default function BeneficiosPage() {
             comunicativa en una sola plataforma.
           </p>
         </div>
-
       </section>
 
       {/* BENEFICIOS */}
       <section className="py-28 px-6 max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
-        
         {[
           {
             icon: "⚡",
@@ -54,19 +50,21 @@ export default function BeneficiosPage() {
         ].map((item, i) => (
           <div
             key={i}
-            className="p-10 rounded-3xl bg-white/80 dark:bg-[#141414] backdrop-blur-xl shadow border border-white/20 dark:border-white/10 hover:scale-105 hover:shadow-2xl transition"
+            className="p-10 rounded-3xl bg-[#d7e0e9] dark:bg-[#141414] backdrop-blur-xl shadow border border-white/20 dark:border-white/10 hover:scale-105 hover:shadow-2xl transition"
           >
             <div className="text-4xl mb-5">{item.icon}</div>
-            <h3 className="text-2xl font-semibold mb-3 text-gray-800 dark:text-white">{item.title}</h3>
-            <p className="text-gray-600 dark:text-gray-300 text-lg">{item.text}</p>
+            <h3 className="text-2xl font-semibold mb-3 text-gray-800 dark:text-white">
+              {item.title}
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 text-lg">
+              {item.text}
+            </p>
           </div>
         ))}
-
       </section>
 
       {/* SECCIÓN DESTACADA */}
       <section className="py-28 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-        
         <div>
           <h2 className="text-4xl font-bold mb-6 text-gray-800 dark:text-white">
             Gestión inteligente 📈
@@ -83,13 +81,12 @@ export default function BeneficiosPage() {
           </ul>
         </div>
 
-        <div className="bg-white/80 dark:bg-[#141414] backdrop-blur-xl p-12 rounded-3xl shadow border border-white/20 dark:border-white/10 text-center">
+        <div className="bg-[#d7e0e9] dark:bg-[#141414] backdrop-blur-xl p-12 rounded-3xl shadow border border-white/20 dark:border-white/10 text-center">
           <div className="text-6xl">💻</div>
           <p className="mt-4 text-gray-600 dark:text-gray-300">
             Plataforma moderna y responsive
           </p>
         </div>
-
       </section>
 
       {/* PARA QUIÉN */}
@@ -99,7 +96,6 @@ export default function BeneficiosPage() {
         </h2>
 
         <div className="grid md:grid-cols-3 gap-10">
-
           {[
             {
               title: "Administradores",
@@ -116,7 +112,7 @@ export default function BeneficiosPage() {
           ].map((item, i) => (
             <div
               key={i}
-              className="bg-white/80 dark:bg-[#141414] backdrop-blur-xl p-10 rounded-3xl shadow border border-white/20 dark:border-white/10"
+              className="bg-[#d7e0e9] dark:bg-[#141414] backdrop-blur-xl p-10 rounded-3xl shadow border border-white/20 dark:border-white/10"
             >
               <h3 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">
                 {item.title}
@@ -126,14 +122,12 @@ export default function BeneficiosPage() {
               </p>
             </div>
           ))}
-
         </div>
       </section>
 
       {/* DIFERENCIAL */}
       <section className="py-28 px-6 max-w-5xl mx-auto text-center">
-        <div className="bg-white/80 dark:bg-[#141414] backdrop-blur-xl p-16 rounded-3xl shadow border border-white/20 dark:border-white/10">
-          
+        <div className="bg-[#d7e0e9] dark:bg-[#141414] backdrop-blur-xl p-16 rounded-3xl shadow border border-white/20 dark:border-white/10">
           <h2 className="text-4xl font-bold mb-6 text-gray-800 dark:text-white">
             ¿Por qué elegir EyeSchool?
           </h2>
@@ -152,14 +146,12 @@ export default function BeneficiosPage() {
               </span>
             ))}
           </div>
-
         </div>
       </section>
 
       {/* CTA */}
       <section className="py-28 px-6 max-w-4xl mx-auto text-center">
         <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-14 rounded-3xl shadow-xl">
-          
           <h2 className="text-4xl font-bold mb-6">
             Empieza hoy mismo 🚀
           </h2>
@@ -173,13 +165,10 @@ export default function BeneficiosPage() {
               Iniciar sesión
             </button>
           </a>
-
         </div>
       </section>
 
       <Footer />
-  
-
     </main>
   );
 }

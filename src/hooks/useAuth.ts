@@ -1,12 +1,15 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@/services/supabase/client'
 import { can, mapRolToKey, type Role, type Action, type Resource } from '@/lib/utils/permissions'
 import { User } from '@supabase/supabase-js'
 
 export function useAuth() {
-  const supabase = createClient()
+  // Instancia estable: una sola por montaje del hook, evita el AbortError de Web Locks
+  const supabaseRef = useRef(createClient())
+  const supabase = supabaseRef.current
+
   const [user, setUser] = useState<User | null>(null)
   const [role, setRole] = useState<Role | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
@@ -15,17 +18,14 @@ export function useAuth() {
   useEffect(() => {
     let mounted = true
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const applySession = (session: { user: User } | null) => {
       if (!mounted) return
-
       if (session) {
         setUser(session.user)
-        // Prioridad: app_metadata.rol (hook) → user_metadata.rol (registro) → user_metadata.idRol (fallback)
         const nombreRol =
           (session.user.app_metadata?.rol as string | undefined) ??
           (session.user.user_metadata?.rol as string | undefined)
-        const rol = mapRolToKey(nombreRol, session.user.user_metadata?.idRol as number | undefined)
-        setRole(rol)
+        setRole(mapRolToKey(nombreRol, session.user.user_metadata?.idRol as number | undefined))
         setUserId(session.user.id)
       } else {
         setUser(null)
@@ -33,32 +33,21 @@ export function useAuth() {
         setUserId(null)
       }
       setLoading(false)
-    })
+    }
+
+    // Refrescar la sesión al montar para obtener app_metadata actualizado
+    supabase.auth.refreshSession().then(({ data: { session } }) => applySession(session))
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!mounted) return
-
-      if (session) {
-        setUser(session.user)
-        const nombreRol =
-          (session.user.app_metadata?.rol as string | undefined) ??
-          (session.user.user_metadata?.rol as string | undefined)
-        const rol = mapRolToKey(nombreRol, session.user.user_metadata?.idRol as number | undefined)
-        setRole(rol)
-        setUserId(session.user.id)
-      } else {
-        setUser(null)
-        setRole(null)
-        setUserId(null)
-      }
-      setLoading(false)
+      applySession(session)
     })
 
     return () => {
       mounted = false
       subscription.unsubscribe()
     }
-  }, [supabase.auth])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const signOut = async () => {
     await supabase.auth.signOut()
