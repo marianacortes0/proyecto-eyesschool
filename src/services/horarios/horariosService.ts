@@ -1,4 +1,5 @@
 import { createClient } from '@/services/supabase/client'
+import { getHorariosAdmin, getProfesoresAdmin, getAsignacionesProfesoresAdmin } from './horariosActions'
 
 export type Horario = {
   idHorario: number
@@ -54,18 +55,7 @@ export const DIAS_SEMANA = [
 ] as const
 
 export async function getHorarios(): Promise<Horario[]> {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('Horario')
-    .select(`
-      *,
-      cursos ( nombreCurso, grado ),
-      materias ( nombreMateria )
-    `)
-    .order('dia')
-    .order('horaInicio')
-
-  if (error) throw error
+  const data = await getHorariosAdmin()
 
   const DIA_ORDER: Record<string, number> = {
     Lunes: 0, Martes: 1, 'Miércoles': 2, Jueves: 3,
@@ -240,11 +230,7 @@ export async function deleteHorario(idHorario: number) {
 }
 
 export async function getProfesores(): Promise<ProfesorOpt[]> {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('profesores')
-    .select('idProfesor, usuario ( primerNombre, primerApellido )')
-  if (error) throw error
+  const data = await getProfesoresAdmin()
   return ((data ?? []) as any[]).map(row => ({
     idProfesor: row.idProfesor,
     nombre: row.usuario
@@ -254,12 +240,7 @@ export async function getProfesores(): Promise<ProfesorOpt[]> {
 }
 
 export async function getAsignacionesProfesores(): Promise<AsignacionProfesor[]> {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('profesores_horario')
-    .select('idHorario, idProfesor, activo, profesores ( idProfesor, usuario ( primerNombre, primerApellido ) )')
-    .eq('activo', true)
-  if (error) throw error
+  const data = await getAsignacionesProfesoresAdmin()
   return ((data ?? []) as any[]).map(row => ({
     idHorario: row.idHorario,
     idProfesor: row.idProfesor,

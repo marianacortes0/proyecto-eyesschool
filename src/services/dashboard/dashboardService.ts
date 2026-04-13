@@ -323,25 +323,24 @@ export async function getDashboardDocenteServer(
   authId: string,
 ): Promise<DocenteStats> {
   // 1. Resolver idUsuario usando el client provisto
-  const { data: usuarioRow } = await db
+  const { data: usuarioRow, error: errUsuario } = await db
     .from('usuario')
     .select('idUsuario')
     .eq('auth_id', authId)
     .maybeSingle()
 
+  console.log('[DASH-DOCENTE] authId:', authId, '→ usuarioRow:', usuarioRow, 'error:', errUsuario)
+
   if (!usuarioRow) return emptyDocenteStats()
   
-  // Ahora podemos llamar a la lógica original pasando el client
-  // Nota: getDashboardDocente por defecto usa resolveIdUsuario() que busca session.
-  // Aquí necesitamos pasar el idUsuario ya resuelto o inyectar la lógica.
-  // Para simplificar, duplicaremos la lógica o la refactorizaremos ligeramente.
-  
   const idUsuario = usuarioRow.idUsuario
-  const { data: profRow } = await db
+  const { data: profRow, error: errProf } = await db
     .from('profesores')
     .select('idProfesor')
     .eq('idUsuario', idUsuario)
     .maybeSingle()
+
+  console.log('[DASH-DOCENTE] idUsuario:', idUsuario, '→ profRow:', profRow, 'error:', errProf)
 
   if (!profRow) return emptyDocenteStats()
   const idProfesor = profRow.idProfesor
@@ -351,9 +350,14 @@ export async function getDashboardDocenteServer(
     db.from('profesores_horario').select('idHorario').eq('idProfesor', idProfesor).eq('activo', true),
   ])
 
+  console.log('[DASH-DOCENTE] idProfesor:', idProfesor, '→ asignaciones:', asigRes.data?.length, 'error:', asigRes.error, '| horarios:', phRes.data?.length, 'error:', phRes.error)
+
   const idMaterias = [...new Set((asigRes.data ?? []).map((a: any) => a.idMateria))]
   const idCursos   = [...new Set((asigRes.data ?? []).map((a: any) => a.idCurso))]
   const idHorarios = (phRes.data ?? []).map((r: any) => r.idHorario)
+
+  console.log('[DASH-DOCENTE] idMaterias:', idMaterias, 'idCursos:', idCursos, 'idHorarios:', idHorarios)
+
 
   const [notasRes, estudiantesRes, novedadesRes, horariosRes] = await Promise.all([
     idMaterias.length > 0
