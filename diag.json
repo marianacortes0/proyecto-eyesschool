@@ -1,0 +1,19 @@
+{
+  "usuarios": [
+    {
+      "idUsuario": 57,
+      "auth_id": "f96a2614-d2e9-4c2f-8bab-bd9f3fb8db14",
+      "primerNombre": "samuel",
+      "primerApellido": "sierra"
+    }
+  ],
+  "profesores": [
+    {
+      "idProfesor": 6,
+      "idUsuario": 57
+    }
+  ],
+  "asignaciones_all": [],
+  "asignaciones_activas": [],
+  "profesores_horario": []
+}

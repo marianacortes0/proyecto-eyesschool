@@ -1,0 +1,402 @@
+{
+  "cursos": [
+    {
+      "idCurso": 11,
+      "nombreCurso": "Ciencias1",
+      "grado": "6",
+      "jornada": "mañana",
+      "activo": true
+    },
+    {
+      "idCurso": 12,
+      "nombreCurso": "Ciencias2",
+      "grado": "7",
+      "jornada": "mañana",
+      "activo": true
+    },
+    {
+      "idCurso": 13,
+      "nombreCurso": "Ciencias3",
+      "grado": "8",
+      "jornada": "mañana",
+      "activo": true
+    },
+    {
+      "idCurso": 14,
+      "nombreCurso": "Ciencias4",
+      "grado": "9",
+      "jornada": "mañana",
+      "activo": true
+    },
+    {
+      "idCurso": 15,
+      "nombreCurso": "Ciencias5",
+      "grado": "10",
+      "jornada": "mañana",
+      "activo": true
+    },
+    {
+      "idCurso": 6,
+      "nombreCurso": "Lenguaje1",
+      "grado": "6",
+      "jornada": "tarde",
+      "activo": true
+    },
+    {
+      "idCurso": 7,
+      "nombreCurso": "Lenguaje2",
+      "grado": "7",
+      "jornada": "tarde",
+      "activo": true
+    },
+    {
+      "idCurso": 8,
+      "nombreCurso": "Lenguaje3",
+      "grado": "8",
+      "jornada": "tarde",
+      "activo": true
+    },
+    {
+      "idCurso": 9,
+      "nombreCurso": "Lenguaje4",
+      "grado": "9",
+      "jornada": "tarde",
+      "activo": true
+    },
+    {
+      "idCurso": 10,
+      "nombreCurso": "Lenguaje5",
+      "grado": "10",
+      "jornada": "tarde",
+      "activo": true
+    },
+    {
+      "idCurso": 1,
+      "nombreCurso": "Matematicas1",
+      "grado": "6",
+      "jornada": "mañana",
+      "activo": true
+    },
+    {
+      "idCurso": 2,
+      "nombreCurso": "Matematicas2",
+      "grado": "7",
+      "jornada": "mañana",
+      "activo": true
+    },
+    {
+      "idCurso": 3,
+      "nombreCurso": "Matematicas3",
+      "grado": "8",
+      "jornada": "mañana",
+      "activo": true
+    },
+    {
+      "idCurso": 4,
+      "nombreCurso": "Matematicas4",
+      "grado": "9",
+      "jornada": "mañana",
+      "activo": true
+    },
+    {
+      "idCurso": 5,
+      "nombreCurso": "Matematicas5",
+      "grado": "10",
+      "jornada": "mañana",
+      "activo": true
+    },
+    {
+      "idCurso": 16,
+      "nombreCurso": "Sociales1",
+      "grado": "6",
+      "jornada": "tarde",
+      "activo": true
+    },
+    {
+      "idCurso": 17,
+      "nombreCurso": "Sociales2",
+      "grado": "7",
+      "jornada": "tarde",
+      "activo": true
+    },
+    {
+      "idCurso": 18,
+      "nombreCurso": "Sociales3",
+      "grado": "8",
+      "jornada": "tarde",
+      "activo": true
+    },
+    {
+      "idCurso": 19,
+      "nombreCurso": "Sociales4",
+      "grado": "9",
+      "jornada": "tarde",
+      "activo": true
+    },
+    {
+      "idCurso": 20,
+      "nombreCurso": "Sociales5",
+      "grado": "10",
+      "jornada": "tarde",
+      "activo": true
+    }
+  ],
+  "materias": [
+    {
+      "idMateria": 3,
+      "nombreMateria": "Ciencias Naturales",
+      "activa": true
+    },
+    {
+      "idMateria": 4,
+      "nombreMateria": "Ciencias Sociales",
+      "activa": true
+    },
+    {
+      "idMateria": 5,
+      "nombreMateria": "Inglés",
+      "activa": true
+    },
+    {
+      "idMateria": 2,
+      "nombreMateria": "Lengua Castellana",
+      "activa": true
+    },
+    {
+      "idMateria": 1,
+      "nombreMateria": "Matemáticas",
+      "activa": true
+    }
+  ],
+  "horarios": [
+    {
+      "idHorario": 2,
+      "dia": "Martes",
+      "horaInicio": "07:00:00",
+      "horaFin": "09:00:00",
+      "salon": "A101",
+      "idMateria": 2,
+      "idCurso": 1
+    },
+    {
+      "idHorario": 3,
+      "dia": "Miercoles",
+      "horaInicio": "08:00:00",
+      "horaFin": "10:00:00",
+      "salon": "B201",
+      "idMateria": 3,
+      "idCurso": 2
+    },
+    {
+      "idHorario": 4,
+      "dia": "Jueves",
+      "horaInicio": "09:00:00",
+      "horaFin": "11:00:00",
+      "salon": "C301",
+      "idMateria": 4,
+      "idCurso": 3
+    },
+    {
+      "idHorario": 5,
+      "dia": "Viernes",
+      "horaInicio": "10:00:00",
+      "horaFin": "12:00:00",
+      "salon": "D401",
+      "idMateria": 5,
+      "idCurso": 4
+    },
+    {
+      "idHorario": 6,
+      "dia": "Lunes",
+      "horaInicio": "07:00:00",
+      "horaFin": "08:00:00",
+      "salon": "291",
+      "idMateria": 2,
+      "idCurso": 1
+    },
+    {
+      "idHorario": 1,
+      "dia": "Lunes",
+      "horaInicio": "07:00:00",
+      "horaFin": "09:00:00",
+      "salon": "A101",
+      "idMateria": 1,
+      "idCurso": 1
+    },
+    {
+      "idHorario": 7,
+      "dia": "Lunes",
+      "horaInicio": "07:00:00",
+      "horaFin": "08:00:00",
+      "salon": "lab",
+      "idMateria": 2,
+      "idCurso": 2
+    },
+    {
+      "idHorario": 8,
+      "dia": "Lunes",
+      "horaInicio": "10:00:00",
+      "horaFin": "12:00:00",
+      "salon": "informatica",
+      "idMateria": 3,
+      "idCurso": 2
+    }
+  ],
+  "notas_sample": [
+    {
+      "idNota": 1,
+      "idEstudiante": 1,
+      "idMateria": 1,
+      "nota": 8.5
+    },
+    {
+      "idNota": 2,
+      "idEstudiante": 1,
+      "idMateria": 2,
+      "nota": 7.8
+    },
+    {
+      "idNota": 3,
+      "idEstudiante": 2,
+      "idMateria": 3,
+      "nota": 9.2
+    },
+    {
+      "idNota": 4,
+      "idEstudiante": 3,
+      "idMateria": 4,
+      "nota": 6.9
+    },
+    {
+      "idNota": 5,
+      "idEstudiante": 4,
+      "idMateria": 5,
+      "nota": 8
+    },
+    {
+      "idNota": 14,
+      "idEstudiante": 5,
+      "idMateria": 4,
+      "nota": 4.1
+    },
+    {
+      "idNota": 15,
+      "idEstudiante": 5,
+      "idMateria": 3,
+      "nota": 1.5
+    },
+    {
+      "idNota": 16,
+      "idEstudiante": 5,
+      "idMateria": 2,
+      "nota": 4.9
+    },
+    {
+      "idNota": 17,
+      "idEstudiante": 7,
+      "idMateria": 1,
+      "nota": 4.3
+    }
+  ],
+  "notas_por_materia": {
+    "1": 2,
+    "2": 2,
+    "3": 2,
+    "4": 2,
+    "5": 1
+  },
+  "estudiantes_sample": [
+    {
+      "idEstudiante": 1,
+      "idCursoActual": 1,
+      "estado": "Activo"
+    },
+    {
+      "idEstudiante": 2,
+      "idCursoActual": 2,
+      "estado": "Activo"
+    },
+    {
+      "idEstudiante": 3,
+      "idCursoActual": 3,
+      "estado": "Activo"
+    },
+    {
+      "idEstudiante": 4,
+      "idCursoActual": 4,
+      "estado": "Activo"
+    },
+    {
+      "idEstudiante": 5,
+      "idCursoActual": 5,
+      "estado": "Activo"
+    },
+    {
+      "idEstudiante": 6,
+      "idCursoActual": 1,
+      "estado": "Activo"
+    },
+    {
+      "idEstudiante": 7,
+      "idCursoActual": 5,
+      "estado": "Activo"
+    }
+  ],
+  "profesor": null,
+  "otras_asignaciones": [
+    {
+      "idAsignacion": 1,
+      "idProfesor": 1,
+      "idCurso": 1,
+      "idMateria": 1,
+      "fechaAsignacion": "2026-02-19T12:58:42",
+      "fechaFinalizacion": null,
+      "activo": true
+    },
+    {
+      "idAsignacion": 2,
+      "idProfesor": 1,
+      "idCurso": 1,
+      "idMateria": 2,
+      "fechaAsignacion": "2026-02-19T12:58:42",
+      "fechaFinalizacion": null,
+      "activo": true
+    },
+    {
+      "idAsignacion": 3,
+      "idProfesor": 2,
+      "idCurso": 2,
+      "idMateria": 3,
+      "fechaAsignacion": "2026-02-19T12:58:42",
+      "fechaFinalizacion": null,
+      "activo": true
+    },
+    {
+      "idAsignacion": 4,
+      "idProfesor": 3,
+      "idCurso": 3,
+      "idMateria": 4,
+      "fechaAsignacion": "2026-02-19T12:58:42",
+      "fechaFinalizacion": null,
+      "activo": true
+    },
+    {
+      "idAsignacion": 5,
+      "idProfesor": 4,
+      "idCurso": 4,
+      "idMateria": 5,
+      "fechaAsignacion": "2026-02-19T12:58:42",
+      "fechaFinalizacion": null,
+      "activo": true
+    }
+  ],
+  "asignaciones_columns": [
+    "idAsignacion",
+    "idProfesor",
+    "idCurso",
+    "idMateria",
+    "fechaAsignacion",
+    "fechaFinalizacion",
+    "activo"
+  ]
+}
