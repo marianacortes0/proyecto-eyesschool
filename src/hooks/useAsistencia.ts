@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import {
-  getRegistros,
-  getEstudiantesSelector,
   actualizarRegistro,
   eliminarRegistro,
   type RegistroAsistencia,
@@ -12,7 +10,11 @@ import {
   type CreateRegistroData,
   type UpdateRegistroData,
 } from '@/services/asistencia/asistenciaService'
-import { crearRegistroAction } from '@/services/asistencia/asistenciaActions'
+import {
+  crearRegistroAction,
+  getRegistrosAction,
+  getEstudiantesSelectorAction,
+} from '@/services/asistencia/asistenciaActions'
 
 export type { EstadoAsistencia }
 export type ModalMode = 'create' | 'edit' | null
@@ -42,8 +44,8 @@ export function useAsistencia(idUsuarioRegistrador: number, idEstudiantePropio?:
       setLoading(true)
       setError(null)
       const [regs, ests] = await Promise.all([
-        getRegistros({ fecha: fechaFiltro, estado: estadoFiltro, search: searchQuery, idEstudiante: idEstudiantePropio }),
-        getEstudiantesSelector(),
+        getRegistrosAction({ fecha: fechaFiltro, estado: estadoFiltro, search: searchQuery, idEstudiante: idEstudiantePropio }),
+        getEstudiantesSelectorAction(),
       ])
       setRegistros(regs)
       setEstudiantes(ests)
@@ -57,7 +59,7 @@ export function useAsistencia(idUsuarioRegistrador: number, idEstudiantePropio?:
   const fetchRegistros = useCallback(async () => {
     try {
       setError(null)
-      const regs = await getRegistros({ fecha: fechaFiltro, estado: estadoFiltro, search: searchQuery, idEstudiante: idEstudiantePropio })
+      const regs = await getRegistrosAction({ fecha: fechaFiltro, estado: estadoFiltro, search: searchQuery, idEstudiante: idEstudiantePropio })
       setRegistros(regs)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al cargar registros')

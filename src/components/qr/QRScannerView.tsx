@@ -9,6 +9,7 @@ type Props = {
   pending: PendingRegistration | null
   lastResult: ScanResult | null
   recentScans: ScanResult[]
+  todayRecords?: { idAsistencia: number; nombreEstudiante: string; codigoEstudiante: string; estado: string; fecha: string; fechaRegistro: string; observacion: string | null }[]
   onCapture: (blob: Blob) => void
   onConfirm: (estado: ScanEstado, observacion: string) => Promise<void>
   onCancel: () => void
@@ -172,6 +173,7 @@ export default function QRScannerView({
   pending,
   lastResult,
   recentScans,
+  todayRecords,
   onCapture,
   onConfirm,
   onCancel,
@@ -389,42 +391,45 @@ export default function QRScannerView({
             Registro del día
           </h2>
           <span className="text-xs text-slate-400 bg-slate-100 dark:bg-white/5 px-2.5 py-1 rounded-full">
-            {recentScans.length} registrado{recentScans.length !== 1 ? 's' : ''}
+            {(todayRecords?.length ?? 0)} registrado{(todayRecords?.length ?? 0) !== 1 ? 's' : ''}
           </span>
         </div>
 
-        {recentScans.length === 0 ? (
+        {(!todayRecords || todayRecords.length === 0) ? (
           <div className="text-center py-10 text-slate-400 dark:text-gray-500 text-sm">
             <p className="text-3xl mb-2">📋</p>
-            <p>Aún no hay registros en esta sesión.</p>
+            <p>No hay registros de asistencia hoy.</p>
           </div>
         ) : (
           <div className="space-y-2 max-h-[calc(100vh-280px)] overflow-y-auto pr-1">
-            {recentScans.map((s) => {
-              const info = estadoInfo(s.estado)
+            {todayRecords.map((r) => {
+              const estadoVal = r.estado as ScanEstado
+              const inf = ESTADOS.find(s => s.value === estadoVal)
+              const badge = inf?.badge ?? 'bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300'
+              const dot = inf?.dot ?? 'bg-slate-400'
               return (
                 <div
-                  key={s.id}
+                  key={r.idAsistencia}
                   className="flex items-start gap-3 px-4 py-3 rounded-xl bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10 shadow-sm"
                 >
-                  <div className={`w-2 h-2 rounded-full flex-shrink-0 mt-1.5 ${info.dot}`} />
+                  <div className={`w-2 h-2 rounded-full flex-shrink-0 mt-1.5 ${dot}`} />
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-slate-800 dark:text-white text-sm truncate">
-                      {s.codigo.nombreCompleto}
+                      {r.nombreEstudiante}
                     </p>
-                    <p className="text-xs text-slate-400 font-mono">{s.codigo.codigoEstudiante}</p>
-                    {s.observacion && (
-                      <p className="text-xs text-slate-400 mt-0.5 truncate" title={s.observacion}>
-                        {s.observacion}
+                    <p className="text-xs text-slate-400 font-mono">{r.codigoEstudiante}</p>
+                    {r.observacion && (
+                      <p className="text-xs text-slate-400 mt-0.5 truncate" title={r.observacion}>
+                        {r.observacion}
                       </p>
                     )}
                   </div>
                   <div className="text-right flex-shrink-0 space-y-1">
-                    <span className={`inline-block text-xs font-semibold px-2 py-0.5 rounded-full ${info.badge}`}>
-                      {s.estado}
+                    <span className={`inline-block text-xs font-semibold px-2 py-0.5 rounded-full ${badge}`}>
+                      {r.estado}
                     </span>
                     <p className="text-xs text-slate-400">
-                      {s.timestamp.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(r.fechaRegistro).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
                 </div>

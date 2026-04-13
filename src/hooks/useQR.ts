@@ -2,17 +2,19 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import {
-  getEstudiantesConQR,
-  getRegistrosAsistencia,
   getMiCodigoQR,
-  getUsuariosSinEstudiante,
-  getCursosActivos,
   type EstudianteQR,
   type CodigoQRConEstudiante,
   type RegistroAsistencia,
   type UsuarioSinEstudiante,
   type CursoSimple,
 } from '@/services/qr/qrService'
+import {
+  getEstudiantesConQRAction,
+  getRegistrosAsistenciaAction,
+  getUsuariosSinEstudianteAction,
+  getCursosActivosAction,
+} from '@/services/qr/qrActions'
 import { asignarQR } from '@/auth/actions'
 import { type Role } from '@/lib/utils/permissions'
 
@@ -41,10 +43,10 @@ export function useQR(role: Role | null) {
       setLoading(true)
       setError(null)
       const [estudiantesData, asistenciaData, sinAsignarData, cursosData] = await Promise.all([
-        getEstudiantesConQR(),
-        getRegistrosAsistencia(fechaFiltro),
-        getUsuariosSinEstudiante(),
-        getCursosActivos(),
+        getEstudiantesConQRAction(),
+        getRegistrosAsistenciaAction(fechaFiltro),
+        getUsuariosSinEstudianteAction(),
+        getCursosActivosAction(),
       ])
       setEstudiantes(estudiantesData)
       setAsistencia(asistenciaData)
@@ -59,7 +61,7 @@ export function useQR(role: Role | null) {
 
   const fetchAsistencia = useCallback(async () => {
     try {
-      const data = await getRegistrosAsistencia(fechaFiltro)
+      const data = await getRegistrosAsistenciaAction(fechaFiltro)
       setAsistencia(data)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al cargar asistencia')
@@ -96,8 +98,8 @@ export function useQR(role: Role | null) {
     }
     // Refrescar lista de estudiantes y pendientes
     const [estudiantesData, sinAsignarData] = await Promise.all([
-      getEstudiantesConQR(),
-      getUsuariosSinEstudiante(),
+      getEstudiantesConQRAction(),
+      getUsuariosSinEstudianteAction(),
     ])
     setEstudiantes(estudiantesData)
     setSinAsignar(sinAsignarData)
