@@ -127,11 +127,15 @@ export async function fetchDocenteStats(db: SupabaseClient, idUsuario: number): 
     notasPorPeriodo:     groupNotasByPeriodo(notas),
     horariosHoy,
     topEstudiantes,
+    distribucionNotas: [
+      { name: 'Aprobados', value: notas.filter(n => n.nota >= 3).length },
+      { name: 'Reprobados', value: notas.filter(n => n.nota < 3).length },
+    ],
   }
 }
 
 function emptyDocenteStats(): DocenteStats {
-  return { promedioNotas: 0, aprobacion: 0, estudiantesCount: 0, novedadesPendientes: 0, notasPorPeriodo: [], horariosHoy: [], topEstudiantes: [] }
+  return { promedioNotas: 0, aprobacion: 0, estudiantesCount: 0, novedadesPendientes: 0, notasPorPeriodo: [], horariosHoy: [], topEstudiantes: [], distribucionNotas: [] }
 }
 
 // ── ESTUDIANTE ────────────────────────────────────────────────────────────────
@@ -199,7 +203,11 @@ function emptyEstudianteStats(): EstudianteStats {
 async function buildHijo(db: SupabaseClient, idEstudiante: number, nombre: string, codigoEstudiante: string, curso: string): Promise<HijoStats> {
   const [notasRes, asistenciaRes, novedadesRes] = await Promise.all([
     db.from('notas').select('nota, idPeriodo, idMateria, materias(nombreMateria)').eq('idEstudiante', idEstudiante),
-    db.from('Asistencia').select('estado').eq('idEstudiante', idEstudiante),
+    db.from('Asistencia')
+      .select('idAsistencia, estado, fecha, tipo, observacion')
+      .eq('idEstudiante', idEstudiante)
+      .order('fecha', { ascending: false })
+      .limit(60),
     db.from('novedades')
       .select('idNovedad, descripcion, estado, fecha, tiposnovedad(nombreTipo)')
       .eq('idEstudiante', idEstudiante)
@@ -208,7 +216,7 @@ async function buildHijo(db: SupabaseClient, idEstudiante: number, nombre: strin
   ])
 
   const notas       = (notasRes.data ?? []) as any[]
-  const asistencias = (asistenciaRes.data ?? []) as { estado: string }[]
+  const asistencias = (asistenciaRes.data ?? []) as { idAsistencia: number; estado: string; fecha: string; tipo: string | null; observacion: string | null }[]
   const novedades   = (novedadesRes.data ?? []) as any[]
 
   const presentes = asistencias.filter(a => a.estado === 'Presente' || a.estado === 'Tarde').length
@@ -219,6 +227,9 @@ async function buildHijo(db: SupabaseClient, idEstudiante: number, nombre: strin
     if (!materiaMap[n.idMateria]) materiaMap[n.idMateria] = { nombre: n.materias?.nombreMateria ?? `Materia ${n.idMateria}`, ns: [] }
     materiaMap[n.idMateria].ns.push(n.nota)
   })
+
+  const asistenciaEstadoMap: Record<string, number> = {}
+  asistencias.forEach(a => { asistenciaEstadoMap[a.estado] = (asistenciaEstadoMap[a.estado] ?? 0) + 1 })
 
   return {
     idEstudiante,
@@ -235,12 +246,20 @@ async function buildHijo(db: SupabaseClient, idEstudiante: number, nombre: strin
       promedio:      Number((ns.reduce((a, b) => a + b, 0) / ns.length).toFixed(2)),
     })).sort((a, b) => b.promedio - a.promedio),
     notasPorPeriodo:      groupNotasByPeriodo(notas),
+    asistenciaEstados:    Object.entries(asistenciaEstadoMap).map(([estado, cantidad]) => ({ estado, cantidad })),
     novedadesRecientes:   novedades.map((n: any) => ({
       idNovedad:   n.idNovedad,
       descripcion: n.descripcion,
       estado:      n.estado,
       fecha:       n.fecha,
       nombreTipo:  n.tiposnovedad?.nombreTipo ?? '—',
+    })),
+    registrosAsistencia: asistencias.map(a => ({
+      idAsistencia: a.idAsistencia,
+      fecha:        a.fecha,
+      estado:       a.estado,
+      tipo:         a.tipo,
+      observacion:  a.observacion,
     })),
   }
 }

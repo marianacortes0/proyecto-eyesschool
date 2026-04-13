@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { type Reporte } from '@/services/reportes/reportesService'
 import {
-  getReportes,
-  createReporte,
-  updateReporte,
-  deleteReporte,
-  type Reporte,
-} from '@/services/reportes/reportesService'
+  getReportesAction,
+  createReporteAction,
+  updateReporteAction,
+  deleteReporteAction,
+} from '@/services/reportes/reportesActions'
 
 export type ModalMode = 'create' | 'edit' | null
 
@@ -30,7 +30,7 @@ export function useReportes(idAdministrador: number) {
     setLoading(true)
     setError(null)
     try {
-      setReportes(await getReportes())
+      setReportes(await getReportesAction())
     } catch (e: any) {
       setError(e.message ?? 'Error al cargar reportes')
     } finally {
@@ -56,7 +56,7 @@ export function useReportes(idAdministrador: number) {
   ) => {
     setSaving(true)
     try {
-      await createReporte({ ...payload, idAdministrador })
+      await createReporteAction({ ...payload, idAdministrador })
       await fetchAll()
       closeModal()
     } catch (e: any) {
@@ -72,7 +72,7 @@ export function useReportes(idAdministrador: number) {
   ) => {
     setSaving(true)
     try {
-      await updateReporte(idReporte, payload)
+      await updateReporteAction(idReporte, payload)
       await fetchAll()
       closeModal()
     } catch (e: any) {
@@ -85,7 +85,7 @@ export function useReportes(idAdministrador: number) {
   const handleDelete = async (idReporte: number) => {
     if (!confirm('¿Eliminar este reporte?')) return
     try {
-      await deleteReporte(idReporte)
+      await deleteReporteAction(idReporte)
       setReportes(prev => prev.filter(r => r.idReporte !== idReporte))
     } catch (e: any) {
       setError(e.message)
@@ -94,6 +94,7 @@ export function useReportes(idAdministrador: number) {
 
   return {
     reportes: filtered,
+    allReportes: reportes,
     totalCount: reportes.length,
     loading,
     saving,

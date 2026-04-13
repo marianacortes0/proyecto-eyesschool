@@ -2,23 +2,25 @@
 
 import { useEffect, useState } from 'react'
 import {
-  getNovedades,
-  getTiposNovedad,
-  getCursosParaNovedades,
-  getEstudiantesParaNovedades,
-  createNovedad,
-  updateNovedad,
-  deleteNovedad,
   type Novedad,
   type TipoNovedad,
   type CursoOpt,
   type EstudianteOpt,
 } from '@/services/novedades/novedadesService'
+import {
+  getNovedadesAction,
+  getTiposNovedadAction,
+  getCursosParaNovedadesAction,
+  getEstudiantesParaNovedadesAction,
+  createNovedadAction,
+  updateNovedadAction,
+  deleteNovedadAction,
+} from '@/services/novedades/novedadesActions'
 import { useAuth } from './useAuth'
 
 export type ModalMode = 'create' | 'edit' | null
 
-export function useNovedades(idAdministrador: number = 0) {
+export function useNovedades(registradoPor: number = 0) {
   const { userId } = useAuth()
 
   const [novedades, setNovedades] = useState<Novedad[]>([])
@@ -43,10 +45,10 @@ export function useNovedades(idAdministrador: number = 0) {
     setError(null)
     try {
       const [nov, tipos, curs, ests] = await Promise.all([
-        getNovedades(),
-        getTiposNovedad(),
-        getCursosParaNovedades(),
-        getEstudiantesParaNovedades(),
+        getNovedadesAction(),
+        getTiposNovedadAction(),
+        getCursosParaNovedadesAction(),
+        getEstudiantesParaNovedadesAction(),
       ])
       setNovedades(nov)
       setTiposNovedad(tipos)
@@ -79,10 +81,10 @@ export function useNovedades(idAdministrador: number = 0) {
   const closeModal = () => { setSelected(null); setModalMode(null) }
 
   const handleCreate = async (payload: { descripcion: string; idEstudiante: number; idTipoNovedad: number }) => {
-    if (!idAdministrador) return
+    if (!registradoPor) return
     setSaving(true)
     try {
-      await createNovedad({ ...payload, registradoPor: idAdministrador })
+      await createNovedadAction({ ...payload, registradoPor })
       await fetchAll()
       closeModal()
     } catch (e: any) {
@@ -98,7 +100,7 @@ export function useNovedades(idAdministrador: number = 0) {
   ) => {
     setSaving(true)
     try {
-      await updateNovedad(idNovedad, payload)
+      await updateNovedadAction(idNovedad, payload)
       await fetchAll()
       closeModal()
     } catch (e: any) {
@@ -111,7 +113,7 @@ export function useNovedades(idAdministrador: number = 0) {
   const handleDelete = async (idNovedad: number) => {
     if (!confirm('¿Eliminar esta novedad?')) return
     try {
-      await deleteNovedad(idNovedad)
+      await deleteNovedadAction(idNovedad)
       setNovedades(prev => prev.filter(n => n.idNovedad !== idNovedad))
     } catch (e: any) {
       setError(e.message)

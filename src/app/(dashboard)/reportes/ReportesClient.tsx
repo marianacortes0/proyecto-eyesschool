@@ -37,7 +37,7 @@ interface Props { role: Role; idAdministrador: number }
 
 export default function ReportesClient({ role, idAdministrador }: Props) {
   const {
-    reportes, totalCount, loading, saving, error,
+    reportes, allReportes, totalCount, loading, saving, error,
     filterTipo, setFilterTipo,
     filterEstado, setFilterEstado,
     searchQuery, setSearchQuery,
@@ -53,7 +53,7 @@ export default function ReportesClient({ role, idAdministrador }: Props) {
 
   // Contadores por estado
   const countByEstado = (estado: string) =>
-    reportes.filter(r => r.estado === estado).length
+    allReportes.filter(r => r.estado === estado).length
 
   return (
     <div className="space-y-6">

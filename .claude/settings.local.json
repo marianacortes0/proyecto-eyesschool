@@ -6,7 +6,9 @@
       "Bash(npm install:*)",
       "Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")",
       "Bash(grep -v \"^Row$\\\\|^Insert$\\\\|^Update$\\\\|^Relationships$\\\\|^public$\\\\|^Tables$\\\\|^__InternalSupabase$\")",
-      "Bash(ls -la /c/Users/maria/proyecto-eyesschool/*.js)"
+      "Bash(ls -la /c/Users/maria/proyecto-eyesschool/*.js)",
+      "Bash(xargs grep:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

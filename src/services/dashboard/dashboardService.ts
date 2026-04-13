@@ -218,6 +218,14 @@ export type EstudianteStats = {
   novedadesRecientes: NovedadResumen[]
 }
 
+export type RegistroAsistenciaSimple = {
+  idAsistencia: number
+  fecha: string
+  estado: string
+  tipo: string | null
+  observacion: string | null
+}
+
 export type HijoStats = {
   idEstudiante: number
   nombreCompleto: string
@@ -231,6 +239,7 @@ export type HijoStats = {
   notasPorPeriodo: { periodo: string; promedio: number }[]
   asistenciaEstados: { estado: string; cantidad: number }[]
   novedadesRecientes: NovedadResumen[]
+  registrosAsistencia: RegistroAsistenciaSimple[]
 }
 
 export type PadreStats = {
@@ -250,8 +259,19 @@ export const getDashboardDocente = async (db?: AnySupabaseClient): Promise<Docen
     .select('idProfesor')
     .eq('idUsuario', idUsuario)
     .maybeSingle()
-  if (!profRow) return emptyDocenteStats()
-  const idProfesor = profRow.idProfesor
+
+  let idProfesor: number
+  if (!profRow) {
+    const { data: newRow } = await supabase
+      .from('profesores')
+      .insert({ idUsuario, nivelEstudios: 'Pendiente', titulo: 'Pendiente' })
+      .select('idProfesor')
+      .single()
+    if (!newRow) return emptyDocenteStats()
+    idProfesor = newRow.idProfesor
+  } else {
+    idProfesor = profRow.idProfesor
+  }
 
   const [asigRes, phRes] = await Promise.all([
     supabase.from('asignaciones').select('idCurso, idMateria').eq('idProfesor', idProfesor).eq('activo', true),
@@ -267,7 +287,7 @@ export const getDashboardDocente = async (db?: AnySupabaseClient): Promise<Docen
       ? supabase.from('notas').select('nota, idPeriodo, idEstudiante').in('idMateria', idMaterias)
       : Promise.resolve({ data: [] as { nota: number; idPeriodo: number; idEstudiante: number }[] }),
     idCursos.length > 0
-      ? supabase.from('estudiantes').select('idEstudiante', { count: 'exact', head: true }).in('idCursoActual', idCursos).eq('estado', 'Activo')
+      ? supabase.from('estudiantes').select('idEstudiante', { count: 'exact', head: true }).in('idCursoActual', idCursos)
       : Promise.resolve({ count: 0, data: null }),
     supabase.from('novedades').select('idNovedad', { count: 'exact', head: true }).eq('estado', 'Pendiente'),
     idHorarios.length > 0
@@ -368,8 +388,18 @@ export async function getDashboardDocenteServer(
     .eq('idUsuario', idUsuario)
     .maybeSingle()
 
-  if (!profRow) return emptyDocenteStats()
-  const idProfesor = profRow.idProfesor
+  let idProfesor: number
+  if (!profRow) {
+    const { data: newRow } = await db
+      .from('profesores')
+      .insert({ idUsuario, nivelEstudios: 'Pendiente', titulo: 'Pendiente' })
+      .select('idProfesor')
+      .single()
+    if (!newRow) return emptyDocenteStats()
+    idProfesor = newRow.idProfesor
+  } else {
+    idProfesor = profRow.idProfesor
+  }
 
   const [asigRes, phRes] = await Promise.all([
     db.from('asignaciones').select('idCurso, idMateria').eq('idProfesor', idProfesor).eq('activo', true),
@@ -385,7 +415,7 @@ export async function getDashboardDocenteServer(
       ? db.from('notas').select('nota, idPeriodo, idEstudiante').in('idMateria', idMaterias)
       : Promise.resolve({ data: [] as { nota: number; idPeriodo: number; idEstudiante: number }[] }),
     idCursos.length > 0
-      ? db.from('estudiantes').select('idEstudiante', { count: 'exact', head: true }).in('idCursoActual', idCursos).eq('estado', 'Activo')
+      ? db.from('estudiantes').select('idEstudiante', { count: 'exact', head: true }).in('idCursoActual', idCursos)
       : Promise.resolve({ count: 0, data: null }),
     db.from('novedades').select('idNovedad', { count: 'exact', head: true }).eq('estado', 'Pendiente'),
     idHorarios.length > 0
@@ -644,7 +674,11 @@ async function buildHijoStats(
 
   const [notasRes, asistenciaRes, novedadesRes] = await Promise.all([
     supabase.from('notas').select('nota, idPeriodo, idMateria, materias(nombreMateria)').eq('idEstudiante', idEstudiante),
-    supabase.from('Asistencia').select('estado').eq('idEstudiante', idEstudiante),
+    supabase.from('Asistencia')
+      .select('idAsistencia, estado, fecha, tipo, observacion')
+      .eq('idEstudiante', idEstudiante)
+      .order('fecha', { ascending: false })
+      .limit(60),
     supabase.from('novedades')
       .select('idNovedad, descripcion, estado, fecha, tiposnovedad(nombreTipo)')
       .eq('idEstudiante', idEstudiante)
@@ -653,7 +687,7 @@ async function buildHijoStats(
   ])
 
   const notas       = (notasRes.data ?? []) as any[]
-  const asistencias = (asistenciaRes.data ?? []) as { estado: string }[]
+  const asistencias = (asistenciaRes.data ?? []) as { idAsistencia: number; estado: string; fecha: string; tipo: string | null; observacion: string | null }[]
   const novedades   = (novedadesRes.data ?? []) as any[]
 
   const presentes = asistencias.filter(a => a.estado === 'Presente' || a.estado === 'Tarde').length
@@ -691,6 +725,13 @@ async function buildHijoStats(
       estado:      n.estado,
       fecha:       n.fecha,
       nombreTipo:  n.tiposnovedad?.nombreTipo ?? '—',
+    })),
+    registrosAsistencia: asistencias.map(a => ({
+      idAsistencia: a.idAsistencia,
+      fecha:        a.fecha,
+      estado:       a.estado,
+      tipo:         a.tipo,
+      observacion:  a.observacion,
     })),
   }
 }

@@ -8,6 +8,7 @@ import {
   type EstudianteSelector,
   type FiltrosAsistencia,
   type EstadoAsistencia,
+  type TipoAsistencia,
 } from './asistenciaService'
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -31,6 +32,20 @@ function buildNombre(u: {
 export async function crearRegistroAction(data: CreateRegistroData) {
   const supabase = createAdminClient()
 
+  // Verificar duplicado: mismo estudiante, misma fecha, mismo tipo
+  const { data: existing, error: checkError } = await supabase
+    .from('Asistencia')
+    .select('idAsistencia')
+    .eq('idEstudiante', data.idEstudiante)
+    .eq('fecha', data.fecha)
+    .eq('tipo', data.tipo)
+    .maybeSingle()
+
+  if (checkError) throw new Error(checkError.message)
+  if (existing) {
+    throw new Error(`Ya existe un registro de ${data.tipo} para este estudiante en esta fecha.`)
+  }
+
   const { error } = await supabase.from('Asistencia').insert({
     idEstudiante:  data.idEstudiante,
     estado:        data.estado,
@@ -38,6 +53,7 @@ export async function crearRegistroAction(data: CreateRegistroData) {
     observacion:   data.observacion ?? null,
     registradoPor: data.registradoPor,
     activo:        true,
+    tipo:          data.tipo,
   })
 
   if (error) {

@@ -146,6 +146,41 @@ export async function getAsignacionesProfesoresAction(): Promise<AsignacionProfe
   }))
 }
 
+// ── Horario write operations (bypass RLS) ───────────────────────────────────
+
+export async function createHorarioAction(
+  payload: Omit<Horario, 'idHorario' | 'nombreCurso' | 'gradoCurso' | 'nombreMateria'>
+): Promise<{ idHorario: number }> {
+  const supabase = createAdminClient()
+  const { data, error } = await supabase.from('Horario').insert(payload).select('idHorario').single()
+  if (error) throw new Error(error.message)
+  return data as { idHorario: number }
+}
+
+export async function asignarProfesorHorarioAction(idProfesor: number, idHorario: number) {
+  const supabase = createAdminClient()
+  const { error } = await supabase
+    .from('profesores_horario')
+    .insert({ idProfesor, idHorario, fechaAsignacion: new Date().toISOString().slice(0, 10), activo: true })
+  if (error) throw new Error(error.message)
+}
+
+export async function updateHorarioAction(
+  idHorario: number,
+  payload: Partial<Omit<Horario, 'idHorario' | 'nombreCurso' | 'gradoCurso' | 'nombreMateria'>>
+) {
+  const supabase = createAdminClient()
+  const { error } = await supabase.from('Horario').update(payload).eq('idHorario', idHorario)
+  if (error) throw new Error(error.message)
+}
+
+export async function deleteHorarioAction(idHorario: number) {
+  const supabase = createAdminClient()
+  await supabase.from('profesores_horario').delete().eq('idHorario', idHorario)
+  const { error } = await supabase.from('Horario').delete().eq('idHorario', idHorario)
+  if (error) throw new Error(error.message)
+}
+
 // ── Asignaciones (bypass RLS) ────────────────────────────────────────────────
 
 export async function getAsignacionesAction(): Promise<Asignacion[]> {
@@ -170,4 +205,29 @@ export async function getAsignacionesAction(): Promise<Asignacion[]> {
     nombreCurso: row.cursos?.nombreCurso ?? '',
     nombreMateria: row.materias?.nombreMateria ?? '',
   }))
+}
+
+// ── Asignaciones write operations (bypass RLS) ───────────────────────────────
+
+export async function createAsignacionAction(
+  payload: Omit<Asignacion, 'idAsignacion' | 'nombreProfesor' | 'nombreCurso' | 'nombreMateria'>
+) {
+  const supabase = createAdminClient()
+  const { error } = await supabase.from('asignaciones').insert(payload)
+  if (error) throw new Error(error.message)
+}
+
+export async function updateAsignacionAction(
+  idAsignacion: number,
+  payload: Partial<Omit<Asignacion, 'idAsignacion'>>
+) {
+  const supabase = createAdminClient()
+  const { error } = await supabase.from('asignaciones').update(payload).eq('idAsignacion', idAsignacion)
+  if (error) throw new Error(error.message)
+}
+
+export async function deleteAsignacionAction(idAsignacion: number) {
+  const supabase = createAdminClient()
+  const { error } = await supabase.from('asignaciones').delete().eq('idAsignacion', idAsignacion)
+  if (error) throw new Error(error.message)
 }

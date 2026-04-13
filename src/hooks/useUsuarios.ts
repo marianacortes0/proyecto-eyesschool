@@ -2,19 +2,20 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import {
-  getUsuarios,
-  updateUsuario,
-  toggleUsuarioEstado,
   type UsuarioConRol,
   type CreateUsuarioData,
   type UpdateUsuarioData,
 } from '@/services/usuarios/usuariosService'
 import {
+  getUsuariosAction,
   createUsuarioConAuth,
+  updateUsuarioAction,
+  toggleUsuarioEstadoAction,
   getPendingUsuariosAction,
   validarUsuarioAction,
   rechazarUsuarioAction,
   deleteUsuarioAction,
+  repararFilasRolAction,
 } from '@/app/(dashboard)/usuarios/actions'
 
 export type ModalMode = 'create' | 'edit' | null
@@ -44,7 +45,7 @@ export function useUsuarios() {
     try {
       setLoading(true)
       setError(null)
-      const data = await getUsuarios()
+      const data = await getUsuariosAction()
       setUsuarios(data)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al cargar usuarios')
@@ -68,6 +69,7 @@ export function useUsuarios() {
   }, [])
 
   useEffect(() => {
+    repararFilasRolAction().catch(() => {})
     fetchUsuarios()
     fetchPending()
   }, [fetchUsuarios, fetchPending])
@@ -90,7 +92,7 @@ export function useUsuarios() {
     if (!selectedUsuario) return
     setSaving(true)
     try {
-      await updateUsuario(selectedUsuario.idUsuario, data)
+      await updateUsuarioAction(selectedUsuario.idUsuario, data)
       await fetchUsuarios()
       closeModal()
     } catch (err) {
@@ -111,7 +113,7 @@ export function useUsuarios() {
 
   const handleToggleEstado = async (id: number, nuevoEstado: boolean): Promise<void> => {
     try {
-      await toggleUsuarioEstado(id, nuevoEstado)
+      await toggleUsuarioEstadoAction(id, nuevoEstado)
       await fetchUsuarios()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al cambiar estado')

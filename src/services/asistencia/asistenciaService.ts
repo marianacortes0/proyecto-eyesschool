@@ -27,18 +27,22 @@ export type EstudianteSelector = {
   jornada: string | null
 }
 
+export type TipoAsistencia = 'entrada' | 'salida'
+
 export type CreateRegistroData = {
   idEstudiante: number
   estado: EstadoAsistencia
   fecha: string
   observacion?: string | null
   registradoPor: number
+  tipo: TipoAsistencia
 }
 
 export type UpdateRegistroData = {
   estado?: EstadoAsistencia
   fecha?: string
   observacion?: string | null
+  tipo?: TipoAsistencia
 }
 
 export type FiltrosAsistencia = {

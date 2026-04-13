@@ -2,9 +2,6 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import {
-  createHorario,
-  updateHorario,
-  deleteHorario,
   createCurso,
   updateCurso,
   deleteCurso,
@@ -14,11 +11,7 @@ import {
   createEspecializacion,
   updateEspecializacion,
   deleteEspecializacion,
-  asignarProfesorHorario,
   getAsignaciones,
-  createAsignacion,
-  updateAsignacion,
-  deleteAsignacion,
   type Horario,
   type Curso,
   type Materia,
@@ -37,6 +30,13 @@ import {
   getProfesoresAction,
   getAsignacionesProfesoresAction,
   getAsignacionesAction,
+  createHorarioAction,
+  asignarProfesorHorarioAction,
+  updateHorarioAction,
+  deleteHorarioAction,
+  createAsignacionAction,
+  updateAsignacionAction,
+  deleteAsignacionAction,
 } from '@/services/horarios/horariosActions'
 
 export type ModalMode = 'create' | 'edit' | null
@@ -158,9 +158,9 @@ export function useHorarios() {
   ) => {
     setSaving(true)
     try {
-      const { idHorario } = await createHorario(payload)
+      const { idHorario } = await createHorarioAction(payload)
       if (idProfesor) {
-        await asignarProfesorHorario(idProfesor, idHorario)
+        await asignarProfesorHorarioAction(idProfesor, idHorario)
       }
       await fetchAll()
       closeModal()
@@ -182,7 +182,7 @@ export function useHorarios() {
   ) => {
     setSaving(true)
     try {
-      await updateHorario(idHorario, payload)
+      await updateHorarioAction(idHorario, payload)
       await fetchAll()
       closeModal()
     } catch (e: any) {
@@ -194,7 +194,7 @@ export function useHorarios() {
 
   const handleToggleActivo = async (h: Horario) => {
     try {
-      await updateHorario(h.idHorario, { activo: !h.activo })
+      await updateHorarioAction(h.idHorario, { activo: !h.activo })
       setHorarios(prev =>
         prev.map(x => x.idHorario === h.idHorario ? { ...x, activo: !h.activo } : x)
       )
@@ -206,7 +206,7 @@ export function useHorarios() {
   const handleDelete = async (idHorario: number) => {
     if (!confirm('¿Eliminar este horario? Esta acción no se puede deshacer.')) return
     try {
-      await deleteHorario(idHorario)
+      await deleteHorarioAction(idHorario)
       setHorarios(prev => prev.filter(h => h.idHorario !== idHorario))
     } catch (e: any) {
       setError(e.message)
@@ -356,7 +356,7 @@ export function useHorarios() {
   const handleCreateAsignacion = async (payload: Omit<Asignacion, 'idAsignacion' | 'nombreProfesor' | 'nombreCurso' | 'nombreMateria'>) => {
     setSavingAsignacion(true)
     try {
-      await createAsignacion(payload)
+      await createAsignacionAction(payload)
       await fetchAll()
       closeAsignacionForm()
     } catch (e: any) {
@@ -369,7 +369,7 @@ export function useHorarios() {
   const handleUpdateAsignacion = async (idAsignacion: number, payload: Partial<Omit<Asignacion, 'idAsignacion'>>) => {
     setSavingAsignacion(true)
     try {
-      await updateAsignacion(idAsignacion, payload)
+      await updateAsignacionAction(idAsignacion, payload)
       await fetchAll()
       closeAsignacionForm()
     } catch (e: any) {
@@ -382,7 +382,7 @@ export function useHorarios() {
   const handleDeleteAsignacion = async (idAsignacion: number) => {
     if (!confirm('¿Eliminar esta asignación?')) return
     try {
-      await deleteAsignacion(idAsignacion)
+      await deleteAsignacionAction(idAsignacion)
       await fetchAll()
     } catch (e: any) {
       setError(e.message)

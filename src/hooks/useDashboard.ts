@@ -1,13 +1,12 @@
-import { createClient } from "../services/supabase/client";
 import { useEffect, useState } from "react";
 import {
-  getPromedioGeneral,
-  getAprobacion,
-  getEstudiantesActivos,
-  getAsistenciaPromedio,
-  getNotasPorPeriodo,
-  getDistribucionUsuarios,
-} from "@/services/dashboard/dashboardService";
+  getPromedioGeneralAction,
+  getAprobacionAction,
+  getEstudiantesActivosAction,
+  getAsistenciaPromedioAction,
+  getNotasPorPeriodoAction,
+  getDistribucionUsuariosAction,
+} from "@/services/dashboard/dashboardActions";
 
 
 type ChartData = {
@@ -32,10 +31,6 @@ useEffect(() => {
  
   const fetchData = async () => {
     try {
-      const { data: { session } } = await createClient().auth.getSession()
-      console.log("[JWT app_metadata]", session?.user?.app_metadata)
-      console.log("[JWT user_metadata]", session?.user?.user_metadata)
-
       const [
         promedio,
         aprobacion,
@@ -44,12 +39,12 @@ useEffect(() => {
         chartData,
         distribucion,
       ] = await Promise.all([
-        getPromedioGeneral(),
-        getAprobacion(),
-        getEstudiantesActivos(),
-        getAsistenciaPromedio(),
-        getNotasPorPeriodo(),
-        getDistribucionUsuarios(),
+        getPromedioGeneralAction(),
+        getAprobacionAction(),
+        getEstudiantesActivosAction(),
+        getAsistenciaPromedioAction(),
+        getNotasPorPeriodoAction(),
+        getDistribucionUsuariosAction(),
       ]);
 
       setStats({

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { type RegistroAsistencia, type EstudianteSelector, type EstadoAsistencia } from '@/services/asistencia/asistenciaService'
+import { type RegistroAsistencia, type EstudianteSelector, type EstadoAsistencia, type TipoAsistencia } from '@/services/asistencia/asistenciaService'
 import { type ModalMode } from '@/hooks/useAsistencia'
 import { type CreateRegistroData, type UpdateRegistroData } from '@/services/asistencia/asistenciaService'
 
@@ -31,6 +31,7 @@ export default function AsistenciaModal({
   const [jornadaSeleccionada, setJornadaSeleccionada] = useState<string>('')
   const [cursoSeleccionado,   setCursoSeleccionado]   = useState<string>('')
   const [idEstudiante,        setIdEstudiante]        = useState<number | ''>('')
+  const [tipo,                setTipo]                = useState<TipoAsistencia>('entrada')
   const [estado,              setEstado]              = useState<EstadoAsistencia>('Presente')
   const [fecha,               setFecha]               = useState('')
   const [observacion,         setObservacion]         = useState('')
@@ -71,6 +72,7 @@ export default function AsistenciaModal({
   useEffect(() => {
     if (mode === 'edit' && registro) {
       setIdEstudiante(registro.idEstudiante)
+      setTipo((registro.tipo as TipoAsistencia | null) ?? 'entrada')
       setEstado(registro.estado)
       setFecha(registro.fecha)
       setObservacion(registro.observacion ?? '')
@@ -78,6 +80,7 @@ export default function AsistenciaModal({
       setJornadaSeleccionada('')
       setCursoSeleccionado('')
       setIdEstudiante('')
+      setTipo('entrada')
       setEstado('Presente')
       setFecha(new Date().toISOString().split('T')[0])
       setObservacion('')
@@ -104,12 +107,14 @@ export default function AsistenciaModal({
       if (mode === 'create') {
         await onCreate({
           idEstudiante: idEstudiante as number,
+          tipo,
           estado,
           fecha,
           observacion: observacion || null,
         })
       } else {
         await onUpdate({
+          tipo,
           estado,
           fecha,
           observacion: observacion || null,
@@ -196,6 +201,37 @@ export default function AsistenciaModal({
               </div>
             </>
           )}
+
+          {/* Tipo: Entrada / Salida */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700 dark:text-gray-300">
+              Tipo <span className="text-red-500">*</span>
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setTipo('entrada')}
+                className={`py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${
+                  tipo === 'entrada'
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300'
+                    : 'border-slate-200 dark:border-white/10 text-slate-500 hover:border-slate-300'
+                }`}
+              >
+                Entrada
+              </button>
+              <button
+                type="button"
+                onClick={() => setTipo('salida')}
+                className={`py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${
+                  tipo === 'salida'
+                    ? 'border-violet-500 bg-violet-50 dark:bg-violet-500/20 text-violet-700 dark:text-violet-300'
+                    : 'border-slate-200 dark:border-white/10 text-slate-500 hover:border-slate-300'
+                }`}
+              >
+                Salida
+              </button>
+            </div>
+          </div>
 
           {/* Fecha */}
           <div className="space-y-1.5">

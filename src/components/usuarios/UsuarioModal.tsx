@@ -110,8 +110,8 @@ export default function UsuarioModal({
       setFormError('El correo es obligatorio.')
       return
     }
-    if (mode === 'create' && form.password.length < 8) {
-      setFormError('La contraseña debe tener al menos 8 caracteres.')
+    if (mode === 'create' && form.password.length < 6) {
+      setFormError('La contraseña debe tener al menos 6 caracteres.')
       return
     }
 
@@ -271,7 +271,7 @@ export default function UsuarioModal({
                 value={form.password}
                 onChange={set('password')}
                 className={inputClass}
-                placeholder="Mínimo 8 caracteres"
+                placeholder="Mínimo 6 caracteres"
                 autoComplete="new-password"
                 required
               />

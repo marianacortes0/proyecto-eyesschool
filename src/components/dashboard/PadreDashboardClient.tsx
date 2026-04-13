@@ -4,9 +4,9 @@ import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { usePadreDashboard } from '@/hooks/usePadreDashboard'
 import { StatsCard } from './StatsCard'
-import type { HijoStats, NovedadResumen, PadreStats } from '@/services/dashboard/dashboardService'
+import type { HijoStats, NovedadResumen, PadreStats, RegistroAsistenciaSimple } from '@/services/dashboard/dashboardService'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Users, Bell, BarChart3, Clock, AlertCircle, ChevronRight, GraduationCap } from 'lucide-react'
+import { Users, Bell, BarChart3, Clock, AlertCircle, ChevronRight, GraduationCap, CalendarDays } from 'lucide-react'
 
 const BarChart     = dynamic(() => import('recharts').then(m => m.BarChart),     { ssr: false })
 const Bar          = dynamic(() => import('recharts').then(m => m.Bar),          { ssr: false })
@@ -69,6 +69,93 @@ function NovedadesList({ novedades }: { novedades: NovedadResumen[] }) {
         </li>
       ))}
     </ul>
+  )
+}
+
+const ESTADO_ASISTENCIA_STYLE: Record<string, string> = {
+  Presente:    'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400',
+  Tarde:       'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400',
+  Ausente:     'bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400',
+  Excusa:      'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400',
+  Suspensión:  'bg-purple-50 text-purple-700 dark:bg-purple-500/10 dark:text-purple-400',
+}
+
+function AsistenciaHistorial({ registros }: { registros: RegistroAsistenciaSimple[] }) {
+  const [pagina, setPagina] = useState(0)
+  const POR_PAGINA = 10
+  const total = registros.length
+  const slice = registros.slice(pagina * POR_PAGINA, (pagina + 1) * POR_PAGINA)
+
+  if (!registros.length) {
+    return (
+      <div className="flex flex-col items-center justify-center py-10 text-slate-400">
+        <CalendarDays size={36} className="mb-2 opacity-40" />
+        <p className="text-sm font-semibold">Sin registros de asistencia</p>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <div className="overflow-x-auto rounded-2xl border border-slate-100 dark:border-white/10">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="bg-slate-50 dark:bg-white/5 text-slate-400 dark:text-slate-500 text-[10px] uppercase tracking-widest font-black">
+              <th className="px-4 py-3 text-left">Fecha</th>
+              <th className="px-4 py-3 text-left">Tipo</th>
+              <th className="px-4 py-3 text-left">Estado</th>
+              <th className="px-4 py-3 text-left">Observación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {slice.map((r, i) => (
+              <tr
+                key={r.idAsistencia}
+                className={`border-t border-slate-100 dark:border-white/5 ${i % 2 === 0 ? '' : 'bg-slate-50/50 dark:bg-white/[0.02]'}`}
+              >
+                <td className="px-4 py-3 whitespace-nowrap text-slate-700 dark:text-slate-300 font-semibold">
+                  {new Date(r.fecha + 'T00:00:00').toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' })}
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap text-slate-500 dark:text-slate-400 capitalize">
+                  {r.tipo ?? '—'}
+                </td>
+                <td className="px-4 py-3">
+                  <span className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase ${ESTADO_ASISTENCIA_STYLE[r.estado] ?? 'bg-slate-100 text-slate-600'}`}>
+                    {r.estado}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-slate-400 dark:text-slate-500 text-xs max-w-[180px] truncate" title={r.observacion ?? ''}>
+                  {r.observacion || '—'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {total > POR_PAGINA && (
+        <div className="flex items-center justify-between mt-4 px-1">
+          <span className="text-xs text-slate-400 font-semibold">
+            {pagina * POR_PAGINA + 1}–{Math.min((pagina + 1) * POR_PAGINA, total)} de {total}
+          </span>
+          <div className="flex gap-2">
+            <button
+              disabled={pagina === 0}
+              onClick={() => setPagina(p => p - 1)}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 disabled:opacity-40 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors"
+            >
+              Anterior
+            </button>
+            <button
+              disabled={(pagina + 1) * POR_PAGINA >= total}
+              onClick={() => setPagina(p => p + 1)}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 disabled:opacity-40 hover:bg-slate-200 dark:hover:bg-white/20 transition-colors"
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -160,7 +247,7 @@ function HijoPanel({ hijo }: { hijo: HijoStats }) {
            />
         </div>
 
-        <motion.div 
+        <motion.div
            initial={{ opacity: 0, x: 20 }}
            animate={{ opacity: 1, x: 0 }}
            className="xl:col-span-2 bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-premium border border-slate-100 dark:border-white/5"
@@ -177,6 +264,24 @@ function HijoPanel({ hijo }: { hijo: HijoStats }) {
           <NovedadesList novedades={hijo.novedadesRecientes} />
         </motion.div>
       </div>
+
+      {/* Historial de asistencia */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-premium border border-slate-100 dark:border-white/5"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Historial de Asistencia</h3>
+            <p className="text-xs text-slate-400 font-medium tracking-tight">Registros de entrada y salida del estudiante</p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
+            <CalendarDays size={20} className="text-blue-500" />
+          </div>
+        </div>
+        <AsistenciaHistorial registros={hijo.registrosAsistencia} />
+      </motion.div>
     </motion.div>
   )
 }

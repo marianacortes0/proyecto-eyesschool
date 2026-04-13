@@ -24,15 +24,7 @@ export default async function NovedadesPage() {
     .eq('auth_id', user.id)
     .maybeSingle()
 
-  let idAdministrador = 0
-  if (usuarioRow) {
-    const { data: adminRow } = await db
-      .from('administrador')
-      .select('idAdministrador')
-      .eq('idUsuario', usuarioRow.idUsuario)
-      .maybeSingle()
-    idAdministrador = adminRow?.idAdministrador ?? 0
-  }
+  const registradoPor = usuarioRow?.idUsuario ?? 0
 
-  return <NovedadesClient role={role} idAdministrador={idAdministrador} />
+  return <NovedadesClient role={role} registradoPor={registradoPor} />
 }

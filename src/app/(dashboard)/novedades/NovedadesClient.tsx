@@ -17,9 +17,9 @@ const ESTADO_COLOR: Record<string, string> = {
   Completado:  'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300',
 }
 
-interface Props { role: Role; idAdministrador: number }
+interface Props { role: Role; registradoPor: number }
 
-export default function NovedadesClient({ role, idAdministrador }: Props) {
+export default function NovedadesClient({ role, registradoPor }: Props) {
   const {
     novedades, tiposNovedad, cursos, estudiantes,
     loading, saving, error,
@@ -28,7 +28,7 @@ export default function NovedadesClient({ role, idAdministrador }: Props) {
     modalMode, selected,
     openCreate, openEdit, closeModal,
     handleCreate, handleUpdate, handleDelete,
-  } = useNovedades(idAdministrador)
+  } = useNovedades(registradoPor)
 
   const canCreate = can(role, 'create', 'novedades')
   const canUpdate = can(role, 'update', 'novedades')
@@ -215,6 +215,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
   // Cascade: Jornada → Grado → Curso → Estudiante
   const [jornada, setJornada] = useState('')
   const [grado, setGrado] = useState('')
+  const [idCurso, setIdCurso] = useState('')
 
   const jornadas = useMemo(() => [...new Set(cursos.map(c => c.jornada))].sort(), [cursos])
   const grados = useMemo(
@@ -226,12 +227,13 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
     [jornada, grado, cursos]
   )
   const estudiantesFiltrados = useMemo(() => {
-    const ids = new Set(cursosDelGrado.map(c => c.idCurso))
-    return ids.size > 0 ? estudiantes.filter(e => e.idCursoActual !== null && ids.has(e.idCursoActual)) : []
-  }, [cursosDelGrado, estudiantes])
+    if (!idCurso) return []
+    return estudiantes.filter(e => e.idCursoActual === Number(idCurso))
+  }, [idCurso, estudiantes])
 
-  const handleJornadaChange = (val: string) => { setJornada(val); setGrado(''); setIdEstudiante('') }
-  const handleGradoChange = (val: string) => { setGrado(val); setIdEstudiante('') }
+  const handleJornadaChange = (val: string) => { setJornada(val); setGrado(''); setIdCurso(''); setIdEstudiante('') }
+  const handleGradoChange = (val: string) => { setGrado(val); setIdCurso(''); setIdEstudiante('') }
+  const handleCursoChange = (val: string) => { setIdCurso(val); setIdEstudiante('') }
 
   const handleEstadoChange = (val: string) => {
     setEstado(val)
@@ -295,17 +297,34 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
                 </div>
               </div>
 
+              {/* Curso */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Curso</label>
+                <select
+                  required
+                  disabled={!grado}
+                  value={idCurso}
+                  onChange={e => handleCursoChange(e.target.value)}
+                  className={`${SEL_CLASS} disabled:opacity-40`}
+                >
+                  <option value="">{!grado ? 'Primero selecciona el grado' : 'Seleccionar curso'}</option>
+                  {cursosDelGrado.map(c => (
+                    <option key={c.idCurso} value={String(c.idCurso)}>{c.nombreCurso}</option>
+                  ))}
+                </select>
+              </div>
+
               {/* Estudiante */}
               <div>
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Estudiante</label>
                 <select
                   required
-                  disabled={!grado}
+                  disabled={!idCurso}
                   value={idEstudiante}
                   onChange={e => setIdEstudiante(e.target.value)}
                   className={`${SEL_CLASS} disabled:opacity-40`}
                 >
-                  <option value="">{!grado ? 'Selecciona jornada y grado' : 'Seleccionar estudiante'}</option>
+                  <option value="">{!idCurso ? 'Primero selecciona el curso' : 'Seleccionar estudiante'}</option>
                   {estudiantesFiltrados.map(est => (
                     <option key={est.idEstudiante} value={String(est.idEstudiante)}>
                       {est.nombre} — {est.codigo}
