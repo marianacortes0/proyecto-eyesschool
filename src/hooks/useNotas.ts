@@ -6,12 +6,12 @@ import {
   getEstudiantesParaNotas,
   getMateriasParaNotas,
   getCursosParaNotas,
-  createNota,
   updateNota,
   deleteNota,
   PERIODOS,
   type Nota,
 } from '@/services/notas/notasService'
+import { createNotaAction } from '@/services/notas/notasActions'
 import { useAuth } from './useAuth'
 
 export type ModalMode = 'create' | 'edit' | null
@@ -101,7 +101,7 @@ export function useNotas() {
     if (!userId) return
     setSaving(true)
     try {
-      await createNota({ ...payload, registradoPor: Number(userId) })
+      await createNotaAction({ ...payload, registradoPor: Number(userId) })
       await fetchAll()
       closeModal()
     } catch (e: any) {

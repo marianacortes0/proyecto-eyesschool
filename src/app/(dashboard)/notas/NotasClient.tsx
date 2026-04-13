@@ -234,7 +234,13 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
   const [formError, setFormError] = useState<string | null>(null)
 
   const jornadas = useMemo(
-    () => [...new Set(cursos.map(c => c.jornada))].sort(),
+    () => {
+      const seen = new Set<string>()
+      seen.add('mañana')
+      seen.add('tarde')
+      cursos.forEach(c => { if (c.jornada) seen.add(c.jornada.toLowerCase()) })
+      return [...seen].sort()
+    },
     [cursos]
   )
 

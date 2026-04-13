@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from 'react'
 import {
   getRegistros,
   getEstudiantesSelector,
-  crearRegistro,
   actualizarRegistro,
   eliminarRegistro,
   type RegistroAsistencia,
@@ -13,6 +12,7 @@ import {
   type CreateRegistroData,
   type UpdateRegistroData,
 } from '@/services/asistencia/asistenciaService'
+import { crearRegistroAction } from '@/services/asistencia/asistenciaActions'
 
 export type { EstadoAsistencia }
 export type ModalMode = 'create' | 'edit' | null
@@ -72,7 +72,7 @@ export function useAsistencia(idUsuarioRegistrador: number, idEstudiantePropio?:
     setSaving(true)
     setError(null)
     try {
-      await crearRegistro({ ...data, registradoPor: idUsuarioRegistrador })
+      await crearRegistroAction({ ...data, registradoPor: idUsuarioRegistrador })
       await fetchRegistros()
       closeModal()
     } catch (err) {
