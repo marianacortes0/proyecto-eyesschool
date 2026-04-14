@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { createClient } from '@/services/supabase/server'
 import { redirect } from 'next/navigation'
 import { mapRolToKey } from '@/lib/utils/permissions'
