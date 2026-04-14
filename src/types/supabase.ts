@@ -106,6 +106,8 @@ export type Database = {
       }
       Asistencia: {
         Row: {
+          activo: boolean | null
+          codigo_qr: string | null
           estado: string
           fecha: string
           fechaRegistro: string
@@ -113,8 +115,11 @@ export type Database = {
           idEstudiante: number
           observacion: string | null
           registradoPor: number
+          tipo: string | null
         }
         Insert: {
+          activo?: boolean | null
+          codigo_qr?: string | null
           estado: string
           fecha: string
           fechaRegistro?: string
@@ -122,8 +127,11 @@ export type Database = {
           idEstudiante: number
           observacion?: string | null
           registradoPor: number
+          tipo?: string | null
         }
         Update: {
+          activo?: boolean | null
+          codigo_qr?: string | null
           estado?: string
           fecha?: string
           fechaRegistro?: string
@@ -131,6 +139,7 @@ export type Database = {
           idEstudiante?: number
           observacion?: string | null
           registradoPor?: number
+          tipo?: string | null
         }
         Relationships: [
           {
@@ -138,6 +147,13 @@ export type Database = {
             columns: ["idEstudiante"]
             isOneToOne: false
             referencedRelation: "estudiantes"
+            referencedColumns: ["idEstudiante"]
+          },
+          {
+            foreignKeyName: "fk_asistencia_estudiante"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "mejor_estudiante"
             referencedColumns: ["idEstudiante"]
           },
           {
@@ -186,6 +202,13 @@ export type Database = {
             columns: ["idEstudiante"]
             isOneToOne: false
             referencedRelation: "estudiantes"
+            referencedColumns: ["idEstudiante"]
+          },
+          {
+            foreignKeyName: "fk_asistenciaaula_estudiante"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "mejor_estudiante"
             referencedColumns: ["idEstudiante"]
           },
           {
@@ -298,6 +321,13 @@ export type Database = {
             columns: ["idEstudiante"]
             isOneToOne: false
             referencedRelation: "estudiantes"
+            referencedColumns: ["idEstudiante"]
+          },
+          {
+            foreignKeyName: "fk_estudianteips_estudiante"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "mejor_estudiante"
             referencedColumns: ["idEstudiante"]
           },
         ]
@@ -462,6 +492,13 @@ export type Database = {
             referencedColumns: ["idEstudiante"]
           },
           {
+            foreignKeyName: "fk_notas_estudiante"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "mejor_estudiante"
+            referencedColumns: ["idEstudiante"]
+          },
+          {
             foreignKeyName: "fk_notas_materia"
             columns: ["idMateria"]
             isOneToOne: false
@@ -520,6 +557,13 @@ export type Database = {
             referencedColumns: ["idEstudiante"]
           },
           {
+            foreignKeyName: "fk_novedades_estudiante"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "mejor_estudiante"
+            referencedColumns: ["idEstudiante"]
+          },
+          {
             foreignKeyName: "fk_novedades_registradopor"
             columns: ["registradoPor"]
             isOneToOne: false
@@ -563,6 +607,13 @@ export type Database = {
             columns: ["idEstudiante"]
             isOneToOne: false
             referencedRelation: "estudiantes"
+            referencedColumns: ["idEstudiante"]
+          },
+          {
+            foreignKeyName: "fk_padres_estudiante"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "mejor_estudiante"
             referencedColumns: ["idEstudiante"]
           },
           {
@@ -699,7 +750,7 @@ export type Database = {
         }
         Insert: {
           archivoGenerado?: string | null
-          estado?: string
+          estado: string
           fechaFin: string
           fechaGeneracion?: string
           fechaInicio: string
@@ -775,6 +826,7 @@ export type Database = {
       }
       usuario: {
         Row: {
+          auth_id: string | null
           correo: string | null
           direccion: string | null
           estado: boolean
@@ -782,6 +834,7 @@ export type Database = {
           genero: string | null
           idRol: number
           idUsuario: number
+          idUsuario_uuid: string | null
           numeroDocumento: string
           password: string | null
           primerApellido: string
@@ -793,6 +846,7 @@ export type Database = {
           ultimoAcceso: string | null
         }
         Insert: {
+          auth_id?: string | null
           correo?: string | null
           direccion?: string | null
           estado?: boolean
@@ -800,6 +854,7 @@ export type Database = {
           genero?: string | null
           idRol: number
           idUsuario?: number
+          idUsuario_uuid?: string | null
           numeroDocumento: string
           password?: string | null
           primerApellido: string
@@ -811,6 +866,7 @@ export type Database = {
           ultimoAcceso?: string | null
         }
         Update: {
+          auth_id?: string | null
           correo?: string | null
           direccion?: string | null
           estado?: boolean
@@ -818,6 +874,7 @@ export type Database = {
           genero?: string | null
           idRol?: number
           idUsuario?: number
+          idUsuario_uuid?: string | null
           numeroDocumento?: string
           password?: string | null
           primerApellido?: string
@@ -840,11 +897,109 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      asistencia_por_estudiante: {
+        Row: {
+          idEstudiante: number | null
+          porcentaje_asistencia: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_asistencia_estudiante"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "estudiantes"
+            referencedColumns: ["idEstudiante"]
+          },
+          {
+            foreignKeyName: "fk_asistencia_estudiante"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "mejor_estudiante"
+            referencedColumns: ["idEstudiante"]
+          },
+        ]
+      }
+      estudiantes_por_curso: {
+        Row: {
+          idCurso: number | null
+          total_estudiantes: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_estudiantes_curso"
+            columns: ["idCurso"]
+            isOneToOne: false
+            referencedRelation: "cursos"
+            referencedColumns: ["idCurso"]
+          },
+        ]
+      }
+      mejor_estudiante: {
+        Row: {
+          codigoEstudiante: string | null
+          idEstudiante: number | null
+          promedio: number | null
+        }
+        Relationships: []
+      }
+      novedades_por_estudiante: {
+        Row: {
+          idEstudiante: number | null
+          total_novedades: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_novedades_estudiante"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "estudiantes"
+            referencedColumns: ["idEstudiante"]
+          },
+          {
+            foreignKeyName: "fk_novedades_estudiante"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "mejor_estudiante"
+            referencedColumns: ["idEstudiante"]
+          },
+        ]
+      }
+      promedio_por_estudiante: {
+        Row: {
+          idEstudiante: number | null
+          promedio: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_notas_estudiante"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "estudiantes"
+            referencedColumns: ["idEstudiante"]
+          },
+          {
+            foreignKeyName: "fk_notas_estudiante"
+            columns: ["idEstudiante"]
+            isOneToOne: false
+            referencedRelation: "mejor_estudiante"
+            referencedColumns: ["idEstudiante"]
+          },
+        ]
+      }
+      promedio_total_notas: {
+        Row: {
+          promedio: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      custom_access_token_hook: { Args: { event: Json }; Returns: Json }
       get_current_user_id: { Args: never; Returns: number }
       get_current_user_rol: { Args: never; Returns: number }
+      get_my_idusuario: { Args: never; Returns: number }
+      get_my_rol: { Args: never; Returns: string }
+      get_my_role: { Args: never; Returns: string }
       is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
@@ -978,3 +1133,4 @@ export const Constants = {
     Enums: {},
   },
 } as const
+  
