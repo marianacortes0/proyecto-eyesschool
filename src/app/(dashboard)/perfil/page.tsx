@@ -116,7 +116,7 @@ export default async function PerfilPage() {
       .eq('idUsuario', usuarioRow.idUsuario)
       .maybeSingle()
     if (padre) {
-      padreServer = padre as typeof padreServer
+      padreServer = padre
       const { data: est } = await db
         .from('estudiantes')
         .select('idEstudiante, usuario ( primerNombre, primerApellido, numeroDocumento )')

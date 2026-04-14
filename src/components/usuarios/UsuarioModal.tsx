@@ -83,6 +83,7 @@ export default function UsuarioModal({
         genero: usuario.genero ?? '',
         direccion: usuario.direccion ?? '',
         idRol: usuario.idRol,
+        password: '',
       })
     } else {
       setForm(EMPTY_FORM)

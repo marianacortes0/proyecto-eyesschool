@@ -18,6 +18,8 @@ import {
 import { asignarQR } from '@/auth/actions'
 import { type Role } from '@/lib/utils/permissions'
 
+export type ModalMode = 'create' | 'edit' | null
+
 export function useQR(role: Role | null) {
   // ── Estado admin ──────────────────────────────────────────────────────────
   const [estudiantes, setEstudiantes]   = useState<EstudianteQR[]>([])

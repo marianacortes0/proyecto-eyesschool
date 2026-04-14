@@ -96,7 +96,13 @@ export function useNovedades(registradoPor: number = 0) {
 
   const handleUpdate = async (
     idNovedad: number,
-    payload: { descripcion?: string; estado?: string; accionTomada?: string; fechaResolucion?: string; idTipoNovedad?: number }
+    payload: { 
+      descripcion?: string; 
+      estado?: string; 
+      accionTomada?: string | null; 
+      fechaResolucion?: string | null; 
+      idTipoNovedad?: number 
+    }
   ) => {
     setSaving(true)
     try {

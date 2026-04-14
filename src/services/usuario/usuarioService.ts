@@ -36,8 +36,8 @@ export type PerfilUsuario = {
   primerApellido: string
   segundoApellido: string | null
   correo: string | null
-  tipoDocumento: string | null
-  numeroDocumento: string | null
+  tipoDocumento: string
+  numeroDocumento: string
   telefono: string | null
   direccion: string | null
   genero: string | null
