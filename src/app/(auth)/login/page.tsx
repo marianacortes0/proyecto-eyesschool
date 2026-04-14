@@ -1,4 +1,5 @@
 import { LoginForm } from "@/components/auth/login-form"
+import { Suspense } from "react"
 
 // Generate metadata
 export const metadata = {
@@ -20,7 +21,9 @@ export default function LoginPage() {
 
       {/* Central Content */}
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 mt-[-5vh]">
-        <LoginForm />
+        <Suspense fallback={<div className="h-[400px] w-full max-w-[300px] mx-auto bg-white/50 dark:bg-black/50 animate-pulse rounded-2xl" />}>
+          <LoginForm />
+        </Suspense>
         
         {/* Footer text */}
         <p className="text-center mt-10 text-xs text-slate-500 dark:text-slate-400">

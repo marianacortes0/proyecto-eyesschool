@@ -201,7 +201,7 @@ interface ModalProps {
   saving: boolean
   onClose: () => void
   onCreate: (p: { descripcion: string; idEstudiante: number; idTipoNovedad: number }) => void
-  onUpdate: (id: number, p: { descripcion?: string; estado?: string; accionTomada?: string | null; fechaResolucion?: string | null; idTipoNovedad?: number }) => void
+  onUpdate: (id: number, p: { descripcion?: string; estado?: string; accionTomada?: string | null; fechaResolucion?: string | null; idTipoNovedad?: number }) => Promise<void> | void
 }
 
 function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving, onClose, onCreate, onUpdate }: ModalProps) {
