@@ -11,6 +11,7 @@
 
 const fs = require('fs');
 const { createClient } = require('@supabase/supabase-js');
+const bcrypt = require('bcryptjs');
 
 // ─── Leer .env.local ────────────────────────────────────────────────────────
 const envLines = fs.readFileSync('.env.local', 'utf8').split('\n');
@@ -92,6 +93,9 @@ async function main() {
   const authId = authData.user.id;
   console.log(`   Usuario Auth creado. UUID: ${authId}`);
 
+  // Hashing password for public.usuario
+  const hashedPassword = await bcrypt.hash(ADMIN.password, 10);
+
   // 3. Insertar en tabla usuario
   console.log('\n3/4  Insertando en tabla usuario...');
   const { data: usuarioData, error: usuarioError } = await supabase
@@ -102,7 +106,7 @@ async function main() {
       segundoNombre:   ADMIN.segundoNombre,
       segundoApellido: ADMIN.segundoApellido,
       correo:          ADMIN.correo,
-      password:        ADMIN.password,
+      password:        hashedPassword,
       numeroDocumento: ADMIN.numeroDocumento,
       tipoDocumento:   ADMIN.tipoDocumento,
       genero:          ADMIN.genero,

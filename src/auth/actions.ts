@@ -4,6 +4,7 @@ import { createClient } from '../services/supabase/server'
 import { createAdminClient } from '../services/supabase/admin'
 import { redirect } from 'next/navigation'
 import { mapRolToKey } from '@/lib/utils/permissions'
+import { hashPassword } from '@/lib/utils/hash'
 
 // ── Lookup tables (public) ────────────────────────────────────────────────────
 
@@ -225,6 +226,7 @@ export async function register(prevState: any, formData: FormData) {
   const rolTextAuth = autoValidado ? rolText : 'Padre'
 
   const emailNorm = email.trim().toLowerCase()
+  const hashedPassword = await hashPassword(password)
 
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email: emailNorm,
@@ -261,6 +263,7 @@ export async function register(prevState: any, formData: FormData) {
       numeroDocumento: docNumber,
       tipoDocumento: docType,
       idRol: idRolAuth,        // rol real (auto-validados) o Padre temporal (pendientes)
+      password: hashedPassword,
       auth_id: authData.user?.id ?? null,
       estado: !needsValidation, // true = activo de inmediato · false = espera validación admin
     })

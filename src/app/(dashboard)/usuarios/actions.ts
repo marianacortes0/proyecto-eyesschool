@@ -2,6 +2,7 @@
 
 import { createAdminClient } from '@/services/supabase/admin'
 import { ROL_NOMBRES, type UsuarioConRol } from '@/services/usuarios/usuariosService'
+import { hashPassword } from '@/lib/utils/hash'
 
 export type CreateUsuarioConAuthData = {
   primerNombre: string
@@ -31,6 +32,9 @@ export async function createUsuarioConAuth(data: CreateUsuarioConAuthData): Prom
   const supabase = createAdminClient()
 
   const rolText = ROL_NOMBRES[data.idRol] ?? 'Profesor'
+
+  // Hashing de la contraseña para guardar en public.usuario
+  const hashedPassword = await hashPassword(data.password)
 
   // 1. Crear cuenta en Supabase Auth con el rol real
   const { data: authData, error: authError } = await supabase.auth.admin.createUser({
@@ -65,6 +69,7 @@ export async function createUsuarioConAuth(data: CreateUsuarioConAuthData): Prom
     genero: data.genero ?? null,
     direccion: data.direccion ?? null,
     idRol: data.idRol,
+    password: hashedPassword,
     auth_id: authData.user.id,
     estado: true,   // el admin crea con acceso inmediato
   })
