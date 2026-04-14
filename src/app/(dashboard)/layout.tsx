@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import DashboardHeader from "@/components/layout/DashboardHeader";
 import DashboardSidebar from "@/components/layout/DashboardSidebar";
 import DashboardFooter from "@/components/layout/DashboardFooter";
