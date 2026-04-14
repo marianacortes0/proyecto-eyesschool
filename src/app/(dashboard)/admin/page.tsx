@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { createClient } from '@/services/supabase/server'
 import { redirect } from 'next/navigation'
 import { mapRolToKey } from '@/lib/utils/permissions'
@@ -12,7 +14,11 @@ export default async function AdminPage() {
   const nombreRol =
     (user.app_metadata?.rol as string | undefined) ??
     (user.user_metadata?.rol as string | undefined)
-  const role = mapRolToKey(nombreRol, user.user_metadata?.idRol as number | undefined)
+
+  const role = mapRolToKey(
+    nombreRol,
+    user.user_metadata?.idRol as number | undefined
+  )
 
   if (role !== 'admin') redirect('/login')
 
