@@ -178,93 +178,72 @@ export default function SupportPage() {
       </main>
 
       <Footer />
-
-      {/* (modales intactos ↓) */}
+     {/* MODAL TELÉFONO */}
       {showPhone && (
         <div className="fixed inset-0 z-50 flex justify-center items-start py-20 px-4">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
           <div className="relative bg-white dark:bg-[#141414] text-gray-800 dark:text-white p-8 rounded-2xl shadow-xl text-center max-w-sm w-full">
             <h2 className="text-2xl font-bold mb-4">Llámanos</h2>
             <p className="text-lg font-semibold mb-2">321 4142140</p>
-            <button onClick={() => setShowPhone(false)} className="px-6 py-2 bg-purple-600 text-white rounded-lg">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+              Atención a nivel nacional
+            </p>
+            <button
+              onClick={() => setShowPhone(false)}
+              className="px-6 py-2 bg-purple-600 text-white rounded-lg"
+            >
               Cerrar
             </button>
           </div>
         </div>
       )}
 
+      {/* MODAL EMAIL */}
       {showEmail && (
-  <div className="fixed inset-0 z-50 flex justify-center items-start py-20 px-4">
-    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+        <div className="fixed inset-0 z-50 flex justify-center items-start py-20 px-4">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+          <div className="relative bg-white dark:bg-[#141414] text-gray-800 dark:text-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-6">Enviar solicitud</h2>
 
-    <div className="relative bg-white dark:bg-[#141414] text-gray-800 dark:text-white p-8 rounded-2xl shadow-xl w-full max-w-md">
-      <h2 className="text-2xl font-bold mb-6">Enviar solicitud</h2>
+            <input type="text" placeholder="Nombre" className="w-full mb-3 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:border-gray-700"
+              onChange={(e) => setForm({ ...form, name: e.target.value })} />
 
-      <input
-        type="text"
-        placeholder="Nombre"
-        className="w-full mb-3 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:border-gray-700"
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
-      />
+            <input type="text" placeholder="Apellidos" className="w-full mb-3 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:border-gray-700"
+              onChange={(e) => setForm({ ...form, lastName: e.target.value })} />
 
-      <input
-        type="text"
-        placeholder="Apellidos"
-        className="w-full mb-3 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:border-gray-700"
-        onChange={(e) => setForm({ ...form, lastName: e.target.value })}
-      />
+            <input type="text" placeholder="Cédula" className="w-full mb-3 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:border-gray-700"
+              onChange={(e) => setForm({ ...form, id: e.target.value })} />
 
-      <input
-        type="text"
-        placeholder="Cédula"
-        className="w-full mb-3 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:border-gray-700"
-        onChange={(e) => setForm({ ...form, id: e.target.value })}
-      />
+            <input type="email" placeholder="Correo" className="w-full mb-3 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:border-gray-700"
+              onChange={(e) => setForm({ ...form, email: e.target.value })} />
 
-      <input
-        type="email"
-        placeholder="Correo"
-        className="w-full mb-3 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:border-gray-700"
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-      />
+            <select className="w-full mb-3 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:text-white dark:border-gray-700"
+              onChange={(e) => setForm({ ...form, type: e.target.value })}>
+              <option value="">Tipo de ayuda</option>
+              <option>Problemas técnicos de la página</option>
+              <option>Asesoría para convenio</option>
+              <option>Problemas al ingresar a su cuenta</option>
+              <option>Otro</option>
+            </select>
 
-      <select
-        className="w-full mb-3 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:text-white dark:border-gray-700"
-        onChange={(e) => setForm({ ...form, type: e.target.value })}
-      >
-        <option value="">Tipo de ayuda</option>
-        <option>Problemas técnicos de la página</option>
-        <option>Asesoría para convenio</option>
-        <option>Problemas al ingresar a su cuenta</option>
-        <option>Otro</option>
-      </select>
+            <textarea placeholder="Mensaje" className="w-full mb-4 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:border-gray-700"
+              rows={4}
+              onChange={(e) => setForm({ ...form, message: e.target.value })} />
 
-      <textarea
-        placeholder="Mensaje"
-        className="w-full mb-4 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:border-gray-700"
-        rows={4}
-        onChange={(e) => setForm({ ...form, message: e.target.value })}
-      />
+            <div className="flex gap-3">
+              <button onClick={handleSendEmail} disabled={loading}
+                className="flex-1 bg-green-600 text-white py-2 rounded-lg disabled:opacity-50">
+                {loading ? "Enviando..." : "Enviar"}
+              </button>
 
-      <div className="flex gap-3">
-        <button
-          onClick={handleSendEmail}
-          disabled={loading}
-          className="flex-1 bg-green-600 text-white py-2 rounded-lg disabled:opacity-50"
-        >
-          {loading ? "Enviando..." : "Enviar"}
-        </button>
-
-        <button
-          onClick={() => setShowEmail(false)}
-          className="flex-1 bg-gray-400 text-white py-2 rounded-lg"
-        >
-          Cancelar
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+              <button onClick={() => setShowEmail(false)}
+                className="flex-1 bg-gray-400 text-white py-2 rounded-lg">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
