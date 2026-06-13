@@ -1,8 +1,55 @@
 'use server'
 
-import { createAdminClient } from '@/services/supabase/admin'
+import { cookies } from 'next/headers'
 import { ROL_NOMBRES, type UsuarioConRol } from '@/services/usuarios/usuariosService'
-import { hashPassword } from '@/lib/utils/hash'
+
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
+
+async function getToken(): Promise<string | null> {
+  const store = await cookies()
+  return store.get('eys_access')?.value ?? null
+}
+
+async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const token = await getToken()
+  const res = await fetch(`${API}${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers as Record<string, string> | undefined),
+    },
+    cache: 'no-store',
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error((body as Record<string, unknown>).detail as string ?? `HTTP ${res.status}`)
+  }
+  if (res.status === 204) return null as T
+  return res.json() as Promise<T>
+}
+
+function rawToUsuarioConRol(u: Record<string, unknown>): UsuarioConRol {
+  const idRol = (u.idRol ?? u.id_rol) as number
+  return {
+    idUsuario:       (u.idUsuario ?? u.id_usuario) as number,
+    tipoDocumento:   (u.tipoDocumento ?? u.tipo_documento) as string,
+    numeroDocumento: (u.numeroDocumento ?? u.numero_documento) as string,
+    primerNombre:    (u.primerNombre ?? u.primer_nombre) as string,
+    segundoNombre:   (u.segundoNombre ?? u.segundo_nombre) as string | null,
+    primerApellido:  (u.primerApellido ?? u.primer_apellido) as string,
+    segundoApellido: (u.segundoApellido ?? u.segundo_apellido) as string | null,
+    genero:          u.genero as string | null,
+    direccion:       u.direccion as string | null,
+    correo:          u.correo as string | null,
+    telefono:        u.telefono as string | null,
+    estado:          u.estado as boolean,
+    fechaRegistro:   (u.fechaRegistro ?? u.fecha_registro) as string,
+    ultimoAcceso:    (u.ultimoAcceso ?? u.ultimo_acceso) as string | null,
+    idRol,
+    rolNombre: ROL_NOMBRES[idRol] ?? 'Desconocido',
+  }
+}
 
 export type CreateUsuarioConAuthData = {
   primerNombre: string
@@ -19,339 +66,148 @@ export type CreateUsuarioConAuthData = {
   idRol: number
 }
 
-// Roles reales en la BD: 1=Profesor | 2=Estudiante | 3=Administrador | 4=Padre
 const ID_ROL_ESTUDIANTE = 2
 const ID_ROL_PROFESOR   = 1
 
-/**
- * Crea un usuario en Supabase Auth Y en public.usuario.
- * El admin asigna el rol directamente — todos los usuarios creados por admin
- * quedan activos (estado=true) con el rol elegido.
- */
 export async function createUsuarioConAuth(data: CreateUsuarioConAuthData): Promise<void> {
-  const supabase = createAdminClient()
-
-  const rolText = ROL_NOMBRES[data.idRol] ?? 'Profesor'
-
-  // Hashing de la contraseña para guardar en public.usuario
-  const hashedPassword = await hashPassword(data.password)
-
-  // 1. Crear cuenta en Supabase Auth con el rol real
-  const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-    email: data.correo,
-    password: data.password,
-    email_confirm: true,
-    app_metadata: { rol: rolText, idRol: data.idRol },
-    user_metadata: {
-      primerNombre: data.primerNombre,
-      primerApellido: data.primerApellido,
-      idRol: data.idRol,
-      rol: rolText,
-      tipoDocumento: data.tipoDocumento,
-      numeroDocumento: data.numeroDocumento,
-    },
+  const usuario = await apiFetch<Record<string, unknown>>('/usuarios', {
+    method: 'POST',
+    body: JSON.stringify({
+      correo:           data.correo,
+      password:         data.password,
+      primer_nombre:    data.primerNombre,
+      primer_apellido:  data.primerApellido,
+      segundo_nombre:   data.segundoNombre   ?? null,
+      segundo_apellido: data.segundoApellido ?? null,
+      tipo_documento:   data.tipoDocumento,
+      numero_documento: data.numeroDocumento,
+      telefono:         data.telefono  ?? null,
+      genero:           data.genero    ?? null,
+      direccion:        data.direccion ?? null,
+      id_rol:           data.idRol,
+    }),
   })
 
-  if (authError || !authData.user) {
-    throw new Error(authError?.message ?? 'No se pudo crear la cuenta de autenticación')
+  const idUsuario = (usuario.id_usuario ?? usuario.idUsuario) as number
+  const hoy = new Date().toISOString().slice(0, 10)
+
+  if (data.idRol === ID_ROL_ESTUDIANTE) {
+    const codigo = `EST${String(idUsuario).padStart(3, '0')}`
+    await apiFetch('/estudiantes', {
+      method: 'POST',
+      body: JSON.stringify({
+        id_usuario:        idUsuario,
+        codigo_estudiante: codigo,
+        fecha_ingreso:     hoy,
+        estado:            'Activo',
+      }),
+    }).catch(() => null)
   }
 
-  // 2. Insertar en public.usuario con rol y estado definitivos
-  const { error: dbError } = await supabase.from('usuario').insert({
-    correo: data.correo,
-    primerNombre: data.primerNombre,
-    primerApellido: data.primerApellido,
-    segundoNombre: data.segundoNombre ?? null,
-    segundoApellido: data.segundoApellido ?? null,
-    tipoDocumento: data.tipoDocumento,
-    numeroDocumento: data.numeroDocumento,
-    telefono: data.telefono ?? null,
-    genero: data.genero ?? null,
-    direccion: data.direccion ?? null,
-    idRol: data.idRol,
-    password: hashedPassword,
-    auth_id: authData.user.id,
-    estado: true,   // el admin crea con acceso inmediato
-  })
-
-  if (dbError) {
-    await supabase.auth.admin.deleteUser(authData.user.id)
-    throw new Error(`Error al guardar el usuario: ${dbError.message}`)
-  }
-
-  // Obtener idUsuario recién creado
-  const { data: usuarioCreado } = await supabase
-    .from('usuario')
-    .select('idUsuario')
-    .eq('auth_id', authData.user.id)
-    .single()
-
-  if (usuarioCreado) {
-    const hoy = new Date().toISOString().slice(0, 10)
-
-    // Si el rol es Estudiante, crear fila en public.estudiantes
-    if (data.idRol === ID_ROL_ESTUDIANTE) {
-      const codigo = `EST${String(usuarioCreado.idUsuario).padStart(3, '0')}`
-      await supabase.from('estudiantes').insert({
-        idUsuario: usuarioCreado.idUsuario,
-        codigoEstudiante: codigo,
-        fechaIngreso: hoy,
-        estado: 'Activo',
-      })
-    }
-
-    // Si el rol es Profesor, crear fila en public.profesores
-    if (data.idRol === ID_ROL_PROFESOR) {
-      const codigo = `PROF${String(usuarioCreado.idUsuario).padStart(3, '0')}`
-      await supabase.from('profesores').insert({
-        idUsuario: usuarioCreado.idUsuario,
-        codigoProfesor: codigo,
-        fechaVinculacion: hoy,
-        nivelEstudios: 'Pendiente',
-        titulo: 'Pendiente',
-        estado: 'Activo',
-      })
-    }
+  if (data.idRol === ID_ROL_PROFESOR) {
+    const codigo = `PROF${String(idUsuario).padStart(3, '0')}`
+    await apiFetch('/profesores', {
+      method: 'POST',
+      body: JSON.stringify({
+        id_usuario:        idUsuario,
+        codigo_profesor:   codigo,
+        titulo:            'Pendiente',
+        nivel_estudios:    'Pendiente',
+        fecha_vinculacion: hoy,
+        estado:            'Activo',
+      }),
+    }).catch(() => null)
   }
 }
 
-/**
- * Usuarios validados (estado=true).
- * Usa cliente admin para bypassear RLS y que el admin pueda ver todos.
- */
 export async function getUsuariosAction(): Promise<UsuarioConRol[]> {
-  const supabase = createAdminClient()
-
-  const { data, error } = await supabase
-    .from('usuario')
-    .select('*')
-    .eq('estado', true)
-    .order('primerApellido', { ascending: true })
-
-  if (error) throw new Error(error.message)
-  if (!data) return []
-
-  return data.map((u) => ({
-    ...u,
-    rolNombre: ROL_NOMBRES[u.idRol] ?? 'Desconocido',
-  }))
+  const data = await apiFetch<Record<string, unknown>[]>('/usuarios?estado=true&limit=500')
+  return data.map(rawToUsuarioConRol)
 }
 
-/**
- * Actualiza datos de un usuario.
- * Usa cliente admin para bypassear RLS.
- */
 export async function updateUsuarioAction(
   id: number,
   data: Partial<{
-    primerNombre: string
-    primerApellido: string
-    segundoNombre: string | null
-    segundoApellido: string | null
-    tipoDocumento: string
-    numeroDocumento: string
-    telefono: string | null
-    genero: string | null
-    direccion: string | null
+    primerNombre: string; primerApellido: string
+    segundoNombre: string | null; segundoApellido: string | null
+    tipoDocumento: string; numeroDocumento: string
+    telefono: string | null; genero: string | null; direccion: string | null
     idRol: number
   }>
 ): Promise<void> {
-  const supabase = createAdminClient()
-  const { error } = await supabase.from('usuario').update(data).eq('idUsuario', id)
-  if (error) throw new Error(error.message)
+  const body: Record<string, unknown> = {}
+  if (data.primerNombre    !== undefined) body.primer_nombre    = data.primerNombre
+  if (data.primerApellido  !== undefined) body.primer_apellido  = data.primerApellido
+  if (data.segundoNombre   !== undefined) body.segundo_nombre   = data.segundoNombre
+  if (data.segundoApellido !== undefined) body.segundo_apellido = data.segundoApellido
+  if (data.tipoDocumento   !== undefined) body.tipo_documento   = data.tipoDocumento
+  if (data.numeroDocumento !== undefined) body.numero_documento = data.numeroDocumento
+  if (data.telefono        !== undefined) body.telefono         = data.telefono
+  if (data.genero          !== undefined) body.genero           = data.genero
+  if (data.direccion       !== undefined) body.direccion        = data.direccion
+  if (data.idRol           !== undefined) body.id_rol           = data.idRol
+  await apiFetch(`/usuarios/${id}`, { method: 'PUT', body: JSON.stringify(body) })
 }
 
-/**
- * Activa o desactiva un usuario.
- * Usa cliente admin para bypassear RLS.
- */
 export async function toggleUsuarioEstadoAction(id: number, nuevoEstado: boolean): Promise<void> {
-  const supabase = createAdminClient()
-  const { error } = await supabase.from('usuario').update({ estado: nuevoEstado }).eq('idUsuario', id)
-  if (error) throw new Error(error.message)
+  await apiFetch(`/usuarios/${id}/estado`, {
+    method: 'PATCH',
+    body: JSON.stringify({ estado: nuevoEstado }),
+  })
 }
 
-/**
- * Usuarios pendientes de validación (estado=false).
- * Usa cliente admin para bypassear RLS y que el admin pueda verlos siempre.
- */
 export async function getPendingUsuariosAction(): Promise<UsuarioConRol[]> {
-  const supabase = createAdminClient()
-
-  const { data, error } = await supabase
-    .from('usuario')
-    .select('*')
-    .eq('estado', false)
-    .order('fechaRegistro', { ascending: true })
-
-  if (error) throw new Error(error.message)
-  if (!data) return []
-
-  return data.map((u) => ({
-    ...u,
-    rolNombre: ROL_NOMBRES[u.idRol] ?? 'Desconocido',
-  }))
+  const data = await apiFetch<Record<string, unknown>[]>('/usuarios?estado=false&limit=500')
+  return data.map(rawToUsuarioConRol)
 }
 
-/**
- * Valida un usuario: activa su cuenta y asigna el rol definitivo.
- * Usa cliente admin para bypassear RLS.
- */
 export async function validarUsuarioAction(id: number, idRol: number): Promise<void> {
-  const supabase = createAdminClient()
-
-  // 1. Obtener el auth_id del usuario para actualizar user_metadata en Auth
-  const { data: usuario } = await supabase
-    .from('usuario')
-    .select('auth_id, correo')
-    .eq('idUsuario', id)
-    .single()
-
-  // 2. Actualizar en public.usuario
-  const { error } = await supabase
-    .from('usuario')
-    .update({ estado: true, idRol })
-    .eq('idUsuario', id)
-
-  if (error) throw new Error(error.message)
-
-  // 3. Actualizar app_metadata Y user_metadata en Auth
-  if (usuario?.auth_id) {
-    const rolText = ROL_NOMBRES[idRol] ?? 'Desconocido'
-    await supabase.auth.admin.updateUserById(usuario.auth_id, {
-      app_metadata: { rol: rolText, idRol },
-      user_metadata: { rol: rolText, idRol },
-    })
-  }
+  await apiFetch(`/usuarios/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ id_rol: idRol }),
+  })
+  await apiFetch(`/usuarios/${id}/estado`, {
+    method: 'PATCH',
+    body: JSON.stringify({ estado: true }),
+  })
 
   const hoy = new Date().toISOString().slice(0, 10)
 
-  // 4. Si el rol asignado es Estudiante, crear fila en public.estudiantes
   if (idRol === ID_ROL_ESTUDIANTE) {
-    const { count } = await supabase
-      .from('estudiantes')
-      .select('*', { count: 'exact', head: true })
-      .eq('idUsuario', id)
-
-    if (!count) {
+    const existing = await apiFetch<Array<Record<string, unknown>>>(`/estudiantes?id_usuario=${id}&limit=1`).catch(() => [])
+    if (!existing.length) {
       const codigo = `EST${String(id).padStart(3, '0')}`
-      await supabase.from('estudiantes').insert({
-        idUsuario: id,
-        codigoEstudiante: codigo,
-        fechaIngreso: hoy,
-        estado: 'Activo',
-      })
+      await apiFetch('/estudiantes', {
+        method: 'POST',
+        body: JSON.stringify({ id_usuario: id, codigo_estudiante: codigo, fecha_ingreso: hoy, estado: 'Activo' }),
+      }).catch(() => null)
     }
   }
 
-  // 5. Si el rol asignado es Profesor, crear fila en public.profesores
   if (idRol === ID_ROL_PROFESOR) {
-    const { count } = await supabase
-      .from('profesores')
-      .select('*', { count: 'exact', head: true })
-      .eq('idUsuario', id)
-
-    if (!count) {
+    const existing = await apiFetch<Array<Record<string, unknown>>>(`/profesores?id_usuario=${id}&limit=1`).catch(() => [])
+    if (!existing.length) {
       const codigo = `PROF${String(id).padStart(3, '0')}`
-      await supabase.from('profesores').insert({
-        idUsuario: id,
-        codigoProfesor: codigo,
-        fechaVinculacion: hoy,
-        nivelEstudios: 'Pendiente',
-        titulo: 'Pendiente',
-        estado: 'Activo',
-      })
+      await apiFetch('/profesores', {
+        method: 'POST',
+        body: JSON.stringify({
+          id_usuario: id, codigo_profesor: codigo,
+          titulo: 'Pendiente', nivel_estudios: 'Pendiente',
+          fecha_vinculacion: hoy, estado: 'Activo',
+        }),
+      }).catch(() => null)
     }
   }
 }
 
-/**
- * Crea filas faltantes en profesores/estudiantes para usuarios ya existentes.
- * Útil para reparar usuarios creados antes de la corrección.
- */
-export async function repararFilasRolAction(): Promise<void> {
-  const supabase = createAdminClient()
-  const hoy = new Date().toISOString().slice(0, 10)
-
-  // Profesores sin fila en profesores
-  const { data: profs } = await supabase
-    .from('usuario')
-    .select('idUsuario')
-    .eq('idRol', ID_ROL_PROFESOR)
-    .eq('estado', true)
-
-  for (const u of profs ?? []) {
-    const { count } = await supabase
-      .from('profesores')
-      .select('*', { count: 'exact', head: true })
-      .eq('idUsuario', u.idUsuario)
-    if (!count) {
-      await supabase.from('profesores').insert({
-        idUsuario: u.idUsuario,
-        codigoProfesor: `PROF${String(u.idUsuario).padStart(3, '0')}`,
-        fechaVinculacion: hoy,
-        nivelEstudios: 'Pendiente',
-        titulo: 'Pendiente',
-        estado: 'Activo',
-      })
-    }
-  }
-
-  // Estudiantes sin fila en estudiantes
-  const { data: ests } = await supabase
-    .from('usuario')
-    .select('idUsuario')
-    .eq('idRol', ID_ROL_ESTUDIANTE)
-    .eq('estado', true)
-
-  for (const u of ests ?? []) {
-    const { count } = await supabase
-      .from('estudiantes')
-      .select('*', { count: 'exact', head: true })
-      .eq('idUsuario', u.idUsuario)
-    if (!count) {
-      await supabase.from('estudiantes').insert({
-        idUsuario: u.idUsuario,
-        codigoEstudiante: `EST${String(u.idUsuario).padStart(3, '0')}`,
-        fechaIngreso: hoy,
-        estado: 'Activo',
-      })
-    }
-  }
-}
-
-/**
- * Rechaza y elimina un usuario pendiente de la tabla public.usuario.
- * Usa cliente admin para bypassear RLS.
- */
 export async function rechazarUsuarioAction(id: number): Promise<void> {
   return deleteUsuarioAction(id)
 }
 
-/**
- * Elimina un usuario de public.usuario Y de Supabase Auth.
- * Usa cliente admin para bypassear RLS y poder borrar de auth.users.
- */
 export async function deleteUsuarioAction(id: number): Promise<void> {
-  const supabase = createAdminClient()
+  await apiFetch(`/usuarios/${id}`, { method: 'DELETE' })
+}
 
-  // 1. Obtener auth_id antes de borrar
-  const { data: usuario } = await supabase
-    .from('usuario')
-    .select('auth_id')
-    .eq('idUsuario', id)
-    .single()
-
-  // 2. Eliminar de public.usuario
-  const { error } = await supabase
-    .from('usuario')
-    .delete()
-    .eq('idUsuario', id)
-
-  if (error) throw new Error(error.message)
-
-  // 3. Eliminar de Supabase Auth si tiene cuenta vinculada
-  if (usuario?.auth_id) {
-    await supabase.auth.admin.deleteUser(usuario.auth_id)
-  }
+export async function repararFilasRolAction(): Promise<void> {
+  // Handled automatically by validarUsuarioAction — no separate repair needed
 }

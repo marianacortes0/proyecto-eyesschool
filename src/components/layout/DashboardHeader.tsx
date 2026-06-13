@@ -3,30 +3,16 @@
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { useSidebar } from '@/components/layout/SidebarContext';
-import { useState, useEffect } from 'react';
-import { createClient } from '@/services/supabase/client';
 import { Menu, Bell, Search, Settings } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 export default function DashboardHeader() {
   const { user, role, loading } = useAuth();
   const { toggleSidebar } = useSidebar();
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const pathname = usePathname();
 
-  useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setAvatarUrl(user?.user_metadata?.avatarUrl ?? null);
-    });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setAvatarUrl(session?.user?.user_metadata?.avatarUrl ?? null);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const firstName = user?.user_metadata?.primerNombre || 'Usuario';
-  const lastName  = user?.user_metadata?.primerApellido || '';
+  const firstName = user?.primerNombre || 'Usuario';
+  const lastName  = user?.primerApellido || '';
   const fullName  = `${firstName} ${lastName}`.trim();
   const initial   = firstName.charAt(0).toUpperCase() || 'U';
 
@@ -36,17 +22,17 @@ export default function DashboardHeader() {
     estudiante: 'Student Profile',
     padre:      'Family / Parent',
   };
-  
+
   const pageTitleMap: Record<string, string> = {
-    '/admin': 'Panel de Administración',
-    '/general': 'Vista General',
-    '/usuarios': 'Gestión de Usuarios',
-    '/qr': 'Códigos QR Académicos',
+    '/admin':      'Panel de Administración',
+    '/general':    'Vista General',
+    '/usuarios':   'Gestión de Usuarios',
+    '/qr':         'Códigos QR Académicos',
     '/asistencia': 'Control de Asistencia',
-    '/notas': 'Registro de Notas',
-    '/horarios': 'Agenda de Horarios',
-    '/reportes': 'Insights & Reportes',
-    '/perfil': 'Mi Perfil Personal',
+    '/notas':      'Registro de Notas',
+    '/horarios':   'Agenda de Horarios',
+    '/reportes':   'Insights & Reportes',
+    '/perfil':     'Mi Perfil Personal',
   };
 
   const currentTitle = pageTitleMap[pathname] || 'Dashboard';
@@ -62,7 +48,7 @@ export default function DashboardHeader() {
         >
           <Menu size={20} className="group-hover:scale-110 transition-transform" />
         </button>
-        
+
         <div className="hidden lg:flex items-center gap-3">
           <div className="w-1 h-8 bg-blue-100 dark:bg-blue-500/20 rounded-full" />
           <div>
@@ -81,9 +67,9 @@ export default function DashboardHeader() {
       <div className="flex items-center gap-4 lg:gap-8">
         <div className="hidden md:flex items-center gap-2 bg-slate-100/50 dark:bg-white/5 px-4 py-2 rounded-2xl border border-slate-200/50 dark:border-white/5 min-w-[200px] lg:min-w-[300px]">
           <Search size={16} className="text-slate-400" />
-          <input 
-            type="text" 
-            placeholder="Search resources, students..." 
+          <input
+            type="text"
+            placeholder="Search resources, students..."
             className="bg-transparent border-none focus:outline-none text-sm text-slate-600 dark:text-slate-300 w-full"
           />
         </div>
@@ -100,10 +86,7 @@ export default function DashboardHeader() {
 
         <div className="h-8 w-px bg-slate-200 dark:bg-white/5 hidden md:block" />
 
-        <Link
-          href="/perfil"
-          className="flex items-center gap-3 group"
-        >
+        <Link href="/perfil" className="flex items-center gap-3 group">
           <div className="text-right hidden md:block">
             {!loading ? (
               <>
@@ -122,8 +105,6 @@ export default function DashboardHeader() {
               <div className="w-full h-full rounded-[14px] bg-white dark:bg-slate-800 overflow-hidden flex items-center justify-center text-blue-600 dark:text-blue-400 font-black text-lg">
                 {loading ? (
                   <span className="animate-pulse">...</span>
-                ) : avatarUrl ? (
-                  <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
                   initial
                 )}

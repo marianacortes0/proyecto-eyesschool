@@ -1,37 +1,37 @@
-import { createClient } from '@/services/supabase/server'
-import { createAdminClient } from '@/services/supabase/admin'
+export const dynamic = 'force-dynamic'
+
 import { redirect } from 'next/navigation'
-import { mapRolToKey } from '@/lib/utils/permissions'
+import { getServerUser, getServerToken, userToRole } from '@/lib/auth/server'
 import ReportesClient from './ReportesClient'
 
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
+
 export default async function ReportesPage() {
-  const supabase = await createClient()
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const user = await getServerUser()
+  if (!user) redirect('/login')
 
-  if (!user || error) redirect('/login')
-
-  const nombreRol =
-    (user.app_metadata?.rol as string | undefined) ??
-    (user.user_metadata?.rol as string | undefined)
-  const role = mapRolToKey(nombreRol, user.user_metadata?.idRol as number | undefined)
-
+  const role = userToRole(user)
   if (!role) redirect('/login')
 
-  const admin_db = createAdminClient()
+  const token = await getServerToken()
+  let idAdministrador = 0
 
-  const { data: usuarioRow } = await admin_db
-    .from('usuario')
-    .select('idUsuario')
-    .eq('auth_id', user.id)
-    .maybeSingle()
+  if (role === 'admin' && token) {
+    try {
+      const res = await fetch(
+        `${API}/administradores?id_usuario=${user.idUsuario}&limit=1`,
+        { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
+      )
+      if (res.ok) {
+        const data = await res.json() as Array<Record<string, unknown>>
+        if (data.length > 0) {
+          idAdministrador = (data[0].id_administrador ?? data[0].idAdministrador) as number ?? 0
+        }
+      }
+    } catch {
+      // leave idAdministrador as 0
+    }
+  }
 
-  const { data: adminRow } = usuarioRow
-    ? await admin_db
-        .from('administrador')
-        .select('idAdministrador')
-        .eq('idUsuario', usuarioRow.idUsuario)
-        .maybeSingle()
-    : { data: null }
-
-  return <ReportesClient role={role} idAdministrador={adminRow?.idAdministrador ?? 0} />
+  return <ReportesClient role={role} idAdministrador={idAdministrador} />
 }

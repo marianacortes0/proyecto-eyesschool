@@ -1,51 +1,43 @@
-import { createClient } from '@/services/supabase/server'
-import { createAdminClient } from '@/services/supabase/admin'
+export const dynamic = 'force-dynamic'
+
 import { redirect } from 'next/navigation'
-import { mapRolToKey } from '@/lib/utils/permissions'
-import dynamic from 'next/dynamic'
-import { 
-  getDashboardPadreServer, 
-  getDashboardDocenteServer, 
-  getDashboardEstudianteServer 
+import { getServerUser, getServerToken, userToRole } from '@/lib/auth/server'
+import nextDynamic from 'next/dynamic'
+import {
+  getDashboardDocenteServer,
+  getDashboardEstudianteServer,
+  getDashboardPadreServer,
 } from '@/services/dashboard/dashboardService'
 
-const DocenteDashboardClient   = dynamic(() => import('@/components/dashboard/DocenteDashboardClient'))
-const EstudianteDashboardClient = dynamic(() => import('@/components/dashboard/EstudianteDashboardClient'))
-const PadreDashboardClient      = dynamic(() => import('@/components/dashboard/PadreDashboardClient'))
+const DocenteDashboardClient    = nextDynamic(() => import('@/components/dashboard/DocenteDashboardClient'))
+const EstudianteDashboardClient = nextDynamic(() => import('@/components/dashboard/EstudianteDashboardClient'))
+const PadreDashboardClient      = nextDynamic(() => import('@/components/dashboard/PadreDashboardClient'))
 
 export default async function GeneralDashboardPage() {
-  const supabase = await createClient()
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const user = await getServerUser()
+  if (!user) redirect('/login')
 
-  if (!user || error) redirect('/login')
-
-  const nombreRol =
-    (user.app_metadata?.rol as string | undefined) ??
-    (user.user_metadata?.rol as string | undefined)
-  const role = mapRolToKey(nombreRol, user.user_metadata?.idRol as number | undefined)
-
+  const role = userToRole(user)
   if (role === 'admin') redirect('/admin')
+  if (!role) redirect('/login')
 
-  // Fetch data on the server based on role
+  const token = await getServerToken()
+
   if (role === 'docente') {
-    const adminDb = createAdminClient()
-    const initialData = await getDashboardDocenteServer(adminDb, user.id)
+    const initialData = token ? await getDashboardDocenteServer(token) : undefined
     return <DocenteDashboardClient initialData={initialData} />
   }
 
   if (role === 'estudiante') {
-    const adminDb = createAdminClient()
-    const initialData = await getDashboardEstudianteServer(adminDb, user.id)
+    const initialData = token ? await getDashboardEstudianteServer(token) : undefined
     return <EstudianteDashboardClient initialData={initialData} />
   }
-  
+
   if (role === 'padre') {
-    const adminDb = createAdminClient()
-    const initialData = await getDashboardPadreServer(adminDb, user.id)
+    const initialData = token ? await getDashboardPadreServer(token) : undefined
     return <PadreDashboardClient initialData={initialData} />
   }
 
-  // Rol desconocido — vista de espera
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>

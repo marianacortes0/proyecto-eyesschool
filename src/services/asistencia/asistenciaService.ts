@@ -1,6 +1,4 @@
-import { createClient } from '../supabase/client'
-
-// ── Tipos ─────────────────────────────────────────────────────────────────────
+import { apiFetch } from '@/services/api/client'
 
 export type EstadoAsistencia = 'Presente' | 'Ausente' | 'Tarde' | 'Excusa' | 'Suspensión'
 
@@ -52,84 +50,60 @@ export type FiltrosAsistencia = {
   idEstudiante?: number
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
-function buildNombre(u: {
-  primerNombre: string
-  primerApellido: string
-  segundoNombre: string | null
-  segundoApellido: string | null
-} | null): string {
-  if (!u) return '—'
-  return [u.primerNombre, u.segundoNombre, u.primerApellido, u.segundoApellido]
-    .filter(Boolean)
-    .join(' ')
+type AsistenciaRaw = {
+  idAsistencia: number
+  idEstudiante: number
+  estado: string
+  fecha: string
+  fechaRegistro: string
+  observacion: string | null
+  registradoPor: number
+  codigoQr: string | null
+  tipo: string | null
 }
 
-// ── Queries ───────────────────────────────────────────────────────────────────
+type EstudianteRaw = {
+  idEstudiante: number
+  codigoEstudiante: string
+  estado: string
+  idCursoActual: number | null
+  usuario?: { primerNombre: string; primerApellido: string; segundoNombre: string | null; segundoApellido: string | null }
+  cursoActual?: { nombreCurso: string; jornada: string } | null
+}
 
-export const getRegistros = async (
-  filtros: FiltrosAsistencia = {}
-): Promise<RegistroAsistencia[]> => {
-  const supabase = createClient()
+function buildNombre(u?: EstudianteRaw['usuario']): string {
+  if (!u) return '—'
+  return [u.primerNombre, u.segundoNombre, u.primerApellido, u.segundoApellido].filter(Boolean).join(' ')
+}
 
-  let query = supabase
-    .from('Asistencia')
-    .select(`
-      idAsistencia, idEstudiante, estado,
-      fecha, fechaRegistro, observacion, registradoPor,
-      codigo_qr, tipo,
-      estudiantes!fk_asistencia_estudiante (
-        codigoEstudiante,
-        usuario!fk_estudiantes_usuario (
-          primerNombre, primerApellido, segundoNombre, segundoApellido
-        ),
-        cursos!fk_estudiantes_curso ( nombreCurso )
-      )
-    `)
-    .order('fecha',         { ascending: false })
-    .order('fechaRegistro', { ascending: false })
-    .limit(200)
+export const getRegistros = async (filtros: FiltrosAsistencia = {}): Promise<RegistroAsistencia[]> => {
+  const params = new URLSearchParams({ skip: '0', limit: '200' })
+  if (filtros.idEstudiante) params.set('id_estudiante', String(filtros.idEstudiante))
+  if (filtros.fecha) params.set('fecha', filtros.fecha)
+  if (filtros.estado && filtros.estado !== 'todos') params.set('estado', filtros.estado)
 
-  if (filtros.idEstudiante) query = query.eq('idEstudiante', filtros.idEstudiante)
-  if (filtros.fecha)  query = query.eq('fecha',  filtros.fecha)
-  if (filtros.estado && filtros.estado !== 'todos')
-    query = query.eq('estado', filtros.estado)
+  const data = await apiFetch<AsistenciaRaw[]>(`/asistencia?${params}`)
 
-  const { data, error } = await query
-  if (error) throw new Error(error.message)
-  if (!data)  return []
+  const resultado: RegistroAsistencia[] = data.map(r => ({
+    idAsistencia:     r.idAsistencia,
+    idEstudiante:     r.idEstudiante,
+    estado:           r.estado as EstadoAsistencia,
+    fecha:            r.fecha,
+    fechaRegistro:    r.fechaRegistro,
+    observacion:      r.observacion,
+    registradoPor:    r.registradoPor,
+    nombreEstudiante: '—',
+    codigoEstudiante: '—',
+    curso:            null,
+    codigo_qr:        r.codigoQr ?? null,
+    tipo:             r.tipo ?? null,
+  }))
 
-  const resultado: RegistroAsistencia[] = data.map((r) => {
-    const est = r.estudiantes as {
-      codigoEstudiante: string
-      usuario: Parameters<typeof buildNombre>[0]
-      cursos: { nombreCurso: string } | null
-    } | null
-
-    return {
-      idAsistencia:     r.idAsistencia,
-      idEstudiante:     r.idEstudiante,
-      estado:           r.estado as EstadoAsistencia,
-      fecha:            r.fecha,
-      fechaRegistro:    r.fechaRegistro,
-      observacion:      r.observacion,
-      registradoPor:    r.registradoPor,
-      nombreEstudiante: buildNombre(est?.usuario ?? null),
-      codigoEstudiante: est?.codigoEstudiante ?? '—',
-      curso:            est?.cursos?.nombreCurso ?? null,
-      codigo_qr:        (r as { codigo_qr?: string | null }).codigo_qr ?? null,
-      tipo:             (r as { tipo?: string | null }).tipo ?? null,
-    }
-  })
-
-  // Filtro de búsqueda por nombre (client-side sobre los primeros 200)
   if (filtros.search) {
     const q = filtros.search.toLowerCase()
-    return resultado.filter(
-      (r) =>
-        r.nombreEstudiante.toLowerCase().includes(q) ||
-        r.codigoEstudiante.toLowerCase().includes(q)
+    return resultado.filter(r =>
+      r.nombreEstudiante.toLowerCase().includes(q) ||
+      r.codigoEstudiante.toLowerCase().includes(q)
     )
   }
 
@@ -137,58 +111,45 @@ export const getRegistros = async (
 }
 
 export const getEstudiantesSelector = async (): Promise<EstudianteSelector[]> => {
-  const supabase = createClient()
-
-  const { data, error } = await supabase
-    .from('estudiantes')
-    .select(`
-      idEstudiante,
-      codigoEstudiante,
-      usuario!fk_estudiantes_usuario (
-        primerNombre, primerApellido, segundoNombre, segundoApellido
-      ),
-      cursos!fk_estudiantes_curso ( nombreCurso, jornada )
-    `)
-    .order('idEstudiante', { ascending: true })
-
-  if (error) throw new Error(error.message)
-  if (!data)  return []
-
-  return data.map((e) => ({
+  const data = await apiFetch<EstudianteRaw[]>('/estudiantes?estado=Activo&limit=500')
+  return data.map(e => ({
     idEstudiante:     e.idEstudiante,
     codigoEstudiante: e.codigoEstudiante,
-    nombreCompleto:   buildNombre(e.usuario as Parameters<typeof buildNombre>[0]),
-    curso:            (e.cursos as { nombreCurso: string; jornada: string } | null)?.nombreCurso ?? null,
-    jornada:          (e.cursos as { nombreCurso: string; jornada: string } | null)?.jornada ?? null,
+    nombreCompleto:   buildNombre(e.usuario),
+    curso:            null,
+    jornada:          null,
   }))
 }
 
 export const crearRegistro = async (data: CreateRegistroData): Promise<void> => {
-  const supabase = createClient()
-
-  const { error } = await supabase.from('Asistencia').insert({
-    idEstudiante:  data.idEstudiante,
-    estado:        data.estado,
-    fecha:         data.fecha,
-    observacion:   data.observacion ?? null,
-    registradoPor: data.registradoPor,
-    activo:        true,
+  await apiFetch('/asistencia', {
+    method: 'POST',
+    body: JSON.stringify({
+      id_estudiante:  data.idEstudiante,
+      estado:         data.estado,
+      fecha:          data.fecha,
+      observacion:    data.observacion ?? null,
+      registrado_por: data.registradoPor,
+      tipo:           data.tipo,
+    }),
   })
-
-  if (error) throw new Error(error.message)
 }
 
-export const actualizarRegistro = async (
-  id: number,
-  data: UpdateRegistroData
-): Promise<void> => {
-  const supabase = createClient()
-  const { error } = await supabase.from('Asistencia').update(data).eq('idAsistencia', id)
-  if (error) throw new Error(error.message)
+export const actualizarRegistro = async (id: number, data: UpdateRegistroData): Promise<void> => {
+  await apiFetch(`/asistencia/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      estado:      data.estado,
+      fecha:       data.fecha,
+      observacion: data.observacion,
+      tipo:        data.tipo,
+    }),
+  })
 }
 
 export const eliminarRegistro = async (id: number): Promise<void> => {
-  const supabase = createClient()
-  const { error } = await supabase.from('Asistencia').delete().eq('idAsistencia', id)
-  if (error) throw new Error(error.message)
+  await apiFetch(`/asistencia/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ activo: false }),
+  })
 }

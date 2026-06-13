@@ -1,122 +1,123 @@
 'use server'
 
-import { createAdminClient } from '../supabase/admin'
+import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
-import { type Nota } from './notasService'
+import type { Nota } from './notasService'
 
-/**
- * Registra una nota usando el Admin Client para bypass de RLS.
- */
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
+
+async function getToken(): Promise<string | null> {
+  const store = await cookies()
+  return store.get('eys_access')?.value ?? null
+}
+
+async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const token = await getToken()
+  const res = await fetch(`${API}${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers as Record<string, string> | undefined),
+    },
+    cache: 'no-store',
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error((body as Record<string, unknown>).detail as string ?? `HTTP ${res.status}`)
+  }
+  if (res.status === 204) return null as T
+  return res.json() as Promise<T>
+}
+
+function toCamelKey(k: string): string {
+  return k.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase())
+}
+
+function toCamel(v: unknown): unknown {
+  if (Array.isArray(v)) return v.map(toCamel)
+  if (v !== null && typeof v === 'object') {
+    return Object.fromEntries(
+      Object.entries(v as Record<string, unknown>).map(([k, val]) => [toCamelKey(k), toCamel(val)])
+    )
+  }
+  return v
+}
+
 export async function createNotaAction(
   payload: Pick<Nota, 'idEstudiante' | 'idMateria' | 'idPeriodo' | 'nota' | 'observacion' | 'registradoPor'>
 ) {
-  const supabase = createAdminClient()
-
-  const { error } = await supabase.from('notas').insert(payload)
-
-  if (error) {
-    console.error('Error en createNotaAction:', error)
-    throw new Error(error.message)
-  }
-
+  await apiFetch('/notas', {
+    method: 'POST',
+    body: JSON.stringify({
+      id_estudiante:  payload.idEstudiante,
+      id_materia:     payload.idMateria,
+      id_periodo:     payload.idPeriodo,
+      nota:           payload.nota,
+      observacion:    payload.observacion ?? null,
+      registrado_por: payload.registradoPor,
+    }),
+  })
   revalidatePath('/notas')
 }
 
-/**
- * Obtiene todas las notas usando el Admin Client para bypass de RLS.
- */
 export async function getNotasAction(): Promise<Nota[]> {
-  const supabase = createAdminClient()
-
-  const { data, error } = await supabase
-    .from('notas')
-    .select(`
-      *,
-      estudiantes (
-        codigoEstudiante,
-        usuario ( primerNombre, primerApellido )
-      ),
-      materias ( nombreMateria )
-    `)
-    .order('fechaRegistro', { ascending: false })
-    .order('idPeriodo', { ascending: true })
-
-  if (error) throw new Error(error.message)
-
-  return ((data ?? []) as any[]).map(row => ({
-    idNota: row.idNota,
-    nota: Number(row.nota),
-    observacion: row.observacion,
-    fechaRegistro: row.fechaRegistro,
-    idEstudiante: row.idEstudiante,
-    idMateria: row.idMateria,
-    idPeriodo: row.idPeriodo,
-    registradoPor: row.registradoPor,
-    codigoEstudiante: row.estudiantes?.codigoEstudiante ?? '',
-    nombreEstudiante: row.estudiantes?.usuario
-      ? `${row.estudiantes.usuario.primerNombre} ${row.estudiantes.usuario.primerApellido}`
-      : `Estudiante #${row.idEstudiante}`,
-    nombreMateria: row.materias?.nombreMateria ?? `Materia #${row.idMateria}`,
-  }))
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/notas?limit=500')
+  return data.map(r => {
+    const c = toCamel(r) as Raw
+    return {
+      idNota:          c.idNota as number,
+      nota:            Number(c.nota),
+      observacion:     c.observacion as string | null,
+      fechaRegistro:   c.fechaRegistro as string,
+      idEstudiante:    c.idEstudiante as number,
+      idMateria:       c.idMateria as number,
+      idPeriodo:       c.idPeriodo as number,
+      registradoPor:   c.registradoPor as number,
+      codigoEstudiante: `EST${String(c.idEstudiante).padStart(3, '0')}`,
+      nombreEstudiante: `Estudiante #${c.idEstudiante}`,
+      nombreMateria:    `Materia #${c.idMateria}`,
+    } satisfies Nota
+  })
 }
 
-/**
- * Obtiene estudiantes para el selector de notas (bypass RLS).
- */
 export async function getEstudiantesAction() {
-  const supabase = createAdminClient()
-
-  const { data, error } = await supabase
-    .from('estudiantes')
-    .select(`
-      idEstudiante,
-      codigoEstudiante,
-      idCursoActual,
-      usuario ( primerNombre, primerApellido )
-    `)
-    .eq('estado', 'Activo')
-    .order('idEstudiante')
-
-  if (error) throw new Error(error.message)
-
-  return ((data ?? []) as any[]).map(e => ({
-    idEstudiante: e.idEstudiante,
-    codigoEstudiante: e.codigoEstudiante,
-    idCursoActual: e.idCursoActual ?? null,
-    nombre: e.usuario
-      ? `${e.usuario.primerNombre} ${e.usuario.primerApellido}`
-      : `Estudiante #${e.idEstudiante}`,
-  }))
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/estudiantes?estado=Activo&limit=500')
+  return data.map(r => {
+    const c = toCamel(r) as Raw
+    return {
+      idEstudiante:     c.idEstudiante as number,
+      codigoEstudiante: c.codigoEstudiante as string,
+      idCursoActual:    (c.idCursoActual as number | null) ?? null,
+      nombre:           `Estudiante #${c.idEstudiante}`,
+    }
+  })
 }
 
-/**
- * Obtiene materias para el selector de notas (bypass RLS).
- */
 export async function getMateriasAction() {
-  const supabase = createAdminClient()
-
-  const { data, error } = await supabase
-    .from('materias')
-    .select('idMateria, nombreMateria')
-    .eq('activa', true)
-    .order('nombreMateria')
-
-  if (error) throw new Error(error.message)
-  return (data ?? []) as { idMateria: number; nombreMateria: string }[]
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/materias?activa=true&limit=200')
+  return data.map(r => {
+    const c = toCamel(r) as Raw
+    return {
+      idMateria:    c.idMateria as number,
+      nombreMateria: c.nombreMateria as string,
+    }
+  })
 }
 
-/**
- * Obtiene cursos para el selector de notas (bypass RLS).
- */
 export async function getCursosAction() {
-  const supabase = createAdminClient()
-
-  const { data, error } = await supabase
-    .from('cursos')
-    .select('idCurso, nombreCurso, grado, jornada')
-    .eq('activo', true)
-    .order('nombreCurso')
-
-  if (error) throw new Error(error.message)
-  return (data ?? []) as { idCurso: number; nombreCurso: string; grado: string; jornada: string }[]
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/cursos?activo=true&limit=200')
+  return data.map(r => {
+    const c = toCamel(r) as Raw
+    return {
+      idCurso:     c.idCurso as number,
+      nombreCurso: c.nombreCurso as string,
+      grado:       c.grado as string,
+      jornada:     c.jornada as string,
+    }
+  })
 }

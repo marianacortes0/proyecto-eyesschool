@@ -1,4 +1,4 @@
-import { createClient } from '@/services/supabase/client'
+import { apiFetch } from '@/services/api/client'
 
 export type Nota = {
   idNota: number
@@ -9,7 +9,6 @@ export type Nota = {
   idMateria: number
   idPeriodo: number
   registradoPor: number
-  // joined
   nombreEstudiante?: string
   codigoEstudiante?: string
   nombreMateria?: string
@@ -34,103 +33,78 @@ export function notaColor(nota: number): string {
 }
 
 export async function getNotas(): Promise<Nota[]> {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('notas')
-    .select(`
-      *,
-      estudiantes (
-        codigoEstudiante,
-        usuario ( primerNombre, primerApellido )
-      ),
-      materias ( nombreMateria )
-    `)
-    .order('fechaRegistro', { ascending: false })
-    .order('idPeriodo', { ascending: true })
-
-  if (error) throw error
-
-  return ((data ?? []) as any[]).map(row => ({
-    idNota: row.idNota,
-    nota: Number(row.nota),
-    observacion: row.observacion,
-    fechaRegistro: row.fechaRegistro,
-    idEstudiante: row.idEstudiante,
-    idMateria: row.idMateria,
-    idPeriodo: row.idPeriodo,
-    registradoPor: row.registradoPor,
-    codigoEstudiante: row.estudiantes?.codigoEstudiante ?? '',
-    nombreEstudiante: row.estudiantes?.usuario
-      ? `${row.estudiantes.usuario.primerNombre} ${row.estudiantes.usuario.primerApellido}`
-      : `Estudiante #${row.idEstudiante}`,
-    nombreMateria: row.materias?.nombreMateria ?? `Materia #${row.idMateria}`,
+  const data = await apiFetch<Record<string, unknown>[]>('/notas?limit=500')
+  return data.map(r => ({
+    idNota:        r.idNota as number,
+    nota:          Number(r.nota),
+    observacion:   r.observacion as string | null,
+    fechaRegistro: r.fechaRegistro as string,
+    idEstudiante:  r.idEstudiante as number,
+    idMateria:     r.idMateria as number,
+    idPeriodo:     r.idPeriodo as number,
+    registradoPor: r.registradoPor as number,
+    codigoEstudiante: `EST${String(r.idEstudiante).padStart(3, '0')}`,
+    nombreEstudiante:  `Estudiante #${r.idEstudiante}`,
+    nombreMateria:     `Materia #${r.idMateria}`,
   }))
 }
 
 export async function getCursosParaNotas() {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('cursos')
-    .select('idCurso, nombreCurso, grado, jornada')
-    .eq('activo', true)
-    .order('nombreCurso')
-  if (error) throw error
-  return (data ?? []) as { idCurso: number; nombreCurso: string; grado: string; jornada: string }[]
+  const data = await apiFetch<Record<string, unknown>[]>('/cursos?activo=true&limit=200')
+  return data.map(c => ({
+    idCurso:     c.idCurso as number,
+    nombreCurso: c.nombreCurso as string,
+    grado:       c.grado as string,
+    jornada:     c.jornada as string,
+  }))
 }
 
 export async function getEstudiantesParaNotas() {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('estudiantes')
-    .select(`
-      idEstudiante,
-      codigoEstudiante,
-      idCursoActual,
-      usuario ( primerNombre, primerApellido )
-    `)
-    .eq('estado', 'Activo')
-    .order('idEstudiante')
-  if (error) throw error
-  return ((data ?? []) as any[]).map(e => ({
-    idEstudiante: e.idEstudiante,
-    codigoEstudiante: e.codigoEstudiante,
-    idCursoActual: e.idCursoActual ?? null,
-    nombre: e.usuario
-      ? `${e.usuario.primerNombre} ${e.usuario.primerApellido}`
-      : `Estudiante #${e.idEstudiante}`,
+  const data = await apiFetch<Record<string, unknown>[]>('/estudiantes?estado=Activo&limit=500')
+  return data.map(e => ({
+    idEstudiante:  e.idEstudiante as number,
+    codigoEstudiante: e.codigoEstudiante as string,
+    idCursoActual: (e.idCursoActual as number | null) ?? null,
+    nombre: `Estudiante #${e.idEstudiante}`,
   }))
 }
 
 export async function getMateriasParaNotas() {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('materias')
-    .select('idMateria, nombreMateria')
-    .eq('activa', true)
-    .order('nombreMateria')
-  if (error) throw error
-  return (data ?? []) as { idMateria: number; nombreMateria: string }[]
+  const data = await apiFetch<Record<string, unknown>[]>('/materias?activa=true&limit=200')
+  return data.map(m => ({
+    idMateria:     m.idMateria as number,
+    nombreMateria: m.nombreMateria as string,
+  }))
 }
 
 export async function createNota(
   payload: Pick<Nota, 'idEstudiante' | 'idMateria' | 'idPeriodo' | 'nota' | 'observacion' | 'registradoPor'>
-) {
-  const supabase = createClient()
-  const { error } = await supabase.from('notas').insert(payload)
-  if (error) throw error
+): Promise<void> {
+  await apiFetch('/notas', {
+    method: 'POST',
+    body: JSON.stringify({
+      id_estudiante:  payload.idEstudiante,
+      id_materia:     payload.idMateria,
+      id_periodo:     payload.idPeriodo,
+      nota:           payload.nota,
+      observacion:    payload.observacion ?? null,
+      registrado_por: payload.registradoPor,
+    }),
+  })
 }
 
 export async function updateNota(
   idNota: number,
   payload: Partial<Pick<Nota, 'nota' | 'observacion' | 'idPeriodo' | 'idMateria'>>
-) {
-  const supabase = createClient()
-  const { error } = await supabase.from('notas').update(payload).eq('idNota', idNota)
-  if (error) throw error
+): Promise<void> {
+  const body: Record<string, unknown> = {}
+  if (payload.nota      !== undefined) body.nota       = payload.nota
+  if (payload.observacion !== undefined) body.observacion = payload.observacion
+  if (payload.idPeriodo !== undefined) body.id_periodo = payload.idPeriodo
+  if (payload.idMateria !== undefined) body.id_materia = payload.idMateria
+  await apiFetch(`/notas/${idNota}`, { method: 'PUT', body: JSON.stringify(body) })
 }
 
-export async function deleteNota(idNota: number) {
-  const supabase = createClient()
-  const { error } = await supabase.from('notas').delete().eq('idNota', idNota)
-  if (error) throw error
+export async function deleteNota(idNota: number): Promise<void> {
+  await apiFetch(`/notas/${idNota}`, { method: 'DELETE' })
 }
