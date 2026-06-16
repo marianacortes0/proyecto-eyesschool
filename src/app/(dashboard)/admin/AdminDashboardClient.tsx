@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useDashboard } from '../../../hooks/useDashboard'
+import { useAuth } from '../../../hooks/useAuth'
 import { StatsCard } from '../../../components/dashboard/StatsCard'
 import { motion } from 'framer-motion'
 import { Plus, Download } from 'lucide-react'
@@ -18,6 +19,8 @@ const CircularChart = dynamic(
 
 export default function AdminDashboardClient() {
   const { stats, charts, distribucionUsuarios, loading } = useDashboard()
+  const { user } = useAuth()
+  const nombre = user ? `${user.primerNombre} ${user.primerApellido}` : ''
 
   if (loading) return (
     <div className="p-8 space-y-8 animate-pulse">
@@ -36,7 +39,7 @@ export default function AdminDashboardClient() {
           animate={{ opacity: 1, x: 0 }}
         >
           <h1 className="text-3xl font-black text-slate-800 dark:text-white tracking-tight">Panel de Administración</h1>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">Welcome back, Mariana. Here is your academic overview for today.</p>
+          <p className="text-slate-500 dark:text-slate-400 font-medium">Bienvenido{nombre ? `, ${nombre}` : ''}. Aquí está el resumen académico de hoy.</p>
         </motion.div>
         
         <div className="flex items-center gap-3">

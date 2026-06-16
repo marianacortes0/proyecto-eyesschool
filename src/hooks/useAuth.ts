@@ -1,63 +1,58 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { createClient } from '@/services/supabase/client'
+import { useEffect, useState } from 'react'
 import { can, mapRolToKey, type Role, type Action, type Resource } from '@/lib/utils/permissions'
-import { User } from '@supabase/supabase-js'
+
+export type AuthUser = {
+  idUsuario: number
+  idRol: number
+  nombreRol: string
+  primerNombre: string
+  primerApellido: string
+}
+
+function readUserCookie(): AuthUser | null {
+  if (typeof document === 'undefined') return null
+  const m = document.cookie.match(/(?:^|; )eys_user=([^;]*)/)
+  if (!m) return null
+  try {
+    return JSON.parse(decodeURIComponent(m[1])) as AuthUser
+  } catch {
+    return null
+  }
+}
 
 export function useAuth() {
-  // Instancia estable: una sola por montaje del hook, evita el AbortError de Web Locks
-  const supabaseRef = useRef(createClient())
-  const supabase = supabaseRef.current
+  const [authUser, setAuthUser] = useState<AuthUser | null>(() => {
+    if (typeof window === 'undefined') return null
+    return readUserCookie()
+  })
+  const loading = false
 
-  const [user, setUser] = useState<User | null>(null)
-  const [role, setRole] = useState<Role | null>(null)
-  const [userId, setUserId] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
-
+  // Re-sync on focus (handles login in another tab)
   useEffect(() => {
-    let mounted = true
-
-    const applySession = (session: { user: User } | null) => {
-      if (!mounted) return
-      if (session) {
-        setUser(session.user)
-        const nombreRol =
-          (session.user.app_metadata?.rol as string | undefined) ??
-          (session.user.user_metadata?.rol as string | undefined)
-        setRole(mapRolToKey(nombreRol, session.user.user_metadata?.idRol as number | undefined))
-        setUserId(session.user.id)
-      } else {
-        setUser(null)
-        setRole(null)
-        setUserId(null)
-      }
-      setLoading(false)
-    }
-
-    // Refrescar la sesión al montar para obtener app_metadata actualizado
-    supabase.auth.refreshSession().then(({ data: { session } }) => applySession(session))
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      applySession(session)
-    })
-
-    return () => {
-      mounted = false
-      subscription.unsubscribe()
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    const sync = () => setAuthUser(readUserCookie())
+    window.addEventListener('focus', sync)
+    return () => window.removeEventListener('focus', sync)
   }, [])
 
+  const role: Role | null = authUser
+    ? mapRolToKey(authUser.nombreRol, authUser.idRol)
+    : null
+
   const signOut = async () => {
-    await supabase.auth.signOut()
+    // Clear cookies and redirect — actual API call handled by logout action
+    document.cookie = 'eys_access=; path=/; max-age=0'
+    document.cookie = 'eys_refresh=; path=/; max-age=0'
+    document.cookie = 'eys_user=; path=/; max-age=0'
     window.location.href = '/login'
   }
 
   return {
-    user,
+    user: authUser,
+    // Keep a `userId` number (was Supabase UUID string) for backward compat
+    userId: authUser?.idUsuario ?? null,
     role,
-    userId,
     loading,
     signOut,
     can: (action: Action, resource: Resource) =>

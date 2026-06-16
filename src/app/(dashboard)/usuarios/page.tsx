@@ -1,19 +1,14 @@
-import { createClient } from '@/services/supabase/server'
+export const dynamic = 'force-dynamic'
+
 import { redirect } from 'next/navigation'
-import { mapRolToKey } from '@/lib/utils/permissions'
+import { getServerUser, userToRole } from '@/lib/auth/server'
 import UsuariosClient from './UsuariosClient'
 
 export default async function UsuariosPage() {
-  const supabase = await createClient()
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const user = await getServerUser()
+  if (!user) redirect('/login')
 
-  if (!user || error) redirect('/login')
-
-  const nombreRol =
-    (user.app_metadata?.rol as string | undefined) ??
-    (user.user_metadata?.rol as string | undefined)
-  const role = mapRolToKey(nombreRol, user.user_metadata?.idRol as number | undefined)
-
+  const role = userToRole(user)
   if (role !== 'admin') redirect('/general')
 
   return <UsuariosClient />

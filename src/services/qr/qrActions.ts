@@ -1,6 +1,6 @@
 'use server'
 
-import { createAdminClient } from '../supabase/admin'
+import { cookies } from 'next/headers'
 import type {
   RegistroAsistencia,
   EstudianteQR,
@@ -9,193 +9,134 @@ import type {
   TipoQR,
 } from './qrService'
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
-function buildNombre(u: {
-  primerNombre: string
-  primerApellido: string
-  segundoNombre: string | null
-  segundoApellido: string | null
-} | null): string {
-  if (!u) return '—'
-  return [u.primerNombre, u.segundoNombre, u.primerApellido, u.segundoApellido]
-    .filter(Boolean)
-    .join(' ')
+async function getToken(): Promise<string | null> {
+  const store = await cookies()
+  return store.get('eys_access')?.value ?? null
 }
 
-// ── Registros de asistencia (bypass RLS) ─────────────────────────────────────
-
-export async function getRegistrosAsistenciaAction(
-  fecha?: string
-): Promise<RegistroAsistencia[]> {
-  const supabase = createAdminClient()
-
-  let query = supabase
-    .from('Asistencia')
-    .select(`
-      idAsistencia, idEstudiante, estado, fecha,
-      fechaRegistro, observacion, registradoPor,
-      codigo_qr, tipo,
-      estudiantes!fk_asistencia_estudiante (
-        codigoEstudiante,
-        usuario!fk_estudiantes_usuario (
-          primerNombre, primerApellido, segundoNombre, segundoApellido
-        )
-      )
-    `)
-    .order('fecha',         { ascending: false })
-    .order('fechaRegistro', { ascending: false })
-
-  if (fecha) query = query.eq('fecha', fecha)
-
-  const { data, error } = await query
-  if (error) throw new Error(error.message)
-  if (!data)  return []
-
-  return data.map((r) => {
-    const est = r.estudiantes as {
-      codigoEstudiante: string
-      usuario: Parameters<typeof buildNombre>[0]
-    } | null
-
-    return {
-      idAsistencia:     r.idAsistencia,
-      idEstudiante:     r.idEstudiante,
-      estado:           r.estado as RegistroAsistencia['estado'],
-      fecha:            r.fecha,
-      fechaRegistro:    r.fechaRegistro,
-      observacion:      r.observacion,
-      registradoPor:    r.registradoPor,
-      nombreEstudiante: buildNombre(est?.usuario ?? null),
-      codigoEstudiante: est?.codigoEstudiante ?? '—',
-      codigo_qr:        (r as { codigo_qr?: string | null }).codigo_qr ?? null,
-      tipo:             (r as { tipo?: string | null }).tipo ?? null,
-    }
+async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const token = await getToken()
+  const res = await fetch(`${API}${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers as Record<string, string> | undefined),
+    },
+    cache: 'no-store',
   })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error((body as Record<string, unknown>).detail as string ?? `HTTP ${res.status}`)
+  }
+  if (res.status === 204) return null as T
+  return res.json() as Promise<T>
 }
 
-// ── Estudiantes con QR (bypass RLS) ──────────────────────────────────────────
+type Raw = Record<string, unknown>
 
-export async function getEstudiantesConQRAction(): Promise<EstudianteQR[]> {
-  const supabase = createAdminClient()
+function toCamelKey(k: string): string {
+  return k.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase())
+}
 
-  const { data, error } = await supabase
-    .from('estudiantes')
-    .select(`
-      idEstudiante,
-      codigoEstudiante,
-      usuario!fk_estudiantes_usuario (
-        primerNombre, primerApellido, segundoNombre, segundoApellido
-      ),
-      cursos!fk_estudiantes_curso ( nombreCurso )
-    `)
-    .eq('estado', 'Activo')
-    .order('idEstudiante', { ascending: true })
+function toCamel(v: unknown): unknown {
+  if (Array.isArray(v)) return v.map(toCamel)
+  if (v !== null && typeof v === 'object') {
+    return Object.fromEntries(
+      Object.entries(v as Record<string, unknown>).map(([k, val]) => [toCamelKey(k), toCamel(val)])
+    )
+  }
+  return v
+}
 
-  if (error) throw new Error(error.message)
-  if (!data) return []
-
-  return data.map((e) => ({
-    idEstudiante: e.idEstudiante,
-    codigoEstudiante: e.codigoEstudiante,
-    nombreCompleto: buildNombre(e.usuario as Parameters<typeof buildNombre>[0]),
-    curso: (e.cursos as { nombreCurso: string } | null)?.nombreCurso ?? null,
+export async function getRegistrosAsistenciaAction(fecha?: string): Promise<RegistroAsistencia[]> {
+  const params = new URLSearchParams({ limit: '200' })
+  if (fecha) params.set('fecha', fecha)
+  const data = await apiFetch<Raw[]>(`/asistencia?${params}`)
+  return data.map(r => ({
+    idAsistencia:     r.idAsistencia as number,
+    idEstudiante:     r.idEstudiante as number,
+    estado:           r.estado as RegistroAsistencia['estado'],
+    fecha:            r.fecha as string,
+    fechaRegistro:    r.fechaRegistro as string,
+    observacion:      r.observacion as string | null,
+    registradoPor:    r.registradoPor as number,
+    nombreEstudiante: '—',
+    codigoEstudiante: '—',
+    codigo_qr:        (r.codigoQr ?? r.codigo_qr) as string | null,
+    tipo:             r.tipo as string | null,
   }))
 }
 
-// ── Buscar QR por código de estudiante (bypass RLS) ──────────────────────────
+export async function getEstudiantesConQRAction(): Promise<EstudianteQR[]> {
+  const data = await apiFetch<Raw[]>('/estudiantes?estado=Activo&limit=500') as Raw[]
+  return data.map(e => ({
+    idEstudiante:     e.idEstudiante as number,
+    codigoEstudiante: e.codigoEstudiante as string,
+    nombreCompleto:   '—',
+    curso:            null,
+  }))
+}
 
 export async function getCodigoQRByValueAction(
   codigoTexto: string
 ): Promise<CodigoQRConEstudiante | null> {
-  const supabase = createAdminClient()
-
-  const { data, error } = await supabase
-    .from('estudiantes')
-    .select(`
-      idEstudiante,
-      codigoEstudiante,
-      estado,
-      usuario!fk_estudiantes_usuario (
-        primerNombre, primerApellido, segundoNombre, segundoApellido
-      ),
-      cursos!fk_estudiantes_curso ( nombreCurso )
-    `)
-    .eq('codigoEstudiante', codigoTexto)
-    .eq('estado', 'Activo')
-    .maybeSingle()
-
-  if (error || !data) return null
-
+  const data = await apiFetch<Raw[]>(`/estudiantes?codigo_estudiante=${encodeURIComponent(codigoTexto)}&estado=Activo&limit=1`)
+  if (!data.length) return null
+  const est = data[0]
   return {
-    idCodigo:         data.idEstudiante,
-    idEstudiante:     data.idEstudiante,
+    idCodigo:         est.idEstudiante as number,
+    idEstudiante:     est.idEstudiante as number,
     tipo:             'ambos' as TipoQR,
-    codigo:           data.codigoEstudiante,
+    codigo:           est.codigoEstudiante as string,
     activo:           true,
     fechaCreacion:    new Date().toISOString(),
     fechaVencimiento: null,
     creadoPor:        null,
-    nombreCompleto:   buildNombre(data.usuario as Parameters<typeof buildNombre>[0]),
-    codigoEstudiante: data.codigoEstudiante,
-    curso:            (data.cursos as { nombreCurso: string } | null)?.nombreCurso ?? null,
+    nombreCompleto:   '—',
+    codigoEstudiante: est.codigoEstudiante as string,
+    curso:            null,
   }
 }
 
-// ── Crear asistencia (bypass RLS) ────────────────────────────────────────────
-
 export async function createAsistenciaAction(data: CreateAsistenciaData): Promise<void> {
-  const supabase = createAdminClient()
-
-  const { error } = await supabase.from('Asistencia').insert({
-    idEstudiante:  data.idEstudiante,
-    estado:        data.estado,
-    fecha:         data.fecha,
-    observacion:   data.observacion ?? null,
-    registradoPor: data.registradoPor,
-    codigo_qr:     data.codigo_qr ?? null,
-    tipo:          data.tipo      ?? null,
-    activo:        true,
+  await apiFetch('/asistencia', {
+    method: 'POST',
+    body: JSON.stringify({
+      id_estudiante:  data.idEstudiante,
+      estado:         data.estado,
+      fecha:          data.fecha,
+      observacion:    data.observacion ?? null,
+      registrado_por: data.registradoPor,
+      codigo_qr:      data.codigo_qr ?? null,
+      tipo:           data.tipo      ?? null,
+    }),
   })
-
-  if (error) throw new Error(error.message)
 }
 
-// ── Usuarios sin estudiante (bypass RLS) ─────────────────────────────────────
-
-export async function getUsuariosSinEstudianteAction() {
-  const supabase = createAdminClient()
-
-  const [{ data: usuarios }, { data: conRegistro }] = await Promise.all([
-    supabase
-      .from('usuario')
-      .select('idUsuario, primerNombre, primerApellido, correo, numeroDocumento')
-      .eq('idRol', 2)
-      .eq('estado', true),
-    supabase.from('estudiantes').select('idUsuario'),
+export async function getUsuariosSinEstudianteAction(): Promise<{ idUsuario: number; primerNombre: string; primerApellido: string; correo: string | null; numeroDocumento: string }[]> {
+  const [usuarios, estudiantes] = await Promise.all([
+    apiFetch<Raw[]>('/usuarios?id_rol=2&estado=true&limit=500'),
+    apiFetch<Raw[]>('/estudiantes?limit=500'),
   ])
-
-  const asignados = new Set((conRegistro ?? []).map((e) => e.idUsuario))
-
-  return (usuarios ?? [])
-    .filter((u) => !asignados.has(u.idUsuario))
-    .map((u) => ({
-      idUsuario: u.idUsuario,
-      primerNombre: u.primerNombre,
-      primerApellido: u.primerApellido,
-      correo: u.correo,
-      numeroDocumento: u.numeroDocumento,
+  const asignados = new Set(estudiantes.map(e => e.idUsuario as number))
+  return (usuarios as Raw[])
+    .filter(u => !asignados.has(u.idUsuario as number))
+    .map(u => ({
+      idUsuario:       u.idUsuario as number,
+      primerNombre:    u.primerNombre as string,
+      primerApellido:  u.primerApellido as string,
+      correo:          u.correo as string | null,
+      numeroDocumento: u.numeroDocumento as string,
     }))
 }
 
-// ── Cursos activos (bypass RLS) ──────────────────────────────────────────────
-
-export async function getCursosActivosAction() {
-  const supabase = createAdminClient()
-  const { data } = await supabase
-    .from('cursos')
-    .select('idCurso, nombreCurso')
-    .eq('activo', true)
-    .order('nombreCurso')
-  return (data ?? []) as { idCurso: number; nombreCurso: string }[]
+export async function getCursosActivosAction(): Promise<{ idCurso: number; nombreCurso: string }[]> {
+  const data = await apiFetch<Raw[]>('/cursos?activo=true&limit=200')
+  return data.map(c => ({
+    idCurso:     c.idCurso as number,
+    nombreCurso: c.nombreCurso as string,
+  }))
 }

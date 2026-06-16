@@ -26,7 +26,7 @@ import {
   serverBuscarEstudiantePorDocumento, serverUpsertPadre,
 } from './actions'
 import { useMemo } from 'react'
-import { createClient } from '@/services/supabase/client'
+import { useAuth } from '@/hooks/useAuth'
 
 const TIPOS_DOC = ['CC', 'TI', 'CE', 'PA', 'RC', 'NIT'] as const
 const GENEROS   = ['M', 'F'] as const
@@ -52,6 +52,7 @@ type Props = {
 }
 
 export default function PerfilClient({ role, adminDataServer, cursosServer = [], idEstudianteServer = null, idCursoActualServer = null, profesorServer = null, especializacionesEnum = [], padreServer = null, estudianteAsociadoServer = null }: Props) {
+  const { user: authUser } = useAuth()
   const [perfil,   setPerfil]   = useState<PerfilUsuario | null>(null)
   const [profesor, setProfesor] = useState<ProfesorPerfil | null>(null)
   const [admin,    setAdmin]    = useState<AdminPerfil | null>(adminDataServer ?? null)
@@ -140,12 +141,11 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
 
   useEffect(() => {
     const load = async () => {
-      // Cargar avatar desde metadata auth
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      setAvatarUrl(user?.user_metadata?.avatarUrl ?? null)
+      setAvatarUrl(null)
 
-      const p = await getMiPerfil()
+      const idUsuario = authUser?.idUsuario
+      if (!idUsuario) { setLoading(false); return }
+      const p = await getMiPerfil(idUsuario)
       if (p) {
         setPerfil(p)
         setPrimerNombre(p.primerNombre ?? '')
@@ -181,7 +181,7 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
       setLoading(false)
     }
     load()
-  }, [role])
+  }, [role, authUser])
 
   const handleSaveEPS = async (e: React.FormEvent) => {
     e.preventDefault()

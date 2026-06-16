@@ -78,9 +78,13 @@ export function mapRolToKey(nombreRol?: string, idRol?: number): Role | null {
   if (nombreRol) {
     const byName: Record<string, Role> = {
       Administrador: 'admin',
+      admin:         'admin',
       Profesor:      'docente',
+      docente:       'docente',
       Estudiante:    'estudiante',
+      estudiante:    'estudiante',
       Padre:         'padre',
+      padre:         'padre',
     }
     return byName[nombreRol] ?? null
   }

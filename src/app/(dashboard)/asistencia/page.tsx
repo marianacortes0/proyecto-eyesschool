@@ -1,46 +1,40 @@
 export const dynamic = 'force-dynamic'
 
-import { createClient } from '@/services/supabase/server'
 import { redirect } from 'next/navigation'
-import { mapRolToKey } from '@/lib/utils/permissions'
+import { getServerUser, getServerToken, userToRole } from '@/lib/auth/server'
 import AsistenciaClient from './AsistenciaClient'
 
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
+
 export default async function AsistenciaPage() {
-  const supabase = await createClient()
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const user = await getServerUser()
+  if (!user) redirect('/login')
 
-  if (!user || error) redirect('/login')
-
-  const nombreRol =
-    (user.app_metadata?.rol as string | undefined) ??
-    (user.user_metadata?.rol as string | undefined)
-  const role = mapRolToKey(nombreRol, user.user_metadata?.idRol as number | undefined)
-
-  // Admin y docente pueden ver asistencia; padre y sin rol → redirect
+  const role = userToRole(user)
   if (!role || role === 'padre') redirect('/general')
 
-  // Obtener idUsuario interno para registradoPor
-  const { data: usuarioRow } = await supabase
-    .from('usuario')
-    .select('idUsuario')
-    .eq('auth_id', user.id)
-    .single()
-
-  // Si es estudiante, obtener su idEstudiante para filtrar solo sus registros
+  const token = await getServerToken()
   let idEstudiantePropio: number | undefined
-  if (role === 'estudiante' && usuarioRow?.idUsuario) {
-    const { data: estRow } = await supabase
-      .from('estudiantes')
-      .select('idEstudiante')
-      .eq('idUsuario', usuarioRow.idUsuario)
-      .maybeSingle()
-    idEstudiantePropio = estRow?.idEstudiante ?? undefined
+
+  if (role === 'estudiante' && token) {
+    try {
+      const res = await fetch(`${API}/estudiantes/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+      })
+      if (res.ok) {
+        const est = await res.json() as Record<string, unknown>
+        idEstudiantePropio = (est.id_estudiante ?? est.idEstudiante) as number | undefined
+      }
+    } catch {
+      // leave idEstudiantePropio undefined
+    }
   }
 
   return (
     <AsistenciaClient
       role={role}
-      idUsuarioRegistrador={usuarioRow?.idUsuario ?? 0}
+      idUsuarioRegistrador={user.idUsuario}
       idEstudiantePropio={idEstudiantePropio}
     />
   )

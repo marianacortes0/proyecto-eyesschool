@@ -1,82 +1,50 @@
-import { createClient } from '@/services/supabase/server'
-import { createAdminClient } from '@/services/supabase/admin'
+export const dynamic = 'force-dynamic'
+
 import { redirect } from 'next/navigation'
-import { mapRolToKey, can } from '@/lib/utils/permissions'
+import { getServerUser, getServerToken, userToRole } from '@/lib/auth/server'
+import { can } from '@/lib/utils/permissions'
 import QRClient from './QRClient'
 import { type CodigoQRConEstudiante } from '@/services/qr/qrService'
 
-function buildNombre(u: {
-  primerNombre: string
-  primerApellido: string
-  segundoNombre: string | null
-  segundoApellido: string | null
-} | null): string {
-  if (!u) return '—'
-  return [u.primerNombre, u.segundoNombre, u.primerApellido, u.segundoApellido]
-    .filter(Boolean)
-    .join(' ')
-}
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
 export default async function QRPage() {
-  const supabase = await createClient()
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const user = await getServerUser()
+  if (!user) redirect('/login')
 
-  if (!user || error) redirect('/login')
-
-  const nombreRol =
-    (user.app_metadata?.rol as string | undefined) ??
-    (user.user_metadata?.rol as string | undefined)
-  const role = mapRolToKey(nombreRol, user.user_metadata?.idRol as number | undefined)
-
+  const role = userToRole(user)
   if (!role || !can(role, 'read', 'qr')) redirect('/general')
 
-  // Para estudiantes: obtener su código server-side con admin client (bypass RLS)
   let miCodigoServer: CodigoQRConEstudiante | null = null
 
   if (role === 'estudiante') {
-    const admin = createAdminClient()
-
-    const { data: usuarioRow } = await admin
-      .from('usuario')
-      .select('idUsuario')
-      .eq('auth_id', user.id)
-      .maybeSingle()
-
-    if (usuarioRow) {
-      const { data: est } = await admin
-        .from('estudiantes')
-        .select(`
-          idEstudiante,
-          codigoEstudiante,
-          usuario!fk_estudiantes_usuario (
-            primerNombre, primerApellido, segundoNombre, segundoApellido
-          ),
-          cursos!fk_estudiantes_curso ( nombreCurso )
-        `)
-        .eq('idUsuario', usuarioRow.idUsuario)
-        .maybeSingle()
-
-      if (est) {
-        const estData = est as {
-          idEstudiante: number
-          codigoEstudiante: string
-          usuario: { primerNombre: string; primerApellido: string; segundoNombre: string | null; segundoApellido: string | null } | null
-          cursos: { nombreCurso: string } | null
+    const token = await getServerToken()
+    if (token) {
+      try {
+        const res = await fetch(`${API}/estudiantes/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+          cache: 'no-store',
+        })
+        if (res.ok) {
+          const est = await res.json() as Record<string, unknown>
+          const idEstudiante = (est.id_estudiante ?? est.idEstudiante) as number
+          const codigo = (est.codigo_estudiante ?? est.codigoEstudiante) as string
+          miCodigoServer = {
+            idCodigo:         idEstudiante,
+            idEstudiante,
+            tipo:             'ambos',
+            codigo,
+            activo:           true,
+            fechaCreacion:    new Date().toISOString(),
+            fechaVencimiento: null,
+            creadoPor:        null,
+            nombreCompleto:   `${user.primerNombre} ${user.primerApellido}`,
+            codigoEstudiante: codigo,
+            curso:            null,
+          }
         }
-
-        miCodigoServer = {
-          idCodigo:         estData.idEstudiante,
-          idEstudiante:     estData.idEstudiante,
-          tipo:             'ambos',
-          codigo:           estData.codigoEstudiante,
-          activo:           true,
-          fechaCreacion:    new Date().toISOString(),
-          fechaVencimiento: null,
-          creadoPor:        null,
-          nombreCompleto:   buildNombre(estData.usuario),
-          codigoEstudiante: estData.codigoEstudiante,
-          curso:            estData.cursos?.nombreCurso ?? null,
-        }
+      } catch {
+        // leave miCodigoServer as null
       }
     }
   }

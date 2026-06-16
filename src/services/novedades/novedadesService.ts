@@ -1,18 +1,7 @@
-import { createClient } from '@/services/supabase/client'
+import { apiFetch } from '@/services/api/client'
 
-export type CursoOpt = {
-  idCurso: number
-  nombreCurso: string
-  grado: string
-  jornada: string
-}
-
-export type EstudianteOpt = {
-  idEstudiante: number
-  nombre: string
-  codigo: string
-  idCursoActual: number | null
-}
+export type CursoOpt = { idCurso: number; nombreCurso: string; grado: string; jornada: string }
+export type EstudianteOpt = { idEstudiante: number; nombre: string; codigo: string; idCursoActual: number | null }
 
 export type Novedad = {
   idNovedad: number
@@ -24,7 +13,6 @@ export type Novedad = {
   idEstudiante: number
   idTipoNovedad: number
   registradoPor: number
-  // joined
   nombreEstudiante?: string
   codigoEstudiante?: string
   nombreTipo?: string
@@ -42,104 +30,82 @@ export type TipoNovedad = {
 export const ESTADOS_NOVEDAD = ['Pendiente', 'Completado'] as const
 
 export async function getCursosParaNovedades(): Promise<CursoOpt[]> {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('cursos')
-    .select('idCurso, nombreCurso, grado, jornada')
-    .eq('activo', true)
-    .order('nombreCurso')
-  if (error) throw error
-  return (data ?? []) as CursoOpt[]
+  const data = await apiFetch<Record<string, unknown>[]>('/cursos?activo=true&limit=200')
+  return data.map(c => ({
+    idCurso:     c.idCurso as number,
+    nombreCurso: c.nombreCurso as string,
+    grado:       c.grado as string,
+    jornada:     c.jornada as string,
+  }))
 }
 
 export async function getEstudiantesParaNovedades(): Promise<EstudianteOpt[]> {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('estudiantes')
-    .select('idEstudiante, codigoEstudiante, idCursoActual, usuario ( primerNombre, primerApellido )')
-  if (error) throw error
-  return ((data ?? []) as any[]).map(row => ({
-    idEstudiante: row.idEstudiante,
-    nombre: row.usuario ? `${row.usuario.primerNombre} ${row.usuario.primerApellido}` : `Estudiante #${row.idEstudiante}`,
-    codigo: row.codigoEstudiante,
-    idCursoActual: row.idCursoActual ?? null,
+  const data = await apiFetch<Record<string, unknown>[]>('/estudiantes?limit=500')
+  return data.map(e => ({
+    idEstudiante:  e.idEstudiante as number,
+    nombre:        `Estudiante #${e.idEstudiante}`,
+    codigo:        e.codigoEstudiante as string,
+    idCursoActual: (e.idCursoActual as number | null) ?? null,
   }))
 }
 
 export async function getNovedades(): Promise<Novedad[]> {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('novedades')
-    .select(`
-      *,
-      estudiantes ( idEstudiante, codigoEstudiante, idUsuario,
-        usuario ( primerNombre, primerApellido )
-      ),
-      tiposnovedad ( nombreTipo, nivelGravedad )
-    `)
-    .order('fecha', { ascending: false })
-
-  if (error) throw error
-
-  return (data ?? []).map((row: any) => ({
-    idNovedad: row.idNovedad,
-    fecha: row.fecha,
-    descripcion: row.descripcion,
-    estado: row.estado,
-    accionTomada: row.accionTomada,
-    fechaResolucion: row.fechaResolucion,
-    idEstudiante: row.idEstudiante,
-    idTipoNovedad: row.idTipoNovedad,
-    registradoPor: row.registradoPor,
-    codigoEstudiante: row.estudiantes?.codigoEstudiante ?? '',
-    nombreEstudiante: row.estudiantes?.usuario
-      ? `${row.estudiantes.usuario.primerNombre} ${row.estudiantes.usuario.primerApellido}`
-      : `Estudiante #${row.idEstudiante}`,
-    nombreTipo: row.tiposnovedad?.nombreTipo ?? '',
-    nivelGravedad: row.tiposnovedad?.nivelGravedad ?? '',
+  const data = await apiFetch<Record<string, unknown>[]>('/novedades?limit=500')
+  return data.map(r => ({
+    idNovedad:       r.idNovedad as number,
+    fecha:           r.fecha as string,
+    descripcion:     r.descripcion as string,
+    estado:          r.estado as string,
+    accionTomada:    r.accionTomada as string | null,
+    fechaResolucion: r.fechaResolucion as string | null,
+    idEstudiante:    r.idEstudiante as number,
+    idTipoNovedad:   r.idTipoNovedad as number,
+    registradoPor:   r.registradoPor as number,
+    codigoEstudiante: `EST${String(r.idEstudiante).padStart(3, '0')}`,
+    nombreEstudiante: `Estudiante #${r.idEstudiante}`,
+    nombreTipo:       '',
+    nivelGravedad:    '',
   }))
 }
 
 export async function getTiposNovedad(): Promise<TipoNovedad[]> {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('tiposnovedad')
-    .select('*')
-    .eq('activo', true)
-    .order('nombreTipo')
-
-  if (error) throw error
-  return data ?? []
+  const data = await apiFetch<Record<string, unknown>[]>('/tipos-novedad?limit=200')
+  return data.map(t => ({
+    idTipoNovedad:  t.idTipoNovedad as number,
+    nombreTipo:     t.nombreTipo as string,
+    nivelGravedad:  t.nivelGravedad as string,
+    requiereAccion: t.requiereAccion as boolean,
+    activo:         t.activo as boolean,
+  }))
 }
 
 export async function createNovedad(
   payload: Pick<Novedad, 'descripcion' | 'idEstudiante' | 'idTipoNovedad' | 'registradoPor'>
-) {
-  const supabase = createClient()
-  const { error } = await supabase.from('novedades').insert({
-    ...payload,
-    estado: 'Pendiente',
+): Promise<void> {
+  await apiFetch('/novedades', {
+    method: 'POST',
+    body: JSON.stringify({
+      descripcion:    payload.descripcion,
+      id_estudiante:  payload.idEstudiante,
+      id_tipo_novedad: payload.idTipoNovedad,
+      registrado_por: payload.registradoPor,
+    }),
   })
-  if (error) throw error
 }
 
 export async function updateNovedad(
   idNovedad: number,
   payload: Partial<Pick<Novedad, 'descripcion' | 'estado' | 'accionTomada' | 'fechaResolucion' | 'idTipoNovedad'>>
-) {
-  const supabase = createClient()
-  const { error } = await supabase
-    .from('novedades')
-    .update(payload)
-    .eq('idNovedad', idNovedad)
-  if (error) throw error
+): Promise<void> {
+  const body: Record<string, unknown> = {}
+  if (payload.descripcion     !== undefined) body.descripcion       = payload.descripcion
+  if (payload.estado          !== undefined) body.estado            = payload.estado
+  if (payload.accionTomada    !== undefined) body.accion_tomada     = payload.accionTomada
+  if (payload.fechaResolucion !== undefined) body.fecha_resolucion  = payload.fechaResolucion
+  if (payload.idTipoNovedad   !== undefined) body.id_tipo_novedad   = payload.idTipoNovedad
+  await apiFetch(`/novedades/${idNovedad}`, { method: 'PUT', body: JSON.stringify(body) })
 }
 
-export async function deleteNovedad(idNovedad: number) {
-  const supabase = createClient()
-  const { error } = await supabase
-    .from('novedades')
-    .delete()
-    .eq('idNovedad', idNovedad)
-  if (error) throw error
+export async function deleteNovedad(idNovedad: number): Promise<void> {
+  await apiFetch(`/novedades/${idNovedad}`, { method: 'DELETE' })
 }

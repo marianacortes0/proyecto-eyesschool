@@ -1,166 +1,124 @@
 'use server'
 
-import { createAdminClient } from '../supabase/admin'
+import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
-import {
-  type CreateRegistroData,
-  type RegistroAsistencia,
-  type EstudianteSelector,
-  type FiltrosAsistencia,
-  type EstadoAsistencia,
-  type TipoAsistencia,
+import type {
+  CreateRegistroData,
+  RegistroAsistencia,
+  EstudianteSelector,
+  FiltrosAsistencia,
 } from './asistenciaService'
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
-function buildNombre(u: {
-  primerNombre: string
-  primerApellido: string
-  segundoNombre: string | null
-  segundoApellido: string | null
-} | null): string {
-  if (!u) return '—'
-  return [u.primerNombre, u.segundoNombre, u.primerApellido, u.segundoApellido]
-    .filter(Boolean)
-    .join(' ')
+async function getToken(): Promise<string | null> {
+  const store = await cookies()
+  return store.get('eys_access')?.value ?? null
 }
 
-/**
- * Registra asistencia usando el Admin Client para bypass de RLS.
- * Útil para roles (como profesores) que tienen restricciones de inserción directa.
- */
-export async function crearRegistroAction(data: CreateRegistroData) {
-  const supabase = createAdminClient()
-
-  // Verificar duplicado: mismo estudiante, misma fecha, mismo tipo
-  const { data: existing, error: checkError } = await supabase
-    .from('Asistencia')
-    .select('idAsistencia')
-    .eq('idEstudiante', data.idEstudiante)
-    .eq('fecha', data.fecha)
-    .eq('tipo', data.tipo)
-    .maybeSingle()
-
-  if (checkError) throw new Error(checkError.message)
-  if (existing) {
-    throw new Error(`Ya existe un registro de ${data.tipo} para este estudiante en esta fecha.`)
-  }
-
-  const { error } = await supabase.from('Asistencia').insert({
-    idEstudiante:  data.idEstudiante,
-    estado:        data.estado,
-    fecha:         data.fecha,
-    observacion:   data.observacion ?? null,
-    registradoPor: data.registradoPor,
-    activo:        true,
-    tipo:          data.tipo,
+async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const token = await getToken()
+  const res = await fetch(`${API}${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers as Record<string, string> | undefined),
+    },
+    cache: 'no-store',
   })
-
-  if (error) {
-    console.error('Error en crearRegistroAction:', error)
-    throw new Error(error.message)
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error((body as Record<string, unknown>).detail as string ?? `HTTP ${res.status}`)
   }
+  if (res.status === 204) return null as T
+  return res.json() as Promise<T>
+}
 
+function toCamelKey(k: string): string {
+  return k.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase())
+}
+
+function toCamel(v: unknown): unknown {
+  if (Array.isArray(v)) return v.map(toCamel)
+  if (v !== null && typeof v === 'object') {
+    return Object.fromEntries(
+      Object.entries(v as Record<string, unknown>).map(([k, val]) => [toCamelKey(k), toCamel(val)])
+    )
+  }
+  return v
+}
+
+export async function crearRegistroAction(data: CreateRegistroData): Promise<void> {
+  await apiFetch('/asistencia', {
+    method: 'POST',
+    body: JSON.stringify({
+      id_estudiante:  data.idEstudiante,
+      estado:         data.estado,
+      fecha:          data.fecha,
+      observacion:    data.observacion ?? null,
+      registrado_por: data.registradoPor,
+      tipo:           data.tipo ?? null,
+    }),
+  })
   revalidatePath('/qr/escanear')
   revalidatePath('/asistencia')
 }
 
-/**
- * Obtiene registros de asistencia usando el Admin Client (bypass RLS).
- */
-export async function getRegistrosAction(
-  filtros: FiltrosAsistencia = {}
-): Promise<RegistroAsistencia[]> {
-  const supabase = createAdminClient()
+export async function getRegistrosAction(filtros: FiltrosAsistencia = {}): Promise<RegistroAsistencia[]> {
+  type Raw = Record<string, unknown>
+  let data: Raw[]
 
-  let query = supabase
-    .from('Asistencia')
-    .select(`
-      idAsistencia, idEstudiante, estado,
-      fecha, fechaRegistro, observacion, registradoPor,
-      codigo_qr, tipo,
-      estudiantes!fk_asistencia_estudiante (
-        codigoEstudiante,
-        usuario!fk_estudiantes_usuario (
-          primerNombre, primerApellido, segundoNombre, segundoApellido
-        ),
-        cursos!fk_estudiantes_curso ( nombreCurso )
-      )
-    `)
-    .order('fecha',         { ascending: false })
-    .order('fechaRegistro', { ascending: false })
-    .limit(200)
+  if (filtros.idEstudiante) {
+    const params = new URLSearchParams({ limit: '200' })
+    if (filtros.fecha) params.set('fecha', filtros.fecha)
+    data = await apiFetch<Raw[]>(`/estudiantes/${filtros.idEstudiante}/asistencia?${params}`)
+  } else {
+    const params = new URLSearchParams({ limit: '200' })
+    if (filtros.fecha) params.set('fecha', filtros.fecha)
+    if (filtros.estado && filtros.estado !== 'todos') params.set('estado', filtros.estado)
+    data = await apiFetch<Raw[]>(`/asistencia?${params}`)
+  }
 
-  if (filtros.idEstudiante) query = query.eq('idEstudiante', filtros.idEstudiante)
-  if (filtros.fecha)  query = query.eq('fecha',  filtros.fecha)
-  if (filtros.estado && filtros.estado !== 'todos')
-    query = query.eq('estado', filtros.estado)
-
-  const { data, error } = await query
-  if (error) throw new Error(error.message)
-  if (!data)  return []
-
-  const resultado: RegistroAsistencia[] = data.map((r) => {
-    const est = r.estudiantes as {
-      codigoEstudiante: string
-      usuario: Parameters<typeof buildNombre>[0]
-      cursos: { nombreCurso: string } | null
-    } | null
-
+  const result = (data as Raw[]).map(r => {
+    const c = toCamel(r) as Raw
     return {
-      idAsistencia:     r.idAsistencia,
-      idEstudiante:     r.idEstudiante,
-      estado:           r.estado as EstadoAsistencia,
-      fecha:            r.fecha,
-      fechaRegistro:    r.fechaRegistro,
-      observacion:      r.observacion,
-      registradoPor:    r.registradoPor,
-      nombreEstudiante: buildNombre(est?.usuario ?? null),
-      codigoEstudiante: est?.codigoEstudiante ?? '—',
-      curso:            est?.cursos?.nombreCurso ?? null,
-      codigo_qr:        (r as { codigo_qr?: string | null }).codigo_qr ?? null,
-      tipo:             (r as { tipo?: string | null }).tipo ?? null,
-    }
+      idAsistencia:     c.idAsistencia as number,
+      idEstudiante:     c.idEstudiante as number,
+      estado:           c.estado as RegistroAsistencia['estado'],
+      fecha:            c.fecha as string,
+      fechaRegistro:    c.fechaRegistro as string,
+      observacion:      c.observacion as string | null,
+      registradoPor:    c.registradoPor as number,
+      nombreEstudiante: '—',
+      codigoEstudiante: '—',
+      curso:            null,
+      codigo_qr:        c.codigoQr as string | null ?? c.codigo_qr as string | null ?? null,
+      tipo:             c.tipo as string | null,
+    } satisfies RegistroAsistencia
   })
 
   if (filtros.search) {
     const q = filtros.search.toLowerCase()
-    return resultado.filter(
-      (r) =>
-        r.nombreEstudiante.toLowerCase().includes(q) ||
-        r.codigoEstudiante.toLowerCase().includes(q)
+    return result.filter(r =>
+      r.nombreEstudiante.toLowerCase().includes(q) ||
+      r.codigoEstudiante.toLowerCase().includes(q)
     )
   }
-
-  return resultado
+  return result
 }
 
-/**
- * Obtiene estudiantes para el selector (bypass RLS).
- */
 export async function getEstudiantesSelectorAction(): Promise<EstudianteSelector[]> {
-  const supabase = createAdminClient()
-
-  const { data, error } = await supabase
-    .from('estudiantes')
-    .select(`
-      idEstudiante,
-      codigoEstudiante,
-      usuario!fk_estudiantes_usuario (
-        primerNombre, primerApellido, segundoNombre, segundoApellido
-      ),
-      cursos!fk_estudiantes_curso ( nombreCurso, jornada )
-    `)
-    .order('idEstudiante', { ascending: true })
-
-  if (error) throw new Error(error.message)
-  if (!data)  return []
-
-  return data.map((e) => ({
-    idEstudiante:     e.idEstudiante,
-    codigoEstudiante: e.codigoEstudiante,
-    nombreCompleto:   buildNombre(e.usuario as Parameters<typeof buildNombre>[0]),
-    curso:            (e.cursos as { nombreCurso: string; jornada: string } | null)?.nombreCurso ?? null,
-    jornada:          (e.cursos as { nombreCurso: string; jornada: string } | null)?.jornada ?? null,
-  }))
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/estudiantes?estado=Activo&limit=500')
+  return data.map(e => {
+    const c = toCamel(e) as Raw
+    return {
+      idEstudiante:     c.idEstudiante as number,
+      codigoEstudiante: c.codigoEstudiante as string,
+      nombreCompleto:   '—',
+      curso:            null,
+      jornada:          null,
+    } satisfies EstudianteSelector
+  })
 }
