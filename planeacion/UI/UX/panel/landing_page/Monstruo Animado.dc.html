@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  html,body{margin:0;height:100%;}
+  *{box-sizing:border-box;}
+</style>
+</helmet>
+<div ref="{{ sceneRef }}" style="width:100%;height:100vh;position:relative;overflow:hidden;background:radial-gradient(ellipse 90% 70% at 50% 36%, #ffffff 0%, #eaf0f7 58%, #dbe5f0 100%);">
+  <div ref="{{ scaleRef }}" style="position:absolute;width:560px;height:640px;transform-origin:top center;will-change:transform;">
+    <div ref="{{ shadowRef }}" style="position:absolute;left:50%;bottom:34px;width:230px;height:40px;transform:translateX(-50%);background:radial-gradient(ellipse at 50% 50%, rgba(40,60,90,0.32) 0%, rgba(40,60,90,0.18) 45%, rgba(40,60,90,0) 72%);filter:blur(1px);pointer-events:none;"></div>
+    <div ref="{{ stageRef }}" style="position:absolute;inset:0;transform-origin:50% 92%;will-change:transform;">
+      <img data-key="blink1" src="frames/blink1.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:1;" />
+      <img data-key="blink2" src="frames/blink2.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="blink3" src="frames/blink3.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="blink4" src="frames/blink4.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="blink5" src="frames/blink5.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="wave1" src="frames/wave1.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="wave2" src="frames/wave2.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="wave3" src="frames/wave3.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="wave4" src="frames/wave4.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="wave5" src="frames/wave5.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="jump1" src="frames/jump1.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="jump2" src="frames/jump2.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="jump3" src="frames/jump3.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="jump4" src="frames/jump4.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+      <img data-key="jump5" src="frames/jump5.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;" />
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 560, &quot;height&quot;: 680 },
+  &quot;background&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;studio&quot;,&quot;sky&quot;,&quot;dark&quot;,&quot;transparent&quot;], &quot;default&quot;: &quot;studio&quot;, &quot;tsType&quot;: &quot;string&quot; },
+  &quot;speed&quot;: { &quot;editor&quot;: &quot;float&quot;, &quot;default&quot;: 1, &quot;min&quot;: 0.4, &quot;max&quot;: 2, &quot;step&quot;: 0.1, &quot;tsType&quot;: &quot;number&quot; },
+  &quot;characterScale&quot;: { &quot;editor&quot;: &quot;float&quot;, &quot;default&quot;: 1, &quot;min&quot;: 0.5, &quot;max&quot;: 1.6, &quot;step&quot;: 0.05, &quot;tsType&quot;: &quot;number&quot; },
+  &quot;groundShadow&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot; }
+}">
+class Component extends DCLogic {
+  // ---- refs ----
+  refScene = (el) => { this.scene = el; this.applyScene(); };
+  refScale = (el) => { this.scaleEl = el; this.applyScene(); };
+  refShadow = (el) => { this.shadow = el; };
+  refStage = (el) => { if (el) { this.stage = el; this.boot(); } };
+
+  applyScene() {
+    if (this.scene) {
+      const bg = this.props.background || 'studio';
+      const map = {
+        studio: 'radial-gradient(ellipse 90% 70% at 50% 36%, #ffffff 0%, #eaf0f7 58%, #dbe5f0 100%)',
+        sky:    'radial-gradient(ellipse 100% 80% at 50% 30%, #eaf6ff 0%, #c9e6fb 55%, #a9d4f5 100%)',
+        dark:   'radial-gradient(ellipse 90% 70% at 50% 38%, #2a2f3a 0%, #1b1f27 70%, #14171d 100%)',
+        transparent: 'conic-gradient(#e9edf2 0 25%, #f7f9fb 0 50%, #e9edf2 0 75%, #f7f9fb 0) 0 0 / 36px 36px'
+      };
+      this.scene.style.background = map[bg] || map.studio;
+      this.scene.style.height = window.innerHeight + 'px';
+    }
+  }
+
+  componentDidUpdate() { this.applyScene(); if (this.shadow) this.shadow.style.opacity = (this.props.groundShadow === false) ? '0' : ''; }
+
+  // ---- easing ----
+  static easeInOut(t){ return t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+  static easeOut(t){ return 1-Math.pow(1-t,3); }
+  static easeIn(t){ return t*t*t; }
+
+  boot() {
+    if (this.booted) return;
+    this.booted = true;
+    // collect frames
+    this.frames = {};
+    this.stage.querySelectorAll('img[data-key]').forEach(im => { this.frames[im.dataset.key] = im; });
+    this.curKey = 'blink1';
+    // resolve layout elements from the tree (refs can be overwritten by re-renders)
+    this.scaleEl = this.scaleEl || this.stage.parentElement;
+    this.scene   = this.scene   || (this.scaleEl && this.scaleEl.parentElement);
+    if (this.scaleEl) this.scaleEl.style.transformOrigin = 'top center';
+    this.applyScene();
+    if (this.shadow && this.props.groundShadow === false) this.shadow.style.opacity = '0';
+
+    const E = Component;
+    // ---- choreography: each segment {dur, fn(lt)-> {key, ty, sy, sx, rot, tx}} ----
+    // ty negative = up. sy/sx are base scales. transforms about feet.
+    this.segs = [
+      // IDLE A
+      { dur: 1.30, fn: () => ({ key:'blink1' }) },
+      // BLINK  (close -> hold -> open)
+      { dur: 0.07, fn: () => ({ key:'blink2' }) },
+      { dur: 0.10, fn: () => ({ key:'blink3' }) },
+      { dur: 0.07, fn: () => ({ key:'blink4' }) },
+      // IDLE B
+      { dur: 0.55, fn: () => ({ key:'blink1' }) },
+      // WAVE: raise (anticipation lean) -> 3 waves -> lower
+      { dur: 0.22, fn: (lt) => ({ key:'wave2', rot: -2*E.easeOut(lt) }) },
+      { dur: 0.90, fn: (lt) => {
+          const k = (lt*6)%2 < 1 ? 'wave3' : 'wave4';
+          return { key:k, rot: -2 + Math.sin(lt*Math.PI*6)*2.2 };
+        } },
+      { dur: 0.18, fn: (lt) => ({ key:'wave2', rot: -2*(1-E.easeInOut(lt)) }) },
+      // IDLE C
+      { dur: 0.55, fn: () => ({ key:'wave1' }) },
+      // JUMP: anticipation crouch -> deeper -> air arc -> land squash -> recover
+      { dur: 0.16, fn: (lt) => { const e=E.easeInOut(lt); return { key:'jump1', ty: 8*e, sy: 1-0.07*e, sx: 1+0.05*e }; } },
+      { dur: 0.12, fn: (lt) => { const e=E.easeInOut(lt); return { key:'jump2', ty: 8+10*e, sy: 0.93-0.07*e, sx: 1.05+0.04*e }; } },
+      { dur: 0.50, fn: (lt) => {
+          const H = 168;
+          const ty = -H*Math.sin(lt*Math.PI);          // up then down
+          const st = Math.cos(lt*Math.PI);              // +1 takeoff .. -1 land
+          return { key:'jump3', ty, sy: 1+0.06*st, sx: 1-0.05*st, rot: Math.sin(lt*Math.PI*2)*3 };
+        } },
+      { dur: 0.12, fn: (lt) => { const e=E.easeOut(lt); return { key:'jump4', ty: 10*(1-e)+8, sy: 0.84, sx: 1.12 }; } },
+      { dur: 0.18, fn: (lt) => { const e=E.easeOut(lt); const s=0.84+(1.04-0.84)*e; return { key:'jump5', ty: 8*(1-e), sy: s>1?1+(s-1)*(1-lt):s, sx: 2-(s>1?1+(s-1)*(1-lt):s) }; } },
+      // IDLE D -> seamless return to start
+      { dur: 1.20, fn: () => ({ key:'blink1' }) },
+    ];
+    this.TOTAL = this.segs.reduce((a,s)=>a+s.dur,0);
+    this.NB = 2; // breaths per loop
+
+    this._onResize = () => this.applyScene();
+    window.addEventListener('resize', this._onResize);
+
+    this.t0 = performance.now();
+    this.tick = this.tick.bind(this);
+    this.raf = requestAnimationFrame(this.tick);
+  }
+
+  setFrame(key){
+    if (key === this.curKey) return;
+    const prev = this.frames[this.curKey];
+    const next = this.frames[key];
+    if (prev) prev.style.opacity = '0';
+    if (next) next.style.opacity = '1';
+    this.curKey = key;
+  }
+
+  tick(now){
+    const speed = this.props.speed != null ? this.props.speed : 1;
+    let te = ((now - this.t0)/1000) * speed;
+    if (typeof window !== 'undefined' && window.__monScrub != null) te = window.__monScrub * this.TOTAL;
+    te = te % this.TOTAL;
+    if (te < 0) te += this.TOTAL;
+
+    // keep the stage fitted & floor-anchored every frame (survives re-renders)
+    if (this.scaleEl) {
+      const cs = this.props.characterScale != null ? this.props.characterScale : 1;
+      const innerH = window.innerHeight, innerW = window.innerWidth;
+      const baseY = innerH * 0.80;
+      const baseFit = Math.min((innerW - 24) / 560, (baseY - 12) / 398, 1.7);
+      const scale = Math.max(0.2, baseFit) * cs;
+      const top = (baseY - 594 * scale);
+      const tf = 'translateX(-50%) scale(' + scale.toFixed(3) + ')';
+      if (this.scaleEl.style.left !== '50%') this.scaleEl.style.left = '50%';
+      const topStr = top.toFixed(1) + 'px';
+      if (this.scaleEl.style.top !== topStr) this.scaleEl.style.top = topStr;
+      if (this.scaleEl.style.transform !== tf) this.scaleEl.style.transform = tf;
+    }
+
+    // find segment
+    let acc = 0, seg = this.segs[0], lt = 0;
+    for (const s of this.segs){
+      if (te < acc + s.dur){ seg = s; lt = (te - acc)/s.dur; break; }
+      acc += s.dur;
+    }
+    const b = seg.fn(Math.min(Math.max(lt,0),1)) || {};
+    const baseTy = b.ty || 0, baseSy = b.sy != null ? b.sy : 1, baseSx = b.sx != null ? b.sx : 1;
+    const baseRot = b.rot || 0, baseTx = b.tx || 0;
+
+    // continuous breathing + sway + eye micro-move (periodic over the loop)
+    const ph = te / this.TOTAL;
+    const br = Math.sin(ph * Math.PI * 2 * this.NB);
+    const sway = Math.sin(ph * Math.PI * 2) * 1.4;
+    const micro = Math.sin(ph * Math.PI * 2 * 3) * 1.2;
+    const ty = baseTy + br * -2.6;
+    const sy = baseSy * (1 + br * 0.018);
+    const sx = baseSx * (1 - br * 0.012);
+    const rot = baseRot + sway;
+    const tx = baseTx + micro;
+
+    this.stage.style.transform =
+      'translate(' + tx.toFixed(2) + 'px,' + ty.toFixed(2) + 'px) rotate(' + rot.toFixed(2) + 'deg) scale(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ')';
+
+    this.setFrame(b.key || 'blink1');
+
+    // reactive ground shadow from airborne height + squash
+    if (this.shadow && this.props.groundShadow !== false){
+      const lift = Math.max(0, -baseTy);       // px above floor
+      const r = Math.min(1, lift / 168);
+      const sq = baseSy < 1 ? (1 - baseSy) : 0; // squashed -> wider shadow
+      const scl = (1 - 0.45*r) * (1 + sq*1.2);
+      this.shadow.style.transform = 'translateX(-50%) scale(' + scl.toFixed(3) + ',' + scl.toFixed(3) + ')';
+      this.shadow.style.opacity = (1 - 0.55*r).toFixed(3);
+    }
+
+    this.raf = requestAnimationFrame(this.tick);
+  }
+
+  componentWillUnmount(){ if (this.raf) cancelAnimationFrame(this.raf); if (this._onResize) window.removeEventListener('resize', this._onResize); }
+
+  renderVals(){
+    return {
+      sceneRef: this.refScene,
+      scaleRef: this.refScale,
+      shadowRef: this.refShadow,
+      stageRef: this.refStage,
+    };
+  }
+}
+</script>
+</body>
+</html>

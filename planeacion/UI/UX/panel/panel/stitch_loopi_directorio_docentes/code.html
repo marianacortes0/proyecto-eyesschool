@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EyeSchool | Gestión de Profesores Radical Minimalist</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;600;700;900&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#630ed4",
+                    "neon-purple": "#A855F7",
+                    "electric-teal": "#2DD4BF",
+                    "surface": "#ffffff",
+                    "surface-bg": "#fafafa",
+                    "on-surface": "#0b1c30",
+                    "on-surface-variant": "#64748b",
+                    "glass-stroke": "rgba(0, 0, 0, 0.05)",
+                    "primary-container": "#f5f0ff",
+            },
+            "borderRadius": {
+                    "super": "2rem",
+                    "xl": "1rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Hanken Grotesk"],
+                    "body": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+        .minimal-card {
+            background: #ffffff;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .minimal-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+        }
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        
+        .asymmetric-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-surface-bg text-on-surface font-body selection:bg-neon-purple selection:text-white overflow-x-hidden">
+<!-- Slim Minimal Sidebar -->
+<aside class="fixed left-0 top-0 h-screen w-20 bg-white border-r border-glass-stroke z-50 flex flex-col items-center py-10">
+<div class="mb-12">
+<div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white">
+<span class="material-symbols-outlined !text-xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors relative group" href="#">
+<span class="material-symbols-outlined !text-2xl">grid_view</span>
+<div class="absolute left-14 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Dashboard</div>
+</a>
+<a class="text-primary relative group" href="#">
+<span class="material-symbols-outlined !text-2xl" style="font-variation-settings: 'FILL' 1;">school</span>
+<div class="absolute left-14 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Academia</div>
+</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors group relative" href="#">
+<span class="material-symbols-outlined !text-2xl">group</span>
+<div class="absolute left-14 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Students</div>
+</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors group relative" href="#">
+<span class="material-symbols-outlined !text-2xl">analytics</span>
+<div class="absolute left-14 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Analytics</div>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-6">
+<div class="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center text-on-surface-variant cursor-pointer hover:bg-surface-bg transition-colors">
+<span class="material-symbols-outlined !text-xl">settings</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-neon-purple flex items-center justify-center text-white font-bold text-xs shadow-md">
+            AR
+        </div>
+</div>
+</aside>
+<!-- Main Space -->
+<main class="ml-20 min-h-screen">
+<div class="max-w-[1400px] mx-auto px-12 py-16">
+<!-- Header Section -->
+<header class="mb-24 flex justify-between items-start">
+<div>
+<h1 class="font-headline text-5xl font-light tracking-tight text-on-surface mb-3">
+                    Directorio de <span class="font-black text-primary">Docentes</span>
+</h1>
+<p class="text-on-surface-variant text-lg font-light tracking-wide max-w-xl">Gestiona el talento académico y supervisa la carga horaria con precisión radical.</p>
+</div>
+<div class="flex gap-4 items-center">
+<div class="relative group mr-4">
+<span class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-on-surface-variant/40 group-focus-within:text-primary transition-colors">search</span>
+<input class="pl-8 bg-transparent border-none focus:ring-0 text-sm font-light w-48 transition-all focus:w-64" placeholder="Buscar..." type="text"/>
+</div>
+<button class="px-8 py-3 bg-on-surface text-white rounded-full font-medium text-xs uppercase tracking-[0.2em] hover:bg-primary transition-all shadow-xl shadow-on-surface/5">
+                    Nuevo Profesor
+                </button>
+</div>
+</header>
+<!-- Asymmetrical Performance Metrics -->
+<div class="asymmetric-grid mb-32 relative">
+<!-- Global Stats Card -->
+<div class="col-span-12 lg:col-span-5 minimal-card p-12 rounded-super border border-glass-stroke z-10">
+<p class="text-[10px] uppercase tracking-[0.3em] text-on-surface-variant mb-10 font-bold">Resumen de Facultad</p>
+<div class="flex items-center gap-12">
+<div class="relative">
+<svg class="w-28 h-28 transform -rotate-90">
+<circle class="text-slate-50" cx="56" cy="56" fill="transparent" r="52" stroke="currentColor" stroke-width="2"></circle>
+<circle class="text-primary" cx="56" cy="56" fill="transparent" r="52" stroke="currentColor" stroke-dasharray="327" stroke-dashoffset="65" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-headline text-2xl font-black">128</div>
+</div>
+<div>
+<div class="text-4xl font-headline font-black mb-1">4.8</div>
+<p class="text-xs text-on-surface-variant uppercase tracking-widest font-medium">Rating Promedio</p>
+<div class="mt-4 flex items-center gap-2 text-electric-teal text-xs font-bold">
+<span class="material-symbols-outlined !text-sm">trending_up</span>
+<span>+4% ESTE SEMESTRE</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Metric: Asistencia -->
+<div class="col-span-12 lg:col-span-3 minimal-card p-10 rounded-super border border-glass-stroke floating-element self-center" style="animation-delay: 1s;">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-6 font-bold">Asistencia General</p>
+<div class="flex items-baseline gap-1">
+<span class="text-5xl font-headline font-light text-on-surface tracking-tighter">92</span>
+<span class="text-primary font-bold text-xl">%</span>
+</div>
+<div class="mt-6 h-0.5 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[92%]"></div>
+</div>
+</div>
+<!-- Floating Metric: Carga Horaria -->
+<div class="col-span-12 lg:col-span-4 minimal-card p-10 rounded-super border border-glass-stroke floating-element lg:mt-12" style="animation-delay: 0.5s;">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-6 font-bold">Carga Semanal</p>
+<div class="flex items-baseline gap-1">
+<span class="text-5xl font-headline font-light text-on-surface tracking-tighter">24</span>
+<span class="text-on-surface-variant font-light text-xl">h</span>
+</div>
+<p class="text-[11px] text-on-surface-variant mt-4 italic">Promedio por docente activo</p>
+</div>
+</div>
+<!-- Teacher Profiles: Airy Airy Airy -->
+<section class="mb-48">
+<div class="flex justify-between items-end mb-16">
+<h2 class="font-headline text-3xl font-light tracking-tight">Perfiles <span class="font-bold">Destacados</span></h2>
+<div class="flex gap-4">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">filter_list</span></button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">grid_view</span></button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+<!-- Teacher 1 -->
+<div class="group relative flex gap-10 items-start">
+<div class="shrink-0 relative">
+<div class="absolute inset-0 bg-primary/5 rounded-[2.5rem] rotate-6 group-hover:rotate-12 transition-transform duration-500"></div>
+<img alt="Elena Valdés" class="relative w-48 h-48 rounded-[2.5rem] object-cover shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKHC7MIMOgj1bI2BkHtX-Jni0I_fkrinY8_sOe5NA8HHTe4ozFdkmnQNFBepnyCI6uHvGqLsipR0K7iW1f4MyqGGnEEh7JVJoISy1Rdu90pM-iQIpkdgdGZkbHl9qnrCiBy7JMXxg_Elpa29gOzv9BBS3ZI6ZoYsdavO-4gCVuY28rYtgoix-fgXxj74X3xdQHeu8MqjBk9LVveJEZ0HCGlT8UYmV2riILZ-Du3YsYjZ1kdqtfgiUm-QQfGGjpleLc8C5zPYGNOy9M"/>
+</div>
+<div class="pt-4 space-y-4">
+<div>
+<span class="text-[10px] font-bold text-primary uppercase tracking-[0.3em]">Cálculo &amp; Álgebra</span>
+<h3 class="text-2xl font-headline font-black text-on-surface mt-1">Elena Valdés</h3>
+<p class="text-sm font-light text-on-surface-variant">Dra. en Matemáticas</p>
+</div>
+<div class="flex items-center gap-6">
+<div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Carga</p>
+<p class="font-bold text-on-surface">32h <span class="text-[10px] font-light">/ 40h</span></p>
+</div>
+<div class="h-8 w-px bg-glass-stroke"></div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Estado</p>
+<p class="text-xs font-bold text-electric-teal flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-electric-teal rounded-full"></span> Activo
+                                </p>
+</div>
+</div>
+<button class="text-xs font-bold uppercase tracking-widest text-on-surface border-b border-on-surface/10 hover:border-primary hover:text-primary transition-all py-1">Ver Perfil Completo</button>
+</div>
+</div>
+<!-- Teacher 2 -->
+<div class="group relative flex gap-10 items-start md:mt-24">
+<div class="shrink-0 relative">
+<div class="absolute inset-0 bg-secondary/5 rounded-[2.5rem] -rotate-6 group-hover:-rotate-12 transition-transform duration-500"></div>
+<img alt="Marco Polo" class="relative w-48 h-48 rounded-[2.5rem] object-cover shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs-2KoLB7Baj1J5E5aHVVZFT7XUYKAi__RcZQryM313RSTNscALQ5o6wuMvNo6UD3ibwUabyBvAhY-mPNHXdoBaiQJ2WVmDuL_3ckPN5IGX0gE2bsaDAtETlEKgC7zE2Bf_TtDT9dbtOg4zvcMDuv1l_2MiO7nGKTtztSbl66IJ4AcH6BcQK391cObdE8cY8oAYJpFNAkF8LORHZdEUO0JxHquGORrTLbBM86jYMi-s2oV45mzX3lqpCQ6rLqu7BAKSPEc0zSabBZY"/>
+</div>
+<div class="pt-4 space-y-4">
+<div>
+<span class="text-[10px] font-bold text-primary uppercase tracking-[0.3em]">Software &amp; UX</span>
+<h3 class="text-2xl font-headline font-black text-on-surface mt-1">Marco Polo</h3>
+<p class="text-sm font-light text-on-surface-variant">Ing. en Software</p>
+</div>
+<div class="flex items-center gap-6">
+<div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Carga</p>
+<p class="font-bold text-on-surface">18h <span class="text-[10px] font-light">/ 40h</span></p>
+</div>
+<div class="h-8 w-px bg-glass-stroke"></div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Estado</p>
+<p class="text-xs font-bold text-on-surface-variant flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-on-surface-variant/40 rounded-full"></span> Licencia
+                                </p>
+</div>
+</div>
+<button class="text-xs font-bold uppercase tracking-widest text-on-surface border-b border-on-surface/10 hover:border-primary hover:text-primary transition-all py-1">Ver Perfil Completo</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Performance Flow Visualization -->
+<section class="mb-32">
+<div class="minimal-card p-16 rounded-[3rem] border border-glass-stroke">
+<div class="flex justify-between items-end mb-16">
+<div>
+<h3 class="font-headline text-2xl font-bold mb-2">Performance Flow</h3>
+<p class="text-on-surface-variant text-sm font-light">Distribución de horas por Facultad y Departamento</p>
+</div>
+<div class="flex gap-8 text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">
+<div class="flex items-center gap-2"><span class="w-2 h-2 bg-primary rounded-full"></span> CIENCIAS</div>
+<div class="flex items-center gap-2"><span class="w-2 h-2 bg-neon-purple rounded-full"></span> INGENIERÍA</div>
+<div class="flex items-center gap-2"><span class="w-2 h-2 bg-electric-teal rounded-full"></span> ARTES</div>
+</div>
+</div>
+<div class="h-64 w-full">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 200">
+<defs>
+<lineargradient id="chart-grad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#630ed4" stop-opacity="0.08"></stop>
+<stop offset="100%" stop-color="#630ed4" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path class="opacity-40" d="M0 160 C 150 140, 300 20, 500 100 S 800 10, 1000 40" fill="none" stroke="#630ed4" stroke-linecap="round" stroke-width="1.5"></path>
+<path d="M0 180 C 150 160, 300 40, 500 120 S 800 20, 1000 60" fill="none" stroke="#630ed4" stroke-linecap="round" stroke-width="3"></path>
+<path d="M0 180 C 150 160, 300 40, 500 120 S 800 20, 1000 60 L 1000 200 L 0 200 Z" fill="url(#chart-grad)"></path>
+<circle cx="500" cy="120" fill="white" r="5" stroke="#630ed4" stroke-width="3"></circle>
+<circle cx="1000" cy="60" fill="white" r="5" stroke="#630ed4" stroke-width="3"></circle>
+</svg>
+</div>
+<div class="flex justify-between mt-10 px-2 text-[10px] font-bold text-on-surface-variant/30 tracking-[0.4em]">
+<span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span>
+</div>
+</div>
+</section>
+<!-- Secondary Content: Insights & Alerts -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
+<div class="lg:col-span-2">
+<div class="flex justify-between items-center mb-10 px-4">
+<h3 class="font-headline text-xl font-bold tracking-tight">Alertas del Día</h3>
+<a class="text-[10px] font-bold text-primary tracking-[0.2em] uppercase hover:underline" href="#">Ver Todo</a>
+</div>
+<div class="space-y-2">
+<div class="group flex items-center justify-between p-6 rounded-2xl hover:bg-white transition-all border border-transparent hover:border-glass-stroke">
+<div class="flex items-center gap-8">
+<span class="text-[10px] font-bold text-on-surface-variant/30 w-10">10:00</span>
+<div>
+<p class="font-medium text-on-surface group-hover:text-primary transition-colors">Conflicto de Aula 302</p>
+<p class="text-[11px] text-on-surface-variant font-light">Prof. Elena vs Prof. Ricardo</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-error !text-lg">warning</span>
+</div>
+<div class="group flex items-center justify-between p-6 rounded-2xl hover:bg-white transition-all border border-transparent hover:border-glass-stroke">
+<div class="flex items-center gap-8">
+<span class="text-[10px] font-bold text-on-surface-variant/30 w-10">14:30</span>
+<div>
+<p class="font-medium text-on-surface group-hover:text-primary transition-colors">Solicitud de Ampliación</p>
+<p class="text-[11px] text-on-surface-variant font-light">Prof. Marco Polo · Dept. Ingeniería</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary !text-lg">info</span>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-neon-purple/5 rounded-full blur-3xl"></div>
+<div class="minimal-card p-10 rounded-super border border-glass-stroke relative overflow-hidden h-full flex flex-col justify-center">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-neon-purple/20 !text-6xl">verified</span>
+</div>
+<p class="text-[10px] uppercase tracking-[0.3em] text-neon-purple font-black mb-6">Auditoría 2024</p>
+<p class="text-on-surface font-light text-lg mb-6 leading-relaxed">El proceso de evaluación docente finaliza en <span class="font-bold text-primary">12 días</span>.</p>
+<button class="w-full py-4 bg-on-surface text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-primary transition-colors shadow-lg">Iniciar Validación</button>
+</div>
+</div>
+</div>
+<!-- Minimal Footer -->
+<footer class="mt-48 py-12 text-center">
+<p class="text-[10px] font-bold text-on-surface-variant/20 uppercase tracking-[0.5em]">© 2026 EyeSchool · Radical Minimalist Edition</p>
+</footer>
+</div>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Subtle entrance animations
+        const cards = document.querySelectorAll('.minimal-card, .group');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(15px)';
+            setTimeout(() => {
+                card.style.transition = 'all 0.8s cubic-bezier(0.23, 1, 0.32, 1)';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 80 * index);
+        });
+
+        // Parallax effect for floating elements
+        document.addEventListener('mousemove', (e) => {
+            const amount = 15;
+            const x = (e.clientX / window.innerWidth - 0.5) * amount;
+            const y = (e.clientY / window.innerHeight - 0.5) * amount;
+            
+            document.querySelectorAll('.floating-element').forEach(el => {
+                el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+            });
+        });
+    });
+</script>
+</body></html>
