@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { can, mapRolToKey, type Role, type Action, type Resource } from '@/lib/utils/permissions'
+import { logout } from '@/auth/actions'
 
 export type AuthUser = {
   idUsuario: number
@@ -41,11 +42,10 @@ export function useAuth() {
     : null
 
   const signOut = async () => {
-    // Clear cookies and redirect — actual API call handled by logout action
-    document.cookie = 'eys_access=; path=/; max-age=0'
-    document.cookie = 'eys_refresh=; path=/; max-age=0'
-    document.cookie = 'eys_user=; path=/; max-age=0'
-    window.location.href = '/login'
+    // Invalida la sesión en el backend, limpia las cookies httpOnly y
+    // redirige a la página de inicio. (El server action hace el redirect a '/').
+    setAuthUser(null)
+    await logout()
   }
 
   return {

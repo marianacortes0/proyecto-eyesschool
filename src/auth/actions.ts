@@ -109,7 +109,7 @@ export async function logout() {
   store.delete('eys_access')
   store.delete('eys_refresh')
   store.delete('eys_user')
-  redirect('/login')
+  redirect('/')
 }
 
 // ── Forgot password ───────────────────────────────────────────────────────────

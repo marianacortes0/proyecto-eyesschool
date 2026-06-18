@@ -4,6 +4,26 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 
+/* ===== Tema del panel nuevo (Luminous Ed-Tech / Minimal) =====
+   Portado desde el handoff de diseño (stitch_loopi_minimalist_dashboard). */
+@theme {
+  --color-primary: #630ed4;
+  --color-neon-purple: #a855f7;
+  --color-electric-teal: #2dd4bf;
+  --color-surface: #ffffff;
+  --color-surface-bg: #fafafa;
+  --color-on-surface: #0b1c30;
+  --color-on-surface-variant: #64748b;
+  --color-glass-stroke: rgba(0, 0, 0, 0.05);
+  --color-primary-container: #f5f0ff;
+
+  --radius-super: 2rem;
+
+  --font-headline: "Hanken Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+
 :root {
   --foreground: #1e293b;
   --background: #f8fafc;
@@ -110,4 +130,32 @@ body {
   .bg-glass {
     @apply backdrop-blur-md bg-white/70 dark:bg-slate-900/70;
   }
+}
+
+/* ===== Panel nuevo: utilidades de diseño ===== */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-variation-settings: "FILL" 0, "wght" 200, "GRAD" 0, "opsz" 24;
+}
+.material-symbols-outlined.fill {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.minimal-card {
+  background: #ffffff;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+.minimal-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
 }

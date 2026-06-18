@@ -1,10 +1,6 @@
 export const dynamic = 'force-dynamic'
 
-import DashboardHeader from "@/components/layout/DashboardHeader";
-import DashboardSidebar from "@/components/layout/DashboardSidebar";
-import DashboardFooter from "@/components/layout/DashboardFooter";
-import { SidebarProvider } from "@/components/layout/SidebarContext";
-import { BackgroundDecorations } from "@/components/layout/BackgroundDecorations";
+import PanelSidebar from "@/components/panel/PanelSidebar";
 
 export default function DashboardLayout({
   children,
@@ -12,28 +8,16 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
-      <div className="flex h-screen w-full bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-white overflow-hidden transition-colors duration-500">
-        {/* Capa decorativa didáctica */}
-        <BackgroundDecorations />
-        
-        {/* Sidebar manejado por el Context */}
-        <DashboardSidebar />
+    <div className="min-h-screen bg-surface-bg text-on-surface font-body">
+      {/* Riel de navegación fijo (Luminous Ed-Tech) */}
+      <PanelSidebar />
 
-        {/* Contenedor principal */}
-        <div className="flex-1 flex flex-col relative z-0 w-full min-w-0 transition-all duration-300">
-          <DashboardHeader />
-
-          {/* Área de contenido scrollable */}
-          <main className="flex-1 overflow-y-auto p-6 md:p-8">
-            <div className="max-w-7xl mx-auto mb-10 w-full">
-              {children}
-            </div>
-          </main>
-
-          <DashboardFooter />
+      {/* Área de contenido — desplazada por el ancho del riel (w-20) */}
+      <main className="ml-20 min-h-screen overflow-x-hidden">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-14 py-10 lg:py-14">
+          {children}
         </div>
-      </div>
-    </SidebarProvider>
+      </main>
+    </div>
   );
 }

@@ -51,6 +51,9 @@ export type DocenteStats = {
   promedioNotas: number
   aprobacion: number
   estudiantesCount: number
+  cursosAsignados: number
+  notasHoy: number
+  asistenciasHoy: number
   novedadesPendientes: number
   notasPorPeriodo: { periodo: string; promedio: number }[]
   horariosHoy: HorarioHoy[]
@@ -77,6 +80,7 @@ export type EstudianteStats = {
   aprobacion: number
   porcentajeAsistencia: number
   totalAsistencias: number
+  periodoActual: number
   novedadesActivas: number
   notasPorMateria: NotaMateria[]
   notasPorPeriodo: { periodo: string; promedio: number }[]
@@ -140,7 +144,8 @@ type PadreAPI = {
 
 function emptyDocenteStats(): DocenteStats {
   return {
-    promedioNotas: 0, aprobacion: 0, estudiantesCount: 0, novedadesPendientes: 0,
+    promedioNotas: 0, aprobacion: 0, estudiantesCount: 0,
+    cursosAsignados: 0, notasHoy: 0, asistenciasHoy: 0, novedadesPendientes: 0,
     notasPorPeriodo: [], horariosHoy: [], topEstudiantes: [], distribucionNotas: [],
   }
 }
@@ -148,7 +153,7 @@ function emptyDocenteStats(): DocenteStats {
 function emptyEstudianteStats(): EstudianteStats {
   return {
     promedioGeneral: 0, aprobacion: 0, porcentajeAsistencia: 0, totalAsistencias: 0,
-    novedadesActivas: 0, notasPorMateria: [], notasPorPeriodo: [],
+    periodoActual: 0, novedadesActivas: 0, notasPorMateria: [], notasPorPeriodo: [],
     asistenciaEstados: [], novedadesRecientes: [],
   }
 }
@@ -162,6 +167,9 @@ export const getDashboardDocente = async (): Promise<DocenteStats> => {
     promedioNotas:       0,
     aprobacion:          0,
     estudiantesCount:    raw.total_estudiantes,
+    cursosAsignados:     raw.total_cursos_asignados,
+    notasHoy:            raw.notas_registradas_hoy,
+    asistenciasHoy:      raw.asistencias_registradas_hoy,
     novedadesPendientes: 0,
     notasPorPeriodo:     [],
     horariosHoy:         [],
@@ -178,6 +186,7 @@ export const getDashboardEstudiante = async (): Promise<EstudianteStats> => {
     aprobacion:           0,
     porcentajeAsistencia: raw.porcentaje_asistencia ?? 0,
     totalAsistencias:     0,
+    periodoActual:        raw.periodo_actual,
     novedadesActivas:     raw.novedades_pendientes,
     notasPorMateria:      [],
     notasPorPeriodo:      [],
@@ -217,6 +226,9 @@ export async function getDashboardDocenteServer(token: string): Promise<DocenteS
     promedioNotas:       0,
     aprobacion:          0,
     estudiantesCount:    raw.total_estudiantes,
+    cursosAsignados:     raw.total_cursos_asignados,
+    notasHoy:            raw.notas_registradas_hoy,
+    asistenciasHoy:      raw.asistencias_registradas_hoy,
     novedadesPendientes: 0,
     notasPorPeriodo:     [],
     horariosHoy:         [],
@@ -233,6 +245,7 @@ export async function getDashboardEstudianteServer(token: string): Promise<Estud
     aprobacion:           0,
     porcentajeAsistencia: raw.porcentaje_asistencia ?? 0,
     totalAsistencias:     0,
+    periodoActual:        raw.periodo_actual,
     novedadesActivas:     raw.novedades_pendientes,
     notasPorMateria:      [],
     notasPorPeriodo:      [],

@@ -15,7 +15,7 @@ interface UsuariosPendientesProps {
 const ROLES_ASIGNABLES = [
   { value: 4, label: 'Padre / Acudiente', color: 'text-purple-600 dark:text-purple-400' },
   { value: 1, label: 'Profesor', color: 'text-green-600 dark:text-green-400' },
-  { value: 3, label: 'Administrador', color: 'text-blue-600 dark:text-blue-400' },
+  { value: 3, label: 'Administrador', color: 'text-primary dark:text-blue-400' },
 ] as const
 
 const TIPO_DOC: Record<string, string> = {
@@ -117,7 +117,7 @@ function PendienteCard({ usuario, onValidar, onRechazar }: CardProps) {
               onClick={() => setRolSeleccionado(r.value)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
                 rolSeleccionado === r.value
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300'
+                  ? 'border-primary bg-blue-50 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300'
                   : 'border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-white/20'
               }`}
             >
@@ -208,7 +208,7 @@ export default function UsuariosPendientes({
 
       {/* SQL Panel */}
       {sqlVisible && (
-        <div className="rounded-xl border border-blue-200 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10 p-4 space-y-2">
+        <div className="rounded-xl border border-blue-200 dark:border-primary/30 bg-blue-50 dark:bg-blue-500/10 p-4 space-y-2">
           <p className="text-xs font-semibold text-blue-700 dark:text-blue-300">
             Script inicial — asignar el primer Administrador
           </p>

@@ -17,7 +17,7 @@ const DIA_HEADER: Record<string, string> = {
 }
 
 const DIA_CELL: Record<string, string> = {
-  Lunes:      'border-l-2 border-blue-400 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-500/5',
+  Lunes:      'border-l-2 border-blue-400 dark:border-primary bg-blue-50/50 dark:bg-blue-500/5',
   Martes:     'border-l-2 border-violet-400 dark:border-violet-500 bg-violet-50/50 dark:bg-violet-500/5',
   Miércoles:  'border-l-2 border-emerald-400 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-500/5',
   Jueves:     'border-l-2 border-orange-400 dark:border-orange-500 bg-orange-50/50 dark:bg-orange-500/5',
@@ -139,7 +139,7 @@ export default function HorariosClient({ role }: Props) {
           {canCreate && (
             <button
               onClick={openCreate}
-              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors"
+              className="px-5 py-2.5 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-xl transition-colors"
             >
               + Nuevo horario
             </button>
@@ -153,13 +153,13 @@ export default function HorariosClient({ role }: Props) {
         <div className="flex rounded-xl border border-slate-200 dark:border-white/10 overflow-hidden shrink-0">
           <button
             onClick={() => { setVista('estudiantes'); setFilterProfesor(''); setFilterJornada(''); setFilterCurso('') }}
-            className={`px-4 py-2 text-sm font-semibold transition-colors ${vista === 'estudiantes' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-white/5 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10'}`}
+            className={`px-4 py-2 text-sm font-semibold transition-colors ${vista === 'estudiantes' ? 'bg-primary text-white' : 'bg-white dark:bg-white/5 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10'}`}
           >
             Estudiantes
           </button>
           <button
             onClick={() => { setVista('profesores'); setFilterCurso(''); setFilterJornada('') }}
-            className={`px-4 py-2 text-sm font-semibold transition-colors ${vista === 'profesores' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-white/5 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10'}`}
+            className={`px-4 py-2 text-sm font-semibold transition-colors ${vista === 'profesores' ? 'bg-primary text-white' : 'bg-white dark:bg-white/5 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10'}`}
           >
             Profesores
           </button>
@@ -171,7 +171,7 @@ export default function HorariosClient({ role }: Props) {
             <select
               value={filterJornada}
               onChange={e => { setFilterJornada(e.target.value); setFilterCurso('') }}
-              className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="">Todas las jornadas</option>
               {jornadas.map(j => (
@@ -181,7 +181,7 @@ export default function HorariosClient({ role }: Props) {
             <select
               value={filterCurso}
               onChange={e => setFilterCurso(e.target.value)}
-              className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="">Todos los cursos</option>
               {cursosDeJornada.map(c => (
@@ -195,7 +195,7 @@ export default function HorariosClient({ role }: Props) {
           <select
             value={filterProfesor}
             onChange={e => setFilterProfesor(e.target.value)}
-            className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">Todos los profesores</option>
             {profesores.map(p => (
@@ -207,7 +207,7 @@ export default function HorariosClient({ role }: Props) {
         <select
           value={filterActivo}
           onChange={e => setFilterActivo(e.target.value as any)}
-          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="todos">Activos e inactivos</option>
           <option value="activo">Solo activos</option>
@@ -366,7 +366,7 @@ export default function HorariosClient({ role }: Props) {
                           {canUpdate && (
                             <button
                               onClick={() => openEdit(h)}
-                              className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-300 text-xs font-semibold transition-colors"
+                              className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-blue-300 text-xs font-semibold transition-colors"
                             >
                               Editar
                             </button>
@@ -646,7 +646,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Día</label>
             <select required value={dia} onChange={e => setDia(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
               {DIAS_SEMANA.map(d => <option key={d} value={d}>{d}</option>)}
             </select>
           </div>
@@ -655,19 +655,19 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
             <div>
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Hora inicio</label>
               <input type="time" required value={horaInicio} onChange={e => setHoraInicio(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Hora fin</label>
               <input type="time" required value={horaFin} onChange={e => setHoraFin(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
             </div>
           </div>
 
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Jornada</label>
             <select required value={jornada} onChange={e => { setJornada(e.target.value); setIdCurso('') }}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
               <option value="">Seleccionar jornada...</option>
               {jornadas.map(j => <option key={j} value={j}>{j}</option>)}
             </select>
@@ -677,7 +677,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Curso</label>
             <select required value={idCurso} onChange={e => setIdCurso(e.target.value)}
               disabled={!jornada}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50">
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50">
               <option value="">{jornada ? 'Seleccionar curso...' : 'Primero selecciona una jornada'}</option>
               {cursosDeJornada.map(c => (
                 <option key={c.idCurso} value={String(c.idCurso)}>{c.nombreCurso} — {c.grado}</option>
@@ -688,7 +688,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Materia</label>
             <select required value={idMateria} onChange={e => setIdMateria(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
               <option value="">Seleccionar materia</option>
               {materias.map(m => (
                 <option key={m.idMateria} value={String(m.idMateria)}>{m.nombreMateria}</option>
@@ -699,14 +699,14 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Salón</label>
             <input type="text" required placeholder="Ej: 201, Lab. Informática" value={salon} onChange={e => setSalon(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
           </div>
 
           {mode === 'create' && (
             <div>
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Profesor (opcional)</label>
               <select value={idProfesor} onChange={e => setIdProfesor(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
                 <option value="">Sin asignar</option>
                 {profesores.map(p => (
                   <option key={p.idProfesor} value={String(p.idProfesor)}>{p.nombre}</option>
@@ -719,7 +719,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
             <label className="flex items-center gap-3 cursor-pointer">
               <div className="relative">
                 <input type="checkbox" className="sr-only" checked={activo} onChange={e => setActivo(e.target.checked)} />
-                <div className={`w-10 h-6 rounded-full transition-colors ${activo ? 'bg-blue-600' : 'bg-slate-300 dark:bg-white/20'}`} />
+                <div className={`w-10 h-6 rounded-full transition-colors ${activo ? 'bg-primary' : 'bg-slate-300 dark:bg-white/20'}`} />
                 <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${activo ? 'translate-x-5' : 'translate-x-1'}`} />
               </div>
               <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{activo ? 'Activo' : 'Inactivo'}</span>
@@ -734,7 +734,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
               Cancelar
             </button>
             <button type="submit" disabled={saving}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
+              className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
               {saving ? 'Guardando...' : mode === 'create' ? 'Crear' : 'Guardar'}
             </button>
           </div>
@@ -793,7 +793,7 @@ function CursosModal({
               {canCreate && (
                 <button
                   onClick={onOpenCreate}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors"
+                  className="px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-xl transition-colors"
                 >
                   + Nuevo curso
                 </button>
@@ -831,7 +831,7 @@ function CursosModal({
                               {canUpdate && (
                                 <button
                                   onClick={() => onOpenEdit(c)}
-                                  className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-300 text-xs font-semibold transition-colors"
+                                  className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-blue-300 text-xs font-semibold transition-colors"
                                 >
                                   Editar
                                 </button>
@@ -890,7 +890,7 @@ function CursoForm({ mode, curso, saving, onClose, onCreate, onUpdate }: CursoFo
     mode === 'create' ? onCreate(payload) : onUpdate(curso!.idCurso, payload)
   }
 
-  const SEL = 'w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
+  const SEL = 'w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary'
 
   return (
     <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
@@ -948,7 +948,7 @@ function CursoForm({ mode, curso, saving, onClose, onCreate, onUpdate }: CursoFo
           <label className="flex items-center gap-3 cursor-pointer">
             <div className="relative">
               <input type="checkbox" className="sr-only" checked={activo} onChange={e => setActivo(e.target.checked)} />
-              <div className={`w-10 h-6 rounded-full transition-colors ${activo ? 'bg-blue-600' : 'bg-slate-300 dark:bg-white/20'}`} />
+              <div className={`w-10 h-6 rounded-full transition-colors ${activo ? 'bg-primary' : 'bg-slate-300 dark:bg-white/20'}`} />
               <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${activo ? 'translate-x-5' : 'translate-x-1'}`} />
             </div>
             <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{activo ? 'Activo' : 'Inactivo'}</span>
@@ -964,7 +964,7 @@ function CursoForm({ mode, curso, saving, onClose, onCreate, onUpdate }: CursoFo
           Cancelar
         </button>
         <button type="submit" disabled={saving}
-          className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
+          className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
           {saving ? 'Guardando...' : mode === 'create' ? 'Crear' : 'Guardar'}
         </button>
       </div>
@@ -1019,7 +1019,7 @@ function MateriasModal({
           ) : (
             <div className="p-6 space-y-4">
               {canCreate && (
-                <button onClick={onOpenCreate} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors">+ Nueva materia</button>
+                <button onClick={onOpenCreate} className="px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-xl transition-colors">+ Nueva materia</button>
               )}
               <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-white/10">
                 <table className="w-full text-sm">
@@ -1043,7 +1043,7 @@ function MateriasModal({
                         {(canUpdate || canDelete) && (
                           <td className="px-4 py-3 text-right">
                             <div className="flex justify-end gap-2">
-                              {canUpdate && <button onClick={() => onOpenEdit(m)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-300 text-xs font-semibold transition-colors">Editar</button>}
+                              {canUpdate && <button onClick={() => onOpenEdit(m)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-blue-300 text-xs font-semibold transition-colors">Editar</button>}
                               {canDelete && <button onClick={() => onDelete(m.idMateria)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-red-100 dark:hover:bg-red-500/20 text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-300 text-xs font-semibold transition-colors">Eliminar</button>}
                             </div>
                           </td>
@@ -1107,7 +1107,7 @@ function EspecializacionesModal({
           ) : (
             <div className="p-6 space-y-4">
               {canCreate && (
-                <button onClick={onOpenCreate} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors">+ Nueva especialización</button>
+                <button onClick={onOpenCreate} className="px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-xl transition-colors">+ Nueva especialización</button>
               )}
               <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-white/10">
                 <table className="w-full text-sm">
@@ -1129,7 +1129,7 @@ function EspecializacionesModal({
                         {(canUpdate || canDelete) && (
                           <td className="px-4 py-3 text-right">
                             <div className="flex justify-end gap-2">
-                              {canUpdate && <button onClick={() => onOpenEdit(esp)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-300 text-xs font-semibold transition-colors">Editar</button>}
+                              {canUpdate && <button onClick={() => onOpenEdit(esp)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-blue-300 text-xs font-semibold transition-colors">Editar</button>}
                               {canDelete && <button onClick={() => onDelete(esp.idEspecializacion)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-red-100 dark:hover:bg-red-500/20 text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-300 text-xs font-semibold transition-colors">Eliminar</button>}
                             </div>
                           </td>
@@ -1155,7 +1155,7 @@ function MateriaForm({ mode, materia, saving, onClose, onCreate, onUpdate }: {
   onCreate: (p: Omit<Materia, 'idMateria'>) => void
   onUpdate: (id: number, p: Partial<Omit<Materia, 'idMateria'>>) => void
 }) {
-  const SEL = 'w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
+  const SEL = 'w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary'
   const [nombre, setNombre] = useState(materia?.nombreMateria ?? '')
   const [codigo, setCodigo] = useState(materia?.codigoMateria ?? '')
   const [activa, setActiva] = useState(materia?.activa ?? true)
@@ -1184,14 +1184,14 @@ function MateriaForm({ mode, materia, saving, onClose, onCreate, onUpdate }: {
       <label className="flex items-center gap-3 cursor-pointer">
         <div className="relative">
           <input type="checkbox" className="sr-only" checked={activa} onChange={e => setActiva(e.target.checked)} />
-          <div className={`w-10 h-6 rounded-full transition-colors ${activa ? 'bg-blue-600' : 'bg-slate-300 dark:bg-white/20'}`} />
+          <div className={`w-10 h-6 rounded-full transition-colors ${activa ? 'bg-primary' : 'bg-slate-300 dark:bg-white/20'}`} />
           <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${activa ? 'translate-x-5' : 'translate-x-1'}`} />
         </div>
         <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{activa ? 'Activa' : 'Inactiva'}</span>
       </label>
       <div className="flex justify-end gap-3 pt-2">
         <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">Cancelar</button>
-        <button type="submit" disabled={saving} className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">{saving ? 'Guardando...' : mode === 'create' ? 'Crear' : 'Guardar'}</button>
+        <button type="submit" disabled={saving} className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">{saving ? 'Guardando...' : mode === 'create' ? 'Crear' : 'Guardar'}</button>
       </div>
     </form>
   )
@@ -1205,7 +1205,7 @@ function EspecializacionForm({ mode, especializacion, saving, onClose, onCreate,
   onCreate: (p: Omit<Especializacion, 'idEspecializacion'>) => void
   onUpdate: (id: number, p: Partial<Omit<Especializacion, 'idEspecializacion'>>) => void
 }) {
-  const SEL = 'w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
+  const SEL = 'w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary'
   const [nombre, setNombre] = useState(especializacion?.nombreEspecializacion ?? '')
   const [activo, setActivo] = useState(especializacion?.activo ?? true)
 
@@ -1229,14 +1229,14 @@ function EspecializacionForm({ mode, especializacion, saving, onClose, onCreate,
       <label className="flex items-center gap-3 cursor-pointer">
         <div className="relative">
           <input type="checkbox" className="sr-only" checked={activo} onChange={e => setActivo(e.target.checked)} />
-          <div className={`w-10 h-6 rounded-full transition-colors ${activo ? 'bg-blue-600' : 'bg-slate-300 dark:bg-white/20'}`} />
+          <div className={`w-10 h-6 rounded-full transition-colors ${activo ? 'bg-primary' : 'bg-slate-300 dark:bg-white/20'}`} />
           <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${activo ? 'translate-x-5' : 'translate-x-1'}`} />
         </div>
         <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{activo ? 'Activo' : 'Inactivo'}</span>
       </label>
       <div className="flex justify-end gap-3 pt-2">
         <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">Cancelar</button>
-        <button type="submit" disabled={saving} className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">{saving ? 'Guardando...' : mode === 'create' ? 'Crear' : 'Guardar'}</button>
+        <button type="submit" disabled={saving} className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">{saving ? 'Guardando...' : mode === 'create' ? 'Crear' : 'Guardar'}</button>
       </div>
     </form>
   )
@@ -1293,7 +1293,7 @@ function AsignacionesModal({
           ) : (
             <div className="p-6 space-y-4">
               {canCreate && (
-                <button onClick={onOpenCreate} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors">+ Nueva asignación</button>
+                <button onClick={onOpenCreate} className="px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-xl transition-colors">+ Nueva asignación</button>
               )}
               <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-white/10">
                 <table className="w-full text-sm">
@@ -1321,7 +1321,7 @@ function AsignacionesModal({
                         {(canUpdate || canDelete) && (
                           <td className="px-4 py-3 text-right">
                             <div className="flex justify-end gap-2">
-                              {canUpdate && <button onClick={() => onOpenEdit(a)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-300 text-xs font-semibold transition-colors">Editar</button>}
+                              {canUpdate && <button onClick={() => onOpenEdit(a)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-blue-300 text-xs font-semibold transition-colors">Editar</button>}
                               {canDelete && <button onClick={() => onDelete(a.idAsignacion)} className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-red-100 dark:hover:bg-red-500/20 text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-300 text-xs font-semibold transition-colors">Eliminar</button>}
                             </div>
                           </td>
@@ -1347,7 +1347,7 @@ function AsignacionForm({ mode, asignacion, profesores, cursos, materias, saving
   onCreate: (p: Omit<Asignacion, 'idAsignacion' | 'nombreProfesor' | 'nombreCurso' | 'nombreMateria'>) => void
   onUpdate: (id: number, p: Partial<Omit<Asignacion, 'idAsignacion'>>) => void
 }) {
-  const SEL = 'w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
+  const SEL = 'w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary'
   
   const [idProfesor, setIdProfesor] = useState(String(asignacion?.idProfesor ?? ''))
   const [idCurso, setIdCurso] = useState(String(asignacion?.idCurso ?? ''))
@@ -1421,7 +1421,7 @@ function AsignacionForm({ mode, asignacion, profesores, cursos, materias, saving
       <label className="flex items-center gap-3 cursor-pointer pt-2">
         <div className="relative">
           <input type="checkbox" className="sr-only" checked={activo} onChange={e => setActivo(e.target.checked)} />
-          <div className={`w-10 h-6 rounded-full transition-colors ${activo ? 'bg-blue-600' : 'bg-slate-300 dark:bg-white/20'}`} />
+          <div className={`w-10 h-6 rounded-full transition-colors ${activo ? 'bg-primary' : 'bg-slate-300 dark:bg-white/20'}`} />
           <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${activo ? 'translate-x-5' : 'translate-x-1'}`} />
         </div>
         <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{activo ? 'Activo' : 'Inactivo'}</span>
@@ -1431,7 +1431,7 @@ function AsignacionForm({ mode, asignacion, profesores, cursos, materias, saving
 
       <div className="flex justify-end gap-3 pt-2">
         <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">Cancelar</button>
-        <button type="submit" disabled={saving} className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">{saving ? 'Guardando...' : mode === 'create' ? 'Crear' : 'Guardar'}</button>
+        <button type="submit" disabled={saving} className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">{saving ? 'Guardando...' : mode === 'create' ? 'Crear' : 'Guardar'}</button>
       </div>
     </form>
   )
