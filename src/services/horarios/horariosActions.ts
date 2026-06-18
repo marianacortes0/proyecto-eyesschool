@@ -1,6 +1,6 @@
 'use server'
 
-import { createAdminClient } from '../supabase/admin'
+import { cookies } from 'next/headers'
 import type {
   Horario,
   Curso,
@@ -11,223 +11,254 @@ import type {
   Asignacion,
 } from './horariosService'
 
-// ── Horarios (bypass RLS) ────────────────────────────────────────────────────
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
 const DIA_ORDER: Record<string, number> = {
-  Lunes: 0, Martes: 1, 'Miércoles': 2, Jueves: 3,
+  Lunes: 0, Martes: 1, 'Miercoles': 2, 'Miércoles': 2, Jueves: 3,
   Viernes: 4, Sábado: 5, Domingo: 6,
 }
 
-export async function getHorariosAction(): Promise<Horario[]> {
-  const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from('Horario')
-    .select(`
-      *,
-      cursos ( nombreCurso, grado ),
-      materias ( nombreMateria )
-    `)
-    .order('dia')
-    .order('horaInicio')
-
-  if (error) throw new Error(error.message)
-
-  return ((data ?? []) as any[])
-    .map(row => ({
-      idHorario: row.idHorario,
-      dia: row.dia,
-      horaInicio: row.horaInicio,
-      horaFin: row.horaFin,
-      salon: row.salon,
-      activo: row.activo,
-      idCurso: row.idCurso,
-      idMateria: row.idMateria,
-      nombreCurso: row.cursos?.nombreCurso ?? '',
-      gradoCurso: row.cursos?.grado ?? '',
-      nombreMateria: row.materias?.nombreMateria ?? '',
-    }))
-    .sort((a, b) => {
-      const dA = DIA_ORDER[a.dia] ?? 99
-      const dB = DIA_ORDER[b.dia] ?? 99
-      if (dA !== dB) return dA - dB
-      return a.horaInicio.localeCompare(b.horaInicio)
-    })
+async function getToken(): Promise<string | null> {
+  const store = await cookies()
+  return store.get('eys_access')?.value ?? null
 }
 
-// ── Cursos (bypass RLS) ──────────────────────────────────────────────────────
+async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const token = await getToken()
+  const res = await fetch(`${API}${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers as Record<string, string> | undefined),
+    },
+    cache: 'no-store',
+  })
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error((body as Record<string, unknown>).detail as string ?? `HTTP ${res.status}`)
+  }
+  if (res.status === 204) return null as T
+  return res.json() as Promise<T>
+}
+
+function toCamelKey(k: string): string {
+  return k.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase())
+}
+
+function toCamel(v: unknown): unknown {
+  if (Array.isArray(v)) return v.map(toCamel)
+  if (v !== null && typeof v === 'object') {
+    return Object.fromEntries(
+      Object.entries(v as Record<string, unknown>).map(([k, val]) => [toCamelKey(k), toCamel(val)])
+    )
+  }
+  return v
+}
+
+export async function getHorariosAction(): Promise<Horario[]> {
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/horarios?limit=500')
+  return (data.map(r => {
+    const c = toCamel(r) as Raw
+    return {
+      idHorario:  c.idHorario as number,
+      dia:        c.dia as string,
+      horaInicio: c.horaInicio as string,
+      horaFin:    c.horaFin as string,
+      salon:      c.salon as string,
+      activo:     c.activo as boolean,
+      idCurso:    c.idCurso as number,
+      idMateria:  c.idMateria as number,
+    } satisfies Horario
+  })).sort((a, b) => {
+    const dA = DIA_ORDER[a.dia] ?? 99
+    const dB = DIA_ORDER[b.dia] ?? 99
+    if (dA !== dB) return dA - dB
+    return a.horaInicio.localeCompare(b.horaInicio)
+  })
+}
 
 export async function getCursosAction(): Promise<Curso[]> {
-  const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from('cursos')
-    .select('idCurso, nombreCurso, grado, jornada, ano, activo')
-    .eq('activo', true)
-    .order('grado')
-  if (error) throw new Error(error.message)
-  return (data ?? []) as Curso[]
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/cursos?activo=true&limit=200')
+  return data.map(r => {
+    const c = toCamel(r) as Raw
+    return {
+      idCurso:     c.idCurso as number,
+      nombreCurso: c.nombreCurso as string,
+      grado:       c.grado as string,
+      jornada:     c.jornada as string,
+      ano:         c.ano as number,
+      activo:      c.activo as boolean,
+    } satisfies Curso
+  })
 }
 
 export async function getAllCursosAction(): Promise<Curso[]> {
-  const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from('cursos')
-    .select('idCurso, nombreCurso, grado, jornada, ano, activo')
-    .order('grado')
-  if (error) throw new Error(error.message)
-  return (data ?? []) as Curso[]
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/cursos?limit=200')
+  return data.map(r => {
+    const c = toCamel(r) as Raw
+    return {
+      idCurso:     c.idCurso as number,
+      nombreCurso: c.nombreCurso as string,
+      grado:       c.grado as string,
+      jornada:     c.jornada as string,
+      ano:         c.ano as number,
+      activo:      c.activo as boolean,
+    } satisfies Curso
+  })
 }
 
-// ── Materias (bypass RLS) ────────────────────────────────────────────────────
-
 export async function getMateriasAction(): Promise<Materia[]> {
-  const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from('materias')
-    .select('idMateria, nombreMateria, codigoMateria, activa')
-    .eq('activa', true)
-    .order('nombreMateria')
-  if (error) throw new Error(error.message)
-  return (data ?? []) as Materia[]
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/materias?activa=true&limit=200')
+  return data.map(r => {
+    const c = toCamel(r) as Raw
+    return {
+      idMateria:    c.idMateria as number,
+      nombreMateria: c.nombreMateria as string,
+      codigoMateria: c.codigoMateria as string,
+      activa:        c.activa as boolean,
+    } satisfies Materia
+  })
 }
 
 export async function getAllMateriasAction(): Promise<Materia[]> {
-  const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from('materias')
-    .select('idMateria, nombreMateria, codigoMateria, activa')
-    .order('nombreMateria')
-  if (error) throw new Error(error.message)
-  return (data ?? []) as Materia[]
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/materias?limit=200')
+  return data.map(r => {
+    const c = toCamel(r) as Raw
+    return {
+      idMateria:    c.idMateria as number,
+      nombreMateria: c.nombreMateria as string,
+      codigoMateria: c.codigoMateria as string,
+      activa:        c.activa as boolean,
+    } satisfies Materia
+  })
 }
-
-// ── Especializaciones (bypass RLS) ───────────────────────────────────────────
 
 export async function getEspecializacionesAction(): Promise<Especializacion[]> {
-  const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from('especializaciones')
-    .select('idEspecializacion, nombreEspecializacion, activo')
-    .order('nombreEspecializacion')
-  if (error) throw new Error(error.message)
-  return (data ?? []) as Especializacion[]
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/especializaciones?limit=200')
+  return data.map(r => {
+    const c = toCamel(r) as Raw
+    return {
+      idEspecializacion:     c.idEspecializacion as number,
+      nombreEspecializacion: c.nombreEspecializacion as string,
+      activo:                c.activo as boolean,
+    } satisfies Especializacion
+  })
 }
 
-// ── Profesores (bypass RLS) ──────────────────────────────────────────────────
-
 export async function getProfesoresAction(): Promise<ProfesorOpt[]> {
-  const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from('profesores')
-    .select('idProfesor, usuario ( primerNombre, primerApellido )')
-  if (error) throw new Error(error.message)
-  return ((data ?? []) as any[]).map(row => ({
-    idProfesor: row.idProfesor,
-    nombre: row.usuario
-      ? `${row.usuario.primerNombre} ${row.usuario.primerApellido}`
-      : `Profesor #${row.idProfesor}`,
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/profesores?limit=500')
+  return (data.map(r => {
+    const c = toCamel(r) as Raw
+    return {
+      idProfesor: c.idProfesor as number,
+      nombre:     `Profesor #${c.idProfesor}`,
+    } satisfies ProfesorOpt
   })).sort((a, b) => a.nombre.localeCompare(b.nombre))
 }
 
-// ── Asignaciones profesor-horario (bypass RLS) ───────────────────────────────
-
 export async function getAsignacionesProfesoresAction(): Promise<AsignacionProfesor[]> {
-  const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from('profesores_horario')
-    .select('idHorario, idProfesor, activo, profesores ( idProfesor, usuario ( primerNombre, primerApellido ) )')
-    .eq('activo', true)
-  if (error) throw new Error(error.message)
-  return ((data ?? []) as any[]).map(row => ({
-    idHorario: row.idHorario,
-    idProfesor: row.idProfesor,
-    nombreProfesor: row.profesores?.usuario
-      ? `${row.profesores.usuario.primerNombre} ${row.profesores.usuario.primerApellido}`
-      : `Profesor #${row.idProfesor}`,
-  }))
+  return []
 }
-
-// ── Horario write operations (bypass RLS) ───────────────────────────────────
 
 export async function createHorarioAction(
   payload: Omit<Horario, 'idHorario' | 'nombreCurso' | 'gradoCurso' | 'nombreMateria'>
 ): Promise<{ idHorario: number }> {
-  const supabase = createAdminClient()
-  const { data, error } = await supabase.from('Horario').insert(payload).select('idHorario').single()
-  if (error) throw new Error(error.message)
-  return data as { idHorario: number }
+  const data = await apiFetch<Record<string, unknown>>('/horarios', {
+    method: 'POST',
+    body: JSON.stringify({
+      id_curso:   payload.idCurso,
+      id_materia: payload.idMateria,
+      dia:        payload.dia,
+      hora_inicio: payload.horaInicio,
+      hora_fin:    payload.horaFin,
+      salon:       payload.salon,
+    }),
+  })
+  return { idHorario: (data.id_horario ?? data.idHorario) as number }
 }
 
 export async function asignarProfesorHorarioAction(idProfesor: number, idHorario: number) {
-  const supabase = createAdminClient()
-  const { error } = await supabase
-    .from('profesores_horario')
-    .insert({ idProfesor, idHorario, fechaAsignacion: new Date().toISOString().slice(0, 10), activo: true })
-  if (error) throw new Error(error.message)
+  await apiFetch(`/horarios/${idHorario}/profesores`, {
+    method: 'POST',
+    body: JSON.stringify({ id_profesor: idProfesor }),
+  })
 }
 
 export async function updateHorarioAction(
   idHorario: number,
   payload: Partial<Omit<Horario, 'idHorario' | 'nombreCurso' | 'gradoCurso' | 'nombreMateria'>>
 ) {
-  const supabase = createAdminClient()
-  const { error } = await supabase.from('Horario').update(payload).eq('idHorario', idHorario)
-  if (error) throw new Error(error.message)
+  const body: Record<string, unknown> = {}
+  if (payload.dia        !== undefined) body.dia        = payload.dia
+  if (payload.horaInicio !== undefined) body.hora_inicio = payload.horaInicio
+  if (payload.horaFin    !== undefined) body.hora_fin   = payload.horaFin
+  if (payload.salon      !== undefined) body.salon      = payload.salon
+  if (payload.activo     !== undefined) body.activo     = payload.activo
+  await apiFetch(`/horarios/${idHorario}`, { method: 'PUT', body: JSON.stringify(body) })
 }
 
 export async function deleteHorarioAction(idHorario: number) {
-  const supabase = createAdminClient()
-  await supabase.from('profesores_horario').delete().eq('idHorario', idHorario)
-  const { error } = await supabase.from('Horario').delete().eq('idHorario', idHorario)
-  if (error) throw new Error(error.message)
+  await apiFetch(`/horarios/${idHorario}`, { method: 'DELETE' })
 }
-
-// ── Asignaciones (bypass RLS) ────────────────────────────────────────────────
 
 export async function getAsignacionesAction(): Promise<Asignacion[]> {
-  const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from('asignaciones')
-    .select(`
-      *,
-      profesores ( usuario ( primerNombre, primerApellido ) ),
-      cursos ( nombreCurso ),
-      materias ( nombreMateria )
-    `)
-    .order('fechaAsignacion', { ascending: false })
-
-  if (error) throw new Error(error.message)
-
-  return ((data ?? []) as any[]).map(row => ({
-    ...row,
-    nombreProfesor: row.profesores?.usuario
-      ? `${row.profesores.usuario.primerNombre} ${row.profesores.usuario.primerApellido}`
-      : `Profesor #${row.idProfesor}`,
-    nombreCurso: row.cursos?.nombreCurso ?? '',
-    nombreMateria: row.materias?.nombreMateria ?? '',
-  }))
+  type Raw = Record<string, unknown>
+  const data = await apiFetch<Raw[]>('/asignaciones?limit=500')
+  return data.map(r => {
+    const c = toCamel(r) as Raw
+    return {
+      idAsignacion:       c.idAsignacion as number,
+      idProfesor:         c.idProfesor as number,
+      idCurso:            c.idCurso as number,
+      idMateria:          c.idMateria as number,
+      fechaAsignacion:    c.fechaAsignacion as string,
+      fechaFinalizacion:  c.fechaFinalizacion as string | null,
+      activo:             c.activo as boolean,
+      nombreProfesor:     `Profesor #${c.idProfesor}`,
+      nombreCurso:        `Curso #${c.idCurso}`,
+      nombreMateria:      `Materia #${c.idMateria}`,
+    } satisfies Asignacion
+  })
 }
-
-// ── Asignaciones write operations (bypass RLS) ───────────────────────────────
 
 export async function createAsignacionAction(
   payload: Omit<Asignacion, 'idAsignacion' | 'nombreProfesor' | 'nombreCurso' | 'nombreMateria'>
 ) {
-  const supabase = createAdminClient()
-  const { error } = await supabase.from('asignaciones').insert(payload)
-  if (error) throw new Error(error.message)
+  await apiFetch('/asignaciones', {
+    method: 'POST',
+    body: JSON.stringify({
+      id_profesor:       payload.idProfesor,
+      id_curso:          payload.idCurso,
+      id_materia:        payload.idMateria,
+      fecha_asignacion:  payload.fechaAsignacion,
+      fecha_finalizacion: payload.fechaFinalizacion ?? null,
+      activo:            payload.activo,
+    }),
+  })
 }
 
 export async function updateAsignacionAction(
   idAsignacion: number,
   payload: Partial<Omit<Asignacion, 'idAsignacion'>>
 ) {
-  const supabase = createAdminClient()
-  const { error } = await supabase.from('asignaciones').update(payload).eq('idAsignacion', idAsignacion)
-  if (error) throw new Error(error.message)
+  const body: Record<string, unknown> = {}
+  if (payload.idProfesor        !== undefined) body.id_profesor        = payload.idProfesor
+  if (payload.idCurso           !== undefined) body.id_curso           = payload.idCurso
+  if (payload.idMateria         !== undefined) body.id_materia         = payload.idMateria
+  if (payload.fechaAsignacion   !== undefined) body.fecha_asignacion   = payload.fechaAsignacion
+  if (payload.fechaFinalizacion !== undefined) body.fecha_finalizacion = payload.fechaFinalizacion
+  if (payload.activo            !== undefined) body.activo             = payload.activo
+  await apiFetch(`/asignaciones/${idAsignacion}`, { method: 'PUT', body: JSON.stringify(body) })
 }
 
 export async function deleteAsignacionAction(idAsignacion: number) {
-  const supabase = createAdminClient()
-  const { error } = await supabase.from('asignaciones').delete().eq('idAsignacion', idAsignacion)
-  if (error) throw new Error(error.message)
+  await apiFetch(`/asignaciones/${idAsignacion}`, { method: 'DELETE' })
 }

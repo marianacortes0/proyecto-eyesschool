@@ -56,7 +56,7 @@ function DownloadBtn({ estudiante }: { estudiante: EstudianteQR }) {
       onClick={handleDownload}
       disabled={loading}
       title="Descargar QR"
-      className="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors disabled:opacity-40"
+      className="p-1.5 rounded-lg text-slate-500 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors disabled:opacity-40"
     >
       {loading ? '⏳' : '⬇'}
     </button>
@@ -108,7 +108,7 @@ function AsignarModal({
               value={idCurso}
               onChange={(e) => setIdCurso(e.target.value)}
               required
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="" disabled>Seleccionar curso...</option>
               {cursos.map((c) => (
@@ -128,7 +128,7 @@ function AsignarModal({
             <button
               type="submit"
               disabled={saving || !idCurso}
-              className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
+              className="flex-1 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
             >
               {saving ? 'Asignando...' : 'Asignar QR'}
             </button>
@@ -245,7 +245,7 @@ function TablaAsignar({
                 <td className="px-4 py-3 text-right">
                   <button
                     onClick={() => setModalUsuario(u)}
-                    className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary/90 text-white text-xs font-semibold transition-colors"
                   >
                     Asignar QR
                   </button>
@@ -430,7 +430,7 @@ export default function QRAdminView({
             placeholder="Buscar por nombre, código o curso..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="flex-1 min-w-56 px-4 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 min-w-56 px-4 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
         )}
         {tab === 'asistencia' && (
@@ -438,7 +438,7 @@ export default function QRAdminView({
             type="date"
             value={fechaFiltro}
             onChange={(e) => { onFechaChange(e.target.value); onRefreshAsistencia() }}
-            className="px-4 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
         )}
       </div>

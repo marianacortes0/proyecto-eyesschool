@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  getPromedioGeneralAction,
-  getAprobacionAction,
-  getEstudiantesActivosAction,
-  getAsistenciaPromedioAction,
-  getNotasPorPeriodoAction,
-  getDistribucionUsuariosAction,
-} from "@/services/dashboard/dashboardActions";
-
+import { getAdminDashboardAction } from "@/services/dashboard/dashboardActions";
 
 type ChartData = {
   periodo: string;
@@ -27,44 +19,27 @@ export const useDashboard = () => {
   const [charts, setCharts] = useState<ChartData[]>([]);
   const [distribucionUsuarios, setDistribucionUsuarios] = useState<{ name: string; value: number }[]>([]);
 
-useEffect(() => {
- 
-  const fetchData = async () => {
-    try {
-      const [
-        promedio,
-        aprobacion,
-        estudiantes,
-        asistencia,
-        chartData,
-        distribucion,
-      ] = await Promise.all([
-        getPromedioGeneralAction(),
-        getAprobacionAction(),
-        getEstudiantesActivosAction(),
-        getAsistenciaPromedioAction(),
-        getNotasPorPeriodoAction(),
-        getDistribucionUsuariosAction(),
-      ]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const d = await getAdminDashboardAction();
+        setStats({
+          promedio:    d?.promedioGeneral    ?? 0,
+          aprobacion:  d?.tasaAprobacion     ?? 0,
+          estudiantes: d?.totalEstudiantes   ?? 0,
+          asistencia:  d?.porcentajeAsistencia ?? 0,
+        });
+        setCharts([]);
+        setDistribucionUsuarios([]);
+      } catch (error) {
+        console.error("ERROR DASHBOARD:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      setStats({
-        promedio,
-        aprobacion,
-        estudiantes: estudiantes ?? 0,
-        asistencia,
-      });
-
-      setCharts(chartData);
-      setDistribucionUsuarios(distribucion);
-    } catch (error) {
-      console.error("ERROR DASHBOARD:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchData();
-}, []);
+    fetchData();
+  }, []);
 
   return { stats, charts, distribucionUsuarios, loading };
 };

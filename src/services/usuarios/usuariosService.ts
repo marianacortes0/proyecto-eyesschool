@@ -1,9 +1,29 @@
-import { createClient } from '../supabase/client'
-import { Tables } from '@/types/supabase'
+import { apiFetch } from '@/services/api/client'
 
-type Usuario = Tables<'usuario'>
+// Roles reales: 1=Profesor | 2=Estudiante | 3=Administrador | 4=Padre
+export const ROL_NOMBRES: Record<number, string> = {
+  1: 'Profesor',
+  2: 'Estudiante',
+  3: 'Administrador',
+  4: 'Padre',
+}
 
-export type UsuarioConRol = Usuario & {
+export type UsuarioConRol = {
+  idUsuario: number
+  tipoDocumento: string
+  numeroDocumento: string
+  primerNombre: string
+  segundoNombre: string | null
+  primerApellido: string
+  segundoApellido: string | null
+  genero: string | null
+  direccion: string | null
+  correo: string | null
+  telefono: string | null
+  estado: boolean
+  fechaRegistro: string
+  ultimoAcceso: string | null
+  idRol: number
   rolNombre: string
 }
 
@@ -24,168 +44,108 @@ export type CreateUsuarioData = {
 
 export type UpdateUsuarioData = Partial<Omit<CreateUsuarioData, 'correo'>>
 
-// Roles reales en la tabla public.roles:
-// 1 = Profesor | 2 = Estudiante | 3 = Administrador | 4 = Padre (default)
-export const ROL_NOMBRES: Record<number, string> = {
-  1: 'Profesor',
-  2: 'Estudiante',
-  3: 'Administrador',
-  4: 'Padre',
+function toUsuarioConRol(u: Record<string, unknown>): UsuarioConRol {
+  const idRol = u.idRol as number ?? u.id_rol as number
+  return {
+    idUsuario:      u.idUsuario as number,
+    tipoDocumento:  u.tipoDocumento as string,
+    numeroDocumento:u.numeroDocumento as string,
+    primerNombre:   u.primerNombre as string,
+    segundoNombre:  u.segundoNombre as string | null,
+    primerApellido: u.primerApellido as string,
+    segundoApellido:u.segundoApellido as string | null,
+    genero:         u.genero as string | null,
+    direccion:      u.direccion as string | null,
+    correo:         u.correo as string | null,
+    telefono:       u.telefono as string | null,
+    estado:         u.estado as boolean,
+    fechaRegistro:  u.fechaRegistro as string,
+    ultimoAcceso:   u.ultimoAcceso as string | null,
+    idRol,
+    rolNombre: ROL_NOMBRES[idRol] ?? 'Desconocido',
+  }
 }
 
-// ── Script SQL para asignar el primer Administrador ──────────────────────────
-// Ejecutar una sola vez en Supabase SQL Editor reemplazando el email:
-//
-//   UPDATE public.usuario
-//   SET "idRol" = 3
-//   WHERE auth_id = (
-//     SELECT id FROM auth.users WHERE email = 'correo@ejemplo.com'
-//   );
-// ─────────────────────────────────────────────────────────────────────────────
-
-/** Usuarios validados (estado = true) */
 export const getUsuarios = async (): Promise<UsuarioConRol[]> => {
-  const supabase = createClient()
-
-  const { data, error } = await supabase
-    .from('usuario')
-    .select('*')
-    .eq('estado', true)
-    .order('primerApellido', { ascending: true })
-
-  if (error) throw new Error(error.message)
-  if (!data) return []
-
-  return data.map((u) => ({
-    ...u,
-    rolNombre: ROL_NOMBRES[u.idRol] ?? 'Desconocido',
-  }))
+  const data = await apiFetch<Record<string, unknown>[]>('/usuarios?estado=true&limit=500')
+  return data.map(toUsuarioConRol)
 }
 
-/** Usuarios pendientes de validación (estado = false) */
 export const getPendingUsuarios = async (): Promise<UsuarioConRol[]> => {
-  const supabase = createClient()
-
-  const { data, error } = await supabase
-    .from('usuario')
-    .select('*')
-    .eq('estado', false)
-    .order('fechaRegistro', { ascending: true })
-
-  if (error) throw new Error(error.message)
-  if (!data) return []
-
-  return data.map((u) => ({
-    ...u,
-    rolNombre: ROL_NOMBRES[u.idRol] ?? 'Desconocido',
-  }))
+  const data = await apiFetch<Record<string, unknown>[]>('/usuarios?estado=false&limit=500')
+  return data.map(toUsuarioConRol)
 }
 
-/**
- * Valida un usuario: activa su cuenta y asigna el rol definitivo.
- * idRol: 3 = Administrador | 1 = Profesor | 4 = Padre (confirma sin cambio de rol)
- */
 export const validarUsuario = async (id: number, idRol: number): Promise<void> => {
-  const supabase = createClient()
-
-  const { error } = await supabase
-    .from('usuario')
-    .update({ estado: true, idRol })
-    .eq('idUsuario', id)
-
-  if (error) throw new Error(error.message)
+  await apiFetch(`/usuarios/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ id_rol: idRol }),
+  })
+  await apiFetch(`/usuarios/${id}/estado`, {
+    method: 'PATCH',
+    body: JSON.stringify({ estado: true }),
+  })
 }
 
-/** Rechaza y elimina un usuario pendiente */
 export const rechazarUsuario = async (id: number): Promise<void> => {
-  const supabase = createClient()
-
-  const { error } = await supabase
-    .from('usuario')
-    .delete()
-    .eq('idUsuario', id)
-
-  if (error) throw new Error(error.message)
+  await apiFetch(`/usuarios/${id}`, { method: 'DELETE' })
 }
 
 export const getUsuarioById = async (id: number): Promise<UsuarioConRol | null> => {
-  const supabase = createClient()
-
-  const { data, error } = await supabase
-    .from('usuario')
-    .select('*')
-    .eq('idUsuario', id)
-    .single()
-
-  if (error) throw new Error(error.message)
-  if (!data) return null
-
-  return { ...data, rolNombre: ROL_NOMBRES[data.idRol] ?? 'Desconocido' }
+  try {
+    const u = await apiFetch<Record<string, unknown>>(`/usuarios/${id}`)
+    return toUsuarioConRol(u)
+  } catch {
+    return null
+  }
 }
 
 export const createUsuario = async (usuario: CreateUsuarioData): Promise<void> => {
-  const supabase = createClient()
-
-  const { error } = await supabase.from('usuario').insert({
-    primerNombre: usuario.primerNombre,
-    primerApellido: usuario.primerApellido,
-    segundoNombre: usuario.segundoNombre ?? null,
-    segundoApellido: usuario.segundoApellido ?? null,
-    tipoDocumento: usuario.tipoDocumento,
-    numeroDocumento: usuario.numeroDocumento,
-    correo: usuario.correo,
-    telefono: usuario.telefono ?? null,
-    genero: usuario.genero ?? null,
-    direccion: usuario.direccion ?? null,
-    idRol: usuario.idRol,
-    estado: false, // pendiente de validación por el administrador
+  await apiFetch('/usuarios', {
+    method: 'POST',
+    body: JSON.stringify({
+      correo:           usuario.correo,
+      password:         usuario.password,
+      primer_nombre:    usuario.primerNombre,
+      primer_apellido:  usuario.primerApellido,
+      segundo_nombre:   usuario.segundoNombre ?? null,
+      segundo_apellido: usuario.segundoApellido ?? null,
+      tipo_documento:   usuario.tipoDocumento,
+      numero_documento: usuario.numeroDocumento,
+      telefono:         usuario.telefono ?? null,
+      genero:           usuario.genero ?? null,
+      direccion:        usuario.direccion ?? null,
+      id_rol:           usuario.idRol,
+    }),
   })
-
-  if (error) throw new Error(error.message)
 }
 
 export const updateUsuario = async (id: number, data: UpdateUsuarioData): Promise<void> => {
-  const supabase = createClient()
+  const payload: Record<string, unknown> = {}
+  if (data.primerNombre)    payload.primer_nombre    = data.primerNombre
+  if (data.primerApellido)  payload.primer_apellido  = data.primerApellido
+  if (data.segundoNombre  !== undefined) payload.segundo_nombre   = data.segundoNombre ?? null
+  if (data.segundoApellido !== undefined) payload.segundo_apellido = data.segundoApellido ?? null
+  if (data.tipoDocumento)   payload.tipo_documento   = data.tipoDocumento
+  if (data.numeroDocumento) payload.numero_documento = data.numeroDocumento
+  if (data.telefono  !== undefined) payload.telefono = data.telefono ?? null
+  if (data.genero    !== undefined) payload.genero   = data.genero ?? null
+  if (data.direccion !== undefined) payload.direccion = data.direccion ?? null
+  if (data.idRol     !== undefined) payload.id_rol   = data.idRol
 
-  const payload: Record<string, unknown> = {
-    primerNombre: data.primerNombre,
-    primerApellido: data.primerApellido,
-    segundoNombre: data.segundoNombre ?? null,
-    segundoApellido: data.segundoApellido ?? null,
-    tipoDocumento: data.tipoDocumento,
-    numeroDocumento: data.numeroDocumento,
-    telefono: data.telefono ?? null,
-    genero: data.genero ?? null,
-    direccion: data.direccion ?? null,
-  }
-  if (data.idRol !== undefined) payload.idRol = data.idRol
-
-  const { error } = await supabase
-    .from('usuario')
-    .update(payload)
-    .eq('idUsuario', id)
-
-  if (error) throw new Error(error.message)
+  await apiFetch(`/usuarios/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  })
 }
 
 export const toggleUsuarioEstado = async (id: number, nuevoEstado: boolean): Promise<void> => {
-  const supabase = createClient()
-
-  const { error } = await supabase
-    .from('usuario')
-    .update({ estado: nuevoEstado })
-    .eq('idUsuario', id)
-
-  if (error) throw new Error(error.message)
+  await apiFetch(`/usuarios/${id}/estado`, {
+    method: 'PATCH',
+    body: JSON.stringify({ estado: nuevoEstado }),
+  })
 }
 
 export const deleteUsuario = async (id: number): Promise<void> => {
-  const supabase = createClient()
-
-  const { error } = await supabase
-    .from('usuario')
-    .delete()
-    .eq('idUsuario', id)
-
-  if (error) throw new Error(error.message)
+  await apiFetch(`/usuarios/${id}`, { method: 'DELETE' })
 }

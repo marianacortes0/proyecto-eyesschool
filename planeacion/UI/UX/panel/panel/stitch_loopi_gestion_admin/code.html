@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EyeSchool | Gestión de Administradores Minimalista</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;600;700;900&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#630ed4",
+                    "neon-purple": "#A855F7",
+                    "electric-teal": "#2DD4BF",
+                    "surface": "#ffffff",
+                    "surface-bg": "#fafafa",
+                    "on-surface": "#0b1c30",
+                    "on-surface-variant": "#64748b",
+                    "glass-stroke": "rgba(0, 0, 0, 0.05)",
+                    "primary-container": "#f5f0ff",
+            },
+            "borderRadius": {
+                    "super": "2rem",
+                    "xl": "1rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Hanken Grotesk"],
+                    "body": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+            transition: all 0.3s ease;
+        }
+        .minimal-card {
+            background: #ffffff;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .minimal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #f1f5f9; border-radius: 10px; }
+        
+        /* Remove checkbox default appearance for minimalist style */
+        .custom-checkbox {
+            appearance: none;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            display: inline-grid;
+            place-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .custom-checkbox:checked {
+            background-color: #630ed4;
+            border-color: #630ed4;
+        }
+        .custom-checkbox:checked::before {
+            content: "check";
+            font-family: 'Material Symbols Outlined';
+            color: white;
+            font-size: 0.875rem;
+            font-variation-settings: 'wght' 600;
+        }
+    </style>
+</head>
+<body class="bg-surface-bg text-on-surface font-body selection:bg-neon-purple selection:text-white overflow-x-hidden">
+<!-- Slim Minimal Sidebar -->
+<aside class="fixed left-0 top-0 h-screen w-20 bg-white border-r border-glass-stroke z-50 flex flex-col items-center py-10">
+<div class="mb-12">
+<div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white">
+<span class="material-symbols-outlined !text-xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors relative group" href="#">
+<span class="material-symbols-outlined !text-2xl">grid_view</span>
+<div class="absolute left-14 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Dashboard</div>
+</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors group relative" href="#">
+<span class="material-symbols-outlined !text-2xl">school</span>
+<div class="absolute left-14 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Academia</div>
+</a>
+<a class="text-primary group relative" href="#">
+<span class="material-symbols-outlined !text-2xl" style="font-variation-settings: 'FILL' 1;">group</span>
+<div class="absolute left-14 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Students</div>
+</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors group relative" href="#">
+<span class="material-symbols-outlined !text-2xl">analytics</span>
+<div class="absolute left-14 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Analytics</div>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-6">
+<div class="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center text-on-surface-variant cursor-pointer hover:bg-surface-bg transition-colors">
+<span class="material-symbols-outlined !text-xl">settings</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-neon-purple flex items-center justify-center text-white font-bold text-xs shadow-md">
+            AR
+        </div>
+</div>
+</aside>
+<!-- Main Space -->
+<main class="ml-20 min-h-screen">
+<div class="max-w-[1200px] mx-auto px-16 py-20">
+<!-- Header -->
+<header class="mb-24 flex justify-between items-start">
+<div>
+<h1 class="font-headline text-5xl font-light tracking-tight text-on-surface mb-3">
+                    Gestión de <span class="font-black text-primary">Admin</span>
+</h1>
+<p class="text-on-surface-variant text-lg font-light tracking-wide">Control jerárquico y auditoría de seguridad centralizada.</p>
+</div>
+<div class="flex gap-4 items-center">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/40 group-focus-within:text-primary transition-colors">search</span>
+<input class="pl-10 pr-4 py-2 bg-transparent border-none focus:ring-0 text-sm w-48 transition-all focus:w-64" placeholder="Buscar..." type="text"/>
+</div>
+<button class="px-8 py-3 bg-on-surface text-white rounded-full font-medium text-sm tracking-wide hover:bg-primary transition-all shadow-xl shadow-on-surface/5">
+                    Nuevo Administrador
+                </button>
+</div>
+</header>
+<!-- Main Layout: Open & Clean -->
+<div class="grid grid-cols-12 gap-16">
+<!-- Left Side: Administrator List -->
+<section class="col-span-12 lg:col-span-8">
+<div class="flex justify-between items-baseline mb-12">
+<h2 class="text-xs font-bold uppercase tracking-[0.3em] text-on-surface-variant">Equipo Activo</h2>
+<span class="text-[10px] font-bold text-on-surface-variant/40 tracking-[0.1em]">4 USUARIOS</span>
+</div>
+<div class="space-y-2">
+<!-- User 1 -->
+<div class="group flex items-center justify-between py-6 px-4 rounded-3xl hover:bg-white transition-all">
+<div class="flex items-center gap-6">
+<img alt="Elena" class="w-12 h-12 rounded-2xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_wZhtgF0BQj2DzXernjtzuK2QEcINWt3qI7xiJSMhatVnneaJHAbXt-NRhi3IDVbH7ZsVxBMINhWdAwRBXNcjZTXpDrv5U2WXyV9naQjexcKoKksYsbQ0opj5e3Q4CQ5TgoN7dqqXFJ29BSQSF5RDcjBKncXUQCzQzoO6TFgu4WQmLgr1k2YmSiVeXgy8Sww6xK8MVAlrlUkD9EXI1iieQzPoPkb3Ze1Ok534INh3DiW0qn5CevNoabZsKlmrIk4lWdCbr681JZi2"/>
+<div>
+<p class="font-semibold text-on-surface group-hover:text-primary transition-colors">Elena Martínez</p>
+<p class="text-xs text-on-surface-variant/60 font-light mt-0.5">elena.m@eyeschool.edu</p>
+</div>
+</div>
+<div class="flex items-center gap-10">
+<span class="text-[10px] font-bold text-primary tracking-[0.2em] uppercase py-1 px-3 bg-primary/5 rounded-full">Académico</span>
+<div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-xl">shield_person</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined !text-xl">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- User 2 -->
+<div class="group flex items-center justify-between py-6 px-4 rounded-3xl hover:bg-white transition-all">
+<div class="flex items-center gap-6">
+<img alt="Carlos" class="w-12 h-12 rounded-2xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwleimD27HnZ0NJtXao-NXMf-vbo8ogJUEA1Asgs12NlFOr5XM6j_m6YSrpVdvVThrDKJxu0uIOBhZJVExXFwiNxz5vFCbN-EPH8JbEheTdhHsBEOP2Iq7PGOmTogjJw_RfQG8_viz--9cVnqvm-1dPxfmJqKtSgWtrS7-xW3lsz7lgLYF6h5YfFCRsjJlCU8eDVRGaBr_K5tYSLtI-e4wiRLhiArBpBhFsVG9Tn9gmwynL8haw2jzU3Y5WtAItPK0FDEYBgid_HRw"/>
+<div>
+<p class="font-semibold text-on-surface group-hover:text-primary transition-colors">Carlos Webber</p>
+<p class="text-xs text-on-surface-variant/60 font-light mt-0.5">c.webber@eyeschool.edu</p>
+</div>
+</div>
+<div class="flex items-center gap-10">
+<span class="text-[10px] font-bold text-electric-teal tracking-[0.2em] uppercase py-1 px-3 bg-electric-teal/5 rounded-full">Analista</span>
+<div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-xl">shield_person</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined !text-xl">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- User 3 -->
+<div class="group flex items-center justify-between py-6 px-4 rounded-3xl hover:bg-white transition-all">
+<div class="flex items-center gap-6">
+<img alt="Julian" class="w-12 h-12 rounded-2xl object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf5iST9xrLkkyqBcXvVRAOe2oFCTDHNQ6inGqVSJe7WHkf1kd5QLaiVUOOzMeT5ywtFn7tS8gvLFXOOovIPkjBNBn0BJ3zdoYCwPuKpMppiZryZVQQMqvouhyVvJuURxaE3U0yDyok_Vw5s1DQRQKYS_EOwmsjs_48snrsmky_wFlEiy8WmTuspPORQOtBSDqLHhjqME1S3eHBX7BXmqvxFW3TX8H98zP0obNTd4a0J9Xo1dt84YCq3t6rU2IZUGm2GYVo9IcZBvuj"/>
+<div>
+<p class="font-semibold text-on-surface group-hover:text-primary transition-colors">Julian Sky</p>
+<p class="text-xs text-on-surface-variant/60 font-light mt-0.5">j.sky@eyeschool.edu</p>
+</div>
+</div>
+<div class="flex items-center gap-10">
+<span class="text-[10px] font-bold text-neon-purple tracking-[0.2em] uppercase py-1 px-3 bg-neon-purple/5 rounded-full">Soporte</span>
+<div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined !text-xl">shield_person</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined !text-xl">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Side: Minimal Logs -->
+<section class="col-span-12 lg:col-span-4">
+<div class="flex justify-between items-baseline mb-12">
+<h2 class="text-xs font-bold uppercase tracking-[0.3em] text-on-surface-variant">Logs Recientes</h2>
+<button class="text-[10px] font-bold text-primary tracking-[0.1em] uppercase hover:underline">Ver todo</button>
+</div>
+<div class="space-y-10 pl-2">
+<!-- Log 1 -->
+<div class="relative group">
+<div class="absolute -left-3 top-2 w-1 h-1 rounded-full bg-primary ring-4 ring-primary/5"></div>
+<p class="text-xs font-bold text-on-surface-variant/40 mb-1 tracking-wider uppercase">Hace 12 min</p>
+<p class="text-sm font-medium text-on-surface">Cambio de Permisos</p>
+<p class="text-xs text-on-surface-variant font-light mt-1 leading-relaxed">Elena M. actualizó los roles del equipo de soporte académico.</p>
+</div>
+<!-- Log 2 -->
+<div class="relative group">
+<div class="absolute -left-3 top-2 w-1 h-1 rounded-full bg-electric-teal ring-4 ring-electric-teal/5"></div>
+<p class="text-xs font-bold text-on-surface-variant/40 mb-1 tracking-wider uppercase">Hace 45 min</p>
+<p class="text-sm font-medium text-on-surface">Nuevo Acceso</p>
+<p class="text-xs text-on-surface-variant font-light mt-1 leading-relaxed">Inicio de sesión exitoso desde terminal no reconocido en Madrid.</p>
+</div>
+<!-- Log 3 -->
+<div class="relative group">
+<div class="absolute -left-3 top-2 w-1 h-1 rounded-full bg-neon-purple ring-4 ring-neon-purple/5"></div>
+<p class="text-xs font-bold text-on-surface-variant/40 mb-1 tracking-wider uppercase">Hace 2 horas</p>
+<p class="text-sm font-medium text-on-surface">Exportación de Datos</p>
+<p class="text-xs text-on-surface-variant font-light mt-1 leading-relaxed">Alex Rivera generó el reporte anual consolidado.</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Role & Permissions: Open Layout -->
+<section class="mt-40">
+<div class="flex items-center gap-4 mb-16 px-4">
+<div class="w-12 h-12 rounded-2xl bg-primary/5 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined !text-2xl">verified_user</span>
+</div>
+<div>
+<h3 class="font-headline text-2xl font-bold tracking-tight">Control de Roles</h3>
+<p class="text-on-surface-variant text-sm font-light">Matriz de permisos acumulativos por jerarquía.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 px-4">
+<!-- Group 1 -->
+<div class="space-y-8">
+<h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-6">Usuarios</h4>
+<div class="space-y-5">
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">Crear / Editar</span>
+<input checked="" class="custom-checkbox" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">Eliminar masivo</span>
+<input checked="" class="custom-checkbox" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">Reset Password</span>
+<input checked="" class="custom-checkbox" type="checkbox"/>
+</label>
+</div>
+</div>
+<!-- Group 2 -->
+<div class="space-y-8">
+<h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-electric-teal mb-6">Finanzas</h4>
+<div class="space-y-5">
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">Ver Balances</span>
+<input checked="" class="custom-checkbox" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">Emitir Facturas</span>
+<input checked="" class="custom-checkbox" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">Reembolsos</span>
+<input class="custom-checkbox" type="checkbox"/>
+</label>
+</div>
+</div>
+<!-- Group 3 -->
+<div class="space-y-8">
+<h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-neon-purple mb-6">Contenido</h4>
+<div class="space-y-5">
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">Aprobar Cursos</span>
+<input checked="" class="custom-checkbox" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">Banear Material</span>
+<input checked="" class="custom-checkbox" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between group cursor-pointer">
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-on-surface transition-colors">Live Stream</span>
+<input class="custom-checkbox" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+</section>
+<!-- Minimal Footer -->
+<footer class="mt-48 py-12 text-center">
+<p class="text-[10px] font-bold text-on-surface-variant/20 uppercase tracking-[0.4em]">© 2026 EyeSchool · Creative Minimalist Admin</p>
+</footer>
+</div>
+</main>
+<script>
+    // Search input micro-interaction
+    const searchInput = document.querySelector('input[type="text"]');
+    searchInput.addEventListener('focus', () => {
+        searchInput.parentElement.classList.add('scale-[1.02]');
+    });
+    searchInput.addEventListener('blur', () => {
+        searchInput.parentElement.classList.remove('scale-[1.02]');
+    });
+</script>
+</body></html>

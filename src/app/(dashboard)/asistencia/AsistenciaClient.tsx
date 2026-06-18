@@ -59,7 +59,7 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
             placeholder="Buscar por nombre o código..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 min-w-48 px-4 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 min-w-48 px-4 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
         )}
 
@@ -68,14 +68,14 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
           type="date"
           value={fechaFiltro}
           onChange={(e) => setFechaFiltro(e.target.value)}
-          className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
 
         {/* Estado */}
         <select
           value={estadoFiltro}
           onChange={(e) => setEstadoFiltro(e.target.value as EstadoAsistencia | 'todos')}
-          className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         >
           {ESTADOS.map((e) => (
             <option key={e} value={e}>
@@ -94,7 +94,7 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
               Presente:   'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/30',
               Tarde:      'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-500/30',
               Ausente:    'bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-300 border-red-200 dark:border-red-500/30',
-              Excusa:     'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-500/30',
+              Excusa:     'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-primary/30',
               Suspensión: 'bg-slate-50 dark:bg-slate-500/10 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-500/30',
             }
             return (

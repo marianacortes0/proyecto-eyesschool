@@ -69,7 +69,7 @@ export default function ReportesClient({ role, idAdministrador }: Props) {
         {canCreate && (
           <button
             onClick={openCreate}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors"
+            className="px-5 py-2.5 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-xl transition-colors"
           >
             + Nuevo reporte
           </button>
@@ -103,12 +103,12 @@ export default function ReportesClient({ role, idAdministrador }: Props) {
           placeholder="Buscar por nombre..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          className="flex-1 min-w-[200px] px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 min-w-[200px] px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
         <select
           value={filterTipo}
           onChange={e => setFilterTipo(e.target.value)}
-          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">Todos los tipos</option>
           {TIPOS_REPORTE.map(t => <option key={t} value={t}>{t}</option>)}
@@ -116,7 +116,7 @@ export default function ReportesClient({ role, idAdministrador }: Props) {
         <select
           value={filterEstado}
           onChange={e => setFilterEstado(e.target.value)}
-          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">Todos los estados</option>
           {ESTADOS_REPORTE.map(e => <option key={e} value={e}>{e}</option>)}
@@ -234,7 +234,7 @@ function ReporteCard({ reporte: r, canUpdate, canDelete, canDownload, onEdit, on
         {canUpdate && (
           <button
             onClick={() => onEdit(r)}
-            className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-300 text-xs font-semibold transition-colors"
+            className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-blue-300 text-xs font-semibold transition-colors"
           >
             Editar
           </button>
@@ -336,7 +336,7 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
               placeholder="Ej: Asistencia Primer Trimestre 2026"
               value={nombreReporte}
               onChange={e => setNombreReporte(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
@@ -346,7 +346,7 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
               <select
                 value={tipoReporte}
                 onChange={e => setTipoReporte(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {TIPOS_REPORTE.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
@@ -357,7 +357,7 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
                 <select
                   value={estado}
                   onChange={e => setEstado(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   {ESTADOS_REPORTE.map(e => <option key={e} value={e}>{e}</option>)}
                 </select>
@@ -373,7 +373,7 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
                 required
                 value={fechaInicio}
                 onChange={e => setFechaInicio(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
             <div>
@@ -383,7 +383,7 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
                 required
                 value={fechaFin}
                 onChange={e => setFechaFin(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
@@ -426,7 +426,7 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
                   href={archivoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-blue-600 dark:text-blue-400 hover:underline truncate"
+                  className="text-xs text-primary dark:text-blue-400 hover:underline truncate"
                 >
                   {archivoNombre ?? 'Ver archivo actual'}
                 </a>
@@ -447,7 +447,7 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
             <button
               type="submit"
               disabled={saving || uploading}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
+              className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
             >
               {saving ? 'Guardando...' : mode === 'create' ? 'Crear' : 'Guardar'}
             </button>

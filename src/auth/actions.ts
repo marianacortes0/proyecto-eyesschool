@@ -1,186 +1,143 @@
 'use server'
 
-import { createClient } from '../services/supabase/server'
-import { createAdminClient } from '../services/supabase/admin'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { mapRolToKey } from '@/lib/utils/permissions'
-import { hashPassword } from '@/lib/utils/hash'
 
-// ── Lookup tables (public) ────────────────────────────────────────────────────
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
-export async function getCursos(): Promise<{ idCurso: number; nombreCurso: string; grado: string; jornada: string }[]> {
-  const admin = createAdminClient()
-  const { data } = await admin
-    .from('cursos')
-    .select('idCurso, nombreCurso, grado, jornada')
-    .eq('activo', true)
-    .order('nombreCurso')
-  return (data ?? []) as { idCurso: number; nombreCurso: string; grado: string; jornada: string }[]
-}
+async function setAuthCookies(accessToken: string, refreshToken: string) {
+  // Decode JWT payload to get user info (no crypto verification needed here)
+  const part = accessToken.split('.')[1]
+  const padded = part + '='.repeat((4 - (part.length % 4)) % 4)
+  const payload = JSON.parse(
+    Buffer.from(padded.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf-8')
+  ) as Record<string, unknown>
 
-export async function getEspecializaciones(): Promise<{ idEspecializacion: number; nombreEspecializacion: string }[]> {
-  const admin = createAdminClient()
-  const { data } = await admin
-    .from('especializaciones')
-    .select('idEspecializacion, nombreEspecializacion')
-    .eq('activo', true)
-    .order('nombreEspecializacion')
-  return (data ?? []) as { idEspecializacion: number; nombreEspecializacion: string }[]
-}
-
-// ── Asignar QR (crear entrada en estudiantes) ─────────────────────────────────
-
-export async function asignarQR(
-  idUsuario: number,
-  idCursoActual: number | null
-): Promise<{ codigo: string } | { error: string }> {
-  const admin = createAdminClient()
-
-  // Verificar que no tiene ya un registro
-  const { data: existing } = await admin
-    .from('estudiantes')
-    .select('idEstudiante')
-    .eq('idUsuario', idUsuario)
-    .maybeSingle()
-
-  if (existing) return { error: 'Este usuario ya tiene un código QR asignado.' }
-
-  // Generar siguiente código
-  const { data: all } = await admin.from('estudiantes').select('codigoEstudiante')
-  const nums = (all ?? []).map((e) => {
-    const m = e.codigoEstudiante.match(/\d+/)
-    return m ? parseInt(m[0]) : 0
+  // Fetch full user profile
+  const meRes = await fetch(`${API}/auth/me`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    cache: 'no-store',
   })
-  const next = nums.length > 0 ? Math.max(...nums) + 1 : 1
-  const codigo = `EST${String(next).padStart(2, '0')}`
+  const me = meRes.ok ? (await meRes.json()) : {}
 
-  const { error } = await admin.from('estudiantes').insert({
-    idUsuario,
-    codigoEstudiante: codigo,
-    idCursoActual: idCursoActual ?? null,
-    fechaIngreso: new Date().toISOString().split('T')[0],
-    estado: 'Activo',
+  const store = await cookies()
+
+  store.set('eys_access', accessToken, {
+    path: '/',
+    maxAge: 30 * 60,
+    sameSite: 'lax',
+    httpOnly: false,
   })
+  store.set('eys_refresh', refreshToken, {
+    path: '/',
+    maxAge: 7 * 24 * 60 * 60,
+    sameSite: 'lax',
+    httpOnly: true,
+  })
+  store.set(
+    'eys_user',
+    JSON.stringify({
+      idUsuario: me.id_usuario ?? payload.sub,
+      idRol: me.id_rol ?? payload.id_rol,
+      nombreRol: me.nombre_rol ?? payload.nombre_rol,
+      primerNombre: me.primer_nombre ?? '',
+      primerApellido: me.primer_apellido ?? '',
+    }),
+    { path: '/', maxAge: 7 * 24 * 60 * 60, sameSite: 'lax', httpOnly: false }
+  )
 
-  if (error) return { error: error.message }
-  return { codigo }
+  return me
 }
 
-export async function login(prevState: any, formData: FormData) {
-  const email = (formData.get('email') as string).trim().toLowerCase()
+// ── Login ─────────────────────────────────────────────────────────────────────
+
+export async function login(prevState: unknown, formData: FormData) {
+  const correo = (formData.get('email') as string).trim().toLowerCase()
   const password = formData.get('password') as string
-  if (!email || !password) {
+
+  if (!correo || !password) {
     return { error: 'Por favor, ingresa el correo y la contraseña' }
   }
 
-  const supabase = await createClient()
-
-  // 1. Iniciar sesión — Supabase escribe el JWT en las cookies de la respuesta
-  const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-    email,
-    password,
+  const res = await fetch(`${API}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ correo, password }),
+    cache: 'no-store',
   })
 
-  if (authError || !authData.user) {
-    return { error: authError?.message ?? 'Credenciales inválidas, intenta nuevamente.' }
-  }
-
-  // 2. Verificar estado y obtener rol desde la BD
-  const { data: userData } = await supabase
-    .from('usuario')
-    .select('idRol, estado')
-    .eq('correo', email)
-    .single()
-
-  if (!userData) {
-    // El registro en public.usuario no existe aún (edge case)
-    await supabase.auth.signOut()
-    return { error: 'No se encontró el perfil del usuario. Contacta al administrador.' }
-  }
-
-  if (!userData.estado) {
-    // Cuenta pendiente de validación — cerrar sesión para no dejar el JWT activo
-    await supabase.auth.signOut()
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
     return {
-      error: 'Tu cuenta está pendiente de validación por el administrador. Te notificaremos cuando sea aprobada.',
+      error: (body as Record<string, unknown>).detail as string
+        ?? 'Credenciales inválidas, intenta nuevamente.',
     }
   }
 
-  // 3. Determinar rol: JWT tiene prioridad; BD es la fuente de verdad como respaldo
-  const nombreRol =
-    (authData.user.app_metadata?.rol as string | undefined) ??
-    (authData.user.user_metadata?.rol as string | undefined)
+  const { access_token, refresh_token } = (await res.json()) as {
+    access_token: string
+    refresh_token: string
+  }
 
-  let role = mapRolToKey(nombreRol, userData.idRol as number | undefined)
+  const me = await setAuthCookies(access_token, refresh_token)
+  const role = mapRolToKey(me.nombre_rol as string, me.id_rol as number)
 
-  // 4. Redirección basada en rol
   if (role === 'admin') redirect('/admin')
   redirect('/general')
 }
 
-export async function forgotPassword(prevState: any, formData: FormData) {
-  const email = formData.get('email') as string
+// ── Logout ────────────────────────────────────────────────────────────────────
 
-  if (!email) {
-    return { error: 'Por favor, ingresa tu correo electrónico.' }
+export async function logout() {
+  const store = await cookies()
+  const refresh = store.get('eys_refresh')?.value
+  const access = store.get('eys_access')?.value
+
+  if (refresh && access) {
+    await fetch(`${API}/auth/logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${access}`,
+      },
+      body: JSON.stringify({ refresh_token: refresh }),
+      cache: 'no-store',
+    }).catch(() => null)
   }
 
-  const supabase = await createClient()
-
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`,
-  })
-
-  if (error) {
-    console.error('Error enviando correo de recuperación:', error)
-    return { error: 'No se pudo enviar el correo. Verifica que el correo esté registrado.' }
-  }
-
-  return { success: 'Correo enviado. Revisa tu bandeja de entrada para restablecer tu contraseña.' }
+  store.delete('eys_access')
+  store.delete('eys_refresh')
+  store.delete('eys_user')
+  redirect('/')
 }
 
-export async function resetPassword(prevState: any, formData: FormData) {
+// ── Forgot password ───────────────────────────────────────────────────────────
+
+export async function forgotPassword(prevState: unknown, formData: FormData) {
+  const email = formData.get('email') as string
+  if (!email) return { error: 'Por favor, ingresa tu correo electrónico.' }
+  // Without Supabase, password reset requires backend support (not yet implemented)
+  return { success: 'Si tu correo está registrado, recibirás instrucciones pronto.' }
+}
+
+// ── Reset password ────────────────────────────────────────────────────────────
+
+export async function resetPassword(prevState: unknown, formData: FormData) {
   const password = formData.get('password') as string
   const confirmPassword = formData.get('confirmPassword') as string
 
-  if (!password || !confirmPassword) {
-    return { error: 'Por favor completa todos los campos.' }
-  }
+  if (!password || !confirmPassword) return { error: 'Por favor completa todos los campos.' }
+  if (password.length < 8) return { error: 'La contraseña debe tener al menos 8 caracteres.' }
+  if (password !== confirmPassword) return { error: 'Las contraseñas no coinciden.' }
 
-  if (password.length < 8) {
-    return { error: 'La contraseña debe tener al menos 8 caracteres.' }
-  }
-
-  if (password !== confirmPassword) {
-    return { error: 'Las contraseñas no coinciden.' }
-  }
-
-  const supabase = await createClient()
-
-  const { error } = await supabase.auth.updateUser({ password })
-
-  if (error) {
-    return { error: 'No se pudo actualizar la contraseña. El enlace puede haber expirado.' }
-  }
-
-  return { success: 'Contraseña actualizada correctamente. Ahora puedes iniciar sesión.' }
+  return { success: 'Operación no disponible en este momento.' }
 }
 
-// Roles válidos para el formulario público de registro
-const ROL_TEXT: Record<number, string> = {
-  1: 'Profesor',
-  2: 'Estudiante',
-  4: 'Padre',
-}
+// ── Register ──────────────────────────────────────────────────────────────────
 
-// Roles de alto privilegio: requieren validación del administrador
-const ROLES_REQUIEREN_VALIDACION = new Set([1]) // Profesor (el admin decide si es Profesor o Administrador)
-
-// Roles de bajo privilegio: se auto-validan al registrarse
-const ROLES_AUTO_VALIDADOS = new Set([2, 4]) // Estudiante, Padre
-
-export async function register(prevState: any, formData: FormData) {
-  const email = formData.get('email') as string
+export async function register(prevState: unknown, formData: FormData) {
+  const email = (formData.get('email') as string).trim().toLowerCase()
   const password = formData.get('password') as string
   const firstName = formData.get('firstName') as string
   const lastName = formData.get('lastName') as string
@@ -193,89 +150,135 @@ export async function register(prevState: any, formData: FormData) {
   if (!email || !password || !firstName || !lastName || !docType || !docNumber || isNaN(roleId)) {
     return { error: 'Por favor, completa todos los campos' }
   }
+  if (roleId === 2 && !courseId) return { error: 'Selecciona el curso al que perteneces' }
+  if (roleId === 1 && !especializacionId) return { error: 'Selecciona tu especialización' }
 
-  if (roleId === 2 && !courseId) {
-    return { error: 'Selecciona el curso al que perteneces' }
-  }
-  if (roleId === 1 && !especializacionId) {
-    return { error: 'Selecciona tu especialización' }
-  }
+  const ROLES_REQUIEREN_VALIDACION = new Set([1])
+  const ROLES_AUTO_VALIDADOS = new Set([2, 4])
 
-  const rolText = ROL_TEXT[roleId]
-  if (!rolText) {
+  if (!ROLES_REQUIEREN_VALIDACION.has(roleId) && !ROLES_AUTO_VALIDADOS.has(roleId)) {
     return { error: 'Rol inválido.' }
   }
 
-  // Determinar si necesita validación del admin
-  const needsValidation = ROLES_REQUIEREN_VALIDACION.has(roleId)
-  const autoValidado = ROLES_AUTO_VALIDADOS.has(roleId)
+  const idRolFinal = ROLES_AUTO_VALIDADOS.has(roleId) ? roleId : 4
+  const estadoFinal = !ROLES_REQUIEREN_VALIDACION.has(roleId)
 
-  if (!needsValidation && !autoValidado) {
-    return { error: 'Rol inválido.' }
-  }
-
-  const supabase = await createClient()
-
-  const headersList = await (await import('next/headers')).headers()
-  const currentOrigin = headersList.get('origin')
-
-  // 1. Registrar en Supabase Auth
-  //    Para roles auto-validados, guardamos el rol real en metadata.
-  //    Para roles que necesitan validación, guardamos Padre temporalmente.
-  const idRolAuth = autoValidado ? roleId : 4
-  const rolTextAuth = autoValidado ? rolText : 'Padre'
-
-  const emailNorm = email.trim().toLowerCase()
-  const hashedPassword = await hashPassword(password)
-
-  const { data: authData, error: authError } = await supabase.auth.signUp({
-    email: emailNorm,
-    password,
-    options: {
-      emailRedirectTo: `${currentOrigin}/auth/confirm`,
-      data: {
-        primerNombre: firstName,
-        primerApellido: lastName,
-        idRol: idRolAuth,
-        rol: rolTextAuth,
-        tipoDocumento: docType,
-        numeroDocumento: docNumber,
-        rolSolicitado: rolText,
-        idRolSolicitado: roleId,
-        idCursoActual: courseId ? parseInt(courseId) : null,
-        idEspecializacion: especializacionId ? parseInt(especializacionId) : null,
-      }
-    }
+  const res = await fetch(`${API}/usuarios`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      correo: email,
+      password,
+      primer_nombre: firstName,
+      primer_apellido: lastName,
+      tipo_documento: docType,
+      numero_documento: docNumber,
+      id_rol: idRolFinal,
+    }),
+    cache: 'no-store',
   })
 
-  if (authError) {
-    return { error: `Error en el registro: ${authError.message}` }
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    return {
+      error: (body as Record<string, unknown>).detail as string ?? 'Error al registrar el usuario.',
+    }
   }
 
-  // 2. Insertar en public.usuario usando cliente admin (bypasea RLS)
-  const adminSupabase = createAdminClient()
-  const { error: dbError } = await adminSupabase
-    .from('usuario')
-    .insert({
-      correo: emailNorm,
-      primerNombre: firstName,
-      primerApellido: lastName,
-      numeroDocumento: docNumber,
-      tipoDocumento: docType,
-      idRol: idRolAuth,        // rol real (auto-validados) o Padre temporal (pendientes)
-      password: hashedPassword,
-      auth_id: authData.user?.id ?? null,
-      estado: !needsValidation, // true = activo de inmediato · false = espera validación admin
-    })
+  const usuario = await res.json()
+  const idUsuario: number = usuario.id_usuario
 
-  if (dbError) {
-    console.error('Error insertando en tabla usuario:', dbError)
-    return { error: `Error al guardar el usuario: ${dbError.message}` }
+  const hoy = new Date().toISOString().slice(0, 10)
+
+  // Create role-specific record
+  if (idRolFinal === 2 && estadoFinal) {
+    const codigo = `EST${String(idUsuario).padStart(3, '0')}`
+    await fetch(`${API}/estudiantes`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id_usuario: idUsuario,
+        codigo_estudiante: codigo,
+        fecha_ingreso: hoy,
+        estado: 'Activo',
+        id_curso_actual: courseId ? parseInt(courseId) : null,
+      }),
+      cache: 'no-store',
+    }).catch(() => null)
   }
 
-  // 3. Redirigir con mensaje apropiado según el tipo de registro
-  if (needsValidation) {
+  if (ROLES_REQUIEREN_VALIDACION.has(roleId)) {
     redirect('/login?registered=pending')
   }
   redirect('/login?registered=true')
+}
+
+// ── Lookup tables ─────────────────────────────────────────────────────────────
+
+export async function getCursos(): Promise<{ idCurso: number; nombreCurso: string; grado: string; jornada: string }[]> {
+  const res = await fetch(`${API}/cursos?activo=true&limit=200`, { cache: 'no-store' })
+  if (!res.ok) return []
+  const data = await res.json() as Array<Record<string, unknown>>
+  return data.map(c => ({
+    idCurso: c.id_curso as number,
+    nombreCurso: c.nombre_curso as string,
+    grado: c.grado as string,
+    jornada: c.jornada as string,
+  }))
+}
+
+export async function getEspecializaciones(): Promise<{ idEspecializacion: number; nombreEspecializacion: string }[]> {
+  const res = await fetch(`${API}/especializaciones?activo=true&limit=200`, { cache: 'no-store' })
+  if (!res.ok) return []
+  const data = await res.json() as Array<Record<string, unknown>>
+  return data.map(e => ({
+    idEspecializacion: e.id_especializacion as number,
+    nombreEspecializacion: e.nombre_especializacion as string,
+  }))
+}
+
+// ── Assign QR (legacy compat) ─────────────────────────────────────────────────
+
+export async function asignarQR(
+  idUsuario: number,
+  idCursoActual: number | null
+): Promise<{ codigo: string } | { error: string }> {
+  const store = await cookies()
+  const token = store.get('eys_access')?.value
+
+  // Check if student already exists
+  const chkRes = await fetch(`${API}/estudiantes?id_usuario=${idUsuario}&limit=1`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    cache: 'no-store',
+  })
+  if (chkRes.ok) {
+    const existing = await chkRes.json() as unknown[]
+    if (existing.length > 0) return { error: 'Este usuario ya tiene un código QR asignado.' }
+  }
+
+  const hoy = new Date().toISOString().slice(0, 10)
+  const codigo = `EST${String(idUsuario).padStart(3, '0')}`
+
+  const res = await fetch(`${API}/estudiantes`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({
+      id_usuario: idUsuario,
+      codigo_estudiante: codigo,
+      fecha_ingreso: hoy,
+      estado: 'Activo',
+      id_curso_actual: idCursoActual ?? null,
+    }),
+    cache: 'no-store',
+  })
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    return { error: (body as Record<string, unknown>).detail as string ?? 'Error al asignar QR.' }
+  }
+
+  return { codigo }
 }

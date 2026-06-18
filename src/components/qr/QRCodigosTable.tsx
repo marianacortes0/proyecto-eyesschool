@@ -42,7 +42,7 @@ function DownloadButton({ codigo }: { codigo: CodigoQRConEstudiante }) {
       onClick={handleDownload}
       disabled={downloading}
       title="Descargar QR"
-      className="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors disabled:opacity-40"
+      className="p-1.5 rounded-lg text-slate-500 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors disabled:opacity-40"
     >
       {downloading ? '⏳' : '⬇'}
     </button>
@@ -151,7 +151,7 @@ export default function QRCodigosTable({ codigos, onEdit, onToggle, onDelete, on
                     <button
                       onClick={() => onEdit(c)}
                       title="Editar"
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
+                      className="p-1.5 rounded-lg text-slate-500 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
                     >
                       ✏️
                     </button>

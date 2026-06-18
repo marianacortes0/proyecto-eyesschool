@@ -123,6 +123,9 @@ export async function fetchDocenteStats(db: SupabaseClient, idUsuario: number): 
     promedioNotas:       calcPromedio(notas),
     aprobacion:          calcAprobacion(notas),
     estudiantesCount:    (estudiantesRes as any).count ?? 0,
+    cursosAsignados:     0,
+    notasHoy:            0,
+    asistenciasHoy:      0,
     novedadesPendientes: (novedadesRes as any).count ?? 0,
     notasPorPeriodo:     groupNotasByPeriodo(notas),
     horariosHoy,
@@ -135,7 +138,7 @@ export async function fetchDocenteStats(db: SupabaseClient, idUsuario: number): 
 }
 
 function emptyDocenteStats(): DocenteStats {
-  return { promedioNotas: 0, aprobacion: 0, estudiantesCount: 0, novedadesPendientes: 0, notasPorPeriodo: [], horariosHoy: [], topEstudiantes: [], distribucionNotas: [] }
+  return { promedioNotas: 0, aprobacion: 0, estudiantesCount: 0, cursosAsignados: 0, notasHoy: 0, asistenciasHoy: 0, novedadesPendientes: 0, notasPorPeriodo: [], horariosHoy: [], topEstudiantes: [], distribucionNotas: [] }
 }
 
 // ── ESTUDIANTE ────────────────────────────────────────────────────────────────
@@ -176,6 +179,7 @@ export async function fetchEstudianteStats(db: SupabaseClient, idUsuario: number
     aprobacion:           calcAprobacion(notas),
     porcentajeAsistencia: pctAsistencia,
     totalAsistencias:     asistencias.length,
+    periodoActual:        0,
     novedadesActivas:     novedades.filter((n: any) => n.estado !== 'Cerrada' && n.estado !== 'Resuelta').length,
     notasPorMateria:      Object.entries(materiaMap).map(([id, { nombre, ns }]) => ({
       idMateria:     Number(id),
@@ -195,7 +199,7 @@ export async function fetchEstudianteStats(db: SupabaseClient, idUsuario: number
 }
 
 function emptyEstudianteStats(): EstudianteStats {
-  return { promedioGeneral: 0, aprobacion: 0, porcentajeAsistencia: 0, totalAsistencias: 0, novedadesActivas: 0, notasPorMateria: [], notasPorPeriodo: [], asistenciaEstados: [], novedadesRecientes: [] }
+  return { promedioGeneral: 0, aprobacion: 0, porcentajeAsistencia: 0, totalAsistencias: 0, periodoActual: 0, novedadesActivas: 0, notasPorMateria: [], notasPorPeriodo: [], asistenciaEstados: [], novedadesRecientes: [] }
 }
 
 // ── PADRE ─────────────────────────────────────────────────────────────────────

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EyeSchool | Gestión de Estudiantes</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;600;700;900&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#630ed4",
+                    "neon-purple": "#A855F7",
+                    "electric-teal": "#2DD4BF",
+                    "surface": "#ffffff",
+                    "surface-bg": "#fafafa",
+                    "on-surface": "#0b1c30",
+                    "on-surface-variant": "#64748b",
+                    "glass-stroke": "rgba(0, 0, 0, 0.05)",
+                    "primary-container": "#f5f0ff",
+                    "error": "#ba1a1a",
+            },
+            "borderRadius": {
+                    "super": "2rem",
+                    "xl": "1rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Hanken Grotesk"],
+                    "body": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+        .minimal-card {
+            background: #ffffff;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            cursor: default;
+        }
+    </style>
+</head>
+<body class="bg-surface-bg text-on-surface font-body selection:bg-neon-purple selection:text-white overflow-x-hidden">
+<!-- Slim Minimal Sidebar (matching SCREEN_16) -->
+<aside class="fixed left-0 top-0 h-screen w-20 bg-white border-r border-glass-stroke z-50 flex flex-col items-center py-10">
+<div class="mb-12">
+<div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white">
+<span class="material-symbols-outlined !text-xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors group relative" href="#">
+<span class="material-symbols-outlined !text-2xl">grid_view</span>
+<div class="absolute left-14 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Dashboard</div>
+</a>
+<a class="text-primary relative group" href="#">
+<span class="material-symbols-outlined !text-2xl" style="font-variation-settings: 'FILL' 1;">group</span>
+<div class="absolute left-14 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Students</div>
+</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors group relative" href="#">
+<span class="material-symbols-outlined !text-2xl">school</span>
+<div class="absolute left-14 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Academia</div>
+</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors group relative" href="#">
+<span class="material-symbols-outlined !text-2xl">analytics</span>
+<div class="absolute left-14 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Analytics</div>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-6">
+<div class="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center text-on-surface-variant cursor-pointer hover:bg-surface-bg transition-colors">
+<span class="material-symbols-outlined !text-xl">settings</span>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary p-0.5 overflow-hidden">
+<img alt="Admin" class="w-full h-full object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBP25sI4s9IPzDxqEpfDUTN58vXTlJkahjmo0gaFzFsqkDyTvUmtcdwHCkFcJM7Dw5Wk4K_wofEmz83rW2-CsH657qBIk2k4TcBW9ZtysU4yPlQobEe4ck4KEiuxx8M6CF1n77xXLA92fDU3ZgTxT-NeAUqdphJPBDce-RMqcshTWR79rli_pFrp-KleYQzRTIETpLKn1_4u6a3A9NSANkqRKJpP7LJRp3FxsjmClemc0lCyx3f8BBjkdtwsK5VdpoH-JKcRY3xE4l"/>
+</div>
+</div>
+</aside>
+<!-- Main Space -->
+<main class="ml-20 min-h-screen">
+<div class="max-w-[1240px] mx-auto px-16 py-20">
+<!-- Header -->
+<header class="mb-32 flex justify-between items-start">
+<div>
+<h1 class="font-headline text-5xl font-light tracking-tight text-on-surface mb-4">
+                    Gestión de <span class="font-black text-primary">Estudiantes</span>
+</h1>
+<p class="text-on-surface-variant text-lg font-light tracking-wide">Visualiza y gestiona el progreso de tus 1,240 alumnos activos.</p>
+</div>
+<div class="flex gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant !text-lg">search</span>
+<input class="pl-11 pr-6 py-3 bg-white border border-glass-stroke rounded-full text-sm font-light focus:ring-1 focus:ring-primary/20 outline-none w-64 transition-all focus:w-80" placeholder="Buscar..." type="text"/>
+</div>
+<button class="px-8 py-3 bg-on-surface text-white rounded-full font-medium text-sm tracking-wide hover:bg-primary transition-all shadow-xl shadow-on-surface/5 flex items-center gap-2">
+<span class="material-symbols-outlined !text-lg">add</span>
+                    Nuevo Alumno
+                </button>
+</div>
+</header>
+<!-- Asymmetrical Layout Section -->
+<div class="relative min-h-[600px] mb-40">
+<!-- Summary Card -->
+<div class="absolute top-0 left-0 w-[40%] minimal-card p-12 rounded-super border border-glass-stroke z-10 hover:shadow-2xl hover:shadow-primary/5">
+<p class="text-xs uppercase tracking-[0.2em] text-on-surface-variant mb-10 font-bold">Resumen General</p>
+<div class="space-y-8">
+<div class="flex items-end justify-between">
+<div>
+<div class="text-5xl font-headline font-black mb-1">1,240</div>
+<p class="text-sm text-on-surface-variant font-light">Total Alumnos</p>
+</div>
+<div class="text-electric-teal text-xs font-bold pb-2">+4% MES</div>
+</div>
+<div class="pt-6 border-t border-glass-stroke flex items-center justify-between">
+<div>
+<div class="text-3xl font-headline font-bold">94.2%</div>
+<p class="text-xs text-on-surface-variant font-light">Asistencia Media</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-primary/5 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Info: Upcoming Class -->
+<div class="absolute top-20 right-0 w-[45%] minimal-card p-10 rounded-super border border-glass-stroke floating-element" style="animation-delay: 1s;">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant mb-6">Próxima Clase Magistral</p>
+<h3 class="font-headline text-2xl font-bold text-on-surface mb-2">Arquitectura Digital Sostenible</h3>
+<div class="flex items-center gap-4 text-sm text-on-surface-variant font-light mb-8">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined !text-sm">location_on</span> Aula 402</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined !text-sm">schedule</span> 14:30 PM</span>
+</div>
+<div class="flex -space-x-3 items-center">
+<img alt="Student" class="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHmXEU8KQ5GJ7juVvBl40Jx3q9JxydlAlwIgSg1bo3MO8WuuysdvUeNa1Nck_bvDbNRur6Wuf-TlukkRuzcsyMmJxKWMpPf25kvNvDeUvXUsU1E5fNF4fKBAf-ip6yQqXzHBFEVTf_mVGrRAUadDKwAv-jSTV0pmfLu_JVZQ4QWlPN_qbvvArvlP4hdGoh_XtzbLPkthqT12Q23dZqTgWvbwv4RcfY-G1nebFZLN06mkTXNvQxFw0bq2OF57x_sPI8bUGM0DKExnsk"/>
+<img alt="Student" class="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfpmlJZR9qnV9O_6pwf5KfcFUvIjahD-Zw0CLCsyYn9K14AymaZJqTyNT832ClscI6xp5Gna-FE_XXN1Mp-33tfqnoel_woByX8q8qpiA9LPZJli7qlL3sz69uTmCcGoMpztGx5RXIF2madJu0VuPHowVmN8AGw2a08OuMlAQj3fcRhKZryYGpcrqF2hSpUrCY8TMEbaXlY1NCCz9b4vaSu-8nuoIP_z7DkckHaeijT7_s_sjHL_1xwkQWm6CeqcMBihNS2YZQUC2S"/>
+<img alt="Student" class="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsa7m1DAz5K7-HfiUacWFqcRQkiETRHB0jaQe1z3PAnZajS_b2rGT-wTM47-S5nDEVyAp0bDJr9lLqBU55d7NoDq4w_9NYJ0Y6cBeV7rH8O7ZG_iIEN1CPGaUOd0co0wBRHw-zSCYli0eeokbZRvoFJFhzhUF3MbHgnI98bBwfjVJOiN96jVP_Aro5QkG9w5iSQ6VB7p499bAQuSo4tUM7iBNl4Yse7TIUIT4sqBpihlOG7sqLWwKrW7CHV5--mB0K4SqHNQHH7GgD"/>
+<div class="w-10 h-10 rounded-full border-2 border-white bg-primary text-white flex items-center justify-center text-[10px] font-bold">+18</div>
+</div>
+</div>
+</div>
+<!-- Student List: Refined Minimal Style -->
+<section class="mt-24">
+<div class="flex justify-between items-center mb-16 px-4">
+<h3 class="font-headline text-2xl font-bold tracking-tight">Lista de Alumnos</h3>
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-on-surface-variant/40 tracking-widest uppercase">Ordenar por:</span>
+<select class="bg-transparent border-none text-xs font-bold text-primary focus:ring-0 cursor-pointer">
+<option>Reciente</option>
+<option>Nombre</option>
+<option>Promedio</option>
+</select>
+</div>
+<a class="text-xs font-bold text-on-surface-variant/40 tracking-[0.2em] uppercase hover:text-primary transition-colors" href="#">Ver Todo</a>
+</div>
+</div>
+<div class="space-y-2">
+<!-- Header row for context -->
+<div class="flex items-center px-10 py-4 text-[10px] font-bold text-on-surface-variant/30 uppercase tracking-[0.2em]">
+<div class="w-1/3">Estudiante</div>
+<div class="w-1/4">ID Matrícula</div>
+<div class="w-1/6">Estado</div>
+<div class="w-1/6 text-center">Promedio</div>
+<div class="flex-1"></div>
+</div>
+<!-- Row 1 -->
+<div class="group flex items-center p-8 rounded-[2rem] hover:bg-white transition-all border border-transparent hover:border-glass-stroke">
+<div class="w-1/3 flex items-center gap-6">
+<img alt="Mateo Rivera" class="w-14 h-14 rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYXF02ioC0kqKKheu-lYCV4ARUDbCAoh3VQ9goc5GI1puys9Tf5FHRDJ0TzXBYIiiPRM3G8jOIN-7bTjuD5V__KquRXPxlkx85FOxM8WaYP8e4nW-0Wantp8gITg3b8IkdsxXCDwXa5rWCN8l7UR8HRCfywt4st1h1uWs5mK5iwDgG0eGEh2sTsreXnA3ZK1M5eUvvgsXXkffG5-QW2BiILh0Ctrb7a-NPfAYlJw3XQ6Fb8hFmUYom65nMUaTUL-QoWpUKSsN8k4_I"/>
+<div>
+<p class="font-medium text-on-surface group-hover:text-primary transition-colors">Mateo Rivera</p>
+<p class="text-xs text-on-surface-variant font-light mt-1">Diseño de Interacción</p>
+</div>
+</div>
+<div class="w-1/4 text-sm font-light text-on-surface-variant">#ES-2024-001</div>
+<div class="w-1/6 flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-electric-teal"></div>
+<span class="text-xs font-medium">Presente</span>
+</div>
+<div class="w-1/6 text-center">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-primary/5 text-primary">9.8</span>
+</div>
+<div class="flex-1 flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined !text-sm">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center hover:bg-error hover:text-white transition-all hover:border-error">
+<span class="material-symbols-outlined !text-sm">delete</span>
+</button>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="group flex items-center p-8 rounded-[2rem] hover:bg-white transition-all border border-transparent hover:border-glass-stroke">
+<div class="w-1/3 flex items-center gap-6">
+<img alt="Sofia Valentín" class="w-14 h-14 rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_1b-gkG2N2P6YVqZNrDW-uuk-mObtA_WWPMzrLPoaRqEFMsl7zSjhm4Dj3swr1iJGx5bXaK6-pj4O7T2Ek3cme3nrqKhElrhzV1IeFiMSaixD8ioDikBYuuQuW2JOeJ3DmnX9KpMcHVeqSwxNawOKYDkWmSr2vmQQCo1DLJrDv52h4hJJQEe9fR-CSM1N7L6s2Vm_p2djowqZcl_pnq5j22OT-PeuUvYKfYwBYbfqSXdXW_FGwfxYADAJRXksqDdaKoV0tgTUqemx"/>
+<div>
+<p class="font-medium text-on-surface group-hover:text-primary transition-colors">Sofia Valentín</p>
+<p class="text-xs text-on-surface-variant font-light mt-1">Ingeniería de Software</p>
+</div>
+</div>
+<div class="w-1/4 text-sm font-light text-on-surface-variant">#ES-2024-002</div>
+<div class="w-1/6 flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-orange-400"></div>
+<span class="text-xs font-medium">Retraso</span>
+</div>
+<div class="w-1/6 text-center">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-primary/5 text-primary">8.5</span>
+</div>
+<div class="flex-1 flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined !text-sm">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center hover:bg-error hover:text-white transition-all hover:border-error">
+<span class="material-symbols-outlined !text-sm">delete</span>
+</button>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="group flex items-center p-8 rounded-[2rem] hover:bg-white transition-all border border-transparent hover:border-glass-stroke">
+<div class="w-1/3 flex items-center gap-6">
+<img alt="Lucas Mendes" class="w-14 h-14 rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGK4SjsOVVMzHz5BIJZfwYylQcLLpa6UELgxaDejg9MwRfK4Jc3oePJ0HkZLhPlqu4IqZly0h_Spb-E3kN0PCmRFoPSNJ45D_Z6NfdbMi_gxkLWM6mAfvDXD0-zNUHXpkn-j3X57Ar35ayE7YP5r_9kDfOmdSn1-fGTpRQ1zIrCvt2E_PaNlErdk_VAnY8mHqzvHQdKTfCP1X1KDxxSu7IGTxIqrwRB-ohfkALAnI4XEcYsHR6RlAB_u-gFcSCSENMSKvgj7m-ntiL"/>
+<div>
+<p class="font-medium text-on-surface group-hover:text-primary transition-colors">Lucas Mendes</p>
+<p class="text-xs text-on-surface-variant font-light mt-1">Marketing Digital</p>
+</div>
+</div>
+<div class="w-1/4 text-sm font-light text-on-surface-variant">#ES-2024-005</div>
+<div class="w-1/6 flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-error"></div>
+<span class="text-xs font-medium">Ausente</span>
+</div>
+<div class="w-1/6 text-center">
+<span class="px-3 py-1 rounded-full text-xs font-bold bg-primary/5 text-primary">7.2</span>
+</div>
+<div class="flex-1 flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined !text-sm">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full border border-glass-stroke flex items-center justify-center hover:bg-error hover:text-white transition-all hover:border-error">
+<span class="material-symbols-outlined !text-sm">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-16 flex justify-center gap-4">
+<button class="w-12 h-12 rounded-full border border-glass-stroke flex items-center justify-center hover:bg-white transition-all">
+<span class="material-symbols-outlined !text-sm">chevron_left</span>
+</button>
+<button class="w-12 h-12 rounded-full bg-on-surface text-white flex items-center justify-center font-bold text-xs">1</button>
+<button class="w-12 h-12 rounded-full border border-glass-stroke flex items-center justify-center hover:bg-white transition-all font-bold text-xs text-on-surface-variant">2</button>
+<button class="w-12 h-12 rounded-full border border-glass-stroke flex items-center justify-center hover:bg-white transition-all font-bold text-xs text-on-surface-variant">3</button>
+<button class="w-12 h-12 rounded-full border border-glass-stroke flex items-center justify-center hover:bg-white transition-all">
+<span class="material-symbols-outlined !text-sm">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Minimal Footer -->
+<footer class="mt-48 py-12 text-center">
+<p class="text-[10px] font-bold text-on-surface-variant/30 uppercase tracking-[0.4em]">© 2026 EyeSchool · Radical Edition</p>
+</footer>
+</div>
+</main>
+<script>
+    // Add subtle parallax to floating elements based on mouse move
+    document.addEventListener('mousemove', (e) => {
+        const amount = 15;
+        const x = (e.clientX / window.innerWidth - 0.5) * amount;
+        const y = (e.clientY / window.innerHeight - 0.5) * amount;
+        
+        document.querySelectorAll('.floating-element').forEach(el => {
+            el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        });
+    });
+</script>
+</body></html>

@@ -37,7 +37,7 @@ export default function UsuariosFilters({
         </div>
         <button
           onClick={onNuevoUsuario}
-          className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-blue-500/30"
+          className="flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-blue-500/30"
         >
           <span className="text-lg leading-none">+</span>
           Nuevo Usuario
@@ -54,7 +54,7 @@ export default function UsuariosFilters({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Buscar por nombre, correo o documento..."
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#1a1a1a] text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#1a1a1a] text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
           />
         </div>
 
@@ -66,8 +66,8 @@ export default function UsuariosFilters({
               onClick={() => onFilterRolChange(f.value)}
               className={`px-3 py-2 rounded-xl text-sm font-semibold transition-all ${
                 filterRol === f.value
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
-                  : 'bg-white dark:bg-[#1a1a1a] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-blue-500'
+                  ? 'bg-primary text-white shadow-md shadow-blue-500/30'
+                  : 'bg-white dark:bg-[#1a1a1a] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-primary'
               }`}
             >
               {f.label}

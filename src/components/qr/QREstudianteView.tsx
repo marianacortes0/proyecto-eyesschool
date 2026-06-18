@@ -11,7 +11,7 @@ type Props = {
 const TIPO_INFO: Record<TipoQR, { label: string; color: string }> = {
   ingreso: { label: 'Código de Ingreso',           color: 'text-green-600 dark:text-green-400' },
   salida:  { label: 'Código de Salida',            color: 'text-orange-600 dark:text-orange-400' },
-  ambos:   { label: 'Código de Ingreso y Salida',  color: 'text-blue-600 dark:text-blue-400' },
+  ambos:   { label: 'Código de Ingreso y Salida',  color: 'text-primary dark:text-blue-400' },
 }
 
 function DownloadButton({ codigo }: { codigo: CodigoQRConEstudiante }) {
@@ -38,7 +38,7 @@ function DownloadButton({ codigo }: { codigo: CodigoQRConEstudiante }) {
     <button
       onClick={handleDownload}
       disabled={downloading}
-      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-semibold transition-colors"
+      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-60 text-white text-sm font-semibold transition-colors"
     >
       {downloading ? 'Descargando...' : 'Descargar QR'}
     </button>
@@ -83,7 +83,7 @@ export default function QREstudianteView({ codigo, loading }: Props) {
               <p className="font-bold text-slate-800 dark:text-white text-base">
                 {codigo.nombreCompleto}
               </p>
-              <p className="text-xs font-mono font-semibold text-blue-600 dark:text-blue-400">
+              <p className="text-xs font-mono font-semibold text-primary dark:text-blue-400">
                 {codigo.codigoEstudiante}
               </p>
               {codigo.curso && (

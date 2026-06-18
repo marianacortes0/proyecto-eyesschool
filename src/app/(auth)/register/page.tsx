@@ -1,19 +1,28 @@
+import Link from 'next/link'
 import { RegisterForm } from '@/components/auth/register-form'
 
 export default function RegisterPage() {
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-black">
-      {/* Background blobs */}
-      <div className="absolute top-0 -left-10 w-72 h-72 bg-blue-500/10 rounded-full mix-blend-multiply filter blur-[128px] animate-pulse"></div>
-      <div className="absolute -bottom-10 -right-10 w-72 h-72 bg-cyan-500/10 rounded-full mix-blend-multiply filter blur-[128px] animate-pulse" style={{ animationDelay: '2s' }}></div>
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-surface-bg font-body py-10 px-4">
+      {/* Halos suaves de fondo */}
+      <div className="absolute top-0 -left-20 w-80 h-80 bg-primary/10 rounded-full filter blur-[120px]" />
+      <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-neon-purple/10 rounded-full filter blur-[120px]" />
 
-      <div className="relative z-10 w-full flex justify-center px-4 py-6">
+      {/* Volver al inicio */}
+      <Link
+        href="/"
+        className="absolute top-6 left-6 z-20 inline-flex items-center gap-2 text-sm text-on-surface-variant hover:text-primary transition-colors"
+      >
+        <span className="material-symbols-outlined !text-lg">arrow_back</span>
+        Inicio
+      </Link>
+
+      <div className="relative z-10 w-full flex justify-center">
         <RegisterForm />
       </div>
 
-      <footer className="absolute bottom-4 w-full text-center text-[10px] text-slate-400 dark:text-slate-600">
-        &copy; {new Date().getFullYear()} EyesSchool.
+      <footer className="absolute bottom-4 w-full text-center text-[10px] font-bold text-on-surface-variant/40 uppercase tracking-[0.3em]">
+        © {new Date().getFullYear()} EyeSchool
       </footer>
     </div>
   )

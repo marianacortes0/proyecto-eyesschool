@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EyeSchool | Reportes e Insights</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .organic-line {
+            filter: drop-shadow(0 0 8px var(--tw-shadow-color));
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #eaddff; border-radius: 10px; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#8f1e62",
+                        "electric-teal": "#2DD4BF",
+                        "surface-bg": "#F8FAFC",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#732ee4",
+                        "on-surface-variant": "#4a4455",
+                        "primary-fixed-dim": "#d2bbff",
+                        "on-tertiary-fixed": "#3d0026",
+                        "on-primary-fixed-variant": "#5a00c6",
+                        "surface": "#f8f9ff",
+                        "on-primary-container": "#ede0ff",
+                        "surface-container": "#e5eeff",
+                        "tertiary-container": "#ae397b",
+                        "outline": "#7b7487",
+                        "primary-container": "#7c3aed",
+                        "on-primary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#eaf1ff",
+                        "neon-purple": "#A855F7",
+                        "primary": "#630ed4",
+                        "inverse-surface": "#213145",
+                        "on-tertiary-fixed-variant": "#85145a",
+                        "on-secondary-fixed": "#001f26",
+                        "surface-variant": "#d3e4fe",
+                        "on-secondary-container": "#006172",
+                        "tertiary-fixed-dim": "#ffafd3",
+                        "surface-container-low": "#eff4ff",
+                        "inverse-primary": "#d2bbff",
+                        "surface-bright": "#f8f9ff",
+                        "glass-stroke": "rgba(255, 255, 255, 0.4)",
+                        "chart-glow-purple": "rgba(124, 58, 237, 0.2)",
+                        "secondary": "#00687a",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-dim": "#cbdbf5",
+                        "tertiary-fixed": "#ffd8e7",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-background": "#0b1c30",
+                        "on-surface": "#0b1c30",
+                        "secondary-container": "#57dffe",
+                        "chart-glow-teal": "rgba(45, 212, 191, 0.2)",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#acedff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "outline-variant": "#ccc3d8",
+                        "on-primary-fixed": "#25005a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "headline-sm": ["Hanken Grotesk"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface-bg text-on-surface font-body-md min-h-screen overflow-x-hidden">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-64 bg-surface-container-low backdrop-blur-2xl border-r border-glass-stroke flex flex-col h-full py-6 z-50">
+<div class="px-6 mb-10">
+<h1 class="font-headline-sm text-headline-sm font-black text-primary">EyeSchool</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Admin Dashboard</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant mx-2 hover:bg-surface-container-high rounded-xl transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant mx-2 hover:bg-surface-container-high rounded-xl transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-label-md text-label-md">Academia</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant mx-2 hover:bg-surface-container-high rounded-xl transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant mx-2 hover:bg-surface-container-high rounded-xl transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 bg-primary-container text-on-primary-container rounded-xl mx-2 shadow-sm" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant mx-2 hover:bg-surface-container-high rounded-xl transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help_center">help_center</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full py-3 bg-gradient-to-r from-primary to-neon-purple text-white rounded-xl font-label-md text-label-md shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+                Upgrade Plan
+            </button>
+<button class="flex items-center gap-4 w-full px-4 py-4 mt-6 text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 p-margin-desktop min-h-screen">
+<!-- Header Section -->
+<header class="flex justify-between items-center mb-12">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-background">Reportes e Insights</h2>
+<p class="text-on-surface-variant font-body-md mt-1">Monitoreo de flujo de rendimiento institucional en tiempo real.</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-lowest border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Buscar métrica..." type="text"/>
+</div>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container transition-colors rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a modern university administrator in a brightly lit, minimalist office. The lighting is soft and even, highlighting a clean and technological workspace. The background features blurred glass partitions and a hint of a digital screen, emphasizing a forward-thinking educational environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTZsG37xYPMOl2tsBxgkABROfWH9gDV6VwItILR9rW3XPilkaYUn2sz__gwhFbK4oMKRrfwXuk4LOdxUazqf7-6DGlOscS1iqSLHrCN3RGyQsbg_v9g6eYnk9WzsZLs4BE3mucOFTmBRFGPuR3pu2Ih5EucHxBREF56BlAH7hbvWCoNo0uZuK7LXB1JwSZaAJofZgamxvfgvjh_Y_MnAr4VWwbAYMSw9eaP3tXUtMfcHj9Qwq7r1mHeNwZxMNhSZKI557HBxOpNZxb"/>
+</div>
+</div>
+</header>
+<!-- Asymmetric Bento Grid / Insights Flow -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Key Metric: Large Fluidity -->
+<div class="col-span-12 lg:col-span-8 flex flex-col">
+<div class="flex justify-between items-end mb-8">
+<div>
+<span class="font-label-md text-label-md text-neon-purple uppercase tracking-widest">Performance Flow</span>
+<h3 class="font-headline-md text-headline-md mt-2">Retención de Alumnos</h3>
+</div>
+<div class="text-right">
+<span class="font-headline-lg text-[48px] text-primary font-black leading-none">94.2%</span>
+<p class="text-electric-teal font-label-md text-label-md mt-2 flex items-center justify-end gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+                            +2.4% este mes
+                        </p>
+</div>
+</div>
+<!-- Main Organic Chart Canvas -->
+<div class="relative h-[400px] w-full flex items-center justify-center">
+<!-- Background Grid (Very Faint) -->
+<div class="absolute inset-0 grid grid-cols-6 gap-px opacity-5">
+<div class="border-r border-outline"></div>
+<div class="border-r border-outline"></div>
+<div class="border-r border-outline"></div>
+<div class="border-r border-outline"></div>
+<div class="border-r border-outline"></div>
+</div>
+<!-- Flow Visualization Placeholder (Custom SVG Animation) -->
+<div class="w-full h-full overflow-visible">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 800 400">
+<defs>
+<lineargradient id="flowGradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" style="stop-color:#630ed4;stop-opacity:0.2"></stop>
+<stop offset="50%" style="stop-color:#A855F7;stop-opacity:0.8"></stop>
+<stop offset="100%" style="stop-color:#2DD4BF;stop-opacity:0.4"></stop>
+</lineargradient>
+<filter id="glow">
+<fegaussianblur result="coloredBlur" stddeviation="4"></fegaussianblur>
+<femerge>
+<femergenode in="coloredBlur"></femergenode>
+<femergenode in="SourceGraphic"></femergenode>
+</femerge>
+</filter>
+</defs>
+<!-- Organic Fluid Line -->
+<path class="organic-line shadow-chart-glow-purple" d="M0,300 C100,280 200,350 300,250 C400,150 500,200 600,100 C700,0 800,50 800,50" fill="none" filter="url(#glow)" stroke="url(#flowGradient)" stroke-linecap="round" stroke-width="6">
+<animate attributename="d" dur="10s" repeatcount="indefinite" values="M0,300 C100,280 200,350 300,250 C400,150 500,200 600,100 C700,0 800,50 800,50;
+                                                   M0,310 C150,290 250,330 350,260 C450,190 550,210 650,110 C750,10 800,60 800,60;
+                                                   M0,300 C100,280 200,350 300,250 C400,150 500,200 600,100 C700,0 800,50 800,50"></animate>
+</path>
+<!-- Subtle Points -->
+<circle cx="300" cy="250" fill="#A855F7" filter="url(#glow)" r="4">
+<animate attributename="cy" dur="10s" repeatcount="indefinite" values="250;260;250"></animate>
+</circle>
+<circle cx="600" cy="100" fill="#2DD4BF" filter="url(#glow)" r="4">
+<animate attributename="cy" dur="10s" repeatcount="indefinite" values="100;110;100"></animate>
+</circle>
+</svg>
+</div>
+</div>
+</div>
+<!-- Side Cards - Asymmetric -->
+<div class="col-span-12 lg:col-span-4 space-y-12 pl-6 border-l border-surface-container">
+<!-- Insight 1 -->
+<div class="group cursor-pointer">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-2 block">Engagement Diario</span>
+<h4 class="font-headline-sm text-headline-sm mb-4 group-hover:text-primary transition-colors">Interacción en Plataforma</h4>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold">12.5k</span>
+<span class="text-on-surface-variant font-body-sm">usuarios activos</span>
+</div>
+<div class="mt-6 flex gap-1 h-12 items-end">
+<div class="w-full bg-surface-container-highest rounded-t-sm transition-all hover:bg-neon-purple" style="height: 40%"></div>
+<div class="w-full bg-surface-container-highest rounded-t-sm transition-all hover:bg-neon-purple" style="height: 60%"></div>
+<div class="w-full bg-primary rounded-t-sm" style="height: 90%"></div>
+<div class="w-full bg-surface-container-highest rounded-t-sm transition-all hover:bg-neon-purple" style="height: 50%"></div>
+<div class="w-full bg-surface-container-highest rounded-t-sm transition-all hover:bg-neon-purple" style="height: 75%"></div>
+<div class="w-full bg-surface-container-highest rounded-t-sm transition-all hover:bg-neon-purple" style="height: 45%"></div>
+<div class="w-full bg-surface-container-highest rounded-t-sm transition-all hover:bg-neon-purple" style="height: 80%"></div>
+</div>
+</div>
+<!-- Insight 2 -->
+<div class="animate-float">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-2 block">Carga de Datos</span>
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full border-4 border-electric-teal/20 border-t-electric-teal flex items-center justify-center">
+<span class="font-bold text-lg text-electric-teal">88%</span>
+</div>
+<div>
+<h4 class="font-body-lg font-semibold">Eficiencia de IA</h4>
+<p class="text-on-surface-variant text-sm">Procesamiento de notas optimizado.</p>
+</div>
+</div>
+</div>
+<!-- Insight 3 -->
+<div class="p-6 bg-surface-container-lowest rounded-3xl border border-glass-stroke shadow-sm hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-neon-purple mb-4" data-icon="lightbulb">lightbulb</span>
+<p class="font-body-md text-on-surface italic">"La mayoría de las deserciones ocurren en la semana 4 de cada semestre. Recomendamos activar el protocolo de alerta temprana."</p>
+</div>
+</div>
+</div>
+<!-- Bottom Insights Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-20 border-t border-surface-container pt-12">
+<div class="space-y-4">
+<span class="font-label-md text-label-md text-primary">Admisiones</span>
+<div class="flex items-end gap-3">
+<span class="font-headline-md text-headline-md">452</span>
+<span class="text-error font-label-sm text-label-sm mb-1">-1.2%</span>
+</div>
+<div class="w-full h-1 bg-surface-container overflow-hidden rounded-full">
+<div class="w-[65%] h-full bg-primary rounded-full"></div>
+</div>
+<p class="text-on-surface-variant text-sm">Objetivo trimestral: 700 nuevas matrículas.</p>
+</div>
+<div class="space-y-4">
+<span class="font-label-md text-label-md text-neon-purple">Becas Otorgadas</span>
+<div class="flex items-end gap-3">
+<span class="font-headline-md text-headline-md">$1.2M</span>
+<span class="text-electric-teal font-label-sm text-label-sm mb-1">+5.8%</span>
+</div>
+<div class="w-full h-1 bg-surface-container overflow-hidden rounded-full">
+<div class="w-[82%] h-full bg-neon-purple rounded-full"></div>
+</div>
+<p class="text-on-surface-variant text-sm">Distribución de fondos según mérito académico.</p>
+</div>
+<div class="space-y-4">
+<span class="font-label-md text-label-md text-electric-teal">Satisfacción Estudiantil</span>
+<div class="flex items-end gap-3">
+<span class="font-headline-md text-headline-md">4.8/5</span>
+<span class="text-electric-teal font-label-sm text-label-sm mb-1">Stable</span>
+</div>
+<div class="w-full h-1 bg-surface-container overflow-hidden rounded-full">
+<div class="w-[96%] h-full bg-electric-teal rounded-full"></div>
+</div>
+<p class="text-on-surface-variant text-sm">Basado en 2,400 encuestas de salida.</p>
+</div>
+</div>
+<!-- Visual Atmosphere Decorations -->
+<div class="fixed top-20 right-[-100px] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
+<div class="fixed bottom-[-100px] left-64 w-[400px] h-[400px] bg-electric-teal/5 rounded-full blur-[80px] pointer-events-none -z-10"></div>
+</main>
+<script>
+        // Micro-interactions for the chart or elements
+        document.addEventListener('mousemove', (e) => {
+            const glowElements = document.querySelectorAll('.organic-line');
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            
+            glowElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const distance = Math.sqrt(Math.pow(mouseX - centerX, 2) + Math.pow(mouseY - centerY, 2));
+                
+                if (distance < 300) {
+                    const intensity = 1 - (distance / 300);
+                    el.style.filter = `drop-shadow(0 0 ${10 + (intensity * 10)}px rgba(124, 58, 237, ${0.2 + intensity * 0.4}))`;
+                }
+            });
+        });
+
+        // Simulating data updates
+        setInterval(() => {
+            const values = document.querySelectorAll('.font-headline-lg');
+            values.forEach(val => {
+                if(Math.random() > 0.8) {
+                    val.style.transform = 'scale(1.05)';
+                    setTimeout(() => val.style.transform = 'scale(1)', 200);
+                }
+            });
+        }, 3000);
+    </script>
+</body></html>

@@ -21,7 +21,7 @@ const ESTADO_COLOR: Record<EstadoAsistencia, string> = {
   Presente:   'border-emerald-500 bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300',
   Tarde:      'border-amber-500 bg-amber-50 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300',
   Ausente:    'border-red-500 bg-red-50 dark:bg-red-500/20 text-red-700 dark:text-red-300',
-  Excusa:     'border-blue-500 bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300',
+  Excusa:     'border-primary bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300',
   Suspensión: 'border-slate-500 bg-slate-100 dark:bg-slate-500/20 text-slate-700 dark:text-slate-300',
 }
 
@@ -148,7 +148,7 @@ export default function AsistenciaModal({
                 <select
                   value={jornadaSeleccionada}
                   onChange={(e) => { setJornadaSeleccionada(e.target.value); setCursoSeleccionado(''); setIdEstudiante('') }}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 >
                   <option value="">Seleccionar jornada...</option>
@@ -165,7 +165,7 @@ export default function AsistenciaModal({
                 <select
                   value={cursoSeleccionado}
                   onChange={(e) => { setCursoSeleccionado(e.target.value); setIdEstudiante('') }}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
                   required
                   disabled={!jornadaSeleccionada}
                 >
@@ -185,7 +185,7 @@ export default function AsistenciaModal({
                 <select
                   value={idEstudiante}
                   onChange={(e) => setIdEstudiante(e.target.value ? Number(e.target.value) : '')}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
                   required
                   disabled={!cursoSeleccionado}
                 >
@@ -213,7 +213,7 @@ export default function AsistenciaModal({
                 onClick={() => setTipo('entrada')}
                 className={`py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${
                   tipo === 'entrada'
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300'
+                    ? 'border-primary bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300'
                     : 'border-slate-200 dark:border-white/10 text-slate-500 hover:border-slate-300'
                 }`}
               >
@@ -242,7 +242,7 @@ export default function AsistenciaModal({
               type="date"
               value={fecha}
               onChange={(e) => setFecha(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               required
             />
           </div>
@@ -280,7 +280,7 @@ export default function AsistenciaModal({
               value={observacion}
               onChange={(e) => setObservacion(e.target.value)}
               placeholder="Ej: llegó sin uniforme, presentó excusa médica..."
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
@@ -303,7 +303,7 @@ export default function AsistenciaModal({
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
+              className="flex-1 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
             >
               {saving ? 'Guardando...' : mode === 'create' ? 'Registrar' : 'Guardar cambios'}
             </button>

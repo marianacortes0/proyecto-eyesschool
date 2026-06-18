@@ -73,7 +73,7 @@ function ConfirmPanel({
   const info = estadoInfo(estado)
 
   return (
-    <div className="flex flex-col gap-5 p-5 rounded-2xl bg-white dark:bg-white/5 border-2 border-blue-300 dark:border-blue-500/50 shadow-lg animate-in fade-in slide-in-from-bottom-2 duration-200">
+    <div className="flex flex-col gap-5 p-5 rounded-2xl bg-white dark:bg-white/5 border-2 border-blue-300 dark:border-primary/50 shadow-lg animate-in fade-in slide-in-from-bottom-2 duration-200">
       {/* Estudiante detectado */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center text-xl flex-shrink-0">
@@ -134,7 +134,7 @@ function ConfirmPanel({
             value={obs}
             onChange={(e) => setObs(e.target.value)}
             placeholder="Ej: llegó sin uniforme, justificó médicamente..."
-            className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
@@ -243,7 +243,7 @@ export default function QRScannerView({
 
   const statusRing =
     status === 'scanning' ? 'ring-blue-400 animate-pulse' :
-    status === 'pending'  ? 'ring-blue-500' :
+    status === 'pending'  ? 'ring-primary' :
     status === 'saving'   ? 'ring-blue-400 animate-pulse' :
     status === 'success'  ? 'ring-emerald-400' :
     status === 'error'    ? 'ring-red-400' :
@@ -273,7 +273,7 @@ export default function QRScannerView({
               </p>
               <button
                 onClick={startCamera}
-                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
+                className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white text-sm font-semibold transition-colors"
               >
                 Activar cámara
               </button>
@@ -285,7 +285,7 @@ export default function QRScannerView({
             <div className="absolute top-3 right-3">
               <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-white backdrop-blur-sm ${
                 status === 'scanning' || status === 'saving' ? 'bg-blue-500/80' :
-                status === 'pending'  ? 'bg-blue-600/80' :
+                status === 'pending'  ? 'bg-primary/80' :
                 status === 'success'  ? 'bg-emerald-500/80' :
                 status === 'error'    ? 'bg-red-500/80' :
                 'bg-slate-700/70'
@@ -313,7 +313,7 @@ export default function QRScannerView({
             <button
               onClick={captureFrame}
               disabled={status === 'scanning'}
-              className="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold transition-colors"
+              className="flex-1 py-3 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white font-semibold transition-colors"
             >
               {status === 'scanning' ? 'Detectando…' : '📸 Escanear'}
             </button>

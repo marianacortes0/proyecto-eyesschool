@@ -100,7 +100,7 @@ export default function QRCodigoModal({
               <select
                 value={idEstudiante}
                 onChange={(e) => setIdEstudiante(e.target.value ? Number(e.target.value) : '')}
-                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 required
               >
                 <option value="">Seleccionar estudiante...</option>
@@ -127,7 +127,7 @@ export default function QRCodigoModal({
                   onClick={() => setTipo(t.value)}
                   className={`flex flex-col items-center gap-1 px-3 py-3 rounded-xl border text-center transition-all ${
                     tipo === t.value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300'
+                      ? 'border-primary bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300'
                       : 'border-slate-200 dark:border-white/10 text-slate-600 dark:text-gray-400 hover:border-blue-300'
                   }`}
                 >
@@ -153,7 +153,7 @@ export default function QRCodigoModal({
               value={fechaVencimiento}
               onChange={(e) => setFechaVencimiento(e.target.value)}
               min={new Date().toISOString().split('T')[0]}
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
             {fechaVencimiento && (
               <button
@@ -185,7 +185,7 @@ export default function QRCodigoModal({
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
+              className="flex-1 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
             >
               {saving ? 'Guardando...' : mode === 'create' ? 'Crear Código' : 'Guardar cambios'}
             </button>

@@ -45,7 +45,7 @@ export default function QRCard({ estudiante, canDownload, size = 180 }: Props) {
         <p className="font-semibold text-slate-800 dark:text-white text-sm leading-tight">
           {estudiante.nombreCompleto}
         </p>
-        <p className="text-xs text-blue-600 dark:text-blue-400 font-mono font-semibold">
+        <p className="text-xs text-primary dark:text-blue-400 font-mono font-semibold">
           {estudiante.codigoEstudiante}
         </p>
         {estudiante.curso && (
@@ -58,7 +58,7 @@ export default function QRCard({ estudiante, canDownload, size = 180 }: Props) {
       {canDownload && (
         <button
           onClick={handleDownload}
-          className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+          className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold rounded-lg bg-primary hover:bg-primary/90 text-white transition-colors"
         >
           Descargar QR
         </button>

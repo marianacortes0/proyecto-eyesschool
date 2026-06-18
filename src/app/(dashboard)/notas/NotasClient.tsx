@@ -38,7 +38,7 @@ export default function NotasClient({ role, idUsuarioRegistrador }: Props) {
         {canCreate && (
           <button
             onClick={openCreate}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors"
+            className="px-5 py-2.5 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-xl transition-colors"
           >
             + Registrar nota
           </button>
@@ -70,12 +70,12 @@ export default function NotasClient({ role, idUsuarioRegistrador }: Props) {
           placeholder="Buscar estudiante o materia..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          className="flex-1 min-w-[200px] px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 min-w-[200px] px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
         <select
           value={filterEstudiante}
           onChange={e => setFilterEstudiante(e.target.value)}
-          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">Todos los estudiantes</option>
           {estudiantes.map(e => (
@@ -87,7 +87,7 @@ export default function NotasClient({ role, idUsuarioRegistrador }: Props) {
         <select
           value={filterMateria}
           onChange={e => setFilterMateria(e.target.value)}
-          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">Todas las materias</option>
           {materias.map(m => (
@@ -97,7 +97,7 @@ export default function NotasClient({ role, idUsuarioRegistrador }: Props) {
         <select
           value={filterPeriodo}
           onChange={e => setFilterPeriodo(e.target.value)}
-          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="">Todos los periodos</option>
           {Object.entries(PERIODOS).map(([k, v]) => (
@@ -168,7 +168,7 @@ export default function NotasClient({ role, idUsuarioRegistrador }: Props) {
                         {canUpdate && (
                           <button
                             onClick={() => openEdit(n)}
-                            className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-300 text-xs font-semibold transition-colors"
+                            className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-blue-300 text-xs font-semibold transition-colors"
                           >
                             Editar
                           </button>
@@ -338,7 +338,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
                     required
                     value={jornada}
                     onChange={e => handleJornadaChange(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="">Seleccionar...</option>
                     {jornadas.map(j => (
@@ -353,7 +353,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
                     disabled={!jornada}
                     value={grado}
                     onChange={e => handleGradoChange(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <option value="">Seleccionar...</option>
                     {grados.map(g => (
@@ -370,7 +370,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
                   disabled={!grado}
                   value={idEstudiante}
                   onChange={e => setIdEstudiante(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <option value="">{grado ? 'Seleccionar estudiante...' : 'Primero selecciona jornada y grado'}</option>
                   {estudiantesFiltrados.map(e => (
@@ -396,7 +396,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
               <select
                 value={idPeriodo}
                 onChange={e => setIdPeriodo(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {Object.entries(PERIODOS).map(([k, v]) => (
                   <option key={k} value={k}>{v}</option>
@@ -412,7 +412,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
               disabled={mode === 'create' && !idEstudiante}
               value={idMateria}
               onChange={e => setIdMateria(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <option value="">{mode === 'create' && !idEstudiante ? 'Primero selecciona un estudiante' : 'Seleccionar materia...'}</option>
               {materias.map(m => (
@@ -435,7 +435,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
                 placeholder="Ej: 4.5"
                 value={notaVal}
                 onChange={e => setNotaVal(e.target.value)}
-                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
               {hasPreview && (
                 <span className={`px-3 py-1.5 rounded-xl text-sm font-black ${notaColor(preview)}`}>
@@ -453,7 +453,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
               rows={2}
               value={observacion}
               onChange={e => setObservacion(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
             />
           </div>
 
@@ -465,7 +465,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
               Cancelar
             </button>
             <button type="submit" disabled={saving}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
+              className="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
               {saving ? 'Guardando...' : mode === 'create' ? 'Registrar' : 'Guardar'}
             </button>
           </div>

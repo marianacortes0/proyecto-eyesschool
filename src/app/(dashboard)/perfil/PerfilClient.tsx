@@ -26,14 +26,14 @@ import {
   serverBuscarEstudiantePorDocumento, serverUpsertPadre,
 } from './actions'
 import { useMemo } from 'react'
-import { createClient } from '@/services/supabase/client'
+import { useAuth } from '@/hooks/useAuth'
 
 const TIPOS_DOC = ['CC', 'TI', 'CE', 'PA', 'RC', 'NIT'] as const
 const GENEROS   = ['M', 'F'] as const
 const CARGOS_ADMIN = ['Rector', 'Coordinador', 'Secretario', 'Tesorero', 'Orientador', 'Otro'] as const
 const PARENTESCOS  = ['Padre', 'Madre', 'Tutor', 'Abuelo', 'Abuela', 'Tío', 'Tía', 'Hermano', 'Hermana', 'Otro'] as const
 
-const inputCls = "w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+const inputCls = "w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
 const labelCls = "block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1"
 
 type PadreData = { idPadre: number; idEstudiante: number; parentesco: string; ocupacion: string | null } | null
@@ -52,6 +52,7 @@ type Props = {
 }
 
 export default function PerfilClient({ role, adminDataServer, cursosServer = [], idEstudianteServer = null, idCursoActualServer = null, profesorServer = null, especializacionesEnum = [], padreServer = null, estudianteAsociadoServer = null }: Props) {
+  const { user: authUser } = useAuth()
   const [perfil,   setPerfil]   = useState<PerfilUsuario | null>(null)
   const [profesor, setProfesor] = useState<ProfesorPerfil | null>(null)
   const [admin,    setAdmin]    = useState<AdminPerfil | null>(adminDataServer ?? null)
@@ -140,12 +141,11 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
 
   useEffect(() => {
     const load = async () => {
-      // Cargar avatar desde metadata auth
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      setAvatarUrl(user?.user_metadata?.avatarUrl ?? null)
+      setAvatarUrl(null)
 
-      const p = await getMiPerfil()
+      const idUsuario = authUser?.idUsuario
+      if (!idUsuario) { setLoading(false); return }
+      const p = await getMiPerfil(idUsuario)
       if (p) {
         setPerfil(p)
         setPrimerNombre(p.primerNombre ?? '')
@@ -181,7 +181,7 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
       setLoading(false)
     }
     load()
-  }, [role])
+  }, [role, authUser])
 
   const handleSaveEPS = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -403,11 +403,11 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
       {/* Avatar */}
       <div className="flex items-center gap-6">
         <div className="relative group">
-          <div className="w-24 h-24 rounded-full border-4 border-blue-500 overflow-hidden bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center shadow-lg">
+          <div className="w-24 h-24 rounded-full border-4 border-primary overflow-hidden bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center shadow-lg">
             {avatarUrl ? (
               <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
             ) : (
-              <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+              <span className="text-3xl font-bold text-primary dark:text-blue-400">
                 {primerNombre.charAt(0).toUpperCase() || perfil?.primerNombre.charAt(0).toUpperCase() || 'U'}
               </span>
             )}
@@ -520,7 +520,7 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
 
         <div className="flex justify-end">
           <button type="submit" disabled={saving}
-            className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
+            className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
             {saving ? 'Guardando...' : 'Guardar cambios'}
           </button>
         </div>
@@ -567,7 +567,7 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
 
             <div className="flex justify-end">
               <button type="submit" disabled={savingProf}
-                className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
+                className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
                 {savingProf ? 'Guardando...' : 'Guardar cambios'}
               </button>
             </div>
@@ -617,7 +617,7 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
               {errorEsp && <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 px-3 py-2 rounded-lg">{errorEsp}</p>}
               <div className="flex justify-end">
                 <button type="submit" disabled={savingEsp || !espSeleccionada}
-                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
+                  className="px-5 py-2 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
                   {savingEsp ? 'Guardando...' : '+ Agregar'}
                 </button>
               </div>
@@ -672,7 +672,7 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
 
           <div className="flex justify-end">
             <button type="submit" disabled={savingAdmin}
-              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
+              className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
               {savingAdmin ? 'Guardando...' : 'Guardar cambios'}
             </button>
           </div>
@@ -713,7 +713,7 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
           {successCurso && <p className="text-sm text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-2 rounded-lg">Curso actualizado.</p>}
           <div className="flex justify-end">
             <button type="submit" disabled={savingCurso || !idCursoActual}
-              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
+              className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
               {savingCurso ? 'Guardando...' : 'Guardar curso'}
             </button>
           </div>
@@ -760,7 +760,7 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
           {successEPS && <p className="text-sm text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-2 rounded-lg">EPS actualizada correctamente.</p>}
           <div className="flex justify-end">
             <button type="submit" disabled={savingEPS || !epsSeleccionada || !tipoAfiliacion}
-              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
+              className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
               {savingEPS ? 'Guardando...' : 'Guardar EPS'}
             </button>
           </div>
@@ -827,7 +827,7 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
           {successPadre && <p className="text-sm text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-2 rounded-lg">Datos guardados correctamente.</p>}
           <div className="flex justify-end">
             <button type="submit" disabled={savingPadre || !estudianteAsociado || !parentesco}
-              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
+              className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
               {savingPadre ? 'Guardando...' : 'Guardar'}
             </button>
           </div>

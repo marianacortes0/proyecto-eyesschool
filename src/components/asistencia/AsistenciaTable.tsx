@@ -109,7 +109,7 @@ export default function AsistenciaTable({ registros, role, onEdit, onDelete }: P
                     <button
                       onClick={() => onEdit(r)}
                       title="Editar"
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
+                      className="p-1.5 rounded-lg text-slate-500 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
                     >
                       ✏️
                     </button>

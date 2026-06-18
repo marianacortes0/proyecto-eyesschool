@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EyeSchool - Control de Asistencia</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-secondary": "#ffffff",
+                "tertiary": "#8f1e62",
+                "electric-teal": "#2DD4BF",
+                "surface-bg": "#F8FAFC",
+                "on-error-container": "#93000a",
+                "surface-tint": "#732ee4",
+                "on-surface-variant": "#4a4455",
+                "primary-fixed-dim": "#d2bbff",
+                "on-tertiary-fixed": "#3d0026",
+                "on-primary-fixed-variant": "#5a00c6",
+                "surface": "#f8f9ff",
+                "on-primary-container": "#ede0ff",
+                "surface-container": "#e5eeff",
+                "tertiary-container": "#ae397b",
+                "outline": "#7b7487",
+                "primary-container": "#7c3aed",
+                "on-primary": "#ffffff",
+                "background": "#f8f9ff",
+                "error": "#ba1a1a",
+                "inverse-on-surface": "#eaf1ff",
+                "neon-purple": "#A855F7",
+                "primary": "#630ed4",
+                "inverse-surface": "#213145",
+                "on-tertiary-fixed-variant": "#85145a",
+                "on-secondary-fixed": "#001f26",
+                "surface-variant": "#d3e4fe",
+                "on-secondary-container": "#006172",
+                "tertiary-fixed-dim": "#ffafd3",
+                "surface-container-low": "#eff4ff",
+                "inverse-primary": "#d2bbff",
+                "surface-bright": "#f8f9ff",
+                "glass-stroke": "rgba(255, 255, 255, 0.4)",
+                "chart-glow-purple": "rgba(124, 58, 237, 0.2)",
+                "secondary": "#00687a",
+                "on-tertiary": "#ffffff",
+                "surface-container-highest": "#d3e4fe",
+                "surface-dim": "#cbdbf5",
+                "tertiary-fixed": "#ffd8e7",
+                "on-secondary-fixed-variant": "#004e5c",
+                "on-background": "#0b1c30",
+                "on-surface": "#0b1c30",
+                "secondary-container": "#57dffe",
+                "chart-glow-teal": "rgba(45, 212, 191, 0.2)",
+                "surface-container-lowest": "#ffffff",
+                "secondary-fixed": "#acedff",
+                "secondary-fixed-dim": "#4cd7f6",
+                "outline-variant": "#ccc3d8",
+                "on-primary-fixed": "#25005a"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "fontFamily": {
+                "body-md": ["Inter"],
+                "body-lg": ["Inter"],
+                "headline-lg": ["Hanken Grotesk"],
+                "headline-md": ["Hanken Grotesk"],
+                "headline-sm": ["Hanken Grotesk"],
+                "label-sm": ["Inter"],
+                "label-md": ["Inter"],
+                "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #F8FAFC;
+            color: #0b1c30;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .indicator-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+        .active-nav-bg {
+            background: rgba(124, 58, 237, 0.1);
+        }
+        .transition-soft {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-64 bg-surface-container-low backdrop-blur-2xl border-r border-glass-stroke flex flex-col py-6 z-50">
+<div class="px-8 mb-12">
+<h1 class="font-headline-sm text-headline-sm font-black text-primary">EyeSchool</h1>
+<p class="font-body-sm text-body-sm text-outline">Admin Dashboard</p>
+</div>
+<nav class="flex-1 space-y-2 px-2">
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-xl mx-2 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 bg-primary-container text-on-primary-container rounded-xl mx-2 shadow-sm group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">group</span>
+<span class="font-label-md text-label-md">Students</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-xl mx-2 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">school</span>
+<span class="font-label-md text-label-md">Academia</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-xl mx-2 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">monitoring</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-xl mx-2 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">description</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<div class="p-4 bg-primary/5 rounded-2xl mb-4 border border-primary/10">
+<p class="font-label-md text-label-md text-primary mb-1">Upgrade Plan</p>
+<p class="text-[10px] text-outline leading-tight">Get advanced analytics and historical data logs.</p>
+</div>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-xl group" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen p-10 bg-surface-bg">
+<!-- Header -->
+<header class="flex justify-between items-center mb-12">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-background tracking-tighter">Control de Asistencia</h2>
+<p class="font-body-md text-body-md text-outline-variant">Visualización detallada y gestión de presencia estudiantil</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-neon-purple rounded-full"></span>
+</div>
+<div class="h-10 w-10 rounded-full bg-surface-container-high flex items-center justify-center border border-glass-stroke overflow-hidden cursor-pointer hover:ring-2 ring-primary/20 transition-all">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a young female educator with a warm smile, wearing modern minimalist glasses, against a clean soft-focus classroom background. The lighting is bright and airy with a cool-toned color palette consistent with a high-end educational platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDneA50jNoQDjg4aOh5yxm86bBno1Nth9lANuk4ht9k-XbuT9STDd-gc7hk1KyCEtA5HIyYI61xVdIJxQdZWmrpe5vj44ZzJ4aaAxC1SUeGypnEEzOPln_g0JAtFFTAEY3dTdj-Om3rDbRCSE7VIhvJSleqAj9Wfv7b_-uYIcsBtmdetYgMBIcrjXnVl2xDibc7a8piFss4E-mcQCPlr9U1c5W3KCFfwVbBqBUzyTvknVN_qwtD32nBv8xkIHRRYffyx6jqOoL7Tjh-"/>
+</div>
+</div>
+</header>
+<div class="bento-grid">
+<!-- Attendance Calendar Card (Asymmetric) -->
+<div class="col-span-8 glass-panel rounded-[32px] p-8">
+<div class="flex justify-between items-end mb-10">
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full border border-glass-stroke hover:bg-surface-container-high transition-soft">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full border border-glass-stroke hover:bg-surface-container-high transition-soft">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+<div class="text-right">
+<h3 class="font-headline-sm text-headline-sm">Septiembre 2024</h3>
+<p class="font-label-md text-label-md text-outline">Semana Actual: 38</p>
+</div>
+</div>
+<!-- Custom Minimal Calendar Grid -->
+<div class="grid grid-cols-7 gap-y-12">
+<div class="text-center font-label-md text-label-md text-outline uppercase tracking-widest">Lun</div>
+<div class="text-center font-label-md text-label-md text-outline uppercase tracking-widest">Mar</div>
+<div class="text-center font-label-md text-label-md text-outline uppercase tracking-widest">Mie</div>
+<div class="text-center font-label-md text-label-md text-outline uppercase tracking-widest">Jue</div>
+<div class="text-center font-label-md text-label-md text-outline uppercase tracking-widest">Vie</div>
+<div class="text-center font-label-md text-label-md text-outline uppercase tracking-widest text-primary/40">Sab</div>
+<div class="text-center font-label-md text-label-md text-outline uppercase tracking-widest text-primary/40">Dom</div>
+<!-- Calendar Days -->
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant/40 mb-2 font-body-lg">26</span>
+</div>
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant/40 mb-2 font-body-lg">27</span>
+</div>
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant/40 mb-2 font-body-lg">28</span>
+</div>
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant/40 mb-2 font-body-lg">29</span>
+</div>
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant/40 mb-2 font-body-lg">30</span>
+</div>
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant mb-2 font-body-lg">01</span>
+<div class="indicator-dot bg-electric-teal shadow-[0_0_8px_rgba(45,212,191,0.6)]"></div>
+</div>
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant mb-2 font-body-lg">02</span>
+</div>
+<!-- Next Row -->
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant mb-2 font-body-lg">03</span>
+<div class="indicator-dot bg-electric-teal"></div>
+</div>
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant mb-2 font-body-lg">04</span>
+<div class="indicator-dot bg-neon-purple/40"></div>
+</div>
+<div class="relative group flex flex-col items-center">
+<div class="absolute -inset-2 bg-primary/5 rounded-2xl -z-10 ring-1 ring-primary/20 scale-110"></div>
+<span class="text-primary font-bold mb-2 font-body-lg">05</span>
+<div class="indicator-dot bg-primary"></div>
+</div>
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant mb-2 font-body-lg">06</span>
+<div class="indicator-dot bg-electric-teal"></div>
+</div>
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant mb-2 font-body-lg">07</span>
+<div class="indicator-dot bg-electric-teal"></div>
+</div>
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant mb-2 font-body-lg">08</span>
+</div>
+<div class="relative group flex flex-col items-center">
+<span class="text-on-surface-variant mb-2 font-body-lg">09</span>
+</div>
+</div>
+<!-- Summary Footer -->
+<div class="mt-20 pt-8 border-t border-glass-stroke flex gap-12">
+<div class="flex items-center gap-3">
+<div class="indicator-dot bg-electric-teal"></div>
+<span class="font-label-sm text-label-sm text-outline">PRESENTE (94%)</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="indicator-dot bg-neon-purple/40"></div>
+<span class="font-label-sm text-label-sm text-outline">AUSENTE (4%)</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="indicator-dot bg-primary"></div>
+<span class="font-label-sm text-label-sm text-outline">HOY</span>
+</div>
+</div>
+</div>
+<!-- Stats Card -->
+<div class="col-span-4 space-y-6">
+<div class="glass-panel rounded-[32px] p-8 relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl transition-soft group-hover:bg-primary/10"></div>
+<h4 class="font-label-md text-label-md text-primary mb-6 uppercase tracking-widest">Global Heatmap</h4>
+<div class="flex items-end gap-1 h-32 mb-6">
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-1/2 transition-soft hover:h-[60%] hover:bg-electric-teal"></div>
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-3/4 transition-soft hover:h-[80%] hover:bg-electric-teal"></div>
+<div class="flex-1 bg-primary rounded-t-lg h-[90%]"></div>
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-2/3 transition-soft hover:h-[75%] hover:bg-electric-teal"></div>
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-1/2 transition-soft hover:h-[55%] hover:bg-electric-teal"></div>
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-1/3 transition-soft hover:h-[40%] hover:bg-electric-teal"></div>
+</div>
+<p class="font-body-sm text-body-sm text-outline">Pico de asistencia registrado los días Jueves a las 09:00 AM.</p>
+</div>
+<div class="glass-panel rounded-[32px] p-8">
+<div class="flex items-center justify-between mb-8">
+<h4 class="font-label-md text-label-md text-primary uppercase tracking-widest">Acciones Rápidas</h4>
+<span class="material-symbols-outlined text-outline">bolt</span>
+</div>
+<div class="space-y-4">
+<button class="w-full py-4 px-6 rounded-2xl bg-primary text-white font-label-md text-label-md hover:bg-primary/90 transition-soft flex items-center justify-between group">
+                            Exportar Reporte Mensual
+                            <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<button class="w-full py-4 px-6 rounded-2xl border border-glass-stroke text-on-surface font-label-md text-label-md hover:bg-white transition-soft flex items-center justify-between group">
+                            Notificar Ausencias
+                            <span class="material-symbols-outlined text-[18px]">mail</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Asymmetric Fluid List Section -->
+<div class="col-span-12 mt-8">
+<div class="flex items-center justify-between mb-8 px-2">
+<h3 class="font-headline-sm text-headline-sm tracking-tight">Historial Reciente</h3>
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-outline">Filtrar por:</span>
+<select class="bg-transparent border-none font-label-md text-label-md text-primary focus:ring-0 cursor-pointer">
+<option>Todos los Grados</option>
+<option>Bachillerato</option>
+<option>Primaria</option>
+</select>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Student Row 1 -->
+<div class="glass-panel rounded-3xl p-4 flex items-center gap-6 group hover:translate-x-2 transition-soft cursor-pointer">
+<div class="w-14 h-14 rounded-2xl overflow-hidden bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-soft" data-alt="Close up portrait of a young male student with a focused expression, wearing a minimalist white polo shirt. Soft studio lighting with a clean light blue background. High-end photography style, extremely sharp detail and professional retouching for a modern educational app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAvBnK09UpAhnQCJ5I0rDH3iS9r43xnAsxwlzOwrQPrVuqY6bEobMvistyrAn8QQ-TEInCHY9wz-sU3141TirrCS2S2klTbFUK1J7qBSlgFghqHSToh8KDdjGorAhtTKsUY_yMDmWx2Wadj8SCtgSPsaQQRxHkEBNNQY7UmpcmJYZpS-EFU4101j6-5OWM3JQFW8q9CRgYQSZNbQnr-BehN5_t1T2cME0qc7KFRk8oM0xg9s4_Y9bVFAXZbvuWZWqfbPT0qp054d0i"/>
+</div>
+<div class="flex-1">
+<h5 class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Julian Rodriguez</h5>
+<p class="font-label-sm text-label-sm text-outline">3ro de Bachillerato - Ciencias</p>
+</div>
+<div class="flex-1 flex justify-center">
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-outline mb-1 uppercase tracking-tighter">Entrada</span>
+<span class="font-body-md text-body-md font-medium">07:52 AM</span>
+</div>
+</div>
+<div class="flex-1 flex justify-center">
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-outline mb-1 uppercase tracking-tighter">Estado</span>
+<div class="flex items-center gap-2">
+<span class="indicator-dot bg-electric-teal"></span>
+<span class="font-label-md text-label-md text-electric-teal">A tiempo</span>
+</div>
+</div>
+</div>
+<div class="pr-4">
+<button class="w-10 h-10 rounded-full flex items-center justify-center border border-glass-stroke text-outline hover:text-primary hover:border-primary/20 transition-soft">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</div>
+</div>
+<!-- Student Row 2 (Delayed) -->
+<div class="glass-panel rounded-3xl p-4 flex items-center gap-6 group hover:translate-x-2 transition-soft cursor-pointer">
+<div class="w-14 h-14 rounded-2xl overflow-hidden bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-soft" data-alt="Portrait of a young female student with braided hair, smiling gently. She is wearing a modern cream-colored sweater. Minimalist aesthetic, bright natural light, clean soft grey background. High-end visual style for a premium school management platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFLLWI8fgGAIvKEyGAJSThKzAh0ySghw2t4iM61VbHExEabgQpMyXOXwas7XeqbDhgJbw0cS4kLNjMSgueydMmZF7yeEN3Iiue4nXiyBlp6_yv78Tj6YRfbLyX-SbIOvO0tD_4xFgEYpwcSt0vc-MZ6aWdCWYF5rwRNLaSBklNax2dhm1RspPrfyREeJDElK-O-9DDk78UCdXKszpSH313p0rCY2-fsB8W2A7jTBesMlIWf44-gxB9xTyBTgDW1d3B1CKFoSJ-1XoU"/>
+</div>
+<div class="flex-1">
+<h5 class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Elena Valadez</h5>
+<p class="font-label-sm text-label-sm text-outline">2do de Bachillerato - Arte</p>
+</div>
+<div class="flex-1 flex justify-center">
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-outline mb-1 uppercase tracking-tighter">Entrada</span>
+<span class="font-body-md text-body-md font-medium">08:15 AM</span>
+</div>
+</div>
+<div class="flex-1 flex justify-center">
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-outline mb-1 uppercase tracking-tighter">Estado</span>
+<div class="flex items-center gap-2">
+<span class="indicator-dot bg-neon-purple"></span>
+<span class="font-label-md text-label-md text-neon-purple">Retraso</span>
+</div>
+</div>
+</div>
+<div class="pr-4">
+<button class="w-10 h-10 rounded-full flex items-center justify-center border border-glass-stroke text-outline hover:text-primary hover:border-primary/20 transition-soft">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</div>
+</div>
+<!-- Student Row 3 (Absent - Subtle Style) -->
+<div class="bg-surface-container-low/40 rounded-3xl p-4 flex items-center gap-6 border border-glass-stroke/50 group hover:translate-x-2 transition-soft cursor-pointer">
+<div class="w-14 h-14 rounded-2xl overflow-hidden bg-surface-container flex-shrink-0 opacity-40">
+<img class="w-full h-full object-cover grayscale" data-alt="Candid side profile of a male student looking away, minimalist photography, muted colors, soft lighting. The image emphasizes a professional and calm school atmosphere with high-end aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCswFPwYEQtz54anKxqxdol1jip7AINfPoNhZTHH7PBB8LfkPMMd_UKrtAqeaK-hMfjX7hr9FKCyB8pZJ4Ms4Kx4vfoWghBCXTqZo1bqTtuz_6cl7xiAaxpwxSxZfGgLNlWJLSbp2lOxlpTQwTF-KrFNc3hdjGRsORQPWvmAGWd0J6pivSrX71FiEhbLvkyH3weFgpNTTmulF_8PcF-Aht-uD9DDZIL5iWeQ51NCuCD5HBryPADZPHbUl-2jWiQwBRSr9Jyr5WBUTqa"/>
+</div>
+<div class="flex-1 opacity-60">
+<h5 class="font-label-md text-label-md text-on-surface">Marco Aurelio</h5>
+<p class="font-label-sm text-label-sm text-outline">1ro de Bachillerato - Deporte</p>
+</div>
+<div class="flex-1 flex justify-center opacity-40">
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-outline mb-1 uppercase tracking-tighter">Entrada</span>
+<span class="font-body-md text-body-md font-medium">--:--</span>
+</div>
+</div>
+<div class="flex-1 flex justify-center">
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-outline mb-1 uppercase tracking-tighter">Estado</span>
+<div class="flex items-center gap-2">
+<span class="indicator-dot bg-outline-variant"></span>
+<span class="font-label-md text-label-md text-outline">Inasistencia</span>
+</div>
+</div>
+</div>
+<div class="pr-4">
+<button class="w-10 h-10 rounded-full flex items-center justify-center border border-glass-stroke text-outline hover:text-primary transition-soft">
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.querySelectorAll('.glass-panel').forEach(panel => {
+            panel.addEventListener('mouseenter', () => {
+                panel.style.boxShadow = '0 10px 40px rgba(99, 14, 212, 0.05)';
+            });
+            panel.addEventListener('mouseleave', () => {
+                panel.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body></html>

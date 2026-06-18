@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EyeSchool | Gestión de Usuarios</title>
+<!-- Google Fonts: Hanken Grotesk & Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600;700;900&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#ffffff",
+                    "tertiary": "#8f1e62",
+                    "electric-teal": "#2DD4BF",
+                    "surface-bg": "#F8FAFC",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#732ee4",
+                    "on-surface-variant": "#4a4455",
+                    "primary-fixed-dim": "#d2bbff",
+                    "on-tertiary-fixed": "#3d0026",
+                    "on-primary-fixed-variant": "#5a00c6",
+                    "surface": "#f8f9ff",
+                    "on-primary-container": "#ede0ff",
+                    "surface-container": "#e5eeff",
+                    "tertiary-container": "#ae397b",
+                    "outline": "#7b7487",
+                    "primary-container": "#7c3aed",
+                    "on-primary": "#ffffff",
+                    "background": "#f8f9ff",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#eaf1ff",
+                    "neon-purple": "#A855F7",
+                    "primary": "#630ed4",
+                    "inverse-surface": "#213145",
+                    "on-tertiary-fixed-variant": "#85145a",
+                    "on-secondary-fixed": "#001f26",
+                    "surface-variant": "#d3e4fe",
+                    "on-secondary-container": "#006172",
+                    "tertiary-fixed-dim": "#ffafd3",
+                    "surface-container-low": "#eff4ff",
+                    "inverse-primary": "#d2bbff",
+                    "surface-container-high": "#dce9ff",
+                    "on-tertiary-container": "#ffdce9",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#eaddff",
+                    "surface-bright": "#f8f9ff",
+                    "glass-stroke": "rgba(255, 255, 255, 0.4)",
+                    "chart-glow-purple": "rgba(124, 58, 237, 0.2)",
+                    "secondary": "#00687a",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#d3e4fe",
+                    "surface-dim": "#cbdbf5",
+                    "tertiary-fixed": "#ffd8e7",
+                    "on-secondary-fixed-variant": "#004e5c",
+                    "on-background": "#0b1c30",
+                    "on-surface": "#0b1c30",
+                    "secondary-container": "#57dffe",
+                    "chart-glow-teal": "rgba(45, 212, 191, 0.2)",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#acedff",
+                    "secondary-fixed-dim": "#4cd7f6",
+                    "outline-variant": "#ccc3d8",
+                    "on-primary-fixed": "#25005a"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "headline-sm": ["Hanken Grotesk"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+            transition: all 0.3s ease;
+        }
+        .active-icon .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #ffffff;
+            color: #0b1c30;
+        }
+        .ultra-slim-nav {
+            width: 64px;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-blur {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .user-row {
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        .user-row:hover {
+            transform: translateX(8px);
+        }
+        .text-contrast-title span:first-child {
+            font-weight: 300;
+        }
+        .text-contrast-title span:last-child {
+            font-weight: 900;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- Sidebar: SideNavBar Ultra-fina (Predicted from JSON Logic) -->
+<nav class="fixed left-0 top-0 h-screen ultra-slim-nav bg-surface-container-low border-r border-glass-stroke z-50 flex flex-col items-center py-8">
+<div class="mb-12">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shadow-lg shadow-chart-glow-purple">
+<span class="material-symbols-outlined !text-[18px]">school</span>
+</div>
+</div>
+<div class="flex flex-col gap-8 flex-1">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors active-icon" title="Dashboard">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+</button>
+<button class="p-2 text-primary bg-primary-container/20 rounded-xl active-icon" title="Students">
+<span class="material-symbols-outlined" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors" title="Academia">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors" title="Analytics">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors" title="Reports">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</button>
+</div>
+<div class="mt-auto flex flex-col gap-6">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors" title="Settings">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-dim border border-white overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional and clean studio portrait of a modern university administrator with a friendly expression. The background is a soft, blurred minimalist office space with cool-toned lighting. The image maintains the brand's aesthetic of digital minimalism and high clarity, using a soft depth of field and high-key brightness." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3bZyDzArzGAbuUMn8w_VZ3j902teGnmOXICTXK0KT0vyhez9T9V2DZtBp0IsDAJ6vj66gDmDKu7zdeAYTQhzTeKi0HYv02tQTCCguZQsJGNX5OFZbEXzD_14ebw72dVnXnL3kiwToSEvUYAG4fH635nx41yjmP0jAt0qEIXyjKapliwH-x_AHRjDrzU7ZBodFAQrtXCGoOMM5y7jcZufTO88jZgirewrtmZi6VDfAByVvQIz4an4DlQtwjqL1a78KfyX4U0ZL_sU8"/>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-16 min-h-screen p-margin-desktop md:p-12 lg:p-20">
+<!-- Header Section: Radical Minimalism & Asymmetric Layout -->
+<header class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-start gap-12 mb-24">
+<div class="flex flex-col gap-4">
+<nav class="flex items-center gap-2 text-label-md font-label-md text-outline-variant mb-4 uppercase tracking-widest">
+<span>Admin</span>
+<span class="material-symbols-outlined !text-xs">chevron_right</span>
+<span class="text-primary font-bold">Comunidad</span>
+</nav>
+<h1 class="font-headline-lg text-[64px] leading-tight text-on-background text-contrast-title">
+<span>Gestión de</span><br/>
+<span class="text-primary">Usuarios</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mt-4 opacity-70">
+                    Administra y supervisa los roles, accesos y actividades de la plataforma EyeSchool con precisión quirúrgica.
+                </p>
+</div>
+<!-- Stats/Contextual Info (Asymmetric) -->
+<div class="flex gap-12 mt-8 lg:mt-24">
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-on-background">1,284</span>
+<span class="font-label-sm text-label-sm text-outline-variant uppercase">Activos</span>
+</div>
+<div class="flex flex-col border-l border-surface-container pl-12">
+<span class="font-headline-md text-headline-md text-neon-purple">+42</span>
+<span class="font-label-sm text-label-sm text-outline-variant uppercase">Esta semana</span>
+</div>
+</div>
+</header>
+<!-- Filters Section -->
+<section class="max-w-7xl mx-auto mb-16">
+<div class="flex flex-wrap items-center justify-between gap-6 border-b border-surface-container-low pb-8">
+<div class="flex gap-10 items-center">
+<button class="font-label-md text-label-md text-primary relative group">
+                        Todos
+                        <span class="absolute -bottom-8 left-0 w-full h-0.5 bg-primary rounded-full"></span>
+</button>
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">Docentes</button>
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">Estudiantes</button>
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">Staff</button>
+</div>
+<div class="flex items-center gap-4 flex-1 max-w-md lg:justify-end">
+<div class="relative w-full lg:w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant !text-lg">search</span>
+<input class="w-full bg-surface-container-lowest border-none focus:ring-1 focus:ring-primary/20 rounded-full pl-10 pr-4 py-2 text-body-sm font-body-sm transition-all outline-none" placeholder="Buscar..." type="text"/>
+</div>
+<button class="p-2.5 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined !text-lg">tune</span>
+</button>
+<button class="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-full font-label-md text-label-md shadow-lg shadow-chart-glow-purple hover:scale-105 transition-transform">
+<span class="material-symbols-outlined !text-[18px]">add</span>
+                        Nuevo Usuario
+                    </button>
+</div>
+</div>
+</section>
+<!-- Floating User List (No Heavy Containers) -->
+<section class="max-w-7xl mx-auto space-y-2">
+<!-- Table Header (Floating) -->
+<div class="grid grid-cols-12 px-6 py-4 text-label-sm font-label-sm text-outline-variant uppercase tracking-wider">
+<div class="col-span-5">Usuario</div>
+<div class="col-span-3 text-center">Rol</div>
+<div class="col-span-2 text-center">Estado</div>
+<div class="col-span-2 text-right">Acciones</div>
+</div>
+<!-- User Rows -->
+<div class="user-row grid grid-cols-12 items-center px-6 py-6 rounded-2xl hover:bg-surface-container-low/40">
+<div class="col-span-5 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A portrait of a young male student in a bright, modern learning environment. He wears a neutral-toned hoodie and has a tech-savvy, focused demeanor. The lighting is crisp and natural, with high contrast between light and shadows, perfectly reflecting the digital minimalist school brand with electric teal accents in the background environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGOACLTq4hDcdKLv1b9C-PqbbwvO46Fncf7YpbzWOOebxJzWCTtD0YLug0IcpzSJM_3WBaY7uNUstfQiCvqO3CuENgMZ5HhDqW31hv3kK87DlyCjwGt6IJiC5SKrQfPfLL1yZad3GJJp-lPfFdh3TN09JGIKZlHX7mkG1G3mt53Dh5ztAbbYTPvRkQm1ZSKOxdu5L5yLcEdzKPlOjnMlA7ZMBS8hcWGk2S9FCYVoRlZXATujsYgxKX86ew4eQ6bFw9tooSTsBkxZCw"/>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-background">Alejandro Marín</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-60">amarin.dev@eyeschool.edu</p>
+</div>
+</div>
+<div class="col-span-3 text-center">
+<span class="inline-block px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-[10px] uppercase">Estudiante</span>
+</div>
+<div class="col-span-2 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-electric-teal shadow-[0_0_8px_rgba(45,212,191,0.6)]"></span>
+<span class="font-label-md text-label-md text-on-surface-variant">Online</span>
+</div>
+</div>
+<div class="col-span-2 flex justify-end gap-2">
+<button class="p-2 text-outline-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 text-outline-variant hover:text-error transition-colors"><span class="material-symbols-outlined">delete_outline</span></button>
+</div>
+</div>
+<div class="user-row grid grid-cols-12 items-center px-6 py-6 rounded-2xl hover:bg-surface-container-low/40">
+<div class="col-span-5 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A sophisticated portrait of a female teacher in her late 30s. She is dressed in a professional, minimalist blazer. The lighting is soft and artistic, using cool teals and warm purples to create a professional but futuristic academic atmosphere. High-resolution photography with a clean white background that emphasizes the minimalist radical style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDni45lVKqfwSurcXKFIHKRQlhtU8ahM48WoL5yQQttw2jCRrjSlhJFhNSFV0PnX3RbPGNCw7LpQAXrO9FYtn6lU77nQ9rdrF_YJ9zEoIAcc3iGl4b6GDsX-8c-2GiKJkRmcYbzTyRPCSlNZqMydIA5xT4l_Glo2M05x_c-E7ljj5xz0BBkRjw1dOO6l_rEPkmRPrSJnn3q4utyJh7QYWoNFoD5ct2-5eAK8Cw3wOgr6VNaUyd2cqDWE35wI8dMVEx_QKgLyxbSmYPr"/>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-background">Elena Vasquez</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-60">e.vasquez@eyeschool.edu</p>
+</div>
+</div>
+<div class="col-span-3 text-center">
+<span class="inline-block px-3 py-1 rounded-full bg-primary-container/10 text-primary font-label-sm text-[10px] uppercase">Docente</span>
+</div>
+<div class="col-span-2 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+<span class="font-label-md text-label-md text-outline-variant">Offline</span>
+</div>
+</div>
+<div class="col-span-2 flex justify-end gap-2">
+<button class="p-2 text-outline-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 text-outline-variant hover:text-error transition-colors"><span class="material-symbols-outlined">delete_outline</span></button>
+</div>
+</div>
+<div class="user-row grid grid-cols-12 items-center px-6 py-6 rounded-2xl hover:bg-surface-container-low/40">
+<div class="col-span-5 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A portrait of an administrator in a high-tech academic office. The subject is wearing a modern minimalist outfit. The setting is bright and spacious, with a heavy emphasis on white space and clean lines. Neon purple accents are visible in the soft bokeh of the background monitors. High-fidelity photography style with a calm, forward-thinking mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtZUzSZmC1MeR2BfCRAKwr2-pAgIHDzZJIne5ah4O8O4LTeBP1RtXtTmQg9enrYmRSnAYKkRRMymT74w4QJ5ggqWorUgMXZt-zNmjCiPuHaKPVL9nALu21snRYOPkjCvpyNmuV6NspEVTWN9CXQwdjpZQimF-2aA1fUqz0wtBdw_Fkf51GnML2Jbd3DctH51Te_sPeqxCyKoVCdrgHAas22jaRM6aevoxUNr9-ScCthyPQwcFNMn8GGuX4zCZBc1Ty-9tLdszb3Hw6"/>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-background">Roberto Solís</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-60">r.solis@eyeschool.edu</p>
+</div>
+</div>
+<div class="col-span-3 text-center">
+<span class="inline-block px-3 py-1 rounded-full bg-neon-purple/10 text-neon-purple font-label-sm text-[10px] uppercase">Admin</span>
+</div>
+<div class="col-span-2 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-electric-teal shadow-[0_0_8px_rgba(45,212,191,0.6)]"></span>
+<span class="font-label-md text-label-md text-on-surface-variant">Online</span>
+</div>
+</div>
+<div class="col-span-2 flex justify-end gap-2">
+<button class="p-2 text-outline-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 text-outline-variant hover:text-error transition-colors"><span class="material-symbols-outlined">delete_outline</span></button>
+</div>
+</div>
+<!-- Empty Space Placeholder for Radical Minimalism -->
+<div class="py-20 flex flex-col items-center justify-center opacity-20 select-none">
+<span class="material-symbols-outlined !text-[80px] font-thin">all_inclusive</span>
+<p class="font-label-md text-label-md mt-4 uppercase tracking-[1em]">EyeSchool Core</p>
+</div>
+</section>
+</main>
+<!-- Floating Tooltip/Quick Action (Asymmetric element) -->
+<div class="fixed bottom-12 right-12 flex flex-col items-end gap-4 z-40">
+<div class="hidden bg-inverse-surface text-inverse-on-surface px-6 py-3 rounded-2xl shadow-xl glass-blur border border-glass-stroke items-center gap-3 animate-bounce" id="quick-alert">
+<span class="material-symbols-outlined text-electric-teal">info</span>
+<p class="font-body-sm">3 nuevas solicitudes pendientes</p>
+</div>
+<button class="w-14 h-14 rounded-full bg-white border border-surface-container shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-all text-primary" onclick="toggleAlert()">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications</span>
+</button>
+</div>
+<script>
+        function toggleAlert() {
+            const alert = document.getElementById('quick-alert');
+            alert.classList.toggle('hidden');
+            alert.classList.toggle('flex');
+        }
+
+        // Micro-interaction: Sidebar expansion on hover (subtle)
+        const sidebar = document.querySelector('.ultra-slim-nav');
+        sidebar.addEventListener('mouseenter', () => {
+            // No full expansion to keep radical minimalism, just a slight shadow change
+            sidebar.classList.add('shadow-2xl');
+        });
+        sidebar.addEventListener('mouseleave', () => {
+            sidebar.classList.remove('shadow-2xl');
+        });
+
+        // Add a subtle parallax to user rows
+        document.addEventListener('mousemove', (e) => {
+            const amount = 5;
+            const x = (e.clientX / window.innerWidth - 0.5) * amount;
+            const y = (e.clientY / window.innerHeight - 0.5) * amount;
+            
+            // Apply only to decoration or extremely subtle shift
+            const headers = document.querySelector('h1');
+            headers.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    </script>
+</body></html>
