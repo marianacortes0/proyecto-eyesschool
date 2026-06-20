@@ -24,7 +24,7 @@ export default function AsistenciaTable({ registros, role, onEdit, onDelete }: P
   if (registros.length === 0) {
     return (
       <div className="text-center py-14 text-slate-500 dark:text-gray-400">
-        <p className="text-4xl mb-3">📋</p>
+        <span className="material-symbols-outlined !text-5xl mb-3 opacity-60">fact_check</span>
         <p className="font-semibold">No hay registros para los filtros seleccionados.</p>
       </div>
     )
@@ -109,16 +109,16 @@ export default function AsistenciaTable({ registros, role, onEdit, onDelete }: P
                     <button
                       onClick={() => onEdit(r)}
                       title="Editar"
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
+                      className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors inline-flex"
                     >
-                      ✏️
+                      <span className="material-symbols-outlined !text-xl">edit</span>
                     </button>
                     <button
                       onClick={() => onDelete(r.idAsistencia)}
                       title="Eliminar"
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+                      className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors inline-flex"
                     >
-                      🗑️
+                      <span className="material-symbols-outlined !text-xl">delete</span>
                     </button>
                   </div>
                 </td>

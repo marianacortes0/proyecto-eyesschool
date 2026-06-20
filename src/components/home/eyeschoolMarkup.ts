@@ -1,6 +1,133 @@
 // AUTO-GENERATED from EyeSchool.dc.html (Claude Design handoff). Do not edit by hand.
 // Injected via dangerouslySetInnerHTML and driven by the engine in EyeSchoolLanding.tsx.
 export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;">
+
+  <!-- ═══════════════ PLATAFORMA / VIDEO SECTION · INICIO ═══════════════ -->
+  <section id="plataforma" data-screen-label="Plataforma" style="position:relative;min-height:100vh;overflow:hidden;scroll-snap-align:start;font-family:'Space Grotesk',sans-serif;background:#140e2c;">
+    <video data-ref="video" loop muted playsinline preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
+      <source src="/eyeschool/assets/galaxy.mp4" type="video/mp4"></source>
+    </video>
+    <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom, rgba(8,5,22,.46) 0%, rgba(14,8,32,.34) 42%, rgba(8,5,22,.58) 100%);"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:90px;z-index:2;background:linear-gradient(to top, #0a0618 0%, transparent 100%);"></div>
+
+    <!-- NAV -->
+    <nav style="position:absolute;top:0;left:0;right:0;z-index:7;display:flex;align-items:center;justify-content:space-between;padding:22px clamp(20px,4vw,56px);">
+      <div style="display:flex;align-items:center;gap:11px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:21px;letter-spacing:1.5px;color:#fff;text-shadow:0 0 14px var(--neon2,#4df0c8);">
+        EYESCHOOL
+      </div>
+      <div style="display:flex;align-items:center;gap:clamp(18px,3vw,40px);font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:2.5px;color:#cdbdf2;">
+        <span data-act="goInicio" style="cursor:pointer;">INICIO</span><span data-act="goNosotros" style="cursor:pointer;">NOSOTROS</span><span data-act="goBeneficios" style="cursor:pointer;">BENEFICIOS</span><span data-act="goSoporte" style="cursor:pointer;">SOPORTE</span>
+      </div>
+      <div data-act="openLogin" style="padding:9px 22px;border-radius:999px;border:1.5px solid var(--neon2,#4df0c8);color:#fff;font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:2px;box-shadow:0 0 16px color-mix(in srgb,var(--neon2,#4df0c8) 55%, transparent);cursor:pointer;">ENTRAR</div>
+    </nav>
+
+    <div style="position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:clamp(100px,13vh,150px) clamp(24px,6vw,90px) clamp(76px,9vh,110px);">
+      <div style="text-align:center;margin-bottom:clamp(32px,5vh,52px);animation:fadeup .9s ease both .1s;">
+        <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:5px;color:#4df0c8;text-shadow:0 0 12px #4df0c8;margin-bottom:18px;text-transform:uppercase;">★ Para cada rol</div>
+        <h2 style="margin:0 0 16px;font-weight:700;font-size:clamp(28px,4.4vw,54px);color:#fff;line-height:1.07;letter-spacing:-.5px;max-width:20ch;text-shadow:0 2px 12px rgba(0,0,0,.85),0 4px 40px rgba(0,0,0,.6);">Una plataforma completa para tu institución</h2>
+        <p style="margin:0 auto;font-size:clamp(14px,1.5vw,18px);color:#e8ddff;max-width:52ch;line-height:1.6;text-shadow:0 2px 10px rgba(0,0,0,.9);">Diseñada para cada rol y optimizada para simplificar todos los procesos académicos.</p>
+      </div>
+
+      <div style="position:relative;width:100%;max-width:680px;">
+        <div data-plat-viewport="1" style="overflow:hidden;width:100%;">
+          <div data-plat-track="1" style="display:flex;width:200%;will-change:transform;">
+            <div style="width:50%;flex:none;display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,1.4vw,18px);padding:6px clamp(6px,0.8vw,10px);box-sizing:border-box;">
+
+        <!-- Administración de roles -->
+        <div style="position:relative;border-radius:13px;padding:15px 16px 14px;background:linear-gradient(160deg, rgba(44,30,86,.55), rgba(22,14,52,.5));border:1px solid rgba(77,240,200,.30);backdrop-filter:blur(12px);box-shadow:0 16px 42px rgba(0,0,0,.42),0 0 24px rgba(77,240,200,.10);animation:fadeup .8s ease both .18s;">
+          <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:9px;">
+            <div style="width:34px;height:34px;flex:none;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(77,240,200,.14);box-shadow:0 0 16px rgba(77,240,200,.22);">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4df0c8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <div>
+              <h3 style="margin:0 0 2px;font-family:'Orbitron',sans-serif;font-size:12px;color:#fff;letter-spacing:.2px;">Administración de roles</h3>
+              <div style="font-size:10px;color:#9b8fc8;">Control de accesos y perfiles</div>
+            </div>
+          </div>
+          <p style="margin:0 0 11px;font-size:11px;line-height:1.5;color:#cdbcf0;">Gestiona docentes, estudiantes, coordinadores y administrativos. Asigna permisos específicos según el rol institucional de cada usuario.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:9px;padding:3px 8px;border-radius:999px;background:rgba(77,240,200,.12);border:1px solid rgba(77,240,200,.3);color:#86f2d8;">Docentes</span>
+            <span style="font-size:9px;padding:3px 8px;border-radius:999px;background:rgba(77,240,200,.12);border:1px solid rgba(77,240,200,.3);color:#86f2d8;">Estudiantes</span>
+            <span style="font-size:9px;padding:3px 8px;border-radius:999px;background:rgba(77,240,200,.12);border:1px solid rgba(77,240,200,.3);color:#86f2d8;">Coordinadores</span>
+          </div>
+        </div>
+
+        <!-- Control de asistencia -->
+        <div style="position:relative;border-radius:13px;padding:15px 16px 14px;background:linear-gradient(160deg, rgba(44,30,86,.55), rgba(22,14,52,.5));border:1px solid rgba(56,232,255,.30);backdrop-filter:blur(12px);box-shadow:0 16px 42px rgba(0,0,0,.42),0 0 24px rgba(56,232,255,.10);animation:fadeup .8s ease both .3s;">
+          <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:9px;">
+            <div style="width:34px;height:34px;flex:none;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(56,232,255,.14);box-shadow:0 0 16px rgba(56,232,255,.22);">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#38e8ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="M9 16l2 2 4-4"></path></svg>
+            </div>
+            <div>
+              <h3 style="margin:0 0 2px;font-family:'Orbitron',sans-serif;font-size:12px;color:#fff;letter-spacing:.2px;">Control de asistencia</h3>
+              <div style="font-size:10px;color:#9b8fc8;">Registro diario por grupo</div>
+            </div>
+          </div>
+          <p style="margin:0 0 11px;font-size:11px;line-height:1.5;color:#cdbcf0;">Registra y consulta la asistencia de estudiantes por jornada, materia y periodo. Genera reportes de ausentismo para seguimiento oportuno.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:9px;padding:3px 8px;border-radius:999px;background:rgba(56,232,255,.12);border:1px solid rgba(56,232,255,.3);color:#8fe9ff;">Por materia</span>
+            <span style="font-size:9px;padding:3px 8px;border-radius:999px;background:rgba(56,232,255,.12);border:1px solid rgba(56,232,255,.3);color:#8fe9ff;">Por jornada</span>
+            <span style="font-size:9px;padding:3px 8px;border-radius:999px;background:rgba(56,232,255,.12);border:1px solid rgba(56,232,255,.3);color:#8fe9ff;">Reportes</span>
+          </div>
+        </div>
+
+            </div>
+            <div style="width:50%;flex:none;display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,1.4vw,18px);padding:6px clamp(6px,0.8vw,10px);box-sizing:border-box;">
+
+        <!-- Calificación de notas -->
+        <div style="position:relative;border-radius:13px;padding:15px 16px 14px;background:linear-gradient(160deg, rgba(44,30,86,.55), rgba(22,14,52,.5));border:1px solid rgba(255,180,90,.30);backdrop-filter:blur(12px);box-shadow:0 16px 42px rgba(0,0,0,.42),0 0 24px rgba(255,180,90,.10);animation:fadeup .8s ease both .42s;">
+          <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:9px;">
+            <div style="width:34px;height:34px;flex:none;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(255,180,90,.14);box-shadow:0 0 16px rgba(255,180,90,.22);">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#ffb45a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="13" y2="16"></line></svg>
+            </div>
+            <div>
+              <h3 style="margin:0 0 2px;font-family:'Orbitron',sans-serif;font-size:12px;color:#fff;letter-spacing:.2px;">Calificación de notas</h3>
+              <div style="font-size:10px;color:#9b8fc8;">Boletines y promedios académicos</div>
+            </div>
+          </div>
+          <p style="margin:0 0 11px;font-size:11px;line-height:1.5;color:#cdbcf0;">Ingresa y consulta notas por periodo, asignatura y logro. Calcula promedios automáticamente y genera boletines académicos listos para entregar.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:9px;padding:3px 8px;border-radius:999px;background:rgba(255,180,90,.12);border:1px solid rgba(255,180,90,.32);color:#ffca8c;">Por periodo</span>
+            <span style="font-size:9px;padding:3px 8px;border-radius:999px;background:rgba(255,180,90,.12);border:1px solid rgba(255,180,90,.32);color:#ffca8c;">Boletines</span>
+            <span style="font-size:9px;padding:3px 8px;border-radius:999px;background:rgba(255,180,90,.12);border:1px solid rgba(255,180,90,.32);color:#ffca8c;">Promedios</span>
+          </div>
+        </div>
+
+        <!-- Gestión de novedades -->
+        <div style="position:relative;border-radius:13px;padding:15px 16px 14px;background:linear-gradient(160deg, rgba(44,30,86,.55), rgba(22,14,52,.5));border:1px solid rgba(255,92,200,.30);backdrop-filter:blur(12px);box-shadow:0 16px 42px rgba(0,0,0,.42),0 0 24px rgba(255,92,200,.10);animation:fadeup .8s ease both .54s;">
+          <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:9px;">
+            <div style="width:34px;height:34px;flex:none;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(255,92,200,.14);box-shadow:0 0 16px rgba(255,92,200,.22);">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#ff5cc8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
+            <div>
+              <h3 style="margin:0 0 2px;font-family:'Orbitron',sans-serif;font-size:12px;color:#fff;letter-spacing:.2px;">Gestión de novedades</h3>
+              <div style="font-size:10px;color:#9b8fc8;">Incidencias y seguimiento</div>
+            </div>
+          </div>
+          <p style="margin:0 0 11px;font-size:11px;line-height:1.5;color:#cdbcf0;">Registra incidencias disciplinarias, permisos, retiros anticipados y eventos especiales. Lleva trazabilidad de cada novedad para coordinación y acudientes.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:9px;padding:3px 8px;border-radius:999px;background:rgba(255,92,200,.12);border:1px solid rgba(255,92,200,.32);color:#ff9bdd;">Disciplinarias</span>
+            <span style="font-size:9px;padding:3px 8px;border-radius:999px;background:rgba(255,92,200,.12);border:1px solid rgba(255,92,200,.32);color:#ff9bdd;">Permisos</span>
+            <span style="font-size:9px;padding:3px 8px;border-radius:999px;background:rgba(255,92,200,.12);border:1px solid rgba(255,92,200,.32);color:#ff9bdd;">Seguimiento</span>
+          </div>
+        </div>
+
+            </div>
+          </div>
+        </div>
+        <div data-plat-dots="1" style="display:flex;justify-content:center;gap:9px;margin-top:20px;">
+          <span style="width:22px;height:8px;border-radius:4px;background:#fff;opacity:1;transition:opacity .4s,width .4s;"></span>
+          <span style="width:8px;height:8px;border-radius:50%;background:#fff;opacity:.35;transition:opacity .4s,width .4s;"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCROLL CHEVRON -->
+    <div data-act="scrollDown" style="position:absolute;left:50%;bottom:18px;z-index:7;transform:translateX(-50%);width:38px;height:38px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--neon2,#4df0c8) 60%, transparent);display:flex;align-items:center;justify-content:center;color:var(--neon2,#4df0c8);animation:chevbob 2.2s ease-in-out infinite;cursor:pointer;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </div>
+  </section>
+
 <div data-ref="scene" style="position:relative;width:100%;height:100vh;overflow:hidden;scroll-snap-align:start;font-family:'Space Grotesk',sans-serif;background:radial-gradient(ellipse 70% 55% at 50% 38%, #3a2566 0%, #241546 46%, #160e30 100%);">
 
   <!-- floating dust motes -->
@@ -250,67 +377,16 @@ export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100
   <!-- VIGNETTE -->
   <div style="position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(ellipse 95% 78% at 50% 40%, transparent 50%, rgba(8,5,22,.6) 100%);"></div>
 
-  <!-- NAV -->
-  <nav style="position:absolute;top:0;left:0;right:0;z-index:7;display:flex;align-items:center;justify-content:space-between;padding:22px clamp(20px,4vw,56px);">
-    <div style="display:flex;align-items:center;gap:11px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:21px;letter-spacing:1.5px;color:#fff;text-shadow:0 0 14px var(--neon2,#4df0c8);">
-      <span style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 50% 42%,#fff 0 22%,#2e63d6 24% 60%,#1a3f8a 62% 100%);box-shadow:0 0 16px var(--neon2,#4df0c8);"></span>EyeSchool
-    </div>
-    <div style="display:flex;align-items:center;gap:clamp(18px,3vw,40px);font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:2.5px;color:#cdbdf2;">
-      <span data-act="goInicio" style="cursor:pointer;">INICIO</span><span data-act="goNosotros" style="cursor:pointer;">NOSOTROS</span><span data-act="goBeneficios" style="cursor:pointer;">BENEFICIOS</span><span data-act="goSoporte" style="cursor:pointer;">SOPORTE</span>
-    </div>
-    <div data-act="openLogin" style="padding:9px 22px;border-radius:999px;border:1.5px solid var(--neon2,#4df0c8);color:#fff;font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:2px;box-shadow:0 0 16px color-mix(in srgb,var(--neon2,#4df0c8) 55%, transparent);cursor:pointer;">ENTRAR</div>
-  </nav>
-
   <!-- HERO TEXT -->
   <div style="position:absolute;left:50%;bottom:8.5%;z-index:7;transform:translateX(-50%);width:min(760px,90%);text-align:center;">
     <div style="font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:5px;color:var(--neon2,#4df0c8);text-shadow:0 0 12px var(--neon2,#4df0c8);margin-bottom:14px;">★ UNIVERSO EYESCHOOL ★</div>
     <h1 data-ref="head" style="margin:0;font-weight:700;font-size:clamp(36px,6.4vw,74px);line-height:1.0;color:#fff;letter-spacing:-1px;text-shadow:0 4px 30px rgba(60,30,120,.6);">Hola, soy Loopi</h1>
     <p data-ref="sub" style="margin:14px auto 24px;font-size:clamp(14px,1.8vw,20px);color:#c6b6ec;max-width:34ch;">Tu compañero peludo para la gestión académica.</p>
-    <div style="display:inline-flex;align-items:center;gap:10px;padding:14px 32px;border-radius:999px;color:#0c2a22;font-weight:700;font-size:16px;background:linear-gradient(92deg,var(--neon2,#4df0c8),#38e8ff);box-shadow:0 0 34px color-mix(in srgb,var(--neon2,#4df0c8) 60%, transparent);cursor:pointer;">Saludar a Loopi →</div>
+    <div style="display:inline-flex;align-items:center;gap:10px;padding:14px 32px;border-radius:999px;color:#0c2a22;font-weight:700;font-size:16px;background:linear-gradient(92deg,var(--neon2,#4df0c8),#38e8ff);box-shadow:0 0 34px color-mix(in srgb,var(--neon2,#4df0c8) 60%, transparent);cursor:pointer;">Saludar al Agente →</div>
   </div>
 
-  <!-- SCROLL CHEVRON -->
-  <div data-act="scrollDown" style="position:absolute;left:50%;bottom:18px;z-index:7;transform:translateX(-50%);width:38px;height:38px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--neon2,#4df0c8) 60%, transparent);display:flex;align-items:center;justify-content:center;color:var(--neon2,#4df0c8);animation:chevbob 2.2s ease-in-out infinite;cursor:pointer;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-  </div>
 
 </div>
-
-  <!-- ═══════════════ PLATAFORMA / VIDEO SECTION ═══════════════ -->
-  <section id="plataforma" style="position:relative;min-height:100vh;overflow:hidden;scroll-snap-align:start;font-family:'Space Grotesk',sans-serif;">
-    <video data-ref="video" loop muted playsinline preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
-      <source src="/eyeschool/assets/galaxy.mp4" type="video/mp4"></source>
-    </video>
-    <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom, rgba(8,5,22,.16) 0%, rgba(14,8,32,.04) 45%, rgba(8,5,22,.16) 100%);"></div>
-    <div style="position:absolute;top:0;left:0;right:0;height:90px;z-index:2;background:linear-gradient(to bottom, #140e2c 0%, transparent 100%);"></div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:70px;z-index:2;background:linear-gradient(to top, #0a0618 0%, transparent 100%);"></div>
-
-    <div style="position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:clamp(70px,10vh,110px) clamp(24px,7vw,130px) clamp(50px,7vh,90px);">
-      <div style="text-align:center;margin-bottom:clamp(44px,7vh,80px);animation:fadeup .9s ease both .1s;">
-        <div style="font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:5px;color:#4df0c8;text-shadow:0 0 12px #4df0c8;margin-bottom:18px;text-transform:uppercase;">★ Para cada rol</div>
-        <h2 style="margin:0 0 18px;font-weight:700;font-size:clamp(28px,4.5vw,56px);color:#fff;line-height:1.07;letter-spacing:-.5px;max-width:20ch;text-shadow:0 2px 12px rgba(0,0,0,.85),0 4px 40px rgba(0,0,0,.6);">Una plataforma completa para tu institución</h2>
-        <p style="margin:0 auto;font-size:clamp(14px,1.5vw,18px);color:#e8ddff;max-width:50ch;line-height:1.65;text-shadow:0 2px 10px rgba(0,0,0,.9);">Diseñada para cada rol y optimizada para simplificar todos los procesos académicos.</p>
-      </div>
-
-      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;width:100%;max-width:760px;">
-        <div style="flex:1 1 200px;max-width:240px;border-radius:14px;padding:18px 18px 20px;background:rgba(77,240,200,.08);border:1px solid rgba(77,240,200,.32);backdrop-filter:blur(12px);animation:appearvanish 7.5s ease-in-out infinite 0s;">
-          <div style="font-size:26px;margin-bottom:9px;line-height:1;">🏫</div>
-          <h3 style="margin:0 0 6px;font-family:'Orbitron',sans-serif;font-size:13px;color:#fff;letter-spacing:.5px;font-weight:600;">Administradores</h3>
-          <p style="margin:0;font-size:12.5px;color:#cdbcf0;line-height:1.5;text-shadow:0 1px 6px rgba(0,0,0,.7);">Controla toda la institución desde un solo panel.</p>
-        </div>
-        <div style="flex:1 1 200px;max-width:240px;border-radius:14px;padding:18px 18px 20px;background:rgba(155,107,255,.08);border:1px solid rgba(155,107,255,.34);backdrop-filter:blur(12px);animation:appearvanish 7.5s ease-in-out infinite .5s;">
-          <div style="font-size:26px;margin-bottom:9px;line-height:1;">👨‍🏫</div>
-          <h3 style="margin:0 0 6px;font-family:'Orbitron',sans-serif;font-size:13px;color:#fff;letter-spacing:.5px;font-weight:600;">Docentes</h3>
-          <p style="margin:0;font-size:12.5px;color:#cdbcf0;line-height:1.5;text-shadow:0 1px 6px rgba(0,0,0,.7);">Gestiona notas, asistencia y cursos fácilmente.</p>
-        </div>
-        <div style="flex:1 1 200px;max-width:240px;border-radius:14px;padding:18px 18px 20px;background:rgba(56,232,255,.08);border:1px solid rgba(56,232,255,.30);backdrop-filter:blur(12px);animation:appearvanish 7.5s ease-in-out infinite 1s;">
-          <div style="font-size:26px;margin-bottom:9px;line-height:1;">🎓</div>
-          <h3 style="margin:0 0 6px;font-family:'Orbitron',sans-serif;font-size:13px;color:#fff;letter-spacing:.5px;font-weight:600;">Estudiantes</h3>
-          <p style="margin:0;font-size:12.5px;color:#cdbcf0;line-height:1.5;text-shadow:0 1px 6px rgba(0,0,0,.7);">Consulta tu progreso académico en tiempo real.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ═══════════════ RESEÑAS SECTION ═══════════════ -->
   <section id="resenas" style="position:relative;min-height:100vh;overflow:hidden;scroll-snap-align:start;font-family:'Space Grotesk',sans-serif;">
@@ -444,12 +520,12 @@ export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100
       </div>
 
       <div data-ring="1" style="position:absolute;inset:0;z-index:4;opacity:1;">
-        <button data-topic="0" style="position:absolute;left:50%;top:50%;width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:50%;border:1.5px solid rgba(120,200,255,.55);background:rgba(20,14,44,.72);backdrop-filter:blur(6px);color:#fff;font-size:clamp(20px,3.2vw,25px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 18px rgba(77,240,200,.28);transition:box-shadow .3s,border-color .3s;" style-hover="box-shadow:0 0 26px rgba(77,240,200,.7);border-color:#4df0c8;">🎯</button>
-        <button data-topic="1" style="position:absolute;left:50%;top:50%;width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:50%;border:1.5px solid rgba(155,107,255,.55);background:rgba(20,14,44,.72);backdrop-filter:blur(6px);color:#fff;font-size:clamp(20px,3.2vw,25px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 18px rgba(155,107,255,.28);transition:box-shadow .3s,border-color .3s;" style-hover="box-shadow:0 0 26px rgba(155,107,255,.7);border-color:#9b6bff;">👁️</button>
-        <button data-topic="2" style="position:absolute;left:50%;top:50%;width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:50%;border:1.5px solid rgba(56,232,255,.55);background:rgba(20,14,44,.72);backdrop-filter:blur(6px);color:#fff;font-size:clamp(20px,3.2vw,25px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 18px rgba(56,232,255,.28);transition:box-shadow .3s,border-color .3s;" style-hover="box-shadow:0 0 26px rgba(56,232,255,.7);border-color:#38e8ff;">💎</button>
-        <button data-topic="3" style="position:absolute;left:50%;top:50%;width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:50%;border:1.5px solid rgba(255,180,90,.55);background:rgba(20,14,44,.72);backdrop-filter:blur(6px);color:#fff;font-size:clamp(20px,3.2vw,25px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 18px rgba(255,180,90,.28);transition:box-shadow .3s,border-color .3s;" style-hover="box-shadow:0 0 26px rgba(255,180,90,.7);border-color:#ffb45a;">🚀</button>
-        <button data-topic="4" style="position:absolute;left:50%;top:50%;width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:50%;border:1.5px solid rgba(255,120,200,.55);background:rgba(20,14,44,.72);backdrop-filter:blur(6px);color:#fff;font-size:clamp(20px,3.2vw,25px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 18px rgba(255,120,200,.28);transition:box-shadow .3s,border-color .3s;" style-hover="box-shadow:0 0 26px rgba(255,120,200,.7);border-color:#ff78c8;">🤝</button>
-        <button data-topic="5" style="position:absolute;left:50%;top:50%;width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:50%;border:1.5px solid rgba(95,224,180,.55);background:rgba(20,14,44,.72);backdrop-filter:blur(6px);color:#fff;font-size:clamp(20px,3.2vw,25px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 18px rgba(95,224,180,.28);transition:box-shadow .3s,border-color .3s;" style-hover="box-shadow:0 0 26px rgba(95,224,180,.7);border-color:#5fe0b4;">🌎</button>
+        <button data-topic="0" style="position:absolute;left:50%;top:50%;width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:50%;border:1.5px solid rgba(120,200,255,.55);background:rgba(20,14,44,.72);backdrop-filter:blur(6px);color:transparent;text-shadow:0 0 0 #e7deff;font-size:clamp(20px,3.2vw,25px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 18px rgba(77,240,200,.28);transition:box-shadow .3s,border-color .3s;" style-hover="box-shadow:0 0 26px rgba(77,240,200,.7);border-color:#4df0c8;">🎯</button>
+        <button data-topic="1" style="position:absolute;left:50%;top:50%;width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:50%;border:1.5px solid rgba(155,107,255,.55);background:rgba(20,14,44,.72);backdrop-filter:blur(6px);color:transparent;text-shadow:0 0 0 #e7deff;font-size:clamp(20px,3.2vw,25px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 18px rgba(155,107,255,.28);transition:box-shadow .3s,border-color .3s;" style-hover="box-shadow:0 0 26px rgba(155,107,255,.7);border-color:#9b6bff;">👁️</button>
+        <button data-topic="2" style="position:absolute;left:50%;top:50%;width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:50%;border:1.5px solid rgba(56,232,255,.55);background:rgba(20,14,44,.72);backdrop-filter:blur(6px);color:transparent;text-shadow:0 0 0 #e7deff;font-size:clamp(20px,3.2vw,25px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 18px rgba(56,232,255,.28);transition:box-shadow .3s,border-color .3s;" style-hover="box-shadow:0 0 26px rgba(56,232,255,.7);border-color:#38e8ff;">💎</button>
+        <button data-topic="3" style="position:absolute;left:50%;top:50%;width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:50%;border:1.5px solid rgba(255,180,90,.55);background:rgba(20,14,44,.72);backdrop-filter:blur(6px);color:transparent;text-shadow:0 0 0 #e7deff;font-size:clamp(20px,3.2vw,25px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 18px rgba(255,180,90,.28);transition:box-shadow .3s,border-color .3s;" style-hover="box-shadow:0 0 26px rgba(255,180,90,.7);border-color:#ffb45a;">🚀</button>
+        <button data-topic="4" style="position:absolute;left:50%;top:50%;width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:50%;border:1.5px solid rgba(255,120,200,.55);background:rgba(20,14,44,.72);backdrop-filter:blur(6px);color:transparent;text-shadow:0 0 0 #e7deff;font-size:clamp(20px,3.2vw,25px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 18px rgba(255,120,200,.28);transition:box-shadow .3s,border-color .3s;" style-hover="box-shadow:0 0 26px rgba(255,120,200,.7);border-color:#ff78c8;">🤝</button>
+        <button data-topic="5" style="position:absolute;left:50%;top:50%;width:clamp(46px,7vw,58px);height:clamp(46px,7vw,58px);border-radius:50%;border:1.5px solid rgba(95,224,180,.55);background:rgba(20,14,44,.72);backdrop-filter:blur(6px);color:transparent;text-shadow:0 0 0 #e7deff;font-size:clamp(20px,3.2vw,25px);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 18px rgba(95,224,180,.28);transition:box-shadow .3s,border-color .3s;" style-hover="box-shadow:0 0 26px rgba(95,224,180,.7);border-color:#5fe0b4;">🌎</button>
       </div>
     </div>
 
@@ -458,7 +534,7 @@ export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100
       <div data-card-backdrop="1" style="position:absolute;inset:0;background:rgba(8,5,22,.62);backdrop-filter:blur(7px);cursor:pointer;"></div>
       <div data-card="1" style="position:relative;z-index:1;width:min(440px,86%);border-radius:26px;padding:44px 40px 40px;text-align:center;background:linear-gradient(160deg, rgba(44,30,86,.96), rgba(22,14,52,.96));border:1.5px solid rgba(130,100,220,.45);box-shadow:0 30px 90px rgba(0,0,0,.55),0 0 50px rgba(120,90,220,.25);transform:scale(.9);">
         <div data-card-close="1" style="position:absolute;top:16px;right:18px;width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;color:#cbb8f0;cursor:pointer;font-size:14px;">✕</div>
-        <div data-card-icon="1" style="font-size:58px;line-height:1;margin-bottom:18px;">🎯</div>
+        <div data-card-icon="1" style="font-size:58px;line-height:1;margin-bottom:18px;color:transparent;text-shadow:0 0 0 #e7deff;">🎯</div>
         <h3 data-card-title="1" style="margin:0 0 14px;font-family:'Orbitron',sans-serif;font-size:clamp(20px,2.4vw,26px);color:#fff;letter-spacing:.5px;">Misión</h3>
         <p data-card-desc="1" style="margin:0;font-size:clamp(14px,1.7vw,17px);color:#cdbcf0;line-height:1.65;">Hacer simple la gestión académica para cada institución del mundo.</p>
       </div>
@@ -489,19 +565,19 @@ export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100
         <!-- floating cards, centered (2 × 2) -->
         <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(16px,2vw,24px);max-width:600px;margin:0 auto;">
           <div style="flex:1 1 250px;max-width:270px;text-align:left;border-radius:16px;padding:22px 24px;background:linear-gradient(160deg, rgba(44,30,86,.55), rgba(22,14,52,.5));border:1px solid rgba(77,240,200,.3);backdrop-filter:blur(12px);box-shadow:0 14px 38px rgba(0,0,0,.4),0 0 24px rgba(77,240,200,.12);animation:benfloatA 9s ease-in-out infinite;">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;"><span style="font-size:26px;">🛟</span><span style="font-family:'Orbitron',sans-serif;font-size:15px;color:var(--neon2,#4df0c8);">Soporte 24/7</span></div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;"><span style="font-size:26px;color:transparent;text-shadow:0 0 0 #e7deff;">🛟</span><span style="font-family:'Orbitron',sans-serif;font-size:15px;color:var(--neon2,#4df0c8);">Soporte 24/7</span></div>
             <p style="margin:0;font-size:13.5px;line-height:1.5;color:#cdbcf0;">Atención permanente por chat, correo y teléfono.</p>
           </div>
           <div style="flex:1 1 250px;max-width:270px;text-align:left;border-radius:16px;padding:22px 24px;background:linear-gradient(160deg, rgba(44,30,86,.55), rgba(22,14,52,.5));border:1px solid rgba(155,107,255,.32);backdrop-filter:blur(12px);box-shadow:0 14px 38px rgba(0,0,0,.4),0 0 24px rgba(155,107,255,.12);animation:benfloatB 10.5s ease-in-out infinite .8s;">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;"><span style="font-size:26px;">⚡</span><span style="font-family:'Orbitron',sans-serif;font-size:15px;color:var(--neon,#9b6bff);">Implementación rápida</span></div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;"><span style="font-size:26px;color:transparent;text-shadow:0 0 0 #e7deff;">⚡</span><span style="font-family:'Orbitron',sans-serif;font-size:15px;color:var(--neon,#9b6bff);">Implementación rápida</span></div>
             <p style="margin:0;font-size:13.5px;line-height:1.5;color:#cdbcf0;">Lista en días, no meses. Todo en la nube.</p>
           </div>
           <div style="flex:1 1 250px;max-width:270px;text-align:left;border-radius:16px;padding:22px 24px;background:linear-gradient(160deg, rgba(44,30,86,.55), rgba(22,14,52,.5));border:1px solid rgba(56,232,255,.3);backdrop-filter:blur(12px);box-shadow:0 14px 38px rgba(0,0,0,.4),0 0 24px rgba(56,232,255,.12);animation:benfloatC 9.5s ease-in-out infinite 1.4s;">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;"><span style="font-size:26px;">🔒</span><span style="font-family:'Orbitron',sans-serif;font-size:15px;color:#38e8ff;">Datos seguros</span></div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;"><span style="font-size:26px;color:transparent;text-shadow:0 0 0 #e7deff;">🔒</span><span style="font-family:'Orbitron',sans-serif;font-size:15px;color:#38e8ff;">Datos seguros</span></div>
             <p style="margin:0;font-size:13.5px;line-height:1.5;color:#cdbcf0;">Cifrado y respaldos automáticos diarios.</p>
           </div>
           <div style="flex:1 1 250px;max-width:270px;text-align:left;border-radius:16px;padding:22px 24px;background:linear-gradient(160deg, rgba(44,30,86,.55), rgba(22,14,52,.5));border:1px solid rgba(255,180,90,.3);backdrop-filter:blur(12px);box-shadow:0 14px 38px rgba(0,0,0,.4),0 0 24px rgba(255,180,90,.12);animation:benfloatB 11s ease-in-out infinite 2s;">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;"><span style="font-size:26px;">🎓</span><span style="font-family:'Orbitron',sans-serif;font-size:15px;color:#ffb45a;">Capacitación incluida</span></div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;"><span style="font-size:26px;color:transparent;text-shadow:0 0 0 #e7deff;">🎓</span><span style="font-family:'Orbitron',sans-serif;font-size:15px;color:#ffb45a;">Capacitación incluida</span></div>
             <p style="margin:0;font-size:13.5px;line-height:1.5;color:#cdbcf0;">Sesiones guiadas y material para tu equipo.</p>
           </div>
         </div>
@@ -541,8 +617,7 @@ export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100
       <!-- brand -->
       <div style="flex:1 1 280px;min-width:240px;">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-          <span style="display:inline-flex;width:30px;height:30px;border-radius:9px;background:radial-gradient(circle at 50% 42%,#fff 0 20%,#2e63d6 22% 60%,#1a3f8a 62% 100%);box-shadow:0 0 16px var(--neon2,#4df0c8);"></span>
-          <span style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:19px;letter-spacing:1px;color:#fff;text-shadow:0 0 12px var(--neon2,#4df0c8);">EyeSchool</span>
+          <span style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:19px;letter-spacing:1px;color:#fff;text-shadow:0 0 12px var(--neon2,#4df0c8);">EYESCHOOL</span>
         </div>
         <p style="margin:0;font-size:13.5px;line-height:1.6;color:#a99bd0;max-width:34ch;">Plataforma de gestión escolar diseñada para simplificar procesos académicos y mejorar la experiencia educativa.</p>
       </div>
@@ -577,8 +652,7 @@ export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100
 
       <!-- brand -->
       <div style="display:flex;align-items:center;gap:9px;margin-bottom:18px;">
-        <span style="display:inline-flex;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 50% 42%,#fff 0 22%,#2e63d6 24% 60%,#1a3f8a 62% 100%);box-shadow:0 0 14px var(--neon2,#4df0c8);"></span>
-        <span style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;color:#fff;text-shadow:0 0 12px var(--neon2,#4df0c8);">EyeSchool</span>
+        <span style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;color:#fff;text-shadow:0 0 12px var(--neon2,#4df0c8);">EYESCHOOL</span>
       </div>
 
       <!-- ░░ LOGIN VIEW ░░ -->

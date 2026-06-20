@@ -22,7 +22,14 @@ function decodeJwtPayload(token: string): Record<string, unknown> | null {
 function getRoleDashboard(role: Role | null): string {
   if (role === 'admin') return '/admin'
   if (role) return '/general'
-  return '/login'
+  return '/'
+}
+
+function loginRedirect(request: NextRequest) {
+  const url = request.nextUrl.clone()
+  url.pathname = '/'
+  url.search = '?login=1'
+  return NextResponse.redirect(url)
 }
 
 export async function updateSession(request: NextRequest) {
@@ -32,26 +39,14 @@ export async function updateSession(request: NextRequest) {
   if (!isProtected) return NextResponse.next({ request })
 
   const token = request.cookies.get('eys_access')?.value
-  if (!token) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
-  }
+  if (!token) return loginRedirect(request)
 
   const payload = decodeJwtPayload(token)
-  if (!payload) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
-  }
+  if (!payload) return loginRedirect(request)
 
   // Check token expiry
   const exp = payload.exp as number | undefined
-  if (exp && Date.now() / 1000 > exp) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
-  }
+  if (exp && Date.now() / 1000 > exp) return loginRedirect(request)
 
   const role = mapRolToKey(
     (payload.rol ?? payload.nombre_rol) as string | undefined,

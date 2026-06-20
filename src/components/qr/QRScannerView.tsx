@@ -76,8 +76,8 @@ function ConfirmPanel({
     <div className="flex flex-col gap-5 p-5 rounded-2xl bg-white dark:bg-white/5 border-2 border-blue-300 dark:border-primary/50 shadow-lg animate-in fade-in slide-in-from-bottom-2 duration-200">
       {/* Estudiante detectado */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center text-xl flex-shrink-0">
-          👤
+        <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-300 flex items-center justify-center flex-shrink-0">
+          <span className="material-symbols-outlined !text-xl">person</span>
         </div>
         <div>
           <p className="font-bold text-slate-800 dark:text-white leading-tight">
@@ -111,7 +111,9 @@ function ConfirmPanel({
                     : 'border-slate-200 dark:border-white/10 text-slate-600 dark:text-gray-400 bg-transparent hover:border-slate-300'
                 }`}
               >
-                {s.value === 'Presente' ? '✅' : s.value === 'Tarde' ? '⏰' : '❌'}{' '}
+                <span className="material-symbols-outlined !text-lg align-middle">
+                  {s.value === 'Presente' ? 'check_circle' : s.value === 'Tarde' ? 'schedule' : 'cancel'}
+                </span>{' '}
                 {s.label}
               </button>
             ))}
@@ -267,7 +269,7 @@ export default function QRScannerView({
           {/* Overlay cuando cámara apagada */}
           {!cameraActive && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-slate-900/80">
-              <p className="text-5xl">📷</p>
+              <span className="material-symbols-outlined !text-6xl text-white/80">photo_camera</span>
               <p className="text-white/80 text-sm font-medium text-center px-6">
                 {cameraError ?? 'Activa la cámara para escanear códigos QR'}
               </p>
@@ -315,7 +317,9 @@ export default function QRScannerView({
               disabled={status === 'scanning'}
               className="flex-1 py-3 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white font-semibold transition-colors"
             >
-              {status === 'scanning' ? 'Detectando…' : '📸 Escanear'}
+              {status === 'scanning' ? 'Detectando…' : (
+                <span className="inline-flex items-center gap-1.5"><span className="material-symbols-outlined !text-lg">photo_camera</span> Escanear</span>
+              )}
             </button>
 
             <button
@@ -353,16 +357,16 @@ export default function QRScannerView({
         {/* Mensaje de error */}
         {errorMsg && (
           <div className="flex items-start gap-3 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 text-sm">
-            <span className="flex-shrink-0 mt-0.5">⚠</span>
+            <span className="material-symbols-outlined flex-shrink-0 !text-lg">warning</span>
             <span className="flex-1">{errorMsg}</span>
-            <button onClick={onClearError} className="flex-shrink-0 hover:opacity-70">✕</button>
+            <button onClick={onClearError} className="flex-shrink-0 hover:opacity-70 inline-flex"><span className="material-symbols-outlined !text-lg">close</span></button>
           </div>
         )}
 
         {/* Confirmación visual de éxito */}
         {status === 'success' && lastResult && (
           <div className="flex items-center gap-4 px-5 py-4 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30">
-            <span className="text-3xl">✅</span>
+            <span className="material-symbols-outlined !text-3xl text-emerald-500">check_circle</span>
             <div className="flex-1 min-w-0">
               <p className="font-bold text-emerald-800 dark:text-emerald-300">
                 {lastResult.codigo.nombreCompleto}
@@ -397,7 +401,7 @@ export default function QRScannerView({
 
         {(!todayRecords || todayRecords.length === 0) ? (
           <div className="text-center py-10 text-slate-400 dark:text-gray-500 text-sm">
-            <p className="text-3xl mb-2">📋</p>
+            <span className="material-symbols-outlined !text-4xl mb-2 opacity-60">fact_check</span>
             <p>No hay registros de asistencia hoy.</p>
           </div>
         ) : (

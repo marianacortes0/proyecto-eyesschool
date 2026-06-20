@@ -795,7 +795,7 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
             {errorBusqueda && <p className="text-xs text-red-500 mt-1">{errorBusqueda}</p>}
             {estudianteAsociado && (
               <div className="mt-2 flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20">
-                <span className="text-emerald-600 dark:text-emerald-400 text-sm font-semibold">✓</span>
+                <span className="material-symbols-outlined text-emerald-600 dark:text-emerald-400 !text-lg">check</span>
                 <span className="text-sm text-emerald-700 dark:text-emerald-300">{estudianteAsociado.nombre}</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400 ml-auto">Doc: {estudianteAsociado.documento}</span>
               </div>

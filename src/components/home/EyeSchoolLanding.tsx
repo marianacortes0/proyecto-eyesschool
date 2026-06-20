@@ -10,14 +10,17 @@
  * the generator left in place, so the rendered output matches the design 1:1.
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "@/auth/actions";
 import { LANDING_MARKUP } from "./eyeschoolMarkup";
+import SignupModal from "./SignupModal";
 
 type LandingHandlers = {
   onLogin: (correo: string, password: string) => Promise<{ error?: string } | void>;
   navigate: (path: string) => void;
+  onSignup: () => void;
+  onReady?: (api: { openLogin: () => void; closeLogin: () => void }) => void;
 };
 
 const KEYFRAMES = `
@@ -238,6 +241,41 @@ function createEngine(root: HTMLElement, handlers: LandingHandlers) {
     setTimeout(() => updateVideos(), 900);
   };
 
+  // ---- plataforma carousel (feature cards) ------------------------------
+  let platTimer: ReturnType<typeof setInterval> | null = null;
+
+  const setupPlataforma = () => {
+    const track = q("[data-plat-track]");
+    const dotWrap = q("[data-plat-dots]");
+    if (!track) return;
+    const slides = 2;
+    const dots = dotWrap
+      ? (Array.prototype.slice.call(dotWrap.querySelectorAll("span")) as AnyEl[])
+      : [];
+    let idx = 0;
+    const show = (i: number) => {
+      track.style.transition = "transform .6s cubic-bezier(.4,0,.2,1)";
+      track.style.transform = "translateX(-" + i * 50 + "%)";
+      dots.forEach((d, k) => {
+        const active = k === i;
+        d.style.opacity = active ? "1" : ".35";
+        d.style.width = active ? "22px" : "8px";
+        d.style.borderRadius = active ? "4px" : "50%";
+      });
+    };
+    show(0);
+    dots.forEach((d, k) =>
+      on(d, "click", () => {
+        idx = k;
+        show(idx);
+      })
+    );
+    platTimer = setInterval(() => {
+      idx = (idx + 1) % slides;
+      show(idx);
+    }, 5200);
+  };
+
   // ---- reseñas rotation -------------------------------------------------
   let reviewTimer: ReturnType<typeof setInterval> | null = null;
   let sopPanel: HTMLElement | null = null;
@@ -382,8 +420,12 @@ function createEngine(root: HTMLElement, handlers: LandingHandlers) {
 
     // El registro inline no captura documento/rol que el backend exige →
     // "Regístrate" lleva a la página de registro real.
-    on(loginCard?.querySelector("[data-go-signup]") ?? null, "click", () =>
-      handlers.navigate("/register")
+    on(loginCard?.querySelector("[data-go-signup]") ?? null, "click", () => {
+      state.loginOpen = false;
+      handlers.onSignup();
+    });
+    on(loginCard?.querySelector("[data-go-login]") ?? null, "click", () =>
+      handlers.navigate("/?login=1")
     );
 
     if (!loginView) return;
@@ -705,12 +747,31 @@ function createEngine(root: HTMLElement, handlers: LandingHandlers) {
   applyScene();
   on(window, "resize", applyScene);
   setupVideo();
+  setupPlataforma();
   setupReviews();
   setupNosotros();
   boot();
 
+  // Expone control del overlay de login a React (para el modal de registro).
+  handlers.onReady?.({
+    openLogin: actions.openLogin,
+    closeLogin: () => {
+      state.loginOpen = false;
+    },
+  });
+
+  // Abre el modal de login al llegar con ?login=1 (redirecciones de auth y botón "Entrar").
+  try {
+    if (new URLSearchParams(window.location.search).get("login") === "1") {
+      actions.openLogin();
+    }
+  } catch {
+    /* noop */
+  }
+
   return () => {
     if (raf) cancelAnimationFrame(raf);
+    if (platTimer) clearInterval(platTimer);
     if (reviewTimer) clearInterval(reviewTimer);
     if (sopTimer) clearInterval(sopTimer);
     cleanups.forEach((fn) => fn());
@@ -720,6 +781,8 @@ function createEngine(root: HTMLElement, handlers: LandingHandlers) {
 export default function EyeSchoolLanding() {
   const hostRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const [signupOpen, setSignupOpen] = useState(false);
+  const openLoginRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     const host = hostRef.current;
@@ -733,6 +796,10 @@ export default function EyeSchoolLanding() {
         return await login(undefined, fd);
       },
       navigate: (path) => router.push(path),
+      onSignup: () => setSignupOpen(true),
+      onReady: ({ openLogin }) => {
+        openLoginRef.current = openLogin;
+      },
     };
     const destroy = createEngine(host, handlers);
     return destroy;
@@ -745,6 +812,14 @@ export default function EyeSchoolLanding() {
         ref={hostRef}
         className="eyeschool-root"
         dangerouslySetInnerHTML={{ __html: LANDING_MARKUP }}
+      />
+      <SignupModal
+        open={signupOpen}
+        onClose={() => setSignupOpen(false)}
+        onSwitchToLogin={() => {
+          setSignupOpen(false);
+          openLoginRef.current();
+        }}
       />
     </>
   );

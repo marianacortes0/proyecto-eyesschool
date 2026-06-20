@@ -563,9 +563,9 @@ function HorarioCell({ dia, horario: h, vista, canUpdate, canDelete, onEdit, onT
           {canDelete && (
             <button
               onClick={() => onDelete(h.idHorario)}
-              className="py-1 px-2 rounded-lg bg-white/80 dark:bg-black/40 hover:bg-red-100 dark:hover:bg-red-500/30 text-slate-500 hover:text-red-600 dark:hover:text-red-300 text-[10px] font-bold transition-colors"
+              className="py-1 px-1.5 rounded-lg bg-white/80 dark:bg-black/40 hover:bg-red-100 dark:hover:bg-red-500/30 text-slate-500 hover:text-red-600 dark:hover:text-red-300 transition-colors inline-flex"
             >
-              ✕
+              <span className="material-symbols-outlined !text-sm">delete</span>
             </button>
           )}
         </div>

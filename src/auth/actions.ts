@@ -208,9 +208,9 @@ export async function register(prevState: unknown, formData: FormData) {
   }
 
   if (ROLES_REQUIEREN_VALIDACION.has(roleId)) {
-    redirect('/login?registered=pending')
+    redirect('/?login=1&registered=pending')
   }
-  redirect('/login?registered=true')
+  redirect('/?login=1&registered=true')
 }
 
 // ── Lookup tables ─────────────────────────────────────────────────────────────

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { usePermissions } from '@/hooks/usePermissions';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 type NavItem = {
   label: string;
@@ -41,7 +42,7 @@ export default function PanelSidebar() {
     match.some((m) => pathname === m || pathname.startsWith(`${m}/`));
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-20 bg-white/85 backdrop-blur-xl border-r border-glass-stroke z-50 flex flex-col items-center py-8">
+    <aside className="fixed left-0 top-0 h-screen w-20 bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl border-r border-glass-stroke z-50 flex flex-col items-center py-8">
       {/* Brand */}
       <Link href={dashboardHref} className="mb-10" aria-label="EyeSchool">
         <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/20">
@@ -77,6 +78,8 @@ export default function PanelSidebar() {
 
       {/* Footer cluster */}
       <div className="mt-auto flex flex-col gap-5 items-center">
+        <ThemeToggle />
+
         <Link
           href="/perfil"
           className={`group relative w-10 h-10 rounded-full flex items-center justify-center transition-colors ${

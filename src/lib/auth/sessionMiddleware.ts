@@ -30,7 +30,7 @@ function isExpired(payload: Record<string, unknown> | null): boolean {
 function getRoleDashboard(role: Role | null): string {
   if (role === 'admin') return '/admin'
   if (role) return '/general'
-  return '/login'
+  return '/'
 }
 
 /** Llama al backend para renovar el access token a partir del refresh token. */
@@ -79,10 +79,11 @@ export async function updateSession(request: NextRequest) {
     return refreshedResponse ?? NextResponse.next({ request })
   }
 
-  // Ruta protegida sin sesión válida → login
+  // Ruta protegida sin sesión válida → login (modal en el landing)
   if (isExpired(payload)) {
     const url = request.nextUrl.clone()
-    url.pathname = '/login'
+    url.pathname = '/'
+    url.search = '?login=1'
     return NextResponse.redirect(url)
   }
 

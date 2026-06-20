@@ -8,7 +8,13 @@
       "Bash(grep -v \"^Row$\\\\|^Insert$\\\\|^Update$\\\\|^Relationships$\\\\|^public$\\\\|^Tables$\\\\|^__InternalSupabase$\")",
       "Bash(ls -la /c/Users/maria/proyecto-eyesschool/*.js)",
       "Bash(xargs grep:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(echo \"=== NEW DESIGN: sections / screen labels ===\")",
+      "Bash(grep -oE '<section id=\\\\\\\\\"[a-z]+\\\\\\\\\"|data-screen-label=\\\\\\\\\"[^\\\\\\\\]*\\\\\\\\\"' /c/Users/maria/.claude/projects/C--Users-maria-proyecto-eyesschool/ba2d260f-273b-4475-9d06-81f1fab9f84f/tool-results/toolu_013LAAT3A3pUjDEYoUH6otHq.txt)",
+      "Bash(echo)",
+      "Bash(echo \"=== NEW DESIGN: ref handoff bindings {{ }} \\(unique\\) ===\")",
+      "Bash(grep -oE 'ref=\\\\\\\\\"\\\\{\\\\{ [a-zA-Z0-9]+ \\\\}\\\\}\\\\\\\\\"|onClick=\\\\\\\\\"\\\\{\\\\{ [a-zA-Z0-9]+ \\\\}\\\\}\\\\\\\\\"' /c/Users/maria/.claude/projects/C--Users-maria-proyecto-eyesschool/ba2d260f-273b-4475-9d06-81f1fab9f84f/tool-results/toolu_013LAAT3A3pUjDEYoUH6otHq.txt)",
+      "Bash(node *)"
     ]
   }
 }

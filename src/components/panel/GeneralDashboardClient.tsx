@@ -4,14 +4,15 @@ import { useAuth } from '@/hooks/useAuth'
 import { useDocenteDashboard } from '@/hooks/useDocenteDashboard'
 import { useEstudianteDashboard } from '@/hooks/useEstudianteDashboard'
 import { usePadreDashboard } from '@/hooks/usePadreDashboard'
+import type { DocenteStats, EstudianteStats, PadreStats } from '@/services/dashboard/dashboardService'
 import MinimalDashboard, { type DashboardKpi } from './MinimalDashboard'
 
 const num = (n: number | null | undefined) => (n == null ? '—' : String(n))
 const dec = (n: number | null | undefined) => (n == null ? '—' : n.toFixed(1))
 const pct = (n: number | null | undefined) => (n == null ? '—' : `${Math.round(n)}%`)
 
-function DocenteDashboard({ name }: { name: string }) {
-  const { data, loading, error } = useDocenteDashboard()
+function DocenteDashboard({ name, initial }: { name: string; initial?: DocenteStats }) {
+  const { data, loading, error } = useDocenteDashboard(initial)
   const kpis: DashboardKpi[] = [
     { label: 'Cursos asignados', value: num(data?.cursosAsignados), icon: 'menu_book', accent: 'primary' },
     { label: 'Notas registradas hoy', value: num(data?.notasHoy), icon: 'edit_note', accent: 'purple' },
@@ -29,8 +30,8 @@ function DocenteDashboard({ name }: { name: string }) {
   )
 }
 
-function EstudianteDashboard({ name }: { name: string }) {
-  const { data, loading, error } = useEstudianteDashboard()
+function EstudianteDashboard({ name, initial }: { name: string; initial?: EstudianteStats }) {
+  const { data, loading, error } = useEstudianteDashboard(initial)
   const kpis: DashboardKpi[] = [
     { label: 'Asistencia', value: pct(data?.porcentajeAsistencia), icon: 'fact_check', accent: 'teal', percent: data?.porcentajeAsistencia ?? undefined },
     { label: 'Novedades activas', value: num(data?.novedadesActivas), icon: 'campaign', accent: 'purple' },
@@ -48,8 +49,8 @@ function EstudianteDashboard({ name }: { name: string }) {
   )
 }
 
-function PadreDashboard({ name }: { name: string }) {
-  const { data, loading, error } = usePadreDashboard()
+function PadreDashboard({ name, initial }: { name: string; initial?: PadreStats }) {
+  const { data, loading, error } = usePadreDashboard(initial)
   const hijo = data?.hijos?.[0]
   const kpis: DashboardKpi[] = [
     { label: 'Asistencia', value: pct(hijo?.porcentajeAsistencia), icon: 'fact_check', accent: 'teal', percent: hijo?.porcentajeAsistencia ?? undefined },
@@ -68,11 +69,19 @@ function PadreDashboard({ name }: { name: string }) {
   )
 }
 
-export default function GeneralDashboardClient() {
+export default function GeneralDashboardClient({
+  initialDocente,
+  initialEstudiante,
+  initialPadre,
+}: {
+  initialDocente?: DocenteStats
+  initialEstudiante?: EstudianteStats
+  initialPadre?: PadreStats
+}) {
   const { user, role } = useAuth()
   const name = user?.primerNombre || 'de nuevo'
-  if (role === 'docente') return <DocenteDashboard name={name} />
-  if (role === 'estudiante') return <EstudianteDashboard name={name} />
-  if (role === 'padre') return <PadreDashboard name={name} />
-  return <EstudianteDashboard name={name} />
+  if (role === 'docente') return <DocenteDashboard name={name} initial={initialDocente} />
+  if (role === 'estudiante') return <EstudianteDashboard name={name} initial={initialEstudiante} />
+  if (role === 'padre') return <PadreDashboard name={name} initial={initialPadre} />
+  return <EstudianteDashboard name={name} initial={initialEstudiante} />
 }

@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic'
+﻿export const dynamic = 'force-dynamic'
 
 import { redirect } from 'next/navigation'
 import { getServerUser, getServerToken, userToRole } from '@/lib/auth/server'
@@ -35,10 +35,10 @@ async function serverFetch<T>(path: string, token: string): Promise<T | null> {
 
 export default async function PerfilPage() {
   const user = await getServerUser()
-  if (!user) redirect('/login')
+  if (!user) redirect('/?login=1')
 
   const role = userToRole(user)
-  if (!role) redirect('/login')
+  if (!role) redirect('/?login=1')
 
   const token = await getServerToken()
 

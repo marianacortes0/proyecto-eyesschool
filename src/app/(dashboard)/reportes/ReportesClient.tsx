@@ -26,11 +26,11 @@ const TIPO_STYLE: Record<string, string> = {
 }
 
 const TIPO_ICON: Record<string, string> = {
-  Academico:     '📝',
-  Disciplinario: '⚠️',
-  Medico:        '🏥',
-  Asistencia:    '📋',
-  Estadistico:   '📊',
+  Academico:     'edit_note',
+  Disciplinario: 'warning',
+  Medico:        'local_hospital',
+  Asistencia:    'fact_check',
+  Estadistico:   'bar_chart',
 }
 
 interface Props { role: Role; idAdministrador: number }
@@ -187,8 +187,8 @@ function ReporteCard({ reporte: r, canUpdate, canDelete, canDownload, onEdit, on
     <div className="bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4 hover:shadow-md transition-all">
 
       {/* Ícono tipo */}
-      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-slate-100 dark:bg-white/10 flex items-center justify-center text-2xl">
-        {TIPO_ICON[r.tipoReporte] ?? '📄'}
+      <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-slate-100 dark:bg-white/10 flex items-center justify-center text-primary">
+        <span className="material-symbols-outlined fill !text-2xl">{TIPO_ICON[r.tipoReporte] ?? 'description'}</span>
       </div>
 
       {/* Info */}

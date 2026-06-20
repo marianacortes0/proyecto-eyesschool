@@ -62,7 +62,7 @@ export default function QREstudianteView({ codigo, loading }: Props) {
           <div className="w-72 h-96 rounded-2xl bg-slate-100 dark:bg-white/5 animate-pulse" />
         ) : !codigo ? (
           <div className="text-center py-12 text-slate-500 dark:text-gray-400">
-            <p className="text-4xl mb-3">🔒</p>
+            <span className="material-symbols-outlined !text-5xl mb-3 opacity-60">lock</span>
             <p className="font-semibold">No tienes un código QR activo.</p>
             <p className="text-sm mt-1">Contacta al administrador para que te asigne uno.</p>
           </div>

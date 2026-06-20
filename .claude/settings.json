@@ -61,7 +61,8 @@
       "PowerShell(npx tsc --noEmit -p tsconfig.json 2>&1 | Select-Object -First 20; Write-Output \"TSC:$LASTEXITCODE\"; npx eslint \"src/components/home/EyeSchoolLanding.tsx\" 2>&1 | Select-Object -First 20; Write-Output \"ESLINT:$LASTEXITCODE\")",
       "Bash(curl -s -m 8 -o /tmp/oa.json http://localhost:8000/openapi.json)",
       "Bash(curl -s -m 8 -o _o.json http://localhost:8000/openapi.json -w \"HTTP:%{http_code} size:%{size_download}\\\\n\")",
-      "Bash(sort -t: -k2 -rn)"
+      "Bash(sort -t: -k2 -rn)",
+      "PowerShell(npx tsc --noEmit 2>&1)"
     ],
     "additionalDirectories": [
       "\\tmp",

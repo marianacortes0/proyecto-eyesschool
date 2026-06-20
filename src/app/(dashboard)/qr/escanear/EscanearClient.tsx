@@ -82,7 +82,7 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
           onClick={openCreate}
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-800 dark:bg-white/10 dark:hover:bg-white/20 text-white text-sm font-semibold transition-colors shadow-sm"
         >
-          ✏️ Registrar manual
+          <span className="material-symbols-outlined !text-lg">edit</span> Registrar manual
         </button>
       </div>
 

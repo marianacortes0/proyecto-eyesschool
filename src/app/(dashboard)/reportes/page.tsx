@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic'
+﻿export const dynamic = 'force-dynamic'
 
 import { redirect } from 'next/navigation'
 import { getServerUser, getServerToken, userToRole } from '@/lib/auth/server'
@@ -8,10 +8,10 @@ const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
 export default async function ReportesPage() {
   const user = await getServerUser()
-  if (!user) redirect('/login')
+  if (!user) redirect('/?login=1')
 
   const role = userToRole(user)
-  if (!role) redirect('/login')
+  if (!role) redirect('/?login=1')
 
   const token = await getServerToken()
   let idAdministrador = 0

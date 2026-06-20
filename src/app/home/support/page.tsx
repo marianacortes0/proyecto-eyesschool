@@ -84,7 +84,7 @@ export default function SupportPage() {
 
   const handleChat = () => {
     alert("Tienes que iniciar sesión para esta acción");
-    router.push("/login");
+    router.push("/?login=1");
   };
 
   return (

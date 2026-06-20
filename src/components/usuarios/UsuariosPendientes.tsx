@@ -92,16 +92,16 @@ function PendienteCard({ usuario, onValidar, onRechazar }: CardProps) {
       <div className="space-y-1 text-xs text-slate-500 dark:text-slate-400">
         {usuario.correo && (
           <p className="flex items-center gap-1.5">
-            <span>✉</span> {usuario.correo}
+            <span className="material-symbols-outlined !text-base">mail</span> {usuario.correo}
           </p>
         )}
         {usuario.telefono && (
           <p className="flex items-center gap-1.5">
-            <span>📞</span> {usuario.telefono}
+            <span className="material-symbols-outlined !text-base">call</span> {usuario.telefono}
           </p>
         )}
         <p className="flex items-center gap-1.5">
-          <span>📅</span> Registrado el {formatFecha(usuario.fechaRegistro)}
+          <span className="material-symbols-outlined !text-base">event</span> Registrado el {formatFecha(usuario.fechaRegistro)}
         </p>
       </div>
 
@@ -135,7 +135,7 @@ function PendienteCard({ usuario, onValidar, onRechazar }: CardProps) {
           disabled={aprobando || rechazando}
           className="flex-1 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold transition-colors disabled:opacity-60 shadow-md shadow-emerald-500/20"
         >
-          {aprobando ? 'Aprobando...' : '✓ Aprobar'}
+          {aprobando ? 'Aprobando...' : 'Aprobar'}
         </button>
 
         {/* Rechazar */}
@@ -161,7 +161,7 @@ function PendienteCard({ usuario, onValidar, onRechazar }: CardProps) {
             disabled={aprobando || rechazando}
             className="px-4 py-2 rounded-xl border border-red-200 dark:border-red-500/30 text-red-500 dark:text-red-400 text-xs font-semibold hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors disabled:opacity-60"
           >
-            ✕ Rechazar
+            Rechazar
           </button>
         )}
       </div>
@@ -202,7 +202,7 @@ export default function UsuariosPendientes({
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
           title="Script para asignar el primer administrador"
         >
-          🛠 Script SQL
+          <span className="material-symbols-outlined !text-base">build</span> Script SQL
         </button>
       </div>
 
@@ -245,7 +245,7 @@ WHERE auth_id = (
         </div>
       ) : pendingUsuarios.length === 0 ? (
         <div className="flex items-center gap-3 px-4 py-5 rounded-2xl border border-dashed border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500">
-          <span className="text-2xl">✅</span>
+          <span className="material-symbols-outlined !text-2xl text-emerald-500">check_circle</span>
           <div>
             <p className="font-semibold text-sm">Sin pendientes</p>
             <p className="text-xs mt-0.5">Todos los usuarios registrados han sido validados.</p>

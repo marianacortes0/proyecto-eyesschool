@@ -160,7 +160,7 @@ export default function BeneficiosPage() {
             Únete a las instituciones que ya están modernizando su gestión.
           </p>
 
-          <a href="/login">
+          <a href="/?login=1">
             <button className="px-10 py-4 rounded-xl bg-white text-black font-semibold hover:scale-105 transition">
               Iniciar sesión
             </button>

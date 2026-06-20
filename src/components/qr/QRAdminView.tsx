@@ -56,9 +56,9 @@ function DownloadBtn({ estudiante }: { estudiante: EstudianteQR }) {
       onClick={handleDownload}
       disabled={loading}
       title="Descargar QR"
-      className="p-1.5 rounded-lg text-slate-500 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors disabled:opacity-40"
+      className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors disabled:opacity-40 inline-flex"
     >
-      {loading ? '⏳' : '⬇'}
+      <span className="material-symbols-outlined !text-xl">{loading ? 'hourglass_empty' : 'download'}</span>
     </button>
   )
 }
@@ -91,7 +91,7 @@ function AsignarModal({
       <div className="w-full max-w-sm bg-white dark:bg-[#1a1a2e] rounded-2xl shadow-2xl border border-white/20 dark:border-white/10">
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-white/10">
           <h2 className="text-base font-bold text-slate-800 dark:text-white">Asignar código QR</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl leading-none">✕</button>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-white leading-none inline-flex"><span className="material-symbols-outlined !text-xl">close</span></button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
@@ -277,7 +277,7 @@ function TablaAsistencia({ registros }: { registros: RegistroAsistencia[] }) {
   if (registros.length === 0) {
     return (
       <div className="text-center py-12 text-slate-500 dark:text-gray-400">
-        <p className="text-3xl mb-2">📋</p>
+        <span className="material-symbols-outlined !text-4xl mb-2 opacity-60">fact_check</span>
         <p>No hay registros de asistencia para esta fecha.</p>
       </div>
     )
@@ -392,7 +392,7 @@ export default function QRAdminView({
                 : 'text-slate-500 dark:text-gray-400 hover:text-slate-700'
             }`}
           >
-            📲 Códigos QR
+            <span className="inline-flex items-center gap-1.5"><span className="material-symbols-outlined !text-lg">qr_code_2</span> Códigos QR</span>
           </button>
           <button
             onClick={() => { setTab('asistencia'); onRefreshAsistencia() }}
@@ -402,7 +402,7 @@ export default function QRAdminView({
                 : 'text-slate-500 dark:text-gray-400 hover:text-slate-700'
             }`}
           >
-            📋 Asistencia
+            <span className="inline-flex items-center gap-1.5"><span className="material-symbols-outlined !text-lg">fact_check</span> Asistencia</span>
           </button>
           <button
             onClick={() => setTab('asignar')}
@@ -412,7 +412,7 @@ export default function QRAdminView({
                 : 'text-slate-500 dark:text-gray-400 hover:text-slate-700'
             }`}
           >
-            👤 Por Asignar
+            <span className="inline-flex items-center gap-1.5"><span className="material-symbols-outlined !text-lg">person</span> Por Asignar</span>
             {sinAsignar.length > 0 && (
               <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-white text-[9px] font-black flex items-center justify-center">
                 {sinAsignar.length}

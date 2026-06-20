@@ -91,6 +91,35 @@ html.dark {
 
 html.dark {
   color-scheme: dark;
+
+  /* ===== Panel tokens en modo oscuro (Luminous Ed-Tech / Dark) ===== */
+  --color-surface: #131c2e;
+  --color-surface-bg: #0b1220;
+  --color-on-surface: #e7edf5;
+  --color-on-surface-variant: #94a3b8;
+  --color-glass-stroke: rgba(255, 255, 255, 0.08);
+  --color-primary-container: #241844;
+}
+
+.dark .minimal-card {
+  background: #131c2e;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+.dark .minimal-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* Controles nativos en oscuro: el desplegable de <select> y las opciones
+   se renderizan oscuros (antes salían en blanco aunque la caja fuera oscura). */
+.dark select,
+.dark input,
+.dark textarea {
+  color-scheme: dark;
+}
+.dark select option,
+.dark select optgroup {
+  background-color: #131c2e;
+  color: #e7edf5;
 }
 
 

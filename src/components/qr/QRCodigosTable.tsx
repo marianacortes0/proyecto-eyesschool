@@ -12,9 +12,9 @@ type Props = {
 }
 
 const TIPO_BADGE: Record<TipoQR, { label: string; cls: string }> = {
-  ingreso: { label: '🚪 Ingreso', cls: 'bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-300' },
-  salida:  { label: '🏃 Salida',  cls: 'bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-300' },
-  ambos:   { label: '↕️ Ambos',   cls: 'bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300' },
+  ingreso: { label: 'Ingreso', cls: 'bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-300' },
+  salida:  { label: 'Salida',  cls: 'bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-300' },
+  ambos:   { label: 'Ambos',   cls: 'bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300' },
 }
 
 function DownloadButton({ codigo }: { codigo: CodigoQRConEstudiante }) {
@@ -42,9 +42,9 @@ function DownloadButton({ codigo }: { codigo: CodigoQRConEstudiante }) {
       onClick={handleDownload}
       disabled={downloading}
       title="Descargar QR"
-      className="p-1.5 rounded-lg text-slate-500 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors disabled:opacity-40"
+      className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors disabled:opacity-40 inline-flex"
     >
-      {downloading ? '⏳' : '⬇'}
+      <span className="material-symbols-outlined !text-xl">{downloading ? 'hourglass_empty' : 'download'}</span>
     </button>
   )
 }
@@ -137,7 +137,7 @@ export default function QRCodigosTable({ codigos, onEdit, onToggle, onDelete, on
                 <td className="px-4 py-3 text-xs whitespace-nowrap">
                   {c.fechaVencimiento ? (
                     <span className={vencido ? 'text-red-500 font-semibold' : 'text-slate-500 dark:text-gray-400'}>
-                      {vencido ? '⚠ ' : ''}{new Date(c.fechaVencimiento).toLocaleDateString('es-CO')}
+                      {new Date(c.fechaVencimiento).toLocaleDateString('es-CO')}
                     </span>
                   ) : (
                     <span className="text-slate-300 dark:text-gray-600">Sin vencimiento</span>
@@ -151,23 +151,23 @@ export default function QRCodigosTable({ codigos, onEdit, onToggle, onDelete, on
                     <button
                       onClick={() => onEdit(c)}
                       title="Editar"
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
+                      className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors inline-flex"
                     >
-                      ✏️
+                      <span className="material-symbols-outlined !text-xl">edit</span>
                     </button>
                     <button
                       onClick={() => onRenew(c.idCodigo)}
                       title="Renovar — genera un nuevo código QR"
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-500/10 transition-colors text-sm"
+                      className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-500/10 transition-colors inline-flex"
                     >
-                      🔄
+                      <span className="material-symbols-outlined !text-xl">autorenew</span>
                     </button>
                     <button
                       onClick={() => onDelete(c.idCodigo)}
                       title="Eliminar"
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+                      className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors inline-flex"
                     >
-                      🗑️
+                      <span className="material-symbols-outlined !text-xl">delete</span>
                     </button>
                   </div>
                 </td>

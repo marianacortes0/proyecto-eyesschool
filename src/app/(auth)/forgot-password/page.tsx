@@ -37,7 +37,7 @@ export default function ForgotPasswordPage() {
                   </svg>
                   <span>{state.success}</span>
                 </div>
-                <Link href="/login" className="text-center text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+                <Link href="/?login=1" className="text-center text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:underline">
                   ← Volver al login
                 </Link>
               </div>
@@ -76,7 +76,7 @@ export default function ForgotPasswordPage() {
                   {pending ? '...' : 'Enviar Enlace'}
                 </button>
 
-                <Link href="/login" className="text-center text-[10px] text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                <Link href="/?login=1" className="text-center text-[10px] text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                   ← Volver al login
                 </Link>
               </form>

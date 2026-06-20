@@ -35,7 +35,7 @@ export default function UsuariosTable({
   if (usuarios.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-slate-400 dark:text-slate-500">
-        <span className="text-4xl mb-3">👤</span>
+        <span className="material-symbols-outlined !text-5xl mb-3 opacity-60">group</span>
         <p className="font-semibold">No se encontraron usuarios</p>
         <p className="text-sm mt-1">Ajusta los filtros o crea un nuevo usuario</p>
       </div>
@@ -121,9 +121,9 @@ export default function UsuariosTable({
                     <button
                       onClick={() => onEdit(u)}
                       title="Editar"
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
+                      className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors inline-flex"
                     >
-                      ✏️
+                      <span className="material-symbols-outlined !text-xl">edit</span>
                     </button>
 
                     {/* Toggle estado */}
@@ -134,9 +134,9 @@ export default function UsuariosTable({
                         u.estado
                           ? 'text-slate-500 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-500/10'
                           : 'text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10'
-                      }`}
+                      } inline-flex`}
                     >
-                      {u.estado ? '🔒' : '🔓'}
+                      <span className="material-symbols-outlined !text-xl">{u.estado ? 'lock' : 'lock_open'}</span>
                     </button>
 
                     {/* Eliminar */}
@@ -162,9 +162,9 @@ export default function UsuariosTable({
                       <button
                         onClick={() => setConfirmDeleteId(u.idUsuario)}
                         title="Eliminar"
-                        className="p-1.5 rounded-lg text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+                        className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors inline-flex"
                       >
-                        🗑️
+                        <span className="material-symbols-outlined !text-xl">delete</span>
                       </button>
                     )}
                   </div>

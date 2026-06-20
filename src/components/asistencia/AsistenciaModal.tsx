@@ -133,7 +133,7 @@ export default function AsistenciaModal({
           <h2 className="text-lg font-bold text-slate-800 dark:text-white">
             {mode === 'create' ? 'Registrar Asistencia' : 'Editar Registro'}
           </h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl leading-none">✕</button>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-white leading-none inline-flex"><span className="material-symbols-outlined !text-xl">close</span></button>
         </div>
 
         {/* Form */}

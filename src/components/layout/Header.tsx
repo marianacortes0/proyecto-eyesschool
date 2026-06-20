@@ -126,7 +126,7 @@ export default function Header() {
             </button>
 
             <Link
-              href="/login"
+              href="/?login=1"
               onClick={() => setOpen(false)}
               className="px-5 py-2 rounded-xl bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition"
             >

@@ -83,9 +83,9 @@ export default function QRCodigoModal({
           </h2>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 dark:hover:text-white text-xl leading-none"
+            className="text-slate-400 hover:text-slate-600 dark:hover:text-white leading-none inline-flex"
           >
-            ✕
+            <span className="material-symbols-outlined !text-xl">close</span>
           </button>
         </div>
 
@@ -131,8 +131,8 @@ export default function QRCodigoModal({
                       : 'border-slate-200 dark:border-white/10 text-slate-600 dark:text-gray-400 hover:border-blue-300'
                   }`}
                 >
-                  <span className="text-lg">
-                    {t.value === 'ingreso' ? '🚪' : t.value === 'salida' ? '🏃' : '↕️'}
+                  <span className="material-symbols-outlined !text-xl">
+                    {t.value === 'ingreso' ? 'login' : t.value === 'salida' ? 'logout' : 'swap_vert'}
                   </span>
                   <span className="text-xs font-semibold leading-tight">{t.label}</span>
                 </button>
