@@ -7,7 +7,6 @@ import type {
   Materia,
   Especializacion,
   ProfesorOpt,
-  AsignacionProfesor,
   Asignacion,
 } from './horariosService'
 
@@ -152,20 +151,26 @@ export async function getEspecializacionesAction(): Promise<Especializacion[]> {
   })
 }
 
-export async function getProfesoresAction(): Promise<ProfesorOpt[]> {
+// El nombre del profesor viene embebido en /profesores (join con usuario).
+async function fetchProfesoresConNombre(): Promise<ProfesorOpt[]> {
   type Raw = Record<string, unknown>
-  const data = await apiFetch<Raw[]>('/profesores?limit=500')
-  return (data.map(r => {
-    const c = toCamel(r) as Raw
+  // El nombre viene embebido en /profesores (join con usuario en el backend);
+  // ya no se consulta /usuarios (directorio completo = solo-admin).
+  const profData = await apiFetch<Raw[]>('/profesores?limit=500')
+
+  return profData.map(p => {
+    const c = toCamel(p) as Raw
+    const nombre = [c.primerNombre, c.primerApellido].filter(Boolean).join(' ')
     return {
       idProfesor: c.idProfesor as number,
-      nombre:     `Profesor #${c.idProfesor}`,
+      nombre:     nombre || `Profesor #${c.idProfesor}`,
     } satisfies ProfesorOpt
-  })).sort((a, b) => a.nombre.localeCompare(b.nombre))
+  })
 }
 
-export async function getAsignacionesProfesoresAction(): Promise<AsignacionProfesor[]> {
-  return []
+export async function getProfesoresAction(): Promise<ProfesorOpt[]> {
+  const profesores = await fetchProfesoresConNombre()
+  return profesores.sort((a, b) => a.nombre.localeCompare(b.nombre))
 }
 
 export async function createHorarioAction(
@@ -211,20 +216,34 @@ export async function deleteHorarioAction(idHorario: number) {
 
 export async function getAsignacionesAction(): Promise<Asignacion[]> {
   type Raw = Record<string, unknown>
-  const data = await apiFetch<Raw[]>('/asignaciones?limit=500')
+  // Se resuelven los nombres de profesor, curso y materia contra sus catálogos
+  // (la lista de /asignaciones solo trae ids). Se usan las variantes "all" para
+  // resolver también cursos/materias inactivos referenciados por una asignación.
+  const [data, profesores, cursos, materias] = await Promise.all([
+    apiFetch<Raw[]>('/asignaciones?limit=500'),
+    fetchProfesoresConNombre(),
+    getAllCursosAction(),
+    getAllMateriasAction(),
+  ])
+  const nombrePorProfesor = new Map(profesores.map(p => [p.idProfesor, p.nombre]))
+  const nombrePorCurso = new Map(cursos.map(c => [c.idCurso, c.nombreCurso]))
+  const nombrePorMateria = new Map(materias.map(m => [m.idMateria, m.nombreMateria]))
   return data.map(r => {
     const c = toCamel(r) as Raw
+    const idProfesor = c.idProfesor as number
+    const idCurso = c.idCurso as number
+    const idMateria = c.idMateria as number
     return {
       idAsignacion:       c.idAsignacion as number,
-      idProfesor:         c.idProfesor as number,
-      idCurso:            c.idCurso as number,
-      idMateria:          c.idMateria as number,
+      idProfesor,
+      idCurso,
+      idMateria,
       fechaAsignacion:    c.fechaAsignacion as string,
       fechaFinalizacion:  c.fechaFinalizacion as string | null,
       activo:             c.activo as boolean,
-      nombreProfesor:     `Profesor #${c.idProfesor}`,
-      nombreCurso:        `Curso #${c.idCurso}`,
-      nombreMateria:      `Materia #${c.idMateria}`,
+      nombreProfesor:     nombrePorProfesor.get(idProfesor) ?? `Profesor #${idProfesor}`,
+      nombreCurso:        nombrePorCurso.get(idCurso) ?? `Curso #${idCurso}`,
+      nombreMateria:      nombrePorMateria.get(idMateria) ?? `Materia #${idMateria}`,
     } satisfies Asignacion
   })
 }
@@ -261,4 +280,35 @@ export async function updateAsignacionAction(
 
 export async function deleteAsignacionAction(idAsignacion: number) {
   await apiFetch(`/asignaciones/${idAsignacion}`, { method: 'DELETE' })
+}
+
+export type HorariosBootstrap = {
+  horarios: Horario[]
+  cursos: Curso[]
+  materias: Materia[]
+  allMaterias: Materia[]
+  allCursos: Curso[]
+  profesores: ProfesorOpt[]
+  especializaciones: Especializacion[]
+  asignaciones: Asignacion[]
+}
+
+/**
+ * Carga inicial de la página de horarios en UNA sola llamada (en vez de 8 server
+ * actions separadas desde el cliente). Internamente las consultas al backend
+ * siguen yendo en paralelo.
+ */
+export async function getHorariosBootstrapAction(): Promise<HorariosBootstrap> {
+  const [horarios, cursos, materias, allMaterias, allCursos, profesores, especializaciones, asignaciones] =
+    await Promise.all([
+      getHorariosAction(),
+      getCursosAction(),
+      getMateriasAction(),
+      getAllMateriasAction(),
+      getAllCursosAction(),
+      getProfesoresAction(),
+      getEspecializacionesAction(),
+      getAsignacionesAction(),
+    ])
+  return { horarios, cursos, materias, allMaterias, allCursos, profesores, especializaciones, asignaciones }
 }

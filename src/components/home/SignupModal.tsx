@@ -2,9 +2,13 @@
 
 import { useActionState, useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { register, getCursos, getEspecializaciones } from '@/auth/actions';
+import { passwordChecks, PASSWORD_RULE_LABELS } from '@/lib/utils/password';
 
 type Curso = { idCurso: number; nombreCurso: string; grado: string; jornada: string };
 type Especializacion = { idEspecializacion: number; nombreEspecializacion: string };
+
+const PARENTESCOS = ['Padre', 'Madre', 'Acudiente', 'Hermano', 'Abuelo', 'Tío', 'Otro'];
+const CARGOS_ADMIN = ['Coordinador', 'Director', 'Administrador'];
 
 // ── Estilos portados 1:1 del card de login synthwave (eyeschoolMarkup) ──
 const NEON = '#4df0c8';
@@ -35,6 +39,9 @@ export default function SignupModal({
   const [loadingOpts, setLoadingOpts] = useState(false);
   const [jornada, setJornada] = useState('');
   const [grado, setGrado] = useState('');
+  const [password, setPassword] = useState('');
+
+  const checks = passwordChecks(password);
 
   useEffect(() => {
     if (!open) return;
@@ -132,6 +139,17 @@ export default function SignupModal({
             </div>
           </div>
 
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            <div>
+              <label style={label}>SEGUNDO NOMBRE</label>
+              <input name="secondName" placeholder="Opcional" style={field} />
+            </div>
+            <div>
+              <label style={label}>SEGUNDO APELLIDO</label>
+              <input name="secondLastName" placeholder="Opcional" style={field} />
+            </div>
+          </div>
+
           <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: 10 }}>
             <div>
               <label style={label}>DOC.</label>
@@ -148,6 +166,27 @@ export default function SignupModal({
             </div>
           </div>
 
+          <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: 10 }}>
+            <div>
+              <label style={label}>GÉNERO</label>
+              <select name="genero" defaultValue="" style={{ ...field, cursor: 'pointer' }}>
+                <option value="">—</option>
+                <option value="M">M</option>
+                <option value="F">F</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+            <div>
+              <label style={label}>TELÉFONO</label>
+              <input name="telefono" placeholder="Opcional" style={field} />
+            </div>
+          </div>
+
+          <div>
+            <label style={label}>DIRECCIÓN</label>
+            <input name="direccion" placeholder="Opcional" style={field} />
+          </div>
+
           <div>
             <label style={label}>¿QUIÉN ERES?</label>
             <select
@@ -158,7 +197,8 @@ export default function SignupModal({
               <option value="" disabled>Selecciona tu rol</option>
               <option value="2">Estudiante</option>
               <option value="4">Padre / Acudiente</option>
-              <option value="1">Profesor / Administrativo</option>
+              <option value="1">Profesor</option>
+              <option value="3">Administrador</option>
             </select>
           </div>
 
@@ -187,10 +227,36 @@ export default function SignupModal({
           )}
 
           {roleId === '1' && (
-            <select name="especializacionId" required disabled={loadingOpts} defaultValue=""
-              style={{ ...field, cursor: 'pointer' }}>
-              <option value="" disabled>{loadingOpts ? 'Cargando…' : 'Selecciona tu especialización'}</option>
-              {especializaciones.map(e => <option key={e.idEspecializacion} value={e.idEspecializacion}>{e.nombreEspecializacion}</option>)}
+            <>
+              <select name="especializacionId" required disabled={loadingOpts} defaultValue=""
+                style={{ ...field, cursor: 'pointer' }}>
+                <option value="" disabled>{loadingOpts ? 'Cargando…' : 'Selecciona tu especialización'}</option>
+                {especializaciones.map(e => <option key={e.idEspecializacion} value={e.idEspecializacion}>{e.nombreEspecializacion}</option>)}
+              </select>
+              <input name="institucion" placeholder="Institución (opcional)" style={field} />
+            </>
+          )}
+
+          {roleId === '4' && (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <div>
+                <label style={label}>ID ESTUDIANTE</label>
+                <input name="idEstudianteVinculado" required type="number" placeholder="N° de estudiante" style={field} />
+              </div>
+              <div>
+                <label style={label}>PARENTESCO</label>
+                <select name="parentesco" required defaultValue="" style={{ ...field, cursor: 'pointer' }}>
+                  <option value="" disabled>Selecciona</option>
+                  {PARENTESCOS.map(p => <option key={p} value={p}>{p}</option>)}
+                </select>
+              </div>
+            </div>
+          )}
+
+          {roleId === '3' && (
+            <select name="cargo" required defaultValue="" style={{ ...field, cursor: 'pointer' }}>
+              <option value="" disabled>Selecciona tu cargo</option>
+              {CARGOS_ADMIN.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           )}
 
@@ -200,7 +266,27 @@ export default function SignupModal({
           </div>
           <div>
             <label style={label}>CONTRASEÑA</label>
-            <input name="password" type="password" required placeholder="••••••••" style={field} />
+            <input
+              name="password"
+              type="password"
+              required
+              placeholder="••••••••"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              style={field}
+            />
+            {password.length > 0 && (
+              <ul style={{ listStyle: 'none', margin: '8px 0 0', padding: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 10px' }}>
+                {PASSWORD_RULE_LABELS.map(({ key, label: text }) => {
+                  const ok = checks[key];
+                  return (
+                    <li key={key} style={{ fontSize: 10, color: ok ? NEON : '#a99bd0', display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <span>{ok ? '✓' : '○'}</span> {text}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
 
           {state?.error && (

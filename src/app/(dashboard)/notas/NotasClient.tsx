@@ -2,27 +2,93 @@
 
 import { useState, useMemo } from 'react'
 import { useNotas, type EstudianteOpt, type MateriaOpt, type CursoOpt } from '@/hooks/useNotas'
-import { PERIODOS, notaColor, NOTA_APROBACION, type Nota } from '@/services/notas/notasService'
+import { type NotasBootstrap } from '@/services/notas/notasActions'
+import { PERIODOS, notaColor, NOTA_APROBACION, downloadBoletinPdf, type Nota } from '@/services/notas/notasService'
 import { can, type Role } from '@/lib/utils/permissions'
+import { notifySuccess, notifyWarning, notifyError } from '@/lib/toast'
+import { getErrorMessage } from '@/lib/errors'
+import Pagination from '@/components/ui/Pagination'
+import { usePagination } from '@/hooks/usePagination'
 
-interface Props { role: Role; idUsuarioRegistrador: number }
+interface Props { role: Role; idUsuarioRegistrador: number; initialData?: NotasBootstrap }
 
-export default function NotasClient({ role, idUsuarioRegistrador }: Props) {
+export default function NotasClient({ role, idUsuarioRegistrador, initialData }: Props) {
   const {
     notas, totalNotas, estudiantes, materias, cursos,
     loading, saving, error, stats,
     filterEstudiante, setFilterEstudiante,
     filterMateria, setFilterMateria,
     filterPeriodo, setFilterPeriodo,
-    searchQuery, setSearchQuery,
+    filterCurso, setFilterCurso,
+    filterJornada, setFilterJornada,
     modalMode, selected,
     openCreate, openEdit, closeModal,
     handleCreate, handleUpdate, handleDelete,
-  } = useNotas(idUsuarioRegistrador)
+  } = useNotas(idUsuarioRegistrador, initialData)
 
   const canCreate = can(role, 'create', 'notas')
   const canUpdate = can(role, 'update', 'notas')
   const canDelete = can(role, 'delete', 'notas')
+
+  const { page, setPage, totalPages, pageItems, total, from, to } = usePagination(notas)
+
+  // Jornadas únicas y cursos disponibles según la jornada seleccionada
+  const jornadas = useMemo(
+    () => [...new Set(cursos.map(c => c.jornada).filter(Boolean))].sort(),
+    [cursos]
+  )
+  const cursosFiltrados = useMemo(
+    () => (filterJornada ? cursos.filter(c => c.jornada === filterJornada) : cursos),
+    [cursos, filterJornada]
+  )
+
+  // El dropdown de estudiante depende del curso elegido: solo lista los
+  // estudiantes cuyo curso actual es el seleccionado.
+  const estudiantesDelCurso = useMemo(
+    () => (filterCurso
+      ? estudiantes.filter(e => e.idCursoActual !== null && String(e.idCursoActual) === filterCurso)
+      : []),
+    [estudiantes, filterCurso]
+  )
+
+  // Al cambiar la jornada, descarta el curso y el estudiante elegidos
+  const handleJornadaFilter = (val: string) => {
+    setFilterJornada(val)
+    setFilterCurso('')
+    setFilterEstudiante('')
+    notifySuccess('Filtros aplicados correctamente')
+  }
+
+  // Al cambiar el curso, descarta el estudiante elegido (depende del curso)
+  const handleCursoFilter = (val: string) => {
+    setFilterCurso(val)
+    setFilterEstudiante('')
+  }
+
+  // ¿Hay algún filtro activo? (para distinguir "sin notas" de "sin coincidencias")
+  const hayFiltrosActivos =
+    !!filterEstudiante || !!filterJornada || !!filterCurso || !!filterMateria || !!filterPeriodo
+
+  // Las notas solo se muestran cuando se ha seleccionado un estudiante
+  // (cadena de filtros jornada → curso → estudiante completa).
+  const estudianteSeleccionado = useMemo(
+    () => estudiantes.find(e => String(e.idEstudiante) === filterEstudiante) ?? null,
+    [estudiantes, filterEstudiante]
+  )
+  const studentSelected = !!filterEstudiante
+
+  const [downloadingBoletin, setDownloadingBoletin] = useState(false)
+  const handleDownloadBoletin = async () => {
+    if (!estudianteSeleccionado) return
+    setDownloadingBoletin(true)
+    try {
+      await downloadBoletinPdf(estudianteSeleccionado.idEstudiante, estudianteSeleccionado.nombre)
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'No se pudo descargar el boletín'))
+    } finally {
+      setDownloadingBoletin(false)
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -45,45 +111,66 @@ export default function NotasClient({ role, idUsuarioRegistrador }: Props) {
         )}
       </div>
 
-      {/* ── KPIs ─────────────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 p-4">
-          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Promedio</p>
-          <p className={`text-3xl font-black mt-1 ${stats.promedio >= NOTA_APROBACION ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
-            {stats.promedio.toFixed(1)}
-          </p>
+      {/* ── KPIs (solo con estudiante seleccionado) ──────────────────────────── */}
+      {studentSelected && (
+        <div className="grid grid-cols-3 gap-4">
+          <div className="bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 p-4">
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Promedio</p>
+            <p className={`text-3xl font-black mt-1 ${stats.promedio >= NOTA_APROBACION ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
+              {stats.promedio.toFixed(1)}
+            </p>
+          </div>
+          <div className="bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 p-4">
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Aprobados</p>
+            <p className="text-3xl font-black text-green-600 dark:text-green-400 mt-1">{stats.aprobados}</p>
+          </div>
+          <div className="bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 p-4">
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Reprobados</p>
+            <p className="text-3xl font-black text-red-500 dark:text-red-400 mt-1">{stats.reprobados}</p>
+          </div>
         </div>
-        <div className="bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 p-4">
-          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Aprobados</p>
-          <p className="text-3xl font-black text-green-600 dark:text-green-400 mt-1">{stats.aprobados}</p>
-        </div>
-        <div className="bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 p-4">
-          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Reprobados</p>
-          <p className="text-3xl font-black text-red-500 dark:text-red-400 mt-1">{stats.reprobados}</p>
-        </div>
-      </div>
+      )}
 
       {/* ── Filtros ──────────────────────────────────────────────────────────── */}
+      {/* Orden: jornada → curso → estudiante (del curso) → materia → periodo */}
       <div className="flex flex-wrap gap-3">
-        <input
-          type="text"
-          placeholder="Buscar estudiante o materia..."
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          className="flex-1 min-w-[200px] px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-        />
+        {/* 1 · Jornada */}
+        <select
+          value={filterJornada}
+          onChange={e => handleJornadaFilter(e.target.value)}
+          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm capitalize focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          <option value="">Todas las jornadas</option>
+          {jornadas.map(j => (
+            <option key={j} value={j}>{j}</option>
+          ))}
+        </select>
+        {/* 2 · Curso */}
+        <select
+          value={filterCurso}
+          onChange={e => handleCursoFilter(e.target.value)}
+          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          <option value="">Todos los cursos</option>
+          {cursosFiltrados.map(c => (
+            <option key={c.idCurso} value={String(c.idCurso)}>{c.nombreCurso}</option>
+          ))}
+        </select>
+        {/* 3 · Estudiante (del curso seleccionado) */}
         <select
           value={filterEstudiante}
           onChange={e => setFilterEstudiante(e.target.value)}
-          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          disabled={!filterCurso}
+          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <option value="">Todos los estudiantes</option>
-          {estudiantes.map(e => (
+          <option value="">{filterCurso ? 'Todos los estudiantes' : 'Primero elige un curso'}</option>
+          {estudiantesDelCurso.map(e => (
             <option key={e.idEstudiante} value={String(e.idEstudiante)}>
               {e.nombre} ({e.codigoEstudiante})
             </option>
           ))}
         </select>
+        {/* 4 · Materia */}
         <select
           value={filterMateria}
           onChange={e => setFilterMateria(e.target.value)}
@@ -94,6 +181,7 @@ export default function NotasClient({ role, idUsuarioRegistrador }: Props) {
             <option key={m.idMateria} value={String(m.idMateria)}>{m.nombreMateria}</option>
           ))}
         </select>
+        {/* 5 · Periodo */}
         <select
           value={filterPeriodo}
           onChange={e => setFilterPeriodo(e.target.value)}
@@ -112,49 +200,104 @@ export default function NotasClient({ role, idUsuarioRegistrador }: Props) {
         </div>
       )}
 
-      {/* ── Tabla ────────────────────────────────────────────────────────────── */}
-      {loading ? (
+      {/* ── Resultados ─────────────────────────────────────────────────────────
+          Las notas solo aparecen cuando hay un estudiante seleccionado. */}
+      {!studentSelected ? (
+        <div className="text-center py-16 text-sm rounded-2xl border border-dashed border-slate-300 dark:border-white/15 text-slate-500 dark:text-slate-400">
+          Selecciona <span className="font-semibold text-slate-700 dark:text-slate-300">jornada</span>,{' '}
+          <span className="font-semibold text-slate-700 dark:text-slate-300">curso</span> y{' '}
+          <span className="font-semibold text-slate-700 dark:text-slate-300">estudiante</span>{' '}
+          para ver las notas y descargar el boletín.
+        </div>
+      ) : (
+        <>
+          {/* Barra de boletín del estudiante seleccionado */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-3 rounded-2xl bg-white dark:bg-white/5 border border-slate-100 dark:border-white/10">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Boletín del estudiante</p>
+              <p className="font-bold text-slate-800 dark:text-white truncate">
+                {estudianteSeleccionado?.nombre ?? '—'}
+                {estudianteSeleccionado?.codigoEstudiante && (
+                  <span className="ml-2 text-xs font-normal text-slate-400">{estudianteSeleccionado.codigoEstudiante}</span>
+                )}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleDownloadBoletin}
+              disabled={downloadingBoletin}
+              className="px-4 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors whitespace-nowrap"
+            >
+              {downloadingBoletin ? 'Generando...' : 'Descargar boletín PDF'}
+            </button>
+          </div>
+
+          {loading ? (
         <div className="space-y-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="h-14 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse" />
           ))}
         </div>
       ) : notas.length === 0 ? (
-        <div className="text-center py-16 text-slate-400 dark:text-slate-500 text-sm">
-          No hay notas que coincidan con los filtros.
+        <div className={`text-center py-16 text-sm rounded-2xl border ${
+          hayFiltrosActivos
+            ? 'bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-300'
+            : 'border-transparent text-slate-400 dark:text-slate-500'
+        }`}>
+          {hayFiltrosActivos
+            ? '⚠️ No se encontraron notas con los filtros seleccionados'
+            : 'Aún no hay notas registradas.'}
         </div>
       ) : (
+        <>
         <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 text-xs uppercase tracking-wide">
+                <th className="px-4 py-3 text-left">Jornada</th>
+                <th className="px-4 py-3 text-left">Curso</th>
                 <th className="px-4 py-3 text-left">Estudiante</th>
+                <th className="px-4 py-3 text-center">Nota</th>
                 <th className="px-4 py-3 text-left">Materia</th>
                 <th className="px-4 py-3 text-left">Periodo</th>
-                <th className="px-4 py-3 text-center">Nota</th>
                 <th className="px-4 py-3 text-left">Observación</th>
                 <th className="px-4 py-3 text-left">Fecha</th>
                 {(canUpdate || canDelete) && <th className="px-4 py-3 text-right">Acciones</th>}
               </tr>
             </thead>
             <tbody>
-              {notas.map(n => (
+              {pageItems.map(n => (
                 <tr
                   key={n.idNota}
                   className="border-b border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
                 >
                   <td className="px-4 py-3">
+                    {n.jornada
+                      ? <span className="capitalize text-slate-700 dark:text-slate-300">{n.jornada}</span>
+                      : <span className="text-slate-400 text-xs">—</span>}
+                  </td>
+                  <td className="px-4 py-3 text-slate-700 dark:text-slate-300">{n.nombreCurso ?? '—'}</td>
+                  <td className="px-4 py-3">
                     <p className="font-semibold text-slate-800 dark:text-white">{n.nombreEstudiante}</p>
                     <p className="text-xs text-slate-400">{n.codigoEstudiante}</p>
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <div className="flex flex-col items-center gap-1">
+                      <span className={`px-2.5 py-1 rounded-lg text-xs font-black ${notaColor(n.nota)}`}>
+                        {n.nota.toFixed(1)}
+                      </span>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                        n.nota >= NOTA_APROBACION
+                          ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300'
+                          : 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300'
+                      }`}>
+                        {n.nota >= NOTA_APROBACION ? 'Aprobado' : 'Reprobado'}
+                      </span>
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-slate-700 dark:text-slate-300">{n.nombreMateria}</td>
                   <td className="px-4 py-3 text-slate-600 dark:text-slate-400">
                     {PERIODOS[n.idPeriodo] ?? `P${n.idPeriodo}`}
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    <span className={`px-2.5 py-1 rounded-lg text-xs font-black ${notaColor(n.nota)}`}>
-                      {n.nota.toFixed(1)}
-                    </span>
                   </td>
                   <td className="px-4 py-3 max-w-[200px] truncate text-slate-500 dark:text-slate-400 text-xs" title={n.observacion ?? ''}>
                     {n.observacion ?? '—'}
@@ -189,6 +332,18 @@ export default function NotasClient({ role, idUsuarioRegistrador }: Props) {
             </tbody>
           </table>
         </div>
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          from={from}
+          to={to}
+          onPageChange={setPage}
+          itemLabel="notas"
+        />
+        </>
+      )}
+        </>
       )}
 
       {/* ── Modal ────────────────────────────────────────────────────────────── */}
@@ -244,16 +399,19 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
     [cursos]
   )
 
+  // La BD guarda la jornada capitalizada ('Mañana'/'Tarde') pero el desplegable
+  // fuerza las opciones en minúscula → la comparación DEBE ser case-insensitive,
+  // si no el desplegable de Grado (y los siguientes) sale vacío.
   const grados = useMemo(
     () => jornada
-      ? [...new Set(cursos.filter(c => c.jornada === jornada).map(c => c.grado))].sort()
+      ? [...new Set(cursos.filter(c => c.jornada?.toLowerCase() === jornada).map(c => c.grado))].sort()
       : [],
     [jornada, cursos]
   )
 
   const cursosDelGrado = useMemo(
     () => jornada && grado
-      ? cursos.filter(c => c.jornada === jornada && c.grado === grado)
+      ? cursos.filter(c => c.jornada?.toLowerCase() === jornada && c.grado === grado)
       : [],
     [jornada, grado, cursos]
   )
@@ -284,16 +442,19 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
     const n = parseFloat(notaVal)
     if (isNaN(n) || n < 0 || n > 5) {
       setFormError('La nota debe estar entre 0.0 y 5.0')
+      notifyWarning('La nota debe estar entre 0.0 y 5.0')
       return
     }
 
     if (mode === 'create') {
       if (!jornada || !grado) {
         setFormError('Selecciona jornada y grado.')
+        notifyWarning('Complete todos los campos requeridos')
         return
       }
       if (!idEstudiante || !idMateria) {
         setFormError('Selecciona estudiante y materia.')
+        notifyWarning('Complete todos los campos requeridos')
         return
       }
       onCreate({

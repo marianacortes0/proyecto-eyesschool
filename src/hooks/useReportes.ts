@@ -8,12 +8,16 @@ import {
   updateReporteAction,
   deleteReporteAction,
 } from '@/services/reportes/reportesActions'
+import { notifySuccess, notifyError } from '@/lib/toast'
+import { getErrorMessage } from '@/lib/errors'
+import { useConfirm } from '@/components/ui/ConfirmDialog'
 
 export type ModalMode = 'create' | 'edit' | null
 
-export function useReportes(idAdministrador: number) {
-  const [reportes, setReportes] = useState<Reporte[]>([])
-  const [loading, setLoading] = useState(true)
+export function useReportes(idAdministrador: number, initialReportes?: Reporte[]) {
+  const confirm = useConfirm()
+  const [reportes, setReportes] = useState<Reporte[]>(initialReportes ?? [])
+  const [loading, setLoading] = useState(!initialReportes)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -31,14 +35,18 @@ export function useReportes(idAdministrador: number) {
     setError(null)
     try {
       setReportes(await getReportesAction())
-    } catch (e: any) {
-      setError(e.message ?? 'Error al cargar reportes')
+    } catch (e) {
+      setError(getErrorMessage(e, 'Error al cargar reportes'))
     } finally {
       setLoading(false)
     }
   }, [])
 
-  useEffect(() => { fetchAll() }, [fetchAll])
+  useEffect(() => {
+    // Si la página entregó los reportes desde el servidor, no refetcheamos al montar.
+    if (initialReportes) return
+    fetchAll()
+  }, [initialReportes, fetchAll])
 
   const filtered = reportes.filter(r => {
     if (filterTipo && r.tipoReporte !== filterTipo) return false
@@ -59,8 +67,9 @@ export function useReportes(idAdministrador: number) {
       await createReporteAction({ ...payload, idAdministrador })
       await fetchAll()
       closeModal()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Reporte generado correctamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al generar el reporte'))
     } finally {
       setSaving(false)
     }
@@ -75,20 +84,26 @@ export function useReportes(idAdministrador: number) {
       await updateReporteAction(idReporte, payload)
       await fetchAll()
       closeModal()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Cambios aplicados con éxito')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al guardar el reporte'))
     } finally {
       setSaving(false)
     }
   }
 
   const handleDelete = async (idReporte: number) => {
-    if (!confirm('¿Eliminar este reporte?')) return
+    const ok = await confirm({
+      title: 'Eliminar reporte',
+      message: '¿Está seguro de eliminar este reporte? Esta acción no se puede deshacer.',
+    })
+    if (!ok) return
     try {
       await deleteReporteAction(idReporte)
       setReportes(prev => prev.filter(r => r.idReporte !== idReporte))
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Reporte eliminado exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al eliminar el reporte'))
     }
   }
 

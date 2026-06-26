@@ -2,6 +2,8 @@
 
 import { redirect } from 'next/navigation'
 import { getServerUser, getServerToken, userToRole } from '@/lib/auth/server'
+import { getReportesAction } from '@/services/reportes/reportesActions'
+import { type Reporte } from '@/services/reportes/reportesService'
 import ReportesClient from './ReportesClient'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
@@ -33,5 +35,13 @@ export default async function ReportesPage() {
     }
   }
 
-  return <ReportesClient role={role} idAdministrador={idAdministrador} />
+  // Lista de reportes en el render del servidor: el cliente arranca sin fetch tras hidratar.
+  let initialReportes: Reporte[] | undefined
+  try {
+    initialReportes = await getReportesAction()
+  } catch {
+    initialReportes = undefined
+  }
+
+  return <ReportesClient role={role} idAdministrador={idAdministrador} initialReportes={initialReportes} />
 }

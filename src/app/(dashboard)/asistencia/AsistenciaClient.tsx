@@ -1,19 +1,25 @@
 'use client'
 
 import { useAsistencia, type EstadoAsistencia } from '@/hooks/useAsistencia'
+import { type AsistenciaBootstrap } from '@/services/asistencia/asistenciaActions'
 import { type Role } from '@/lib/utils/permissions'
 import AsistenciaTable from '@/components/asistencia/AsistenciaTable'
 import AsistenciaModal from '@/components/asistencia/AsistenciaModal'
+import Pagination from '@/components/ui/Pagination'
+import { usePagination } from '@/hooks/usePagination'
+import { notifySuccess } from '@/lib/toast'
 
 type Props = {
   role: Role
   idUsuarioRegistrador: number
   idEstudiantePropio?: number
+  nombreEstudiantePropio?: string
+  initialData?: AsistenciaBootstrap
 }
 
 const ESTADOS: (EstadoAsistencia | 'todos')[] = ['todos', 'Presente', 'Tarde', 'Ausente', 'Excusa', 'Suspensión']
 
-export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudiantePropio }: Props) {
+export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudiantePropio, nombreEstudiantePropio, initialData }: Props) {
   const {
     registros,
     estudiantes,
@@ -25,18 +31,28 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
     selectedRecord,
     openEdit,
     closeModal,
+    cursos,
+    jornadas,
     fechaFiltro,
     setFechaFiltro,
     estadoFiltro,
     setEstadoFiltro,
+    cursoFiltro,
+    setCursoFiltro,
+    jornadaFiltro,
+    setJornadaFiltro,
     searchQuery,
     setSearchQuery,
     handleCreate,
     handleUpdate,
     handleDelete,
-  } = useAsistencia(idUsuarioRegistrador, idEstudiantePropio)
+  } = useAsistencia(idUsuarioRegistrador, idEstudiantePropio, initialData, nombreEstudiantePropio)
 
-  const esEstudiante = role === 'estudiante'
+  // Estudiante y padre ven SOLO la asistencia del estudiante asociado: se ocultan
+  // los filtros de búsqueda/jornada/curso (el catálogo global no les corresponde).
+  const esEstudiante = role === 'estudiante' || role === 'padre'
+
+  const { page, setPage, totalPages, pageItems, total, from, to } = usePagination(registros)
 
   return (
     <div className="space-y-6">
@@ -74,7 +90,10 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
         {/* Estado */}
         <select
           value={estadoFiltro}
-          onChange={(e) => setEstadoFiltro(e.target.value as EstadoAsistencia | 'todos')}
+          onChange={(e) => {
+            setEstadoFiltro(e.target.value as EstadoAsistencia | 'todos')
+            notifySuccess('Filtro aplicado correctamente')
+          }}
           className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         >
           {ESTADOS.map((e) => (
@@ -83,6 +102,38 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
             </option>
           ))}
         </select>
+
+        {/* Jornada — oculta para estudiantes (solo ven sus propios registros) */}
+        {!esEstudiante && (
+          <select
+            value={jornadaFiltro}
+            onChange={(e) => setJornadaFiltro(e.target.value)}
+            className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary capitalize"
+          >
+            <option value="todos">Todas las jornadas</option>
+            {jornadas.map((j) => (
+              <option key={j} value={j}>
+                {j}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {/* Curso — oculto para estudiantes (solo ven sus propios registros) */}
+        {!esEstudiante && (
+          <select
+            value={cursoFiltro}
+            onChange={(e) => setCursoFiltro(e.target.value === 'todos' ? 'todos' : Number(e.target.value))}
+            className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          >
+            <option value="todos">Todos los cursos</option>
+            {cursos.map((c) => (
+              <option key={c.idCurso} value={c.idCurso}>
+                {c.nombreCurso}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       {/* Resumen de estados (solo hoy) */}
@@ -114,6 +165,13 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
         </div>
       )}
 
+      {/* Aviso: filtro Presente sin resultados */}
+      {!loading && estadoFiltro === 'Presente' && registros.length === 0 && (
+        <div className="px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-300 text-sm">
+          ⚠️ No hay registros con estado &apos;Presente&apos;
+        </div>
+      )}
+
       {/* Tabla o skeleton */}
       {loading ? (
         <div className="space-y-3">
@@ -122,12 +180,23 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
           ))}
         </div>
       ) : (
-        <AsistenciaTable
-          registros={registros}
-          role={role}
-          onEdit={openEdit}
-          onDelete={handleDelete}
-        />
+        <>
+          <AsistenciaTable
+            registros={pageItems}
+            role={role}
+            onEdit={openEdit}
+            onDelete={handleDelete}
+          />
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            from={from}
+            to={to}
+            onPageChange={setPage}
+            itemLabel="registros"
+          />
+        </>
       )}
 
       {/* Modal */}

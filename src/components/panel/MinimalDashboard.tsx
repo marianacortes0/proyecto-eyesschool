@@ -19,6 +19,8 @@ export type MinimalDashboardProps = {
   kpis: DashboardKpi[];
   loading?: boolean;
   error?: string | null;
+  /** Contenido extra (p. ej. gráficas) que se muestra debajo de los KPIs. */
+  extra?: React.ReactNode;
 };
 
 const accentMap = {
@@ -58,7 +60,7 @@ function RadialGauge({ percent, stroke, size = 64 }: { percent: number; stroke: 
   );
 }
 
-export default function MinimalDashboard({ greetingName, subtitle, primary, kpis, loading, error }: MinimalDashboardProps) {
+export default function MinimalDashboard({ greetingName, subtitle, primary, kpis, loading, error, extra }: MinimalDashboardProps) {
   return (
     <>
       <PanelHeader light="Hola," bold={greetingName} subtitle={subtitle} />
@@ -136,6 +138,8 @@ export default function MinimalDashboard({ greetingName, subtitle, primary, kpis
           })}
         </div>
       </div>
+
+      {!loading && extra}
 
       <footer className="mt-24 lg:mt-32 py-10 text-center">
         <p className="text-[10px] font-bold text-on-surface-variant/30 uppercase tracking-[0.4em]">

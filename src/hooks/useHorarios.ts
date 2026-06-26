@@ -11,46 +11,39 @@ import {
   createEspecializacion,
   updateEspecializacion,
   deleteEspecializacion,
-  getAsignaciones,
   type Horario,
   type Curso,
   type Materia,
   type Especializacion,
   type ProfesorOpt,
-  type AsignacionProfesor,
   type Asignacion,
 } from '@/services/horarios/horariosService'
 import {
-  getHorariosAction,
-  getCursosAction,
-  getAllCursosAction,
-  getMateriasAction,
-  getAllMateriasAction,
-  getEspecializacionesAction,
-  getProfesoresAction,
-  getAsignacionesProfesoresAction,
-  getAsignacionesAction,
+  getHorariosBootstrapAction,
+  type HorariosBootstrap,
   createHorarioAction,
-  asignarProfesorHorarioAction,
   updateHorarioAction,
   deleteHorarioAction,
   createAsignacionAction,
   updateAsignacionAction,
   deleteAsignacionAction,
 } from '@/services/horarios/horariosActions'
+import { notifySuccess, notifyError } from '@/lib/toast'
+import { getErrorMessage } from '@/lib/errors'
+import { useConfirm } from '@/components/ui/ConfirmDialog'
 
 export type ModalMode = 'create' | 'edit' | null
 
-export function useHorarios() {
-  const [horarios, setHorarios] = useState<Horario[]>([])
-  const [cursos, setCursos] = useState<Curso[]>([])
-  const [allCursos, setAllCursos] = useState<Curso[]>([])
-  const [materias, setMaterias] = useState<Materia[]>([])
-  const [allMaterias, setAllMaterias] = useState<Materia[]>([])
-  const [especializaciones, setEspecializaciones] = useState<Especializacion[]>([])
-  const [profesores, setProfesores] = useState<ProfesorOpt[]>([])
-  const [asignaciones, setAsignaciones] = useState<AsignacionProfesor[]>([])
-  const [asignacionesList, setAsignacionesList] = useState<Asignacion[]>([])
+export function useHorarios(initialData?: HorariosBootstrap) {
+  const confirm = useConfirm()
+  const [horarios, setHorarios] = useState<Horario[]>(initialData?.horarios ?? [])
+  const [cursos, setCursos] = useState<Curso[]>(initialData?.cursos ?? [])
+  const [allCursos, setAllCursos] = useState<Curso[]>(initialData?.allCursos ?? [])
+  const [materias, setMaterias] = useState<Materia[]>(initialData?.materias ?? [])
+  const [allMaterias, setAllMaterias] = useState<Materia[]>(initialData?.allMaterias ?? [])
+  const [especializaciones, setEspecializaciones] = useState<Especializacion[]>(initialData?.especializaciones ?? [])
+  const [profesores, setProfesores] = useState<ProfesorOpt[]>(initialData?.profesores ?? [])
+  const [asignacionesList, setAsignacionesList] = useState<Asignacion[]>(initialData?.asignaciones ?? [])
 
   // Modal materias
   const [materiasModalOpen, setMateriasModalOpen] = useState(false)
@@ -64,7 +57,7 @@ export function useHorarios() {
   const [selectedEspecializacion, setSelectedEspecializacion] = useState<Especializacion | null>(null)
   const [savingEspecializacion, setSavingEspecializacion] = useState(false)
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!initialData)
   const [saving, setSaving] = useState(false)
   const [savingCurso, setSavingCurso] = useState(false)
   const [savingAsignacion, setSavingAsignacion] = useState(false)
@@ -96,44 +89,54 @@ export function useHorarios() {
     setLoading(true)
     setError(null)
     try {
-      const [h, c, m, am, ac, profs, asigns, esps, asigList] = await Promise.all([
-        getHorariosAction(),
-        getCursosAction(),
-        getMateriasAction(),
-        getAllMateriasAction(),
-        getAllCursosAction(),
-        getProfesoresAction(),
-        getAsignacionesProfesoresAction(),
-        getEspecializacionesAction(),
-        getAsignacionesAction(),
-      ])
-      setHorarios(h)
-      setCursos(c)
-      setMaterias(m)
-      setAllMaterias(am)
-      setAllCursos(ac)
-      setProfesores(profs)
-      setAsignaciones(asigns)
-      setEspecializaciones(esps)
-      setAsignacionesList(asigList)
-    } catch (e: any) {
-      setError(e.message ?? 'Error al cargar horarios')
+      const data = await getHorariosBootstrapAction()
+      setHorarios(data.horarios)
+      setCursos(data.cursos)
+      setMaterias(data.materias)
+      setAllMaterias(data.allMaterias)
+      setAllCursos(data.allCursos)
+      setProfesores(data.profesores)
+      setEspecializaciones(data.especializaciones)
+      setAsignacionesList(data.asignaciones)
+    } catch (e) {
+      setError(getErrorMessage(e, 'Error al cargar horarios'))
     } finally {
       setLoading(false)
     }
   }, [])
 
-  useEffect(() => { fetchAll() }, [fetchAll])
+  useEffect(() => {
+    // Si la página entregó los datos desde el servidor, no refetcheamos al montar.
+    if (initialData) return
+    fetchAll()
+  }, [initialData, fetchAll])
 
-  // Enrich horarios with profesor name from asignaciones
+  // Enriquecer cada horario con curso (nombre + grado), materia (nombre + código)
+  // y profesor. El profesor se resuelve por la asignación profesor↔(curso+materia),
+  // ya que el backend no expone un join directo horario→profesor.
+  const cursoById = new Map(allCursos.map(c => [c.idCurso, c]))
+  const materiaById = new Map(allMaterias.map(m => [m.idMateria, m]))
+  const asignacionPorCursoMateria = new Map<string, typeof asignacionesList[number]>()
+  for (const a of asignacionesList) {
+    const key = `${a.idCurso}-${a.idMateria}`
+    const prev = asignacionPorCursoMateria.get(key)
+    if (!prev || (a.activo && !prev.activo)) asignacionPorCursoMateria.set(key, a)
+  }
+
   const enriched = horarios.map(h => {
-    const asign = asignaciones.find(a => a.idHorario === h.idHorario)
-    return { ...h, nombreProfesor: asign?.nombreProfesor }
+    const curso = cursoById.get(h.idCurso)
+    const materia = materiaById.get(h.idMateria)
+    const asign = asignacionPorCursoMateria.get(`${h.idCurso}-${h.idMateria}`)
+    return {
+      ...h,
+      nombreCurso:   curso?.nombreCurso ?? h.nombreCurso,
+      gradoCurso:    curso?.grado ?? h.gradoCurso,
+      nombreMateria: materia?.nombreMateria ?? h.nombreMateria,
+      codigoMateria: materia?.codigoMateria ?? h.codigoMateria,
+      idProfesor:    asign?.idProfesor,
+      nombreProfesor: asign?.nombreProfesor,
+    }
   })
-
-  const profHorarioIds = filterProfesor
-    ? new Set(asignaciones.filter(a => String(a.idProfesor) === filterProfesor).map(a => a.idHorario))
-    : null
 
   const filtered = enriched.filter(h => {
     if (filterActivo === 'activo' && !h.activo) return false
@@ -141,7 +144,7 @@ export function useHorarios() {
     if (vista === 'estudiantes') {
       if (filterCurso && String(h.idCurso) !== filterCurso) return false
     } else {
-      if (profHorarioIds && !profHorarioIds.has(h.idHorario)) return false
+      if (filterProfesor && String(h.idProfesor ?? '') !== filterProfesor) return false
     }
     return true
   })
@@ -152,25 +155,44 @@ export function useHorarios() {
   const openEdit = (h: Horario) => { setSelected(h); setModalMode('edit') }
   const closeModal = () => { setSelected(null); setModalMode(null) }
 
+  /** Asigna/actualiza el profesor que dicta una materia en un curso (asignación). */
+  const upsertProfesorAsignacion = async (idCurso: number, idMateria: number, idProfesor?: number) => {
+    if (!idProfesor) return
+    const existing = asignacionesList.find(a => a.idCurso === idCurso && a.idMateria === idMateria)
+    if (existing) {
+      if (existing.idProfesor !== idProfesor) {
+        await updateAsignacionAction(existing.idAsignacion, { idProfesor })
+      }
+    } else {
+      await createAsignacionAction({
+        idProfesor,
+        idCurso,
+        idMateria,
+        fechaAsignacion: new Date().toISOString().slice(0, 10),
+        fechaFinalizacion: null,
+        activo: true,
+      })
+    }
+  }
+
   const handleCreate = async (
     payload: Omit<Horario, 'idHorario' | 'nombreCurso' | 'gradoCurso' | 'nombreMateria'>,
     idProfesor?: number
   ) => {
     setSaving(true)
     try {
-      const { idHorario } = await createHorarioAction(payload)
-      if (idProfesor) {
-        await asignarProfesorHorarioAction(idProfesor, idHorario)
-      }
+      await createHorarioAction(payload)
+      await upsertProfesorAsignacion(payload.idCurso, payload.idMateria, idProfesor)
       await fetchAll()
       closeModal()
-    } catch (e: any) {
-      const msg: string = e.message ?? ''
-      if (msg.includes('uq_horario_salon_horario')) {
-        setError('Ese salón ya tiene un bloque asignado en ese día y horario.')
-      } else {
-        setError(msg)
-      }
+      notifySuccess('Horario creado exitosamente')
+    } catch (e) {
+      const msg = getErrorMessage(e, '')
+      notifyError(
+        msg.includes('uq_horario_salon_horario')
+          ? 'Ese salón ya tiene un bloque asignado en ese día y horario.'
+          : (msg || 'Error al crear el horario')
+      )
     } finally {
       setSaving(false)
     }
@@ -178,15 +200,22 @@ export function useHorarios() {
 
   const handleUpdate = async (
     idHorario: number,
-    payload: Partial<Omit<Horario, 'idHorario' | 'nombreCurso' | 'gradoCurso' | 'nombreMateria'>>
+    payload: Partial<Omit<Horario, 'idHorario' | 'nombreCurso' | 'gradoCurso' | 'nombreMateria'>>,
+    idProfesor?: number
   ) => {
     setSaving(true)
     try {
       await updateHorarioAction(idHorario, payload)
+      const idCurso = payload.idCurso ?? selected?.idCurso
+      const idMateria = payload.idMateria ?? selected?.idMateria
+      if (idCurso != null && idMateria != null) {
+        await upsertProfesorAsignacion(idCurso, idMateria, idProfesor)
+      }
       await fetchAll()
       closeModal()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Horario editado exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al editar el horario'))
     } finally {
       setSaving(false)
     }
@@ -198,18 +227,24 @@ export function useHorarios() {
       setHorarios(prev =>
         prev.map(x => x.idHorario === h.idHorario ? { ...x, activo: !h.activo } : x)
       )
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Cambios aplicados con éxito')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al actualizar el horario'))
     }
   }
 
   const handleDelete = async (idHorario: number) => {
-    if (!confirm('¿Eliminar este horario? Esta acción no se puede deshacer.')) return
+    const ok = await confirm({
+      title: 'Eliminar horario',
+      message: '¿Está seguro de eliminar este horario? Esta acción no se puede deshacer.',
+    })
+    if (!ok) return
     try {
       await deleteHorarioAction(idHorario)
       setHorarios(prev => prev.filter(h => h.idHorario !== idHorario))
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Horario eliminado exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al eliminar el horario'))
     }
   }
 
@@ -227,8 +262,9 @@ export function useHorarios() {
       await createCurso(payload)
       await fetchAll()
       closeCursoForm()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Curso creado exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al crear el curso'))
     } finally {
       setSavingCurso(false)
     }
@@ -240,20 +276,26 @@ export function useHorarios() {
       await updateCurso(idCurso, payload)
       await fetchAll()
       closeCursoForm()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Curso editado exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al editar el curso'))
     } finally {
       setSavingCurso(false)
     }
   }
 
   const handleDeleteCurso = async (idCurso: number) => {
-    if (!confirm('¿Eliminar este curso? Los horarios asociados quedarán sin curso.')) return
+    const ok = await confirm({
+      title: 'Eliminar curso',
+      message: '¿Está seguro de eliminar este curso? Los horarios asociados quedarán sin curso.',
+    })
+    if (!ok) return
     try {
       await deleteCurso(idCurso)
       await fetchAll()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Curso eliminado exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al eliminar el curso'))
     }
   }
 
@@ -271,8 +313,9 @@ export function useHorarios() {
       await createMateria(payload)
       await fetchAll()
       closeMateriaForm()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Materia creada exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al crear la materia'))
     } finally {
       setSavingMateria(false)
     }
@@ -284,20 +327,26 @@ export function useHorarios() {
       await updateMateria(idMateria, payload)
       await fetchAll()
       closeMateriaForm()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Materia editada exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al editar la materia'))
     } finally {
       setSavingMateria(false)
     }
   }
 
   const handleDeleteMateria = async (idMateria: number) => {
-    if (!confirm('¿Eliminar esta materia? Los horarios asociados quedarán sin materia.')) return
+    const ok = await confirm({
+      title: 'Eliminar materia',
+      message: '¿Está seguro de eliminar esta materia? Los horarios asociados quedarán sin materia.',
+    })
+    if (!ok) return
     try {
       await deleteMateria(idMateria)
       await fetchAll()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Materia eliminada exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al eliminar la materia'))
     }
   }
 
@@ -315,8 +364,9 @@ export function useHorarios() {
       await createEspecializacion(payload)
       await fetchAll()
       closeEspecializacionForm()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Especialización creada exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al crear la especialización'))
     } finally {
       setSavingEspecializacion(false)
     }
@@ -328,20 +378,26 @@ export function useHorarios() {
       await updateEspecializacion(idEspecializacion, payload)
       await fetchAll()
       closeEspecializacionForm()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Especialización editada exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al editar la especialización'))
     } finally {
       setSavingEspecializacion(false)
     }
   }
 
   const handleDeleteEspecializacion = async (idEspecializacion: number) => {
-    if (!confirm('¿Eliminar esta especialización?')) return
+    const ok = await confirm({
+      title: 'Eliminar especialización',
+      message: '¿Está seguro de eliminar esta especialización? Esta acción no se puede deshacer.',
+    })
+    if (!ok) return
     try {
       await deleteEspecializacion(idEspecializacion)
       await fetchAll()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Especialización eliminada exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al eliminar la especialización'))
     }
   }
 
@@ -359,8 +415,9 @@ export function useHorarios() {
       await createAsignacionAction(payload)
       await fetchAll()
       closeAsignacionForm()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Horario asignado correctamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al crear la asignación'))
     } finally {
       setSavingAsignacion(false)
     }
@@ -372,20 +429,26 @@ export function useHorarios() {
       await updateAsignacionAction(idAsignacion, payload)
       await fetchAll()
       closeAsignacionForm()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Asignación editada exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al editar la asignación'))
     } finally {
       setSavingAsignacion(false)
     }
   }
 
   const handleDeleteAsignacion = async (idAsignacion: number) => {
-    if (!confirm('¿Eliminar esta asignación?')) return
+    const ok = await confirm({
+      title: 'Eliminar asignación',
+      message: '¿Está seguro de eliminar esta asignación? Esta acción no se puede deshacer.',
+    })
+    if (!ok) return
     try {
       await deleteAsignacionAction(idAsignacion)
       await fetchAll()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Asignación eliminada exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al eliminar la asignación'))
     }
   }
 

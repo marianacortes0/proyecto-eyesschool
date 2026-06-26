@@ -176,58 +176,22 @@ export default function UsuariosPendientes({
   onValidar,
   onRechazar,
 }: UsuariosPendientesProps) {
-  const [sqlVisible, setSqlVisible] = useState(false)
-
   return (
     <section className="space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">⏳</span>
-            <h2 className="text-lg font-bold text-slate-800 dark:text-white">
-              Validación Pendiente
-            </h2>
-          </div>
-          {pendingUsuarios.length > 0 && (
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-500 text-white text-xs font-bold">
-              {pendingUsuarios.length}
-            </span>
-          )}
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <span className="text-lg">⏳</span>
+          <h2 className="text-lg font-bold text-slate-800 dark:text-white">
+            Validación Pendiente
+          </h2>
         </div>
-
-        {/* SQL Helper */}
-        <button
-          onClick={() => setSqlVisible((v) => !v)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
-          title="Script para asignar el primer administrador"
-        >
-          <span className="material-symbols-outlined !text-base">build</span> Script SQL
-        </button>
+        {pendingUsuarios.length > 0 && (
+          <span className="px-2.5 py-0.5 rounded-full bg-amber-500 text-white text-xs font-bold">
+            {pendingUsuarios.length}
+          </span>
+        )}
       </div>
-
-      {/* SQL Panel */}
-      {sqlVisible && (
-        <div className="rounded-xl border border-blue-200 dark:border-primary/30 bg-blue-50 dark:bg-blue-500/10 p-4 space-y-2">
-          <p className="text-xs font-semibold text-blue-700 dark:text-blue-300">
-            Script inicial — asignar el primer Administrador
-          </p>
-          <p className="text-xs text-slate-600 dark:text-slate-400">
-            Ejecutar una única vez en el <strong>SQL Editor de Supabase</strong>, reemplazando el email:
-          </p>
-          <pre className="bg-slate-900 text-green-400 rounded-lg p-3 text-xs overflow-x-auto whitespace-pre">
-{`UPDATE public.usuario
-SET "idRol" = 3
-WHERE auth_id = (
-  SELECT id FROM auth.users
-  WHERE email = 'correo@ejemplo.com'
-);`}
-          </pre>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            idRol 3 = Administrador · Una vez ejecutado, ese usuario podrá validar a los demás.
-          </p>
-        </div>
-      )}
 
       {/* Error */}
       {error && (

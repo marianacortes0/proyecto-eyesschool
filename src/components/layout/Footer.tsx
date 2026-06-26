@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import LegalModal from "../ui/LegalModal";
 
 export default function Footer() {
@@ -38,24 +39,24 @@ export default function Footer() {
 
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="/" className="hover:text-black dark:hover:text-white transition">
+                <Link href="/" className="hover:text-black dark:hover:text-white transition">
                   Inicio
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/home/nosotros" className="hover:text-black dark:hover:text-white transition">
+                <Link href="/home/nosotros" className="hover:text-black dark:hover:text-white transition">
                   Nosotros
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/home/beneficios" className="hover:text-black dark:hover:text-white transition">
+                <Link href="/home/beneficios" className="hover:text-black dark:hover:text-white transition">
                   Beneficios
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/?login=1" className="hover:text-black dark:hover:text-white transition">
+                <Link href="/?login=1" className="hover:text-black dark:hover:text-white transition">
                   Iniciar sesión
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -92,9 +93,9 @@ export default function Footer() {
               </li>
 
               <li>
-                <a href="/home/support" className="hover:text-black dark:hover:text-white transition">
+                <Link href="/home/support" className="hover:text-black dark:hover:text-white transition">
                   Soporte
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

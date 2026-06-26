@@ -25,7 +25,54 @@ export type UsuarioConRol = {
   ultimoAcceso: string | null
   idRol: number
   rolNombre: string
+  // Solo aplica a estudiantes (idRol === 2)
+  idEstudiante?: number | null
+  idCursoActual?: number | null
+  cursoNombre?: string | null
+  // Solo aplica a padres / acudientes (idRol === 4)
+  idPadre?: number | null
+  idEstudianteRelacionado?: number | null
+  parentesco?: string | null
+  estudianteNombre?: string | null
+  estudianteCurso?: string | null
+  // Solo aplica a profesores (idRol === 1)
+  idProfesor?: number | null
+  especializaciones?: { id: number; nombre: string; institucion: string | null }[]
+  // Solo aplica a administradores (idRol === 3)
+  idAdministrador?: number | null
+  cargo?: string | null
+  nivelAcceso?: string | null
+  // Vigencia del rol (todos los usuarios; persistida según el rol)
+  fechaAsignacion?: string | null
+  fechaFin?: string | null
 }
+
+// Opción de curso para selects (estudiantes)
+export type CursoOpt = {
+  idCurso: number
+  label: string
+}
+
+// Opción de estudiante para selects (vincular a un padre)
+export type EstudianteOpt = {
+  idEstudiante: number
+  nombre: string
+  idCurso: number | null
+  cursoLabel: string | null
+  label: string
+}
+
+// Opción de especialización para selects (profesores)
+export type EspecializacionOpt = {
+  idEspecializacion: number
+  label: string
+}
+
+// Valores válidos de parentesco en el backend
+export const PARENTESCOS = ['Padre', 'Madre', 'Tutor', 'Abuelo', 'Otro'] as const
+
+// Niveles de acceso del administrador en el backend
+export const NIVELES_ACCESO = ['Bajo', 'Medio', 'Alto'] as const
 
 export type CreateUsuarioData = {
   primerNombre: string
@@ -40,6 +87,21 @@ export type CreateUsuarioData = {
   genero?: 'M' | 'F' | 'O'
   direccion?: string
   idRol: number
+  // Curso al que se matricula el estudiante (solo idRol === 2)
+  idCursoActual?: number | null
+  // Vínculo con un estudiante (solo idRol === 4 — padre / acudiente)
+  idEstudianteRelacionado?: number | null
+  parentesco?: string | null
+  // Especialización (solo idRol === 1 — profesor). Es el NOMBRE de la
+  // especialización: si no existe en el catálogo, el backend la crea.
+  especializacion?: string | null
+  institucion?: string | null
+  // Cargo / nivel de acceso (solo idRol === 3 — administrador)
+  cargo?: string | null
+  nivelAcceso?: string | null
+  // Vigencia del rol (todos los usuarios)
+  fechaAsignacion?: string | null
+  fechaFin?: string | null
 }
 
 export type UpdateUsuarioData = Partial<Omit<CreateUsuarioData, 'correo'>>
@@ -81,14 +143,12 @@ export const validarUsuario = async (id: number, idRol: number): Promise<void> =
     method: 'PUT',
     body: JSON.stringify({ id_rol: idRol }),
   })
-  await apiFetch(`/usuarios/${id}/estado`, {
-    method: 'PATCH',
-    body: JSON.stringify({ estado: true }),
-  })
+  // `estado` va como query param (el backend NO lo lee del body).
+  await apiFetch(`/usuarios/${id}/estado?estado=true`, { method: 'PATCH' })
 }
 
 export const rechazarUsuario = async (id: number): Promise<void> => {
-  await apiFetch(`/usuarios/${id}`, { method: 'DELETE' })
+  await deleteUsuario(id)
 }
 
 export const getUsuarioById = async (id: number): Promise<UsuarioConRol | null> => {
@@ -140,12 +200,11 @@ export const updateUsuario = async (id: number, data: UpdateUsuarioData): Promis
 }
 
 export const toggleUsuarioEstado = async (id: number, nuevoEstado: boolean): Promise<void> => {
-  await apiFetch(`/usuarios/${id}/estado`, {
-    method: 'PATCH',
-    body: JSON.stringify({ estado: nuevoEstado }),
-  })
+  // `estado` va como query param (el backend NO lo lee del body).
+  await apiFetch(`/usuarios/${id}/estado?estado=${nuevoEstado}`, { method: 'PATCH' })
 }
 
+// Borrado físico: DELETE /usuarios/{id} (204). El backend cascadea las filas de rol.
 export const deleteUsuario = async (id: number): Promise<void> => {
   await apiFetch(`/usuarios/${id}`, { method: 'DELETE' })
 }

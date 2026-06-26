@@ -1,12 +1,15 @@
 'use client'
 
 import { useUsuarios } from '@/hooks/useUsuarios'
+import { type UsuariosBootstrap } from './actions'
 import UsuariosFilters from '@/components/usuarios/UsuariosFilters'
 import UsuariosTable from '@/components/usuarios/UsuariosTable'
 import UsuarioModal from '@/components/usuarios/UsuarioModal'
 import UsuariosPendientes from '@/components/usuarios/UsuariosPendientes'
+import Pagination from '@/components/ui/Pagination'
+import { usePagination } from '@/hooks/usePagination'
 
-export default function UsuariosClient() {
+export default function UsuariosClient({ initialData }: { initialData?: UsuariosBootstrap }) {
   const {
     // validados
     usuarios,
@@ -21,6 +24,9 @@ export default function UsuariosClient() {
     // modal
     selectedUsuario,
     modalMode,
+    cursos,
+    estudiantes,
+    especializaciones,
     // filtros
     filterRol,
     searchQuery,
@@ -37,7 +43,9 @@ export default function UsuariosClient() {
     // acciones pendientes
     handleValidar,
     handleRechazar,
-  } = useUsuarios()
+  } = useUsuarios(initialData)
+
+  const { page, setPage, totalPages, pageItems, total, from, to } = usePagination(usuarios)
 
   return (
     <div className="p-6 space-y-6">
@@ -73,12 +81,23 @@ export default function UsuariosClient() {
           ))}
         </div>
       ) : (
-        <UsuariosTable
-          usuarios={usuarios}
-          onEdit={openEditModal}
-          onToggleEstado={handleToggleEstado}
-          onDelete={handleDelete}
-        />
+        <>
+          <UsuariosTable
+            usuarios={pageItems}
+            onEdit={openEditModal}
+            onToggleEstado={handleToggleEstado}
+            onDelete={handleDelete}
+          />
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            from={from}
+            to={to}
+            onPageChange={setPage}
+            itemLabel="usuarios"
+          />
+        </>
       )}
 
       {/* Modal crear / editar */}
@@ -86,6 +105,9 @@ export default function UsuariosClient() {
         mode={modalMode}
         usuario={selectedUsuario}
         saving={saving}
+        cursos={cursos}
+        estudiantes={estudiantes}
+        especializaciones={especializaciones}
         onClose={closeModal}
         onCreate={handleCreate}
         onUpdate={handleUpdate}

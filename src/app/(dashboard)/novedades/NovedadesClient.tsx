@@ -2,14 +2,23 @@
 
 import { useState, useMemo } from 'react'
 import { useNovedades } from '@/hooks/useNovedades'
+import { type NovedadesBootstrap } from '@/services/novedades/novedadesActions'
 import { ESTADOS_NOVEDAD, type Novedad, type CursoOpt, type EstudianteOpt } from '@/services/novedades/novedadesService'
 import { type Role } from '@/lib/utils/permissions'
 import { can } from '@/lib/utils/permissions'
+import Pagination from '@/components/ui/Pagination'
+import { usePagination } from '@/hooks/usePagination'
 
+// El backend usa Bajo/Medio/Alto/Crítico; se mapean también las variantes
+// Alta/Media/Baja por compatibilidad.
 const GRAVEDAD_COLOR: Record<string, string> = {
-  Alta:   'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300',
-  Media:  'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-300',
-  Baja:   'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300',
+  Alto:      'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300',
+  Alta:      'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300',
+  'Crítico': 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300',
+  Medio:     'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-300',
+  Media:     'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-300',
+  Bajo:      'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300',
+  Baja:      'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300',
 }
 
 const ESTADO_COLOR: Record<string, string> = {
@@ -17,9 +26,9 @@ const ESTADO_COLOR: Record<string, string> = {
   Completado:  'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300',
 }
 
-interface Props { role: Role; registradoPor: number }
+interface Props { role: Role; registradoPor: number; initialData?: NovedadesBootstrap }
 
-export default function NovedadesClient({ role, registradoPor }: Props) {
+export default function NovedadesClient({ role, registradoPor, initialData }: Props) {
   const {
     novedades, tiposNovedad, cursos, estudiantes,
     loading, saving, error,
@@ -28,11 +37,13 @@ export default function NovedadesClient({ role, registradoPor }: Props) {
     modalMode, selected,
     openCreate, openEdit, closeModal,
     handleCreate, handleUpdate, handleDelete,
-  } = useNovedades(registradoPor)
+  } = useNovedades(registradoPor, initialData)
 
   const canCreate = can(role, 'create', 'novedades')
   const canUpdate = can(role, 'update', 'novedades')
   const canDelete = can(role, 'delete', 'novedades')
+
+  const { page, setPage, totalPages, pageItems, total, from, to } = usePagination(novedades)
 
   return (
     <div className="space-y-6">
@@ -101,6 +112,7 @@ export default function NovedadesClient({ role, registradoPor }: Props) {
           No hay novedades registradas.
         </div>
       ) : (
+        <>
         <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5">
           <table className="w-full text-sm">
             <thead>
@@ -115,7 +127,7 @@ export default function NovedadesClient({ role, registradoPor }: Props) {
               </tr>
             </thead>
             <tbody>
-              {novedades.map(n => (
+              {pageItems.map(n => (
                 <tr
                   key={n.idNovedad}
                   className="border-b border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
@@ -168,6 +180,16 @@ export default function NovedadesClient({ role, registradoPor }: Props) {
             </tbody>
           </table>
         </div>
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          from={from}
+          to={to}
+          onPageChange={setPage}
+          itemLabel="novedades"
+        />
+        </>
       )}
 
       {/* Modal */}

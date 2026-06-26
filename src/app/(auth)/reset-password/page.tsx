@@ -1,11 +1,17 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import { resetPassword } from '@/auth/actions'
 import Link from 'next/link'
 
 export default function ResetPasswordPage() {
   const [state, formAction, pending] = useActionState(resetPassword, null)
+  const [token, setToken] = useState('')
+
+  // El token llega como ?token=... en el enlace del correo.
+  useEffect(() => {
+    setToken(new URLSearchParams(window.location.search).get('token') ?? '')
+  }, [])
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-50 dark:bg-black">
@@ -43,6 +49,14 @@ export default function ResetPasswordPage() {
               </div>
             ) : (
               <form action={formAction} className="flex flex-col gap-4">
+                <input type="hidden" name="token" value={token} readOnly />
+
+                {!token && (
+                  <div className="p-2 bg-amber-50/80 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 text-[10px] font-medium rounded-xl border border-amber-200 dark:border-amber-800/50">
+                    No se detectó un enlace válido. Solicita uno nuevo desde &quot;¿Olvidaste tu contraseña?&quot;.
+                  </div>
+                )}
+
                 <div className="flex flex-col gap-1 group">
                   <label htmlFor="password" className="text-[10px] font-semibold text-slate-700 dark:text-slate-300 ml-1">
                     Nueva Contraseña

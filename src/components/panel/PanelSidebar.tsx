@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { usePermissions } from '@/hooks/usePermissions';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 type NavItem = {
   label: string;
@@ -19,6 +20,17 @@ export default function PanelSidebar() {
   const pathname = usePathname();
   const { can } = usePermissions();
   const { user, signOut } = useAuth();
+  const confirm = useConfirm();
+
+  const handleSignOut = async () => {
+    const ok = await confirm({
+      title: 'Cerrar sesión',
+      message: '¿Está seguro de cerrar sesión?',
+      confirmText: 'Cerrar sesión',
+      danger: false,
+    });
+    if (ok) signOut();
+  };
 
   const isAdmin = can('read', 'usuarios');
   const dashboardHref = isAdmin ? '/admin' : '/general';
@@ -68,7 +80,7 @@ export default function PanelSidebar() {
               {active && (
                 <span className="absolute -left-3 top-1/2 -translate-y-1/2 h-6 w-1 rounded-full bg-primary" />
               )}
-              <span className="absolute left-12 top-1/2 -translate-y-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+              <span className="absolute left-12 top-1/2 -translate-y-1/2 bg-slate-900 dark:bg-slate-700 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                 {item.label}
               </span>
             </Link>
@@ -89,18 +101,18 @@ export default function PanelSidebar() {
           }`}
         >
           <span className="material-symbols-outlined !text-xl">settings</span>
-          <span className="absolute left-12 top-1/2 -translate-y-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+          <span className="absolute left-12 top-1/2 -translate-y-1/2 bg-slate-900 dark:bg-slate-700 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
             Ajustes y Perfil
           </span>
         </Link>
 
         <button
-          onClick={signOut}
+          onClick={handleSignOut}
           className="group relative text-on-surface-variant hover:text-primary transition-colors"
           aria-label="Cerrar sesión"
         >
           <span className="material-symbols-outlined !text-2xl">logout</span>
-          <span className="absolute left-12 top-1/2 -translate-y-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+          <span className="absolute left-12 top-1/2 -translate-y-1/2 bg-slate-900 dark:bg-slate-700 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
             Cerrar sesión
           </span>
         </button>

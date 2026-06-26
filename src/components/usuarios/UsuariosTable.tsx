@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { type UsuarioConRol } from '@/services/usuarios/usuariosService'
 
 interface UsuariosTableProps {
@@ -30,8 +29,6 @@ export default function UsuariosTable({
   onToggleEstado,
   onDelete,
 }: UsuariosTableProps) {
-  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null)
-
   if (usuarios.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-slate-400 dark:text-slate-500">
@@ -51,6 +48,7 @@ export default function UsuariosTable({
             <th className="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Documento</th>
             <th className="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Correo</th>
             <th className="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Rol</th>
+            <th className="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Curso / Vínculo</th>
             <th className="px-4 py-3 text-left font-semibold text-slate-600 dark:text-slate-300">Estado</th>
             <th className="px-4 py-3 text-right font-semibold text-slate-600 dark:text-slate-300">Acciones</th>
           </tr>
@@ -101,6 +99,73 @@ export default function UsuariosTable({
                   )}
                 </td>
 
+                {/* Curso (estudiantes) / Estudiante vinculado (padres) */}
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                  {u.idRol === 2 ? (
+                    u.cursoNombre ? (
+                      <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">
+                        {u.cursoNombre}
+                      </span>
+                    ) : (
+                      <span className="text-slate-400 italic text-xs">Sin asignar</span>
+                    )
+                  ) : u.idRol === 3 ? (
+                    u.cargo ? (
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="px-2 py-0.5 rounded-lg text-[11px] font-semibold bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300">
+                          {u.cargo}
+                        </span>
+                        {u.nivelAcceso && (
+                          <span className="px-2 py-0.5 rounded-lg text-[11px] font-semibold bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-slate-300">
+                            {u.nivelAcceso}
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-slate-400 italic text-xs">Sin cargo</span>
+                    )
+                  ) : u.idRol === 1 ? (
+                    u.especializaciones && u.especializaciones.length > 0 ? (
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {u.especializaciones.map((e) => (
+                          <span
+                            key={e.id}
+                            className="px-2 py-0.5 rounded-lg text-[11px] font-semibold bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300"
+                          >
+                            {e.nombre}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-slate-400 italic text-xs">Sin especialización</span>
+                    )
+                  ) : u.idRol === 4 ? (
+                    u.estudianteNombre ? (
+                      <div className="flex flex-col gap-1">
+                        <span className="font-medium text-slate-700 dark:text-slate-200">
+                          {u.estudianteNombre}
+                        </span>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {u.parentesco && (
+                            <span className="px-2 py-0.5 rounded-lg text-[11px] font-semibold bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300">
+                              {u.parentesco}
+                            </span>
+                          )}
+                          {u.estudianteCurso && (
+                            <span className="px-2 py-0.5 rounded-lg text-[11px] font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">
+                              {u.estudianteCurso}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-slate-400 italic text-xs">Sin vincular</span>
+                    )
+                  ) : (
+                    <span className="text-slate-400 text-xs">—</span>
+                  )}
+                </td>
+
                 {/* Estado */}
                 <td className="px-4 py-3">
                   <span
@@ -140,33 +205,13 @@ export default function UsuariosTable({
                     </button>
 
                     {/* Eliminar */}
-                    {confirmDeleteId === u.idUsuario ? (
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() => {
-                            onDelete(u.idUsuario)
-                            setConfirmDeleteId(null)
-                          }}
-                          className="px-2 py-1 rounded-lg bg-red-500 text-white text-xs font-semibold hover:bg-red-600 transition-colors"
-                        >
-                          Confirmar
-                        </button>
-                        <button
-                          onClick={() => setConfirmDeleteId(null)}
-                          className="px-2 py-1 rounded-lg bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-white/20 transition-colors"
-                        >
-                          Cancelar
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => setConfirmDeleteId(u.idUsuario)}
-                        title="Eliminar"
-                        className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors inline-flex"
-                      >
-                        <span className="material-symbols-outlined !text-xl">delete</span>
-                      </button>
-                    )}
+                    <button
+                      onClick={() => onDelete(u.idUsuario)}
+                      title="Eliminar"
+                      className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors inline-flex"
+                    >
+                      <span className="material-symbols-outlined !text-xl">delete</span>
+                    </button>
                   </div>
                 </td>
               </tr>

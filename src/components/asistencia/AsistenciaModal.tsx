@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { type RegistroAsistencia, type EstudianteSelector, type EstadoAsistencia, type TipoAsistencia } from '@/services/asistencia/asistenciaService'
-import { type ModalMode } from '@/hooks/useAsistencia'
+import { type RegistroAsistencia, type EstudianteSelector, type EstadoAsistencia, type TipoAsistencia, normalizeTipo } from '@/services/asistencia/asistenciaService'
+import { type ModalMode, type CreateManyData } from '@/hooks/useAsistencia'
 import { type CreateRegistroData, type UpdateRegistroData } from '@/services/asistencia/asistenciaService'
 
 type Props = {
@@ -12,6 +12,9 @@ type Props = {
   saving: boolean
   onClose: () => void
   onCreate: (data: Omit<CreateRegistroData, 'registradoPor'>) => Promise<void>
+  /** Registro de varios estudiantes a la vez (mismo estado). Si no se provee,
+   *  se hace un onCreate por cada estudiante seleccionado. */
+  onCreateMany?: (ids: number[], data: CreateManyData) => Promise<void>
   onUpdate: (data: UpdateRegistroData) => Promise<void>
 }
 
@@ -26,11 +29,11 @@ const ESTADO_COLOR: Record<EstadoAsistencia, string> = {
 }
 
 export default function AsistenciaModal({
-  mode, registro, estudiantes, saving, onClose, onCreate, onUpdate,
+  mode, registro, estudiantes, saving, onClose, onCreate, onCreateMany, onUpdate,
 }: Props) {
   const [jornadaSeleccionada, setJornadaSeleccionada] = useState<string>('')
   const [cursoSeleccionado,   setCursoSeleccionado]   = useState<string>('')
-  const [idEstudiante,        setIdEstudiante]        = useState<number | ''>('')
+  const [selectedIds,         setSelectedIds]         = useState<number[]>([])
   const [tipo,                setTipo]                = useState<TipoAsistencia>('entrada')
   const [estado,              setEstado]              = useState<EstadoAsistencia>('Presente')
   const [fecha,               setFecha]               = useState('')
@@ -55,8 +58,11 @@ export default function AsistenciaModal({
   const cursosDeJornada = useMemo(() => {
     const seen = new Set<string>()
     const result: string[] = []
+    // Comparación sin distinguir mayúsculas: la jornada del curso viene como
+    // 'Mañana'/'Tarde' pero las opciones del desplegable se fuerzan en minúscula.
+    const jornadaSel = jornadaSeleccionada.toLowerCase()
     for (const e of estudiantes) {
-      if (jornadaSeleccionada && e.jornada === jornadaSeleccionada && e.curso && !seen.has(e.curso)) {
+      if (jornadaSel && e.jornada?.toLowerCase() === jornadaSel && e.curso && !seen.has(e.curso)) {
         seen.add(e.curso)
         result.push(e.curso)
       }
@@ -69,17 +75,27 @@ export default function AsistenciaModal({
     [estudiantes, cursoSeleccionado]
   )
 
+  // ¿Están todos los del curso seleccionados? (para el botón "Seleccionar todos")
+  const todosSeleccionados = estudiantesFiltrados.length > 0 &&
+    estudiantesFiltrados.every(e => selectedIds.includes(e.idEstudiante))
+
+  const toggleEstudiante = (id: number) =>
+    setSelectedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
+
+  const toggleTodos = () =>
+    setSelectedIds(todosSeleccionados ? [] : estudiantesFiltrados.map(e => e.idEstudiante))
+
   useEffect(() => {
     if (mode === 'edit' && registro) {
-      setIdEstudiante(registro.idEstudiante)
-      setTipo((registro.tipo as TipoAsistencia | null) ?? 'entrada')
+      setSelectedIds([registro.idEstudiante])
+      setTipo(normalizeTipo(registro.tipo) ?? 'entrada')
       setEstado(registro.estado)
       setFecha(registro.fecha)
       setObservacion(registro.observacion ?? '')
     } else {
       setJornadaSeleccionada('')
       setCursoSeleccionado('')
-      setIdEstudiante('')
+      setSelectedIds([])
       setTipo('entrada')
       setEstado('Presente')
       setFecha(new Date().toISOString().split('T')[0])
@@ -94,8 +110,8 @@ export default function AsistenciaModal({
     e.preventDefault()
     setFormError(null)
 
-    if (mode === 'create' && !idEstudiante) {
-      setFormError('Selecciona un estudiante')
+    if (mode === 'create' && selectedIds.length === 0) {
+      setFormError('Selecciona al menos un estudiante')
       return
     }
     if (!fecha) {
@@ -105,13 +121,14 @@ export default function AsistenciaModal({
 
     try {
       if (mode === 'create') {
-        await onCreate({
-          idEstudiante: idEstudiante as number,
-          tipo,
-          estado,
-          fecha,
-          observacion: observacion || null,
-        })
+        if (onCreateMany) {
+          await onCreateMany(selectedIds, { tipo, estado, fecha, observacion: observacion || null })
+        } else {
+          // Respaldo: un registro por estudiante seleccionado.
+          for (const id of selectedIds) {
+            await onCreate({ idEstudiante: id, tipo, estado, fecha, observacion: observacion || null })
+          }
+        }
       } else {
         await onUpdate({
           tipo,
@@ -147,7 +164,7 @@ export default function AsistenciaModal({
                 </label>
                 <select
                   value={jornadaSeleccionada}
-                  onChange={(e) => { setJornadaSeleccionada(e.target.value); setCursoSeleccionado(''); setIdEstudiante('') }}
+                  onChange={(e) => { setJornadaSeleccionada(e.target.value); setCursoSeleccionado(''); setSelectedIds([]) }}
                   className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   required
                 >
@@ -164,7 +181,7 @@ export default function AsistenciaModal({
                 </label>
                 <select
                   value={cursoSeleccionado}
-                  onChange={(e) => { setCursoSeleccionado(e.target.value); setIdEstudiante('') }}
+                  onChange={(e) => { setCursoSeleccionado(e.target.value); setSelectedIds([]) }}
                   className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
                   required
                   disabled={!jornadaSeleccionada}
@@ -179,25 +196,60 @@ export default function AsistenciaModal({
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-slate-700 dark:text-gray-300">
-                  Estudiante <span className="text-red-500">*</span>
-                </label>
-                <select
-                  value={idEstudiante}
-                  onChange={(e) => setIdEstudiante(e.target.value ? Number(e.target.value) : '')}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
-                  required
-                  disabled={!cursoSeleccionado}
-                >
-                  <option value="">
-                    {cursoSeleccionado ? 'Seleccionar estudiante...' : 'Primero selecciona un curso'}
-                  </option>
-                  {estudiantesFiltrados.map((e) => (
-                    <option key={e.idEstudiante} value={e.idEstudiante}>
-                      {e.nombreCompleto} — {e.codigoEstudiante}
-                    </option>
-                  ))}
-                </select>
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-semibold text-slate-700 dark:text-gray-300">
+                    Estudiantes <span className="text-red-500">*</span>
+                    {selectedIds.length > 0 && (
+                      <span className="ml-2 font-normal text-xs text-primary dark:text-blue-400">
+                        {selectedIds.length} seleccionado{selectedIds.length !== 1 ? 's' : ''}
+                      </span>
+                    )}
+                  </label>
+                  {cursoSeleccionado && estudiantesFiltrados.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={toggleTodos}
+                      className="text-xs font-semibold text-primary dark:text-blue-400 hover:underline"
+                    >
+                      {todosSeleccionados ? 'Quitar todos' : 'Seleccionar todos'}
+                    </button>
+                  )}
+                </div>
+
+                {!cursoSeleccionado ? (
+                  <p className="px-3 py-2.5 rounded-xl border border-dashed border-slate-200 dark:border-white/10 text-sm text-slate-400 dark:text-slate-500">
+                    Primero selecciona un curso
+                  </p>
+                ) : estudiantesFiltrados.length === 0 ? (
+                  <p className="px-3 py-2.5 rounded-xl border border-dashed border-slate-200 dark:border-white/10 text-sm text-slate-400 dark:text-slate-500">
+                    Este curso no tiene estudiantes activos
+                  </p>
+                ) : (
+                  <div className="max-h-48 overflow-y-auto rounded-xl border border-slate-200 dark:border-white/10 divide-y divide-slate-100 dark:divide-white/5">
+                    {estudiantesFiltrados.map((e) => {
+                      const checked = selectedIds.includes(e.idEstudiante)
+                      return (
+                        <label
+                          key={e.idEstudiante}
+                          className={`flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors ${
+                            checked ? 'bg-blue-50 dark:bg-blue-500/10' : 'hover:bg-slate-50 dark:hover:bg-white/5'
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => toggleEstudiante(e.idEstudiante)}
+                            className="w-4 h-4 rounded accent-primary"
+                          />
+                          <span className="text-sm text-slate-800 dark:text-white">
+                            {e.nombreCompleto}
+                            <span className="text-slate-400 font-mono text-xs ml-1.5">{e.codigoEstudiante}</span>
+                          </span>
+                        </label>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -305,7 +357,11 @@ export default function AsistenciaModal({
               disabled={saving}
               className="flex-1 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
             >
-              {saving ? 'Guardando...' : mode === 'create' ? 'Registrar' : 'Guardar cambios'}
+              {saving
+                ? 'Guardando...'
+                : mode === 'create'
+                  ? `Registrar${selectedIds.length > 1 ? ` (${selectedIds.length})` : ''}`
+                  : 'Guardar cambios'}
             </button>
           </div>
         </form>

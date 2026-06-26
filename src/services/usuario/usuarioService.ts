@@ -1,5 +1,8 @@
 import { apiFetch } from '@/services/api/client'
 
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
+const API_ORIGIN = API.replace(/\/api\/v1\/?$/, '')
+
 export type PerfilUsuario = {
   idUsuario: number
   primerNombre: string
@@ -12,6 +15,10 @@ export type PerfilUsuario = {
   telefono: string | null
   direccion: string | null
   genero: string | null
+  rolNombre: string | null
+  fechaRegistro: string | null
+  ultimoAcceso: string | null
+  fotoPerfil: string | null
 }
 
 export type ProfesorPerfil = {
@@ -52,10 +59,24 @@ export const EPS_OPTIONS = [
 
 export const TIPO_AFILIACION_OPTIONS = ['Contributivo', 'Subsidiado', 'Especial'] as const
 
-// Avatar not stored in Supabase Storage anymore — stubs
-export async function uploadAvatar(_file: File): Promise<string> {
-  throw new Error('La carga de avatares no está disponible en esta versión.')
+/** Resuelve una ruta de avatar relativa contra el origen del backend. */
+function resolveAvatarUrl(url: string): string {
+  if (!url) return ''
+  if (/^https?:\/\//.test(url) || url.startsWith('data:')) return url
+  return `${API_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`
 }
+
+/** Sube la foto de perfil a POST /auth/me/avatar (multipart, campo `file`). */
+export async function uploadAvatar(file: File): Promise<string> {
+  const fd = new FormData()
+  fd.append('file', file)
+  const data = await apiFetch<unknown>('/auth/me/avatar', { method: 'POST', body: fd })
+  if (typeof data === 'string') return resolveAvatarUrl(data)
+  const obj = (data ?? {}) as Record<string, unknown>
+  const url = (obj.url ?? obj.avatar ?? obj.avatarUrl ?? obj.ruta ?? obj.rutaAvatar ?? '') as string
+  return resolveAvatarUrl(url)
+}
+
 export function getAvatarUrl(_user: unknown): string | null {
   return null
 }
@@ -75,6 +96,10 @@ export async function getMiPerfil(idUsuario: number): Promise<PerfilUsuario | nu
       telefono:        u.telefono as string | null,
       direccion:       u.direccion as string | null,
       genero:          u.genero as string | null,
+      rolNombre:       (u.nombreRol ?? u.rolNombre) as string | null ?? null,
+      fechaRegistro:   (u.fechaRegistro as string | null) ?? null,
+      ultimoAcceso:    (u.ultimoAcceso as string | null) ?? null,
+      fotoPerfil:      u.fotoPerfil ? resolveAvatarUrl(u.fotoPerfil as string) : null,
     }
   } catch {
     return null
@@ -100,9 +125,12 @@ export async function updateMiPerfil(
 
 export async function getMiPerfilProfesor(idUsuario: number): Promise<ProfesorPerfil | null> {
   try {
-    const data = await apiFetch<Record<string, unknown>[]>(`/profesores?id_usuario=${idUsuario}&limit=1`)
-    if (!data.length) return null
-    const p = data[0]
+    // OJO: GET /profesores IGNORA el filtro ?id_usuario (solo acepta skip/limit),
+    // así que NO se puede pedir limit=1: hay que traer la lista y buscar la fila
+    // cuyo idUsuario coincide. Si no, se cargaría el perfil del PRIMER profesor.
+    const data = await apiFetch<Record<string, unknown>[]>(`/profesores?limit=500`)
+    const p = data.find(x => x.idUsuario === idUsuario)
+    if (!p) return null
     const esps = await apiFetch<Record<string, unknown>[]>(`/profesores/${p.idProfesor}/especializaciones`).catch(() => [])
     return {
       idProfesor:       p.idProfesor as number,
@@ -112,7 +140,8 @@ export async function getMiPerfilProfesor(idUsuario: number): Promise<ProfesorPe
       fechaVinculacion: p.fechaVinculacion as string,
       especializaciones: esps.map(e => ({
         idEspecializacion:     e.idEspecializacion as number,
-        nombreEspecializacion: e.nombreEspecializacion as string,
+        // El nombre viene ANIDADO en `especializacion` (join del backend).
+        nombreEspecializacion: ((e.especializacion as Record<string, unknown> | null)?.nombreEspecializacion as string) ?? '',
         institucion:           (e.institucion as string) ?? '',
       })),
     }
@@ -133,9 +162,11 @@ export async function updateMiPerfilProfesor(
 
 export async function getMiPerfilAdmin(idUsuario: number): Promise<AdminPerfil | null> {
   try {
-    const data = await apiFetch<Record<string, unknown>[]>(`/administradores?id_usuario=${idUsuario}&limit=1`)
-    if (!data.length) return null
-    const a = data[0]
+    // GET /administradores ignora ?id_usuario (solo skip/limit) → se busca en la
+    // lista. Con limit=1 se cargaría el PRIMER administrador, no el del usuario.
+    const data = await apiFetch<Record<string, unknown>[]>(`/administradores?limit=500`)
+    const a = data.find(x => x.idUsuario === idUsuario)
+    if (!a) return null
     return {
       idAdministrador: a.idAdministrador as number,
       cargo:           a.cargo as string,
@@ -182,11 +213,14 @@ export async function insertAdminPerfil(
   }
 }
 
-export async function getMiEPS(idUsuario: number): Promise<EPSPerfil[]> {
+export async function getMiEPS(_idUsuario: number): Promise<EPSPerfil[]> {
   try {
-    const students = await apiFetch<Record<string, unknown>[]>(`/estudiantes?id_usuario=${idUsuario}&limit=1`)
-    if (!students.length) return []
-    const idEstudiante = students[0].idEstudiante as number
+    // El estudiante NO puede listar /estudiantes (es admin/docente); su propia
+    // fila se obtiene con /estudiantes/me (antes /estudiantes?id_usuario daba 403
+    // o traía al primer estudiante).
+    const me = await apiFetch<Record<string, unknown>>(`/estudiantes/me`)
+    const idEstudiante = me?.idEstudiante as number | undefined
+    if (!idEstudiante) return []
     const data = await apiFetch<Record<string, unknown>[]>(`/estudiantes/${idEstudiante}/ips`)
     return data.map(e => ({
       idIPS:            e.idIps as number,

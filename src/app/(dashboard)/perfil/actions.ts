@@ -9,6 +9,23 @@ async function getToken(): Promise<string | null> {
   return store.get('eys_access')?.value ?? null
 }
 
+/**
+ * Convierte el `detail` de un error del backend en un texto legible. FastAPI
+ * devuelve `detail` como string (errores de negocio) o como ARRAY de objetos
+ * `{loc, msg, type}` en los 422 de validación; sin esto, `new Error(array)`
+ * producía "[object Object],[object Object]" en la UI.
+ */
+function formatDetail(detail: unknown, status: number): string {
+  if (typeof detail === 'string' && detail) return detail
+  if (Array.isArray(detail)) {
+    const msgs = detail
+      .map(d => (d && typeof d === 'object' && 'msg' in d ? String((d as { msg: unknown }).msg) : ''))
+      .filter(Boolean)
+    if (msgs.length) return msgs.join('. ')
+  }
+  return `HTTP ${status}`
+}
+
 async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = await getToken()
   const res = await fetch(`${API}${path}`, {
@@ -22,15 +39,21 @@ async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> 
   })
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
-    throw new Error((body as Record<string, unknown>).detail as string ?? `HTTP ${res.status}`)
+    throw new Error(formatDetail((body as Record<string, unknown>).detail, res.status))
   }
   if (res.status === 204) return null as T
   return res.json() as Promise<T>
 }
 
 export async function serverEnsureEstudiante(idUsuario: number): Promise<number> {
-  const existing = await apiFetch<Array<Record<string, unknown>>>(`/estudiantes?id_usuario=${idUsuario}&limit=1`)
-  if (existing.length > 0) return existing[0].idEstudiante as number
+  // El estudiante NO puede listar /estudiantes (admin/docente); su fila propia se
+  // obtiene con /estudiantes/me. Si aún no existe (404), se crea abajo.
+  try {
+    const me = await apiFetch<Record<string, unknown>>(`/estudiantes/me`)
+    if (me?.idEstudiante) return me.idEstudiante as number
+  } catch {
+    /* sin fila de estudiante todavía → se crea a continuación */
+  }
 
   const hoy = new Date().toISOString().slice(0, 10)
   const codigo = `EST${String(idUsuario).padStart(3, '0')}`
@@ -69,6 +92,16 @@ export async function serverUpsertEPS(
   })
 }
 
+export async function serverUpdatePassword(
+  idUsuario: number,
+  password: string
+): Promise<void> {
+  await apiFetch(`/usuarios/${idUsuario}`, {
+    method: 'PUT',
+    body: JSON.stringify({ password }),
+  })
+}
+
 export async function serverUpdateUsuario(
   idUsuario: number,
   payload: Record<string, string | null>
@@ -84,12 +117,19 @@ export async function serverUpdateUsuario(
 
 export async function serverUpdateAdministrador(
   idAdministrador: number,
-  payload: { cargo?: string; nivelAcceso?: string }
+  payload: { idUsuario: number; cargo: string; nivelAcceso: string; fechaAsignacion: string }
 ): Promise<void> {
-  const body: Record<string, unknown> = {}
-  if (payload.cargo        !== undefined) body.cargo        = payload.cargo
-  if (payload.nivelAcceso  !== undefined) body.nivel_acceso = payload.nivelAcceso
-  await apiFetch(`/administradores/${idAdministrador}`, { method: 'PUT', body: JSON.stringify(body) })
+  // El PUT del backend usa el schema de creación (todos los campos requeridos),
+  // por eso se reenvían id_usuario y fecha_asignacion además de cargo/nivel.
+  await apiFetch(`/administradores/${idAdministrador}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      id_usuario:       payload.idUsuario,
+      cargo:            payload.cargo,
+      nivel_acceso:     payload.nivelAcceso,
+      fecha_asignacion: (payload.fechaAsignacion || new Date().toISOString()).slice(0, 10),
+    }),
+  })
 }
 
 export async function serverInsertAdministrador(
@@ -127,8 +167,10 @@ export async function serverUpdateProfesor(
 }
 
 export async function serverEnsureProfesor(idUsuario: number): Promise<number> {
-  const existing = await apiFetch<Array<Record<string, unknown>>>(`/profesores?id_usuario=${idUsuario}&limit=1`)
-  if (existing.length > 0) return existing[0].idProfesor as number
+  // GET /profesores ignora ?id_usuario (devuelve el primero) → se busca en la lista.
+  const lista = await apiFetch<Array<Record<string, unknown>>>(`/profesores?limit=500`)
+  const existing = lista.find(p => p.idUsuario === idUsuario)
+  if (existing) return existing.idProfesor as number
 
   const hoy = new Date().toISOString().slice(0, 10)
   const codigo = `PROF${String(idUsuario).padStart(3, '0')}`

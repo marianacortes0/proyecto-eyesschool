@@ -75,7 +75,7 @@ export default function SupportPage() {
       } else {
         alert("Error al enviar correo ❌");
       }
-    } catch (error) {
+    } catch {
       alert("Error de conexión ❌");
     } finally {
       setLoading(false);
@@ -139,9 +139,16 @@ export default function SupportPage() {
 
             <h3 className="text-xl font-semibold mb-2">Enviar correo</h3>
 
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
               Escríbenos y te responderemos lo más pronto posible.
             </p>
+
+            <a
+              href="mailto:eyesschool.soporte@gmail.com"
+              className="block mb-6 text-sm font-medium text-green-600 dark:text-green-400 hover:underline break-all"
+            >
+              eyesschool.soporte@gmail.com
+            </a>
 
             <button
               onClick={() => setShowEmail(true)}
@@ -184,9 +191,16 @@ export default function SupportPage() {
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
           <div className="relative bg-white dark:bg-[#141414] text-gray-800 dark:text-white p-8 rounded-2xl shadow-xl text-center max-w-sm w-full">
             <h2 className="text-2xl font-bold mb-4">Llámanos</h2>
-            <p className="text-lg font-semibold mb-2">321 4142140</p>
+            <a
+              href="https://wa.me/573011836458"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block text-lg font-semibold mb-2 text-green-600 dark:text-green-400 hover:underline"
+            >
+              +57 301 183 6458
+            </a>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-              Atención a nivel nacional
+              Escríbenos por WhatsApp · Atención a nivel nacional
             </p>
             <button
               onClick={() => setShowPhone(false)}
@@ -217,13 +231,13 @@ export default function SupportPage() {
             <input type="email" placeholder="Correo" className="w-full mb-3 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:border-gray-700"
               onChange={(e) => setForm({ ...form, email: e.target.value })} />
 
-            <select className="w-full mb-3 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:text-white dark:border-gray-700"
+            <select className="w-full mb-3 p-2 rounded border bg-white text-gray-800 dark:bg-[#1f1f1f] dark:text-white dark:border-gray-700"
               onChange={(e) => setForm({ ...form, type: e.target.value })}>
-              <option value="">Tipo de ayuda</option>
-              <option>Problemas técnicos de la página</option>
-              <option>Asesoría para convenio</option>
-              <option>Problemas al ingresar a su cuenta</option>
-              <option>Otro</option>
+              <option value="" className="bg-white text-gray-800 dark:bg-[#1f1f1f] dark:text-white">Tipo de ayuda</option>
+              <option className="bg-white text-gray-800 dark:bg-[#1f1f1f] dark:text-white">Problemas técnicos de la página</option>
+              <option className="bg-white text-gray-800 dark:bg-[#1f1f1f] dark:text-white">Asesoría para convenio</option>
+              <option className="bg-white text-gray-800 dark:bg-[#1f1f1f] dark:text-white">Problemas al ingresar a su cuenta</option>
+              <option className="bg-white text-gray-800 dark:bg-[#1f1f1f] dark:text-white">Otro</option>
             </select>
 
             <textarea placeholder="Mensaje" className="w-full mb-4 p-2 rounded border bg-white dark:bg-[#1f1f1f] dark:border-gray-700"

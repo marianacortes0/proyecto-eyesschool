@@ -1,4 +1,15 @@
-import { apiFetch } from '@/services/api/client'
+import { apiFetch, getClientToken } from '@/services/api/client'
+
+// Origen del backend (sin /api/v1) para construir URLs de archivos estáticos.
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
+const API_ROOT = API_BASE.replace(/\/api\/v1\/?$/, '')
+
+/** Convierte una ruta relativa del backend (/static/...) en URL absoluta. */
+export function fileUrl(path: string | null | undefined): string {
+  if (!path) return ''
+  if (/^(https?:|data:)/i.test(path)) return path
+  return `${API_ROOT}${path.startsWith('/') ? '' : '/'}${path}`
+}
 
 export type Reporte = {
   idReporte: number
@@ -68,13 +79,88 @@ export async function updateReporte(
 }
 
 export async function deleteReporte(idReporte: number): Promise<void> {
-  await apiFetch(`/reportes/${idReporte}/estado`, {
-    method: 'PATCH',
-    body: JSON.stringify({ estado: 'Error' }),
+  await apiFetch(`/reportes/${idReporte}`, { method: 'DELETE' })
+}
+
+// Formatos y tamaño permitidos para los archivos de reporte.
+export const FORMATOS_REPORTE = ['.pdf', '.xlsx', '.xls', '.doc', '.docx'] as const
+export const MAX_TAMANO_REPORTE = 10 * 1024 * 1024 // 10 MB
+
+export function validarArchivoReporte(file: File): { ok: true } | { ok: false; motivo: string } {
+  const ext = '.' + (file.name.split('.').pop() ?? '').toLowerCase()
+  if (!FORMATOS_REPORTE.includes(ext as (typeof FORMATOS_REPORTE)[number])) {
+    return { ok: false, motivo: 'Formato de archivo no válido' }
+  }
+  if (file.size > MAX_TAMANO_REPORTE) {
+    return { ok: false, motivo: 'El archivo excede el tamaño máximo permitido' }
+  }
+  return { ok: true }
+}
+
+/**
+ * Sube el archivo del reporte al backend (multipart) y devuelve la ruta relativa
+ * `/static/reportes/...` que se persiste en `archivo_generado`. Usa XHR para
+ * reportar progreso real de carga.
+ */
+export function uploadArchivoReporte(
+  file: File,
+  onProgress?: (pct: number) => void,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const form = new FormData()
+    form.append('file', file)
+
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', `${API_BASE}/reportes/archivo`)
+    const token = getClientToken()
+    if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`)
+
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100))
+    }
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        onProgress?.(100)
+        // El backend (response_model=str) responde el string JSON-encoded.
+        try { resolve(JSON.parse(xhr.responseText) as string) }
+        catch { resolve(xhr.responseText) }
+        return
+      }
+      let msg = `HTTP ${xhr.status}`
+      try { msg = (JSON.parse(xhr.responseText).detail as string) ?? msg } catch {}
+      reject(new Error(msg))
+    }
+    xhr.onerror = () => reject(new Error('Error al subir el archivo'))
+    xhr.send(form)
   })
 }
 
-// File upload no longer uses Supabase Storage — returns a placeholder URL
-export async function uploadArchivoReporte(_file: File): Promise<string> {
-  throw new Error('La carga de archivos no está disponible en esta versión.')
+/**
+ * Descarga el archivo del reporte como PDF (u otro formato) forzando la descarga
+ * con el nombre que entrega el backend. Va autenticado con el token de acceso.
+ */
+export async function downloadReporteArchivo(idReporte: number, nombreReporte: string): Promise<void> {
+  const token = getClientToken()
+  const res = await fetch(`${API_BASE}/reportes/${idReporte}/archivo`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  })
+  if (!res.ok) {
+    let msg = `HTTP ${res.status}`
+    try { msg = ((await res.json()) as { detail?: string }).detail ?? msg } catch {}
+    throw new Error(msg)
+  }
+
+  const blob = await res.blob()
+  const dispo = res.headers.get('Content-Disposition') ?? ''
+  const match = /filename="?([^"]+)"?/.exec(dispo)
+  const filename = match?.[1] ?? `${nombreReporte}.pdf`
+
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
 }

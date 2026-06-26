@@ -9,11 +9,12 @@ interface UsuariosFiltersProps {
   onNuevoUsuario: () => void
 }
 
+// Roles reales en la BD: 1=Profesor | 2=Estudiante | 3=Administrador | 4=Padre
 const ROL_FILTROS = [
   { label: 'Todos', value: null },
-  { label: 'Administradores', value: 1 },
-  { label: 'Profesores', value: 2 },
-  { label: 'Estudiantes', value: 3 },
+  { label: 'Administradores', value: 3 },
+  { label: 'Profesores', value: 1 },
+  { label: 'Estudiantes', value: 2 },
   { label: 'Padres', value: 4 },
 ]
 

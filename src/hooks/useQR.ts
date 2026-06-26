@@ -1,8 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import {
-  getMiCodigoQR,
   type EstudianteQR,
   type CodigoQRConEstudiante,
   type RegistroAsistencia,
@@ -13,25 +12,26 @@ import {
   getEstudiantesConQRAction,
   getRegistrosAsistenciaAction,
   getUsuariosSinEstudianteAction,
-  getCursosActivosAction,
+  getQRBootstrapAction,
+  type QRBootstrap,
 } from '@/services/qr/qrActions'
 import { asignarQR } from '@/auth/actions'
 import { type Role } from '@/lib/utils/permissions'
 
 export type ModalMode = 'create' | 'edit' | null
 
-export function useQR(role: Role | null) {
+export function useQR(role: Role | null, initialData?: QRBootstrap) {
   // ── Estado admin ──────────────────────────────────────────────────────────
-  const [estudiantes, setEstudiantes]   = useState<EstudianteQR[]>([])
-  const [asistencia, setAsistencia]     = useState<RegistroAsistencia[]>([])
-  const [sinAsignar, setSinAsignar]     = useState<UsuarioSinEstudiante[]>([])
-  const [cursos, setCursos]             = useState<CursoSimple[]>([])
-  const [loading, setLoading]           = useState(true)
+  const [estudiantes, setEstudiantes]   = useState<EstudianteQR[]>(initialData?.estudiantes ?? [])
+  const [asistencia, setAsistencia]     = useState<RegistroAsistencia[]>(initialData?.asistencia ?? [])
+  const [sinAsignar, setSinAsignar]     = useState<UsuarioSinEstudiante[]>(initialData?.sinAsignar ?? [])
+  const [cursos, setCursos]             = useState<CursoSimple[]>(initialData?.cursos ?? [])
+  const [loading, setLoading]           = useState(!initialData)
   const [error, setError]               = useState<string | null>(null)
 
   // ── Estado estudiante ─────────────────────────────────────────────────────
-  const [miCodigo, setMiCodigo]         = useState<CodigoQRConEstudiante | null>(null)
-  const [miLoading, setMiLoading]       = useState(true)
+  const [miCodigo] = useState<CodigoQRConEstudiante | null>(null)
+  const [miLoading] = useState(true)
 
   // ── Filtros admin ─────────────────────────────────────────────────────────
   const [searchQuery, setSearchQuery]   = useState('')
@@ -44,16 +44,11 @@ export function useQR(role: Role | null) {
     try {
       setLoading(true)
       setError(null)
-      const [estudiantesData, asistenciaData, sinAsignarData, cursosData] = await Promise.all([
-        getEstudiantesConQRAction(),
-        getRegistrosAsistenciaAction(fechaFiltro),
-        getUsuariosSinEstudianteAction(),
-        getCursosActivosAction(),
-      ])
-      setEstudiantes(estudiantesData)
-      setAsistencia(asistenciaData)
-      setSinAsignar(sinAsignarData)
-      setCursos(cursosData)
+      const data = await getQRBootstrapAction(fechaFiltro)
+      setEstudiantes(data.estudiantes)
+      setAsistencia(data.asistencia)
+      setSinAsignar(data.sinAsignar)
+      setCursos(data.cursos)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al cargar datos')
     } finally {
@@ -70,21 +65,16 @@ export function useQR(role: Role | null) {
     }
   }, [fechaFiltro])
 
-  // ── Fetch estudiante ──────────────────────────────────────────────────────
-  const fetchMiCodigo = useCallback(async () => {
-    try {
-      setMiLoading(true)
-      setMiCodigo(await getMiCodigoQR())
-    } catch {
-      setMiCodigo(null)
-    } finally {
-      setMiLoading(false)
-    }
-  }, [])
-
+  // Si la página entregó los datos del día desde el servidor, no refetcheamos en
+  // el primer montaje; los cambios de fecha posteriores sí disparan fetchAdmin.
+  const seededRef = useRef(!!initialData)
   useEffect(() => {
-    if (role === 'admin' || role === 'docente') fetchAdmin()
-    // estudiante: datos se obtienen server-side en page.tsx
+    if (role !== 'admin' && role !== 'docente') return
+    if (seededRef.current) {
+      seededRef.current = false
+      return
+    }
+    fetchAdmin()
   }, [role, fetchAdmin])
 
   // ── Asignar QR ────────────────────────────────────────────────────────────

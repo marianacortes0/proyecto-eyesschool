@@ -12,6 +12,8 @@ export type Horario = {
   nombreCurso?: string
   gradoCurso?: string
   nombreMateria?: string
+  codigoMateria?: string
+  idProfesor?: number
   nombreProfesor?: string
 }
 

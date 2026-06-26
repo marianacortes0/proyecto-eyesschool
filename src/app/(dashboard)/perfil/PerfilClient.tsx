@@ -4,12 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import { type Role } from '@/lib/utils/permissions'
 import {
   getMiPerfil,
-  updateMiPerfil,
   getMiPerfilProfesor,
-  updateMiPerfilProfesor,
   getMiEPS,
-  updateMiPerfilAdmin,
-  insertAdminPerfil,
   uploadAvatar,
   EPS_OPTIONS,
   TIPO_AFILIACION_OPTIONS,
@@ -20,15 +16,15 @@ import {
   type CursoPerfil,
 } from '@/services/usuario/usuarioService'
 import {
-  serverUpdateEstudianteCurso, serverUpsertEPS, serverEnsureEstudiante,
+  serverUpsertEPS, serverEnsureEstudiante,
   serverEnsureProfesor, serverUpdateProfesor, serverAddEspecializacion, serverRemoveEspecializacion,
   serverUpdateUsuario, serverUpdateAdministrador, serverInsertAdministrador,
-  serverBuscarEstudiantePorDocumento, serverUpsertPadre,
+  serverBuscarEstudiantePorDocumento, serverUpsertPadre, serverUpdatePassword,
 } from './actions'
-import { useMemo } from 'react'
 import { useAuth } from '@/hooks/useAuth'
+import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
+import { getErrorMessage } from '@/lib/errors'
 
-const TIPOS_DOC = ['CC', 'TI', 'CE', 'PA', 'RC', 'NIT'] as const
 const GENEROS   = ['M', 'F'] as const
 const CARGOS_ADMIN = ['Rector', 'Coordinador', 'Secretario', 'Tesorero', 'Orientador', 'Otro'] as const
 const PARENTESCOS  = ['Padre', 'Madre', 'Tutor', 'Abuelo', 'Abuela', 'Tío', 'Tía', 'Hermano', 'Hermana', 'Otro'] as const
@@ -41,6 +37,7 @@ type EstudianteAsociado = { idEstudiante: number; nombre: string; documento: str
 
 type Props = {
   role: Role
+  perfilServer?: PerfilUsuario | null
   adminDataServer?: AdminPerfil | null
   cursosServer?: CursoPerfil[]
   idEstudianteServer?: number | null
@@ -51,13 +48,13 @@ type Props = {
   estudianteAsociadoServer?: EstudianteAsociado
 }
 
-export default function PerfilClient({ role, adminDataServer, cursosServer = [], idEstudianteServer = null, idCursoActualServer = null, profesorServer = null, especializacionesEnum = [], padreServer = null, estudianteAsociadoServer = null }: Props) {
+export default function PerfilClient({ role, perfilServer = null, adminDataServer, cursosServer = [], idEstudianteServer = null, idCursoActualServer = null, profesorServer = null, especializacionesEnum = [], padreServer = null, estudianteAsociadoServer = null }: Props) {
   const { user: authUser } = useAuth()
-  const [perfil,   setPerfil]   = useState<PerfilUsuario | null>(null)
-  const [profesor, setProfesor] = useState<ProfesorPerfil | null>(null)
+  const [perfil,   setPerfil]   = useState<PerfilUsuario | null>(perfilServer)
+  const [profesor, setProfesor] = useState<ProfesorPerfil | null>(profesorServer)
   const [admin,    setAdmin]    = useState<AdminPerfil | null>(adminDataServer ?? null)
   const [eps,      setEPS]      = useState<EPSPerfil[]>([])
-  const [loading,  setLoading]  = useState(true)
+  const [loading,  setLoading]  = useState(!perfilServer)
   const [saving,   setSaving]   = useState(false)
   const [savingProf, setSavingProf] = useState(false)
   const [savingAdmin, setSavingAdmin] = useState(false)
@@ -77,37 +74,24 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
   const [institucionEsp,   setInstitucionEsp]   = useState('')
   const [savingEsp,        setSavingEsp]        = useState(false)
   const [errorEsp,         setErrorEsp]         = useState<string | null>(null)
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(perfilServer?.fotoPerfil ?? null)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Estudiante: EPS y curso
   const [idEstudiante,    setIdEstudiante]    = useState<number | null>(idEstudianteServer)
-  const [cursosLista,     setCursosLista]     = useState<CursoPerfil[]>(cursosServer)
-  const [idCursoActual,   setIdCursoActual]   = useState<string>(() => {
-    if (idCursoActualServer && cursosServer.find(c => c.idCurso === idCursoActualServer)) {
-      return String(idCursoActualServer)
-    }
-    return ''
-  })
-  const [jornadaEst,      setJornadaEst]      = useState<string>(() => {
-    if (idCursoActualServer) {
-      return cursosServer.find(c => c.idCurso === idCursoActualServer)?.jornada ?? ''
-    }
-    return ''
-  })
+  // Curso actual del estudiante — SOLO LECTURA (la jornada y el curso los asigna
+  // la institución; el estudiante no puede cambiarlos).
+  const cursoActualEst = cursosServer.find(c => c.idCurso === idCursoActualServer) ?? null
   const [epsSeleccionada, setEpsSeleccionada] = useState<string>('')
   const [tipoAfiliacion,  setTipoAfiliacion]  = useState<string>('')
   // Se pre-llena cuando lleguen los datos de EPS
   const [savingEPS,       setSavingEPS]       = useState(false)
   const [successEPS,      setSuccessEPS]      = useState(false)
   const [errorEPS,        setErrorEPS]        = useState<string | null>(null)
-  const [savingCurso,     setSavingCurso]     = useState(false)
-  const [successCurso,    setSuccessCurso]    = useState(false)
-  const [errorCurso,      setErrorCurso]      = useState<string | null>(null)
 
   // Padre
-  const [padreData,          setPadreData]          = useState<PadreData>(padreServer)
+  const [, setPadreData] = useState<PadreData>(padreServer)
   const [estudianteAsociado, setEstudianteAsociado] = useState<EstudianteAsociado>(estudianteAsociadoServer)
   const [docBusqueda,        setDocBusqueda]        = useState(estudianteAsociadoServer?.documento ?? '')
   const [parentesco,         setParentesco]         = useState(padreServer?.parentesco ?? '')
@@ -118,70 +102,78 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
   const [successPadre,       setSuccessPadre]       = useState(false)
   const [errorPadre,         setErrorPadre]         = useState<string | null>(null)
 
-  const jornadasEst = useMemo(() => [...new Set(cursosLista.map(c => c.jornada))].sort(), [cursosLista])
-  const cursosDeJornada = useMemo(
-    () => jornadaEst ? cursosLista.filter(c => c.jornada === jornadaEst) : [],
-    [cursosLista, jornadaEst]
-  )
+  // Campos usuario (pre-sembrados con el perfil del servidor si llegó)
+  const [primerNombre,    setPrimerNombre]    = useState(perfilServer?.primerNombre ?? '')
+  const [segundoNombre,   setSegundoNombre]   = useState(perfilServer?.segundoNombre ?? '')
+  const [primerApellido,  setPrimerApellido]  = useState(perfilServer?.primerApellido ?? '')
+  const [segundoApellido, setSegundoApellido] = useState(perfilServer?.segundoApellido ?? '')
+  const [tipoDocumento,   setTipoDocumento]   = useState(perfilServer?.tipoDocumento ?? '')
+  const [numeroDocumento, setNumeroDocumento] = useState(perfilServer?.numeroDocumento ?? '')
+  const [telefono,        setTelefono]        = useState(perfilServer?.telefono ?? '')
+  const [direccion,       setDireccion]       = useState(perfilServer?.direccion ?? '')
+  const [genero,          setGenero]          = useState(perfilServer?.genero ?? '')
 
-  // Campos usuario
-  const [primerNombre,    setPrimerNombre]    = useState('')
-  const [segundoNombre,   setSegundoNombre]   = useState('')
-  const [primerApellido,  setPrimerApellido]  = useState('')
-  const [segundoApellido, setSegundoApellido] = useState('')
-  const [tipoDocumento,   setTipoDocumento]   = useState('')
-  const [numeroDocumento, setNumeroDocumento] = useState('')
-  const [telefono,        setTelefono]        = useState('')
-  const [direccion,       setDireccion]       = useState('')
-  const [genero,          setGenero]          = useState('')
+  // Campos profesor (pre-sembrados con los datos del servidor si llegaron)
+  const [titulo,        setTitulo]        = useState(profesorServer?.titulo ?? '')
+  const [nivelEstudios, setNivelEstudios] = useState(profesorServer?.nivelEstudios ?? '')
 
-  // Campos profesor
-  const [titulo,        setTitulo]        = useState('')
-  const [nivelEstudios, setNivelEstudios] = useState('')
+  // Cambio de contraseña
+  const [newPassword,     setNewPassword]     = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [savingPassword,  setSavingPassword]  = useState(false)
 
   useEffect(() => {
     const load = async () => {
-      setAvatarUrl(null)
+      setAvatarUrl(perfilServer?.fotoPerfil ?? null)
 
-      const idUsuario = authUser?.idUsuario
+      const idUsuario = authUser?.idUsuario ?? perfilServer?.idUsuario
       if (!idUsuario) { setLoading(false); return }
-      const p = await getMiPerfil(idUsuario)
-      if (p) {
-        setPerfil(p)
-        setPrimerNombre(p.primerNombre ?? '')
-        setSegundoNombre(p.segundoNombre ?? '')
-        setPrimerApellido(p.primerApellido ?? '')
-        setSegundoApellido(p.segundoApellido ?? '')
-        setTipoDocumento(p.tipoDocumento ?? '')
-        setNumeroDocumento(p.numeroDocumento ?? '')
-        setTelefono(p.telefono ?? '')
-        setDireccion(p.direccion ?? '')
-        setGenero(p.genero ?? '')
 
-        if (role === 'docente') {
-          const prof = await getMiPerfilProfesor(p.idUsuario)
-          if (prof) {
-            setProfesor(prof)
-            setTitulo(prof.titulo ?? '')
-            setNivelEstudios(prof.nivelEstudios ?? '')
-          }
-        }
+      // Perfil base: si el servidor ya lo entregó (perfilServer), no refetcheamos
+      // ni resembramos los campos del formulario.
+      if (!perfilServer) {
+        const p = await getMiPerfil(idUsuario)
+        if (p) {
+          setPerfil(p)
+          setPrimerNombre(p.primerNombre ?? '')
+          setSegundoNombre(p.segundoNombre ?? '')
+          setPrimerApellido(p.primerApellido ?? '')
+          setSegundoApellido(p.segundoApellido ?? '')
+          setTipoDocumento(p.tipoDocumento ?? '')
+          setNumeroDocumento(p.numeroDocumento ?? '')
+          setTelefono(p.telefono ?? '')
+          setDireccion(p.direccion ?? '')
+          setGenero(p.genero ?? '')
+          setAvatarUrl(p.fotoPerfil ?? null)
 
-        if (role === 'estudiante') {
-          const epsData = await getMiEPS(p.idUsuario)
-          setEPS(epsData)
-          if (epsData.length > 0) {
-            const primera = epsData[0]
-            const match = EPS_OPTIONS.find(o => o.nombre === primera.nombreIPS)
-            if (match) setEpsSeleccionada(String(match.idIPS))
-            setTipoAfiliacion(primera.tipoAfiliacion ?? '')
+          // Profesor: solo se obtiene en cliente si no llegó del servidor.
+          if (role === 'docente' && !profesorServer) {
+            const prof = await getMiPerfilProfesor(p.idUsuario)
+            if (prof) {
+              setProfesor(prof)
+              setTitulo(prof.titulo ?? '')
+              setNivelEstudios(prof.nivelEstudios ?? '')
+            }
           }
         }
       }
+
+      // EPS solo aplica a estudiantes y no viene del servidor.
+      if (role === 'estudiante') {
+        const epsData = await getMiEPS(idUsuario)
+        setEPS(epsData)
+        if (epsData.length > 0) {
+          const primera = epsData[0]
+          const match = EPS_OPTIONS.find(o => o.nombre === primera.nombreIPS)
+          if (match) setEpsSeleccionada(String(match.idIPS))
+          setTipoAfiliacion(primera.tipoAfiliacion ?? '')
+        }
+      }
+
       setLoading(false)
     }
     load()
-  }, [role, authUser])
+  }, [role, authUser, perfilServer, profesorServer])
 
   const handleSaveEPS = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -198,30 +190,10 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
       await serverUpsertEPS(estId, { idIPS: eps.idIPS, nombreIPS: eps.nombre, tipoAfiliacion })
       setSuccessEPS(true)
       setEPS(await getMiEPS(perfil!.idUsuario))
-    } catch (err: any) {
-      setErrorEPS(err.message ?? 'Error al guardar EPS')
+    } catch (err) {
+      setErrorEPS(getErrorMessage(err, 'Error al guardar EPS'))
     } finally {
       setSavingEPS(false)
-    }
-  }
-
-  const handleSaveCurso = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!idCursoActual) { setErrorCurso('Selecciona un curso'); return }
-    setSavingCurso(true); setSuccessCurso(false); setErrorCurso(null)
-    try {
-      let estId = idEstudiante
-      if (!estId && perfil) {
-        estId = await serverEnsureEstudiante(perfil.idUsuario)
-        setIdEstudiante(estId)
-      }
-      if (!estId) throw new Error('No se pudo obtener el estudiante')
-      await serverUpdateEstudianteCurso(estId, Number(idCursoActual))
-      setSuccessCurso(true)
-    } catch (err: any) {
-      setErrorCurso(err.message ?? 'Error al guardar curso')
-    } finally {
-      setSavingCurso(false)
     }
   }
 
@@ -243,8 +215,8 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
         return [...filtered, { idEspecializacion: Number(espSeleccionada), nombreEspecializacion: nombre, institucion: institucionEsp }]
       })
       setEspSeleccionada(''); setInstitucionEsp('')
-    } catch (err: any) {
-      setErrorEsp(err.message ?? 'Error al guardar')
+    } catch (err) {
+      setErrorEsp(getErrorMessage(err, 'Error al guardar'))
     } finally {
       setSavingEsp(false)
     }
@@ -255,25 +227,33 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
     try {
       await serverRemoveEspecializacion(idProfesor, idEspecializacion)
       setEspecializaciones(prev => prev.filter(e => e.idEspecializacion !== idEspecializacion))
-    } catch (err: any) {
-      setErrorEsp(err.message ?? 'Error al eliminar')
+    } catch (err) {
+      setErrorEsp(getErrorMessage(err, 'Error al eliminar'))
     }
   }
 
   const handleSaveAdmin = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSavingAdmin(true); setSuccessAdmin(false); setError(null)
+    if (!perfil) return
+    if (!cargo || !nivelAcceso) { notifyWarning('Selecciona cargo y nivel de acceso'); return }
+    setSavingAdmin(true); setSuccessAdmin(false)
     try {
       if (admin) {
-        await serverUpdateAdministrador(admin.idAdministrador, { cargo, nivelAcceso })
+        await serverUpdateAdministrador(admin.idAdministrador, {
+          idUsuario: perfil.idUsuario,
+          cargo,
+          nivelAcceso,
+          fechaAsignacion: admin.fechaAsignacion,
+        })
         setAdmin({ ...admin, cargo, nivelAcceso })
-      } else if (perfil) {
+      } else {
         const nuevo = await serverInsertAdministrador(perfil.idUsuario, { cargo, nivelAcceso })
-        setAdmin(nuevo as any)
+        setAdmin(nuevo as AdminPerfil)
       }
       setSuccessAdmin(true)
-    } catch (err: any) {
-      setError(err.message ?? 'Error al guardar')
+      notifySuccess('Datos administrativos actualizados')
+    } catch (err) {
+      notifyError(getErrorMessage(err, 'Error al guardar los datos administrativos'))
     } finally {
       setSavingAdmin(false)
     }
@@ -287,16 +267,53 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
     try {
       const url = await uploadAvatar(file)
       setAvatarUrl(url)
-    } catch (err: any) {
-      setError(err.message ?? 'Error al subir imagen')
+      notifySuccess('Foto de perfil actualizada correctamente')
+    } catch (err) {
+      notifyError(getErrorMessage(err, 'Error al actualizar la foto de perfil'))
     } finally {
       setUploadingAvatar(false)
+    }
+  }
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!perfil) return
+    if (!newPassword || !confirmPassword) {
+      notifyWarning('Complete todos los campos requeridos')
+      return
+    }
+    if (newPassword.length < 6) {
+      notifyWarning('La contraseña debe tener al menos 6 caracteres')
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      notifyWarning('Las contraseñas no coinciden')
+      return
+    }
+    setSavingPassword(true)
+    try {
+      await serverUpdatePassword(perfil.idUsuario, newPassword)
+      setNewPassword('')
+      setConfirmPassword('')
+      notifySuccess('Contraseña cambiada exitosamente')
+    } catch (err) {
+      notifyError(getErrorMessage(err, 'Error al cambiar la contraseña'))
+    } finally {
+      setSavingPassword(false)
     }
   }
 
   const handleSaveUsuario = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!perfil) return
+    if (!primerNombre.trim() || !primerApellido.trim()) {
+      notifyWarning('Complete todos los campos requeridos')
+      return
+    }
+    if (telefono && !/^[0-9+\s()-]{7,15}$/.test(telefono.trim())) {
+      notifyWarning('Ingrese un teléfono válido (7 a 15 dígitos)')
+      return
+    }
     setSaving(true); setError(null); setSuccess(false)
     try {
       await serverUpdateUsuario(perfil.idUsuario, {
@@ -311,8 +328,9 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
         genero:          genero          || null,
       })
       setSuccess(true)
-    } catch (err: any) {
-      setError(err.message ?? 'Error al guardar')
+      notifySuccess('Perfil actualizado exitosamente')
+    } catch (err) {
+      notifyError(getErrorMessage(err, 'Error al actualizar el perfil'))
     } finally {
       setSaving(false)
     }
@@ -330,8 +348,9 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
       if (!profId) throw new Error('No se pudo obtener el profesor')
       await serverUpdateProfesor(profId, { titulo, nivelEstudios })
       setSuccessProf(true)
-    } catch (err: any) {
-      setError(err.message ?? 'Error al guardar')
+      notifySuccess('Datos profesionales actualizados')
+    } catch (err) {
+      notifyError(getErrorMessage(err, 'Error al guardar los datos profesionales'))
     } finally {
       setSavingProf(false)
     }
@@ -344,8 +363,8 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
       const result = await serverBuscarEstudiantePorDocumento(docBusqueda.trim())
       if (!result) { setErrorBusqueda('No se encontró ningún estudiante con ese documento'); return }
       setEstudianteAsociado(result)
-    } catch (err: any) {
-      setErrorBusqueda(err.message ?? 'Error al buscar')
+    } catch (err) {
+      setErrorBusqueda(getErrorMessage(err, 'Error al buscar'))
     } finally {
       setBuscandoEst(false)
     }
@@ -366,8 +385,8 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
         ocupacion: ocupacion || null,
       }))
       setSuccessPadre(true)
-    } catch (err: any) {
-      setErrorPadre(err.message ?? 'Error al guardar')
+    } catch (err) {
+      setErrorPadre(getErrorMessage(err, 'Error al guardar'))
     } finally {
       setSavingPadre(false)
     }
@@ -478,19 +497,21 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
           </div>
         </div>
 
+        {/* Documento — de solo lectura: la identidad no se modifica por seguridad */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className={labelCls}>Tipo documento</label>
-            <select value={tipoDocumento} onChange={e => setTipoDocumento(e.target.value)} className={inputCls}>
-              <option value="">Seleccionar...</option>
-              {TIPOS_DOC.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
+            <input value={tipoDocumento} disabled className={`${inputCls} opacity-60 cursor-not-allowed`} />
           </div>
           <div>
             <label className={labelCls}>N° documento</label>
-            <input value={numeroDocumento} onChange={e => setNumeroDocumento(e.target.value)} className={inputCls} />
+            <input value={numeroDocumento} disabled className={`${inputCls} opacity-60 cursor-not-allowed`} />
           </div>
         </div>
+        <p className="-mt-2 text-[11px] text-slate-400 dark:text-slate-500 flex items-center gap-1">
+          <span className="material-symbols-outlined !text-sm">lock</span>
+          El tipo y número de documento no se pueden modificar por seguridad.
+        </p>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -511,6 +532,30 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
           <input value={direccion} onChange={e => setDireccion(e.target.value)} placeholder="Ej: Calle 123 # 45-67, Bogotá" className={inputCls} />
         </div>
 
+        {/* Datos de solo lectura */}
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <label className={labelCls}>Rol</label>
+            <input value={perfil.rolNombre ?? role} disabled className={`${inputCls} opacity-60 cursor-not-allowed capitalize`} />
+          </div>
+          <div>
+            <label className={labelCls}>Fecha de registro</label>
+            <input
+              value={perfil.fechaRegistro ? new Date(perfil.fechaRegistro).toLocaleDateString('es-CO') : '—'}
+              disabled
+              className={`${inputCls} opacity-60 cursor-not-allowed`}
+            />
+          </div>
+          <div>
+            <label className={labelCls}>Último acceso</label>
+            <input
+              value={perfil.ultimoAcceso ? new Date(perfil.ultimoAcceso).toLocaleString('es-CO') : '—'}
+              disabled
+              className={`${inputCls} opacity-60 cursor-not-allowed`}
+            />
+          </div>
+        </div>
+
         {error && (
           <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 px-3 py-2 rounded-lg">{error}</p>
         )}
@@ -522,6 +567,41 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
           <button type="submit" disabled={saving}
             className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
             {saving ? 'Guardando...' : 'Guardar cambios'}
+          </button>
+        </div>
+      </form>
+
+      {/* ── Cambio de contraseña ──────────────────────────────────────────── */}
+      <form onSubmit={handleChangePassword} className="bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 p-6 space-y-5">
+        <h2 className="text-base font-bold text-slate-800 dark:text-white">Cambiar contraseña</h2>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className={labelCls}>Nueva contraseña</label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={e => setNewPassword(e.target.value)}
+              placeholder="Mínimo 6 caracteres"
+              autoComplete="new-password"
+              className={inputCls}
+            />
+          </div>
+          <div>
+            <label className={labelCls}>Confirmar contraseña</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              placeholder="Repite la contraseña"
+              autoComplete="new-password"
+              className={inputCls}
+            />
+          </div>
+        </div>
+        <div className="flex justify-end">
+          <button type="submit" disabled={savingPassword}
+            className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
+            {savingPassword ? 'Guardando...' : 'Cambiar contraseña'}
           </button>
         </div>
       </form>
@@ -679,45 +759,43 @@ export default function PerfilClient({ role, adminDataServer, cursosServer = [],
         </form>
       )}
 
-      {/* ── Estudiante: Jornada y Curso ───────────────────────────────────── */}
+      {/* ── Estudiante: Jornada y Curso (SOLO LECTURA) ────────────────────── */}
       {role === 'estudiante' && (
-        <form onSubmit={handleSaveCurso} className="bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 p-6 space-y-5">
-          <h2 className="text-base font-bold text-slate-800 dark:text-white">Jornada y curso</h2>
+        <div className="bg-white dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 p-6 space-y-5">
+          <div>
+            <h2 className="text-base font-bold text-slate-800 dark:text-white">Jornada y curso</h2>
+            <p className="mt-1 text-[11px] text-slate-400 dark:text-slate-500 flex items-center gap-1">
+              <span className="material-symbols-outlined !text-sm">lock</span>
+              Tu jornada y curso los asigna la institución; no se pueden modificar.
+            </p>
+          </div>
           <div className="grid grid-cols-3 gap-4">
             <div>
               <label className={labelCls}>Jornada</label>
-              <select value={jornadaEst} onChange={e => { setJornadaEst(e.target.value); setIdCursoActual('') }} className={inputCls}>
-                <option value="">Seleccionar...</option>
-                {jornadasEst.map(j => <option key={j} value={j}>{j}</option>)}
-              </select>
+              <input
+                value={cursoActualEst?.jornada ?? '—'}
+                disabled
+                className={`${inputCls} opacity-60 cursor-not-allowed capitalize`}
+              />
             </div>
             <div>
               <label className={labelCls}>Curso</label>
-              <select value={idCursoActual} onChange={e => setIdCursoActual(e.target.value)} className={inputCls} disabled={!jornadaEst}>
-                <option value="">Seleccionar...</option>
-                {cursosDeJornada.map(c => (
-                  <option key={c.idCurso} value={String(c.idCurso)}>{c.nombreCurso}</option>
-                ))}
-              </select>
+              <input
+                value={cursoActualEst?.nombreCurso ?? 'Sin asignar'}
+                disabled
+                className={`${inputCls} opacity-60 cursor-not-allowed`}
+              />
             </div>
             <div>
               <label className={labelCls}>Grado</label>
               <input
-                value={cursosLista.find(c => String(c.idCurso) === idCursoActual)?.grado ?? ''}
+                value={cursoActualEst?.grado ?? '—'}
                 disabled
                 className={`${inputCls} opacity-60 cursor-not-allowed`}
               />
             </div>
           </div>
-          {errorCurso  && <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 px-3 py-2 rounded-lg">{errorCurso}</p>}
-          {successCurso && <p className="text-sm text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-2 rounded-lg">Curso actualizado.</p>}
-          <div className="flex justify-end">
-            <button type="submit" disabled={savingCurso || !idCursoActual}
-              className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors">
-              {savingCurso ? 'Guardando...' : 'Guardar curso'}
-            </button>
-          </div>
-        </form>
+        </div>
       )}
 
       {/* ── Estudiante: EPS ───────────────────────────────────────────────── */}

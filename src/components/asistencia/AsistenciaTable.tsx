@@ -1,7 +1,7 @@
 'use client'
 
 import { type RegistroAsistencia, type EstadoAsistencia } from '@/services/asistencia/asistenciaService'
-import { type Role } from '@/lib/utils/permissions'
+import { can, type Role } from '@/lib/utils/permissions'
 
 type Props = {
   registros: RegistroAsistencia[]
@@ -19,7 +19,9 @@ const ESTADO_BADGE: Record<EstadoAsistencia, string> = {
 }
 
 export default function AsistenciaTable({ registros, role, onEdit, onDelete }: Props) {
-  const canEdit = role === 'admin'
+  const canEdit = can(role, 'update', 'asistencia')
+  const canDelete = can(role, 'delete', 'asistencia')
+  const canActions = canEdit || canDelete
 
   if (registros.length === 0) {
     return (
@@ -41,7 +43,7 @@ export default function AsistenciaTable({ registros, role, onEdit, onDelete }: P
             <th className="px-4 py-3 text-left">Observación</th>
             <th className="px-4 py-3 text-left">Tipo</th>
             <th className="px-4 py-3 text-left">Registrado</th>
-            {canEdit && <th className="px-4 py-3 text-right">Acciones</th>}
+            {canActions && <th className="px-4 py-3 text-right">Acciones</th>}
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100 dark:divide-white/5">
@@ -54,7 +56,11 @@ export default function AsistenciaTable({ registros, role, onEdit, onDelete }: P
               <td className="px-4 py-3">
                 <p className="font-semibold text-slate-800 dark:text-white">{r.nombreEstudiante}</p>
                 <p className="text-xs text-slate-400 font-mono">{r.codigoEstudiante}</p>
-                {r.curso && <p className="text-xs text-slate-400">{r.curso}</p>}
+                {r.curso && (
+                  <p className="text-xs text-slate-400 capitalize">
+                    {r.curso}{r.jornada ? ` · ${r.jornada}` : ''}
+                  </p>
+                )}
               </td>
 
               {/* Fecha */}
@@ -103,23 +109,27 @@ export default function AsistenciaTable({ registros, role, onEdit, onDelete }: P
               </td>
 
               {/* Acciones */}
-              {canEdit && (
+              {canActions && (
                 <td className="px-4 py-3">
                   <div className="flex items-center justify-end gap-1">
-                    <button
-                      onClick={() => onEdit(r)}
-                      title="Editar"
-                      className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors inline-flex"
-                    >
-                      <span className="material-symbols-outlined !text-xl">edit</span>
-                    </button>
-                    <button
-                      onClick={() => onDelete(r.idAsistencia)}
-                      title="Eliminar"
-                      className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors inline-flex"
-                    >
-                      <span className="material-symbols-outlined !text-xl">delete</span>
-                    </button>
+                    {canEdit && (
+                      <button
+                        onClick={() => onEdit(r)}
+                        title="Editar"
+                        className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors inline-flex"
+                      >
+                        <span className="material-symbols-outlined !text-xl">edit</span>
+                      </button>
+                    )}
+                    {canDelete && (
+                      <button
+                        onClick={() => onDelete(r.idAsistencia)}
+                        title="Eliminar"
+                        className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors inline-flex"
+                      >
+                        <span className="material-symbols-outlined !text-xl">delete</span>
+                      </button>
+                    )}
                   </div>
                 </td>
               )}

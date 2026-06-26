@@ -1,4 +1,6 @@
-import { apiFetch } from '@/services/api/client'
+import { apiFetch, getClientToken } from '@/services/api/client'
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
 export type Nota = {
   idNota: number
@@ -50,7 +52,9 @@ export async function getNotas(): Promise<Nota[]> {
 }
 
 export async function getCursosParaNotas() {
-  const data = await apiFetch<Record<string, unknown>[]>('/cursos?activo=true&limit=200')
+  // Sin filtro `activo` (ver getCursosAction): un estudiante puede estar en un
+  // curso inactivo; así su curso sigue apareciendo en el desplegable.
+  const data = await apiFetch<Record<string, unknown>[]>('/cursos?limit=200')
   return data.map(c => ({
     idCurso:     c.idCurso as number,
     nombreCurso: c.nombreCurso as string,
@@ -60,7 +64,10 @@ export async function getCursosParaNotas() {
 }
 
 export async function getEstudiantesParaNotas() {
-  const data = await apiFetch<Record<string, unknown>[]>('/estudiantes?estado=Activo&limit=500')
+  // Sin filtro `estado` (ver getEstudiantesAction): el backend lo compara exacto
+  // y sensible a mayúsculas, y el campo no es confiable. Así Notas muestra los
+  // mismos estudiantes que el módulo Usuarios.
+  const data = await apiFetch<Record<string, unknown>[]>('/estudiantes?limit=500')
   return data.map(e => ({
     idEstudiante:  e.idEstudiante as number,
     codigoEstudiante: e.codigoEstudiante as string,
@@ -107,4 +114,31 @@ export async function updateNota(
 
 export async function deleteNota(idNota: number): Promise<void> {
   await apiFetch(`/notas/${idNota}`, { method: 'DELETE' })
+}
+
+/**
+ * Descarga el boletín en PDF de un estudiante (todas sus notas agrupadas por
+ * periodo). Va autenticado con el token de acceso y fuerza la descarga del archivo.
+ */
+export async function downloadBoletinPdf(idEstudiante: number, nombre?: string): Promise<void> {
+  const token = getClientToken()
+  const res = await fetch(`${API_BASE}/notas/estudiantes/${idEstudiante}/boletin/pdf`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  })
+  if (!res.ok) {
+    let msg = `HTTP ${res.status}`
+    try { msg = ((await res.json()) as { detail?: string }).detail ?? msg } catch {}
+    throw new Error(msg)
+  }
+
+  const blob = await res.blob()
+  const safe = (nombre ?? `estudiante_${idEstudiante}`).replace(/[^a-zA-Z0-9-_]+/g, '_')
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `boletin_${safe}.pdf`
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
 }

@@ -2,6 +2,36 @@ import { apiFetch } from '@/services/api/client'
 
 export type EstadoAsistencia = 'Presente' | 'Ausente' | 'Tarde' | 'Excusa' | 'Suspensión'
 
+const ESTADOS_VALIDOS: EstadoAsistencia[] = ['Presente', 'Ausente', 'Tarde', 'Excusa', 'Suspensión']
+
+/**
+ * Normaliza el estado recibido del backend a uno del enum, tolerando variantes
+ * ('presente'|'asistio'|1 → 'Presente', etc.). Así el filtro por estado coincide
+ * exactamente sin importar cómo lo almacene la BD.
+ */
+export function normalizeEstado(raw: unknown): EstadoAsistencia {
+  if (raw == null) return 'Ausente'
+  const s = String(raw).trim().toLowerCase()
+  if (['presente', 'asistio', 'asistió', 'presencial', '1'].includes(s)) return 'Presente'
+  if (['tarde', 'retardo', '2'].includes(s)) return 'Tarde'
+  if (['ausente', 'falta', 'inasistencia', '0'].includes(s)) return 'Ausente'
+  if (['excusa', 'excusado', 'justificado'].includes(s)) return 'Excusa'
+  if (['suspension', 'suspensión', 'suspendido'].includes(s)) return 'Suspensión'
+  return ESTADOS_VALIDOS.find(e => e.toLowerCase() === s) ?? 'Ausente'
+}
+
+/**
+ * Normaliza el tipo de marcación. El QR guarda 'ingreso'/'ambos' y otras fuentes
+ * pueden usar 1/2, pero la tabla muestra 'entrada'/'salida'.
+ */
+export function normalizeTipo(raw: unknown): 'entrada' | 'salida' | null {
+  if (raw == null || raw === '') return null
+  const s = String(raw).trim().toLowerCase()
+  if (['salida', 'egreso', 'out', '2'].includes(s)) return 'salida'
+  if (['entrada', 'ingreso', 'ambos', 'in', '1'].includes(s)) return 'entrada'
+  return null
+}
+
 export type RegistroAsistencia = {
   idAsistencia: number
   idEstudiante: number
@@ -13,6 +43,7 @@ export type RegistroAsistencia = {
   nombreEstudiante: string
   codigoEstudiante: string
   curso: string | null
+  jornada: string | null
   codigo_qr: string | null
   tipo: string | null
 }
@@ -22,6 +53,13 @@ export type EstudianteSelector = {
   codigoEstudiante: string
   nombreCompleto: string
   curso: string | null
+  jornada: string | null
+  idCurso: number | null
+}
+
+export type CursoOption = {
+  idCurso: number
+  nombreCurso: string
   jornada: string | null
 }
 
@@ -48,91 +86,6 @@ export type FiltrosAsistencia = {
   estado?: EstadoAsistencia | 'todos'
   search?: string
   idEstudiante?: number
-}
-
-type AsistenciaRaw = {
-  idAsistencia: number
-  idEstudiante: number
-  estado: string
-  fecha: string
-  fechaRegistro: string
-  observacion: string | null
-  registradoPor: number
-  codigoQr: string | null
-  tipo: string | null
-}
-
-type EstudianteRaw = {
-  idEstudiante: number
-  codigoEstudiante: string
-  estado: string
-  idCursoActual: number | null
-  usuario?: { primerNombre: string; primerApellido: string; segundoNombre: string | null; segundoApellido: string | null }
-  cursoActual?: { nombreCurso: string; jornada: string } | null
-}
-
-function buildNombre(u?: EstudianteRaw['usuario']): string {
-  if (!u) return '—'
-  return [u.primerNombre, u.segundoNombre, u.primerApellido, u.segundoApellido].filter(Boolean).join(' ')
-}
-
-export const getRegistros = async (filtros: FiltrosAsistencia = {}): Promise<RegistroAsistencia[]> => {
-  const params = new URLSearchParams({ skip: '0', limit: '200' })
-  if (filtros.idEstudiante) params.set('id_estudiante', String(filtros.idEstudiante))
-  if (filtros.fecha) params.set('fecha', filtros.fecha)
-  if (filtros.estado && filtros.estado !== 'todos') params.set('estado', filtros.estado)
-
-  const data = await apiFetch<AsistenciaRaw[]>(`/asistencia?${params}`)
-
-  const resultado: RegistroAsistencia[] = data.map(r => ({
-    idAsistencia:     r.idAsistencia,
-    idEstudiante:     r.idEstudiante,
-    estado:           r.estado as EstadoAsistencia,
-    fecha:            r.fecha,
-    fechaRegistro:    r.fechaRegistro,
-    observacion:      r.observacion,
-    registradoPor:    r.registradoPor,
-    nombreEstudiante: '—',
-    codigoEstudiante: '—',
-    curso:            null,
-    codigo_qr:        r.codigoQr ?? null,
-    tipo:             r.tipo ?? null,
-  }))
-
-  if (filtros.search) {
-    const q = filtros.search.toLowerCase()
-    return resultado.filter(r =>
-      r.nombreEstudiante.toLowerCase().includes(q) ||
-      r.codigoEstudiante.toLowerCase().includes(q)
-    )
-  }
-
-  return resultado
-}
-
-export const getEstudiantesSelector = async (): Promise<EstudianteSelector[]> => {
-  const data = await apiFetch<EstudianteRaw[]>('/estudiantes?estado=Activo&limit=500')
-  return data.map(e => ({
-    idEstudiante:     e.idEstudiante,
-    codigoEstudiante: e.codigoEstudiante,
-    nombreCompleto:   buildNombre(e.usuario),
-    curso:            null,
-    jornada:          null,
-  }))
-}
-
-export const crearRegistro = async (data: CreateRegistroData): Promise<void> => {
-  await apiFetch('/asistencia', {
-    method: 'POST',
-    body: JSON.stringify({
-      id_estudiante:  data.idEstudiante,
-      estado:         data.estado,
-      fecha:          data.fecha,
-      observacion:    data.observacion ?? null,
-      registrado_por: data.registradoPor,
-      tipo:           data.tipo,
-    }),
-  })
 }
 
 export const actualizarRegistro = async (id: number, data: UpdateRegistroData): Promise<void> => {

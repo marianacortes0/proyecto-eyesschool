@@ -6,6 +6,7 @@ import { useAsistencia } from '@/hooks/useAsistencia'
 import { getRegistrosAsistenciaAction } from '@/services/qr/qrActions'
 import type { RegistroAsistencia } from '@/services/qr/qrService'
 import QRScannerView from '@/components/qr/QRScannerView'
+import RegistroMasivo from '@/components/qr/RegistroMasivo'
 import AsistenciaModal from '@/components/asistencia/AsistenciaModal'
 import { type Role } from '@/lib/utils/permissions'
 
@@ -34,13 +35,18 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
 
   const {
     estudiantes,
+    cursos,
     saving,
     modalMode,
     selectedRecord,
     openCreate,
     closeModal,
     handleCreate,
+    handleCreateMany,
   } = useAsistencia(idUsuarioRegistrador)
+
+  // Modo de registro: escaneo individual (cámara) o registro masivo por curso.
+  const [mode, setMode] = useState<'scan' | 'masivo'>('scan')
 
   // ── Registros de hoy desde la BD ──────────────────────────────────────────
   const [todayRecords, setTodayRecords] = useState<RegistroAsistencia[]>([])
@@ -78,38 +84,73 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
           </p>
         </div>
 
-        <button
-          onClick={openCreate}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-800 dark:bg-white/10 dark:hover:bg-white/20 text-white text-sm font-semibold transition-colors shadow-sm"
-        >
-          <span className="material-symbols-outlined !text-lg">edit</span> Registrar manual
-        </button>
+        {mode === 'scan' && (
+          <button
+            onClick={openCreate}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-800 dark:bg-white/10 dark:hover:bg-white/20 text-white text-sm font-semibold transition-colors shadow-sm"
+          >
+            <span className="material-symbols-outlined !text-lg">edit</span> Registrar manual
+          </button>
+        )}
       </div>
 
-      {/* Instrucciones QR */}
-      <div className="flex flex-wrap gap-2 text-xs text-slate-500 dark:text-gray-400">
-        {['1. Activa la cámara', '2. Apunta al código QR y pulsa Escanear', '3. Selecciona el estado y agrega observaciones', '4. Confirma el registro'].map((step) => (
-          <span
-            key={step}
-            className="px-3 py-1.5 rounded-full bg-slate-100 dark:bg-white/5"
+      {/* Selector de modo: escaneo individual vs registro masivo por curso */}
+      <div className="inline-flex rounded-xl border border-slate-200 dark:border-white/10 overflow-hidden">
+        {([
+          { key: 'scan', label: 'Escanear QR', icon: 'qr_code_scanner' },
+          { key: 'masivo', label: 'Registro masivo', icon: 'groups' },
+        ] as const).map((m) => (
+          <button
+            key={m.key}
+            type="button"
+            onClick={() => setMode(m.key)}
+            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-semibold transition-colors ${
+              mode === m.key
+                ? 'bg-primary text-white'
+                : 'bg-white dark:bg-white/5 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10'
+            }`}
           >
-            {step}
-          </span>
+            <span className="material-symbols-outlined !text-lg">{m.icon}</span>
+            {m.label}
+          </button>
         ))}
       </div>
 
-      <QRScannerView
-        status={status}
-        errorMsg={errorMsg}
-        pending={pending}
-        lastResult={lastResult}
-        recentScans={recentScans}
-        todayRecords={todayRecords}
-        onCapture={processCapture}
-        onConfirm={confirmRegistration}
-        onCancel={cancelPending}
-        onClearError={clearError}
-      />
+      {mode === 'scan' ? (
+        <>
+          {/* Instrucciones QR */}
+          <div className="flex flex-wrap gap-2 text-xs text-slate-500 dark:text-gray-400">
+            {['1. Activa la cámara', '2. Apunta al código QR y pulsa Escanear', '3. Elige el tipo (Entrada/Salida)', '4. Confirma el registro'].map((step) => (
+              <span
+                key={step}
+                className="px-3 py-1.5 rounded-full bg-slate-100 dark:bg-white/5"
+              >
+                {step}
+              </span>
+            ))}
+          </div>
+
+          <QRScannerView
+            status={status}
+            errorMsg={errorMsg}
+            pending={pending}
+            lastResult={lastResult}
+            recentScans={recentScans}
+            todayRecords={todayRecords}
+            onCapture={processCapture}
+            onConfirm={confirmRegistration}
+            onCancel={cancelPending}
+            onClearError={clearError}
+          />
+        </>
+      ) : (
+        <RegistroMasivo
+          cursos={cursos}
+          estudiantes={estudiantes}
+          idUsuarioRegistrador={idUsuarioRegistrador}
+          onRegistered={fetchToday}
+        />
+      )}
 
       {/* Modal de registro manual */}
       <AsistenciaModal
@@ -119,6 +160,7 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
         saving={saving}
         onClose={closeModal}
         onCreate={handleCreate}
+        onCreateMany={handleCreateMany}
         onUpdate={async () => {}}
       />
     </div>

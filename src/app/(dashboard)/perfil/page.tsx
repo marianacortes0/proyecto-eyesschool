@@ -3,9 +3,18 @@
 import { redirect } from 'next/navigation'
 import { getServerUser, getServerToken, userToRole } from '@/lib/auth/server'
 import PerfilClient from './PerfilClient'
-import type { AdminPerfil, CursoPerfil, ProfesorPerfil } from '@/services/usuario/usuarioService'
+import type { AdminPerfil, CursoPerfil, ProfesorPerfil, PerfilUsuario } from '@/services/usuario/usuarioService'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
+const API_ORIGIN = API.replace(/\/api\/v1\/?$/, '')
+
+/** Resuelve la ruta de la foto (relativa /static/...) contra el origen del backend. */
+function resolveFoto(v: unknown): string | null {
+  const url = typeof v === 'string' ? v : ''
+  if (!url) return null
+  if (/^https?:\/\//.test(url) || url.startsWith('data:')) return url
+  return `${API_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`
+}
 
 function toCamel(v: unknown): unknown {
   if (Array.isArray(v)) return v.map(toCamel)
@@ -42,6 +51,31 @@ export default async function PerfilPage() {
 
   const token = await getServerToken()
 
+  // Perfil base en el render del servidor (evita el spinner del fetch en cliente).
+  let perfilServer: PerfilUsuario | null = null
+  if (token) {
+    const u = await serverFetch<Record<string, unknown>>(`/usuarios/${user.idUsuario}`, token)
+    if (u) {
+      perfilServer = {
+        idUsuario:       u.idUsuario as number,
+        primerNombre:    u.primerNombre as string,
+        segundoNombre:   u.segundoNombre as string | null,
+        primerApellido:  u.primerApellido as string,
+        segundoApellido: u.segundoApellido as string | null,
+        correo:          u.correo as string | null,
+        tipoDocumento:   u.tipoDocumento as string,
+        numeroDocumento: u.numeroDocumento as string,
+        telefono:        u.telefono as string | null,
+        direccion:       u.direccion as string | null,
+        genero:          u.genero as string | null,
+        rolNombre:       (u.nombreRol ?? u.rolNombre) as string | null ?? null,
+        fechaRegistro:   (u.fechaRegistro as string | null) ?? null,
+        ultimoAcceso:    (u.ultimoAcceso as string | null) ?? null,
+        fotoPerfil:      resolveFoto(u.fotoPerfil),
+      }
+    }
+  }
+
   let adminData: AdminPerfil | null = null
   let cursosServer: CursoPerfil[] = []
   let idEstudianteServer: number | null = null
@@ -55,6 +89,7 @@ export default async function PerfilPage() {
     return (
       <PerfilClient
         role={role}
+        perfilServer={perfilServer}
         adminDataServer={adminData}
         cursosServer={cursosServer}
         idEstudianteServer={idEstudianteServer}
@@ -70,14 +105,16 @@ export default async function PerfilPage() {
   if (role === 'docente') {
     const [esps, profList] = await Promise.all([
       serverFetch<Array<{ idEspecializacion: number; nombreEspecializacion: string }>>('/especializaciones?limit=200', token),
-      serverFetch<Array<Record<string, unknown>>>(`/profesores?id_usuario=${user.idUsuario}&limit=1`, token),
+      // GET /profesores IGNORA ?id_usuario (solo skip/limit) → se trae la lista y
+      // se busca la fila del usuario. Con limit=1 se cargaría OTRO profesor.
+      serverFetch<Array<Record<string, unknown>>>(`/profesores?limit=500`, token),
     ])
     especializacionesEnum = (esps ?? []).map(e => ({
       idEspecializacion:     e.idEspecializacion,
       nombreEspecializacion: e.nombreEspecializacion,
     }))
-    if (profList && profList.length > 0) {
-      const p = profList[0] as Record<string, unknown>
+    const p = (profList ?? []).find(x => (x.idUsuario as number) === user.idUsuario)
+    if (p) {
       const espsRel = await serverFetch<Array<Record<string, unknown>>>(
         `/profesores/${p.idProfesor}/especializaciones`,
         token
@@ -90,7 +127,9 @@ export default async function PerfilPage() {
         fechaVinculacion: p.fechaVinculacion as string,
         especializaciones: (espsRel ?? []).map(e => ({
           idEspecializacion:     e.idEspecializacion as number,
-          nombreEspecializacion: e.nombreEspecializacion as string,
+          // El nombre viene ANIDADO en `especializacion` (join del backend), no
+          // en el nivel superior; leerlo plano dejaba el nombre vacío.
+          nombreEspecializacion: ((e.especializacion as Record<string, unknown> | null)?.nombreEspecializacion as string) ?? '',
           institucion:           (e.institucion as string) ?? '',
         })),
       }
@@ -98,12 +137,14 @@ export default async function PerfilPage() {
   }
 
   if (role === 'admin') {
+    // GET /administradores ignora ?id_usuario → se trae la lista y se busca al
+    // administrador del usuario logueado (si no, se cargaría OTRO administrador).
     const adminList = await serverFetch<Array<Record<string, unknown>>>(
-      `/administradores?id_usuario=${user.idUsuario}&limit=1`,
+      `/administradores?limit=500`,
       token
     )
-    if (adminList && adminList.length > 0) {
-      const a = adminList[0]
+    const a = (adminList ?? []).find(x => (x.idUsuario as number) === user.idUsuario)
+    if (a) {
       adminData = {
         idAdministrador: a.idAdministrador as number,
         cargo:           a.cargo as string,
@@ -140,15 +181,12 @@ export default async function PerfilPage() {
         parentesco:   padreData.parentesco as string,
         ocupacion:    padreData.ocupacion as string | null,
       }
-      const estData = await serverFetch<Record<string, unknown>>(
-        `/estudiantes/${padreData.idEstudiante}`,
-        token
-      )
-      if (estData) {
+      // /padres/me ya trae el nombre y documento del estudiante asociado.
+      if (padreData.idEstudiante != null) {
         estudianteAsociadoServer = {
-          idEstudiante: estData.idEstudiante as number,
-          nombre:       `Estudiante #${estData.idEstudiante}`,
-          documento:    '',
+          idEstudiante: padreData.idEstudiante as number,
+          nombre:       (padreData.nombreEstudiante as string | null) ?? `Estudiante #${padreData.idEstudiante}`,
+          documento:    (padreData.documentoEstudiante as string | null) ?? '',
         }
       }
     }
@@ -157,6 +195,7 @@ export default async function PerfilPage() {
   return (
     <PerfilClient
       role={role}
+      perfilServer={perfilServer}
       adminDataServer={adminData}
       cursosServer={cursosServer}
       idEstudianteServer={idEstudianteServer}

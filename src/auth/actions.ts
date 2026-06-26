@@ -3,6 +3,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { mapRolToKey } from '@/lib/utils/permissions'
+import { isPasswordValid } from '@/lib/utils/password'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -115,102 +116,145 @@ export async function logout() {
 // ── Forgot password ───────────────────────────────────────────────────────────
 
 export async function forgotPassword(prevState: unknown, formData: FormData) {
-  const email = formData.get('email') as string
+  const email = (formData.get('email') as string)?.trim().toLowerCase()
   if (!email) return { error: 'Por favor, ingresa tu correo electrónico.' }
-  // Without Supabase, password reset requires backend support (not yet implemented)
-  return { success: 'Si tu correo está registrado, recibirás instrucciones pronto.' }
+
+  // El backend nunca revela si el correo existe; si existe, envía el enlace por correo.
+  // Ignoramos errores de red para no filtrar información ni romper el mensaje neutro.
+  try {
+    await fetch(`${API}/auth/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ correo: email }),
+      cache: 'no-store',
+    })
+  } catch {
+    // no-op
+  }
+
+  return { success: 'Si tu correo está registrado, recibirás un enlace para restablecer tu contraseña.' }
 }
 
 // ── Reset password ────────────────────────────────────────────────────────────
 
 export async function resetPassword(prevState: unknown, formData: FormData) {
+  const token = (formData.get('token') as string) ?? ''
   const password = formData.get('password') as string
   const confirmPassword = formData.get('confirmPassword') as string
 
+  if (!token) return { error: 'Enlace inválido o incompleto. Solicita uno nuevo.' }
   if (!password || !confirmPassword) return { error: 'Por favor completa todos los campos.' }
   if (password.length < 8) return { error: 'La contraseña debe tener al menos 8 caracteres.' }
   if (password !== confirmPassword) return { error: 'Las contraseñas no coinciden.' }
 
-  return { success: 'Operación no disponible en este momento.' }
-}
-
-// ── Register ──────────────────────────────────────────────────────────────────
-
-export async function register(prevState: unknown, formData: FormData) {
-  const email = (formData.get('email') as string).trim().toLowerCase()
-  const password = formData.get('password') as string
-  const firstName = formData.get('firstName') as string
-  const lastName = formData.get('lastName') as string
-  const docType = formData.get('docType') as string
-  const docNumber = formData.get('docNumber') as string
-  const roleId = parseInt(formData.get('roleId') as string)
-  const courseId = formData.get('courseId') as string | null
-  const especializacionId = formData.get('especializacionId') as string | null
-
-  if (!email || !password || !firstName || !lastName || !docType || !docNumber || isNaN(roleId)) {
-    return { error: 'Por favor, completa todos los campos' }
-  }
-  if (roleId === 2 && !courseId) return { error: 'Selecciona el curso al que perteneces' }
-  if (roleId === 1 && !especializacionId) return { error: 'Selecciona tu especialización' }
-
-  const ROLES_REQUIEREN_VALIDACION = new Set([1])
-  const ROLES_AUTO_VALIDADOS = new Set([2, 4])
-
-  if (!ROLES_REQUIEREN_VALIDACION.has(roleId) && !ROLES_AUTO_VALIDADOS.has(roleId)) {
-    return { error: 'Rol inválido.' }
-  }
-
-  const idRolFinal = ROLES_AUTO_VALIDADOS.has(roleId) ? roleId : 4
-  const estadoFinal = !ROLES_REQUIEREN_VALIDACION.has(roleId)
-
-  const res = await fetch(`${API}/usuarios`, {
+  const res = await fetch(`${API}/auth/reset-password`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      correo: email,
-      password,
-      primer_nombre: firstName,
-      primer_apellido: lastName,
-      tipo_documento: docType,
-      numero_documento: docNumber,
-      id_rol: idRolFinal,
-    }),
+    body: JSON.stringify({ token, new_password: password }),
     cache: 'no-store',
   })
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
     return {
-      error: (body as Record<string, unknown>).detail as string ?? 'Error al registrar el usuario.',
+      error: (body as Record<string, unknown>).detail as string
+        ?? 'No se pudo restablecer la contraseña. El enlace pudo expirar.',
     }
   }
 
-  const usuario = await res.json()
-  const idUsuario: number = usuario.id_usuario
+  return { success: 'Tu contraseña fue actualizada. Ya puedes iniciar sesión.' }
+}
 
-  const hoy = new Date().toISOString().slice(0, 10)
+// ── Register ──────────────────────────────────────────────────────────────────
 
-  // Create role-specific record
-  if (idRolFinal === 2 && estadoFinal) {
-    const codigo = `EST${String(idUsuario).padStart(3, '0')}`
-    await fetch(`${API}/estudiantes`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id_usuario: idUsuario,
-        codigo_estudiante: codigo,
-        fecha_ingreso: hoy,
-        estado: 'Activo',
-        id_curso_actual: courseId ? parseInt(courseId) : null,
-      }),
-      cache: 'no-store',
-    }).catch(() => null)
+const ROL_LABEL: Record<number, string> = {
+  1: 'Profesor', 2: 'Estudiante', 3: 'Administrador', 4: 'Padre / Acudiente',
+}
+
+export async function register(prevState: unknown, formData: FormData) {
+  const email = (formData.get('email') as string)?.trim().toLowerCase() ?? ''
+  const password = formData.get('password') as string
+  const firstName = (formData.get('firstName') as string)?.trim() ?? ''
+  const secondName = (formData.get('secondName') as string)?.trim() ?? ''
+  const lastName = (formData.get('lastName') as string)?.trim() ?? ''
+  const secondLastName = (formData.get('secondLastName') as string)?.trim() ?? ''
+  const docType = formData.get('docType') as string
+  const docNumber = (formData.get('docNumber') as string)?.trim() ?? ''
+  const genero = (formData.get('genero') as string) || null
+  const direccion = (formData.get('direccion') as string)?.trim() || null
+  const telefono = (formData.get('telefono') as string)?.trim() || null
+  const roleId = parseInt(formData.get('roleId') as string)
+  const courseId = formData.get('courseId') as string | null
+  const especializacionId = formData.get('especializacionId') as string | null
+  const institucion = (formData.get('institucion') as string)?.trim() || null
+  const parentesco = (formData.get('parentesco') as string) || null
+  const idEstudianteVinculado = formData.get('idEstudianteVinculado') as string | null
+  const cargo = (formData.get('cargo') as string) || null
+
+  // Validaciones comunes
+  if (!email || !password || !firstName || !lastName || !docType || !docNumber || isNaN(roleId)) {
+    return { error: 'Por favor, completa todos los campos' }
+  }
+  if (!isPasswordValid(password)) {
+    return { error: 'La contraseña debe tener mínimo 8 caracteres, mayúscula, minúscula, número y carácter especial.' }
   }
 
-  if (ROLES_REQUIEREN_VALIDACION.has(roleId)) {
-    redirect('/?login=1&registered=pending')
+  // Validaciones por rol + campos específicos
+  const especifico: Record<string, unknown> = {}
+  if (roleId === 2) {
+    if (!courseId) return { error: 'Selecciona el curso al que perteneces' }
+    especifico.id_curso_actual = parseInt(courseId)
+  } else if (roleId === 4) {
+    if (!idEstudianteVinculado) return { error: 'Ingresa el ID del estudiante vinculado' }
+    if (!parentesco) return { error: 'Selecciona el parentesco' }
+    especifico.id_estudiante_vinculado = parseInt(idEstudianteVinculado)
+    especifico.parentesco = parentesco
+  } else if (roleId === 1) {
+    if (!especializacionId) return { error: 'Selecciona tu especialización' }
+    especifico.id_especializacion = parseInt(especializacionId)
+    if (institucion) especifico.institucion = institucion
+  } else if (roleId === 3) {
+    if (!cargo) return { error: 'Selecciona tu cargo' }
+    especifico.cargo = cargo
+  } else {
+    return { error: 'Rol inválido.' }
   }
-  redirect('/?login=1&registered=true')
+
+  const res = await fetch(`${API}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      correo: email,
+      password,
+      primer_nombre: firstName,
+      segundo_nombre: secondName || null,
+      primer_apellido: lastName,
+      segundo_apellido: secondLastName || null,
+      tipo_documento: docType,
+      numero_documento: docNumber,
+      genero,
+      direccion,
+      telefono,
+      id_rol: roleId,
+      ...especifico,
+    }),
+    cache: 'no-store',
+  })
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    const detail = (body as Record<string, unknown>).detail
+    const motivo = typeof detail === 'string' ? detail : 'No se pudo completar el registro.'
+    return { error: `Error al registrar el usuario: ${motivo}` }
+  }
+
+  // Admin (3) y Profesor (1) requieren aprobación; Estudiante (2) y Padre (4) no.
+  const requiereAprobacion = roleId === 1 || roleId === 3
+  const rolLabel = ROL_LABEL[roleId] ?? 'usuario'
+  if (requiereAprobacion) {
+    redirect(`/?login=1&registered=pending&rol=${encodeURIComponent(rolLabel)}`)
+  }
+  redirect(`/?login=1&registered=true&rol=${encodeURIComponent(rolLabel)}`)
 }
 
 // ── Lookup tables ─────────────────────────────────────────────────────────────

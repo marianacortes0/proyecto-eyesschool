@@ -11,7 +11,7 @@ type Props = {
   recentScans: ScanResult[]
   todayRecords?: { idAsistencia: number; nombreEstudiante: string; codigoEstudiante: string; estado: string; fecha: string; fechaRegistro: string; observacion: string | null }[]
   onCapture: (blob: Blob) => void
-  onConfirm: (estado: ScanEstado, observacion: string) => Promise<void>
+  onConfirm: (tipo: 'entrada' | 'salida') => Promise<void>
   onCancel: () => void
   onClearError: () => void
 }
@@ -54,23 +54,17 @@ function ConfirmPanel({
 }: {
   pending: PendingRegistration
   saving: boolean
-  onConfirm: (estado: ScanEstado, obs: string) => void
+  onConfirm: (tipo: 'entrada' | 'salida') => void
   onCancel: () => void
 }) {
-  const [estado, setEstado]     = useState<ScanEstado>('Presente')
-  const [obs, setObs]           = useState('')
-  const obsRef                  = useRef<HTMLTextAreaElement>(null)
-
-  // Enfocar el campo de observaciones al aparecer
-  useEffect(() => { obsRef.current?.focus() }, [])
+  const [tipo, setTipo] = useState<'entrada' | 'salida'>('entrada')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onConfirm(estado, obs)
+    onConfirm(tipo)
   }
 
   const { qrData } = pending
-  const info = estadoInfo(estado)
 
   return (
     <div className="flex flex-col gap-5 p-5 rounded-2xl bg-white dark:bg-white/5 border-2 border-blue-300 dark:border-primary/50 shadow-lg animate-in fade-in slide-in-from-bottom-2 duration-200">
@@ -94,50 +88,35 @@ function ConfirmPanel({
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Selector de estado */}
+        {/* Tipo: Entrada / Salida — único campo a elegir */}
         <div className="space-y-1.5">
           <label className="text-xs font-semibold text-slate-600 dark:text-gray-400 uppercase tracking-wider">
-            Estado de asistencia
+            Tipo de registro
           </label>
-          <div className="grid grid-cols-3 gap-2">
-            {ESTADOS.map((s) => (
-              <button
-                key={s.value}
-                type="button"
-                onClick={() => setEstado(s.value)}
-                className={`py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${
-                  estado === s.value
-                    ? `ring-2 ${s.ring} border-transparent`
-                    : 'border-slate-200 dark:border-white/10 text-slate-600 dark:text-gray-400 bg-transparent hover:border-slate-300'
-                }`}
-              >
-                <span className="material-symbols-outlined !text-lg align-middle">
-                  {s.value === 'Presente' ? 'check_circle' : s.value === 'Tarde' ? 'schedule' : 'cancel'}
-                </span>{' '}
-                {s.label}
-              </button>
-            ))}
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setTipo('entrada')}
+              className={`py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${
+                tipo === 'entrada'
+                  ? 'border-primary bg-blue-50 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300'
+                  : 'border-slate-200 dark:border-white/10 text-slate-500 hover:border-slate-300'
+              }`}
+            >
+              <span className="material-symbols-outlined !text-lg align-middle">login</span> Entrada
+            </button>
+            <button
+              type="button"
+              onClick={() => setTipo('salida')}
+              className={`py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${
+                tipo === 'salida'
+                  ? 'border-violet-500 bg-violet-50 dark:bg-violet-500/20 text-violet-700 dark:text-violet-300'
+                  : 'border-slate-200 dark:border-white/10 text-slate-500 hover:border-slate-300'
+              }`}
+            >
+              <span className="material-symbols-outlined !text-lg align-middle">logout</span> Salida
+            </button>
           </div>
-        </div>
-
-        {/* Observaciones */}
-        <div className="space-y-1.5">
-          <label
-            htmlFor="obs-field"
-            className="text-xs font-semibold text-slate-600 dark:text-gray-400 uppercase tracking-wider"
-          >
-            Observaciones{' '}
-            <span className="text-slate-400 font-normal normal-case">(opcional)</span>
-          </label>
-          <textarea
-            id="obs-field"
-            ref={obsRef}
-            rows={2}
-            value={obs}
-            onChange={(e) => setObs(e.target.value)}
-            placeholder="Ej: llegó sin uniforme, justificó médicamente..."
-            className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-primary"
-          />
         </div>
 
         {/* Acciones */}
@@ -154,12 +133,10 @@ function ConfirmPanel({
             type="submit"
             disabled={saving}
             className={`flex-1 py-2.5 rounded-xl text-white text-sm font-semibold transition-colors disabled:opacity-50 ${
-              info.dot === 'bg-emerald-500' ? 'bg-emerald-600 hover:bg-emerald-700' :
-              info.dot === 'bg-amber-500'   ? 'bg-amber-500 hover:bg-amber-600' :
-              'bg-red-600 hover:bg-red-700'
+              tipo === 'entrada' ? 'bg-primary hover:bg-primary/90' : 'bg-violet-600 hover:bg-violet-700'
             }`}
           >
-            {saving ? 'Guardando…' : `Registrar ${estado}`}
+            {saving ? 'Guardando…' : `Registrar ${tipo === 'entrada' ? 'Entrada' : 'Salida'}`}
           </button>
         </div>
       </form>
@@ -174,7 +151,6 @@ export default function QRScannerView({
   errorMsg,
   pending,
   lastResult,
-  recentScans,
   todayRecords,
   onCapture,
   onConfirm,
@@ -341,6 +317,17 @@ export default function QRScannerView({
             >
               ⏹
             </button>
+          </div>
+        )}
+
+        {/* Pista visual mientras escanea */}
+        {status === 'scanning' && (
+          <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-primary/30 text-blue-600 dark:text-blue-300 text-sm">
+            <svg className="w-4 h-4 animate-spin flex-shrink-0" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+            </svg>
+            <span>⚠️ Escaneando… mantenga el código QR frente a la cámara</span>
           </div>
         )}
 

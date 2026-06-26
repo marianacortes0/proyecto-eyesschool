@@ -5,6 +5,7 @@ import { getServerUser, getServerToken, userToRole } from '@/lib/auth/server'
 import { can } from '@/lib/utils/permissions'
 import QRClient from './QRClient'
 import { type CodigoQRConEstudiante } from '@/services/qr/qrService'
+import { getQRBootstrapAction, type QRBootstrap } from '@/services/qr/qrActions'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -14,6 +15,17 @@ export default async function QRPage() {
 
   const role = userToRole(user)
   if (!role || !can(role, 'read', 'qr')) redirect('/general')
+
+  // Vista admin/docente: datos del día en el render del servidor (1 sola llamada).
+  let initialData: QRBootstrap | undefined
+  if (role === 'admin' || role === 'docente') {
+    const hoy = new Date().toISOString().split('T')[0]
+    try {
+      initialData = await getQRBootstrapAction(hoy)
+    } catch {
+      initialData = undefined
+    }
+  }
 
   let miCodigoServer: CodigoQRConEstudiante | null = null
 
@@ -49,5 +61,5 @@ export default async function QRPage() {
     }
   }
 
-  return <QRClient miCodigoServer={miCodigoServer} />
+  return <QRClient miCodigoServer={miCodigoServer} initialData={initialData} />
 }

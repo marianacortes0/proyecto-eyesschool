@@ -2,10 +2,25 @@
 
 import { useState, useMemo } from 'react'
 import { useHorarios } from '@/hooks/useHorarios'
+import { type HorariosBootstrap } from '@/services/horarios/horariosActions'
 import { DIAS_SEMANA, type Horario, type Curso, type Materia, type Especializacion, type ProfesorOpt, type Asignacion } from '@/services/horarios/horariosService'
 import { can, type Role } from '@/lib/utils/permissions'
+import { notifyWarning } from '@/lib/toast'
 
 const JORNADAS = ['Mañana', 'Tarde', 'Noche', 'Completa']
+
+// Paleta estable para colorear bloques por materia (acento izquierdo + fondo suave)
+const BLOQUE_COLORES = [
+  'border-l-4 border-blue-400 bg-blue-50/60 dark:bg-blue-500/10',
+  'border-l-4 border-violet-400 bg-violet-50/60 dark:bg-violet-500/10',
+  'border-l-4 border-emerald-400 bg-emerald-50/60 dark:bg-emerald-500/10',
+  'border-l-4 border-orange-400 bg-orange-50/60 dark:bg-orange-500/10',
+  'border-l-4 border-rose-400 bg-rose-50/60 dark:bg-rose-500/10',
+  'border-l-4 border-amber-400 bg-amber-50/60 dark:bg-amber-500/10',
+  'border-l-4 border-cyan-400 bg-cyan-50/60 dark:bg-cyan-500/10',
+  'border-l-4 border-fuchsia-400 bg-fuchsia-50/60 dark:bg-fuchsia-500/10',
+]
+const colorPorMateria = (idMateria: number) => BLOQUE_COLORES[idMateria % BLOQUE_COLORES.length]
 
 const DIA_HEADER: Record<string, string> = {
   Lunes:      'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300',
@@ -16,18 +31,9 @@ const DIA_HEADER: Record<string, string> = {
   Sábado:     'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-300',
 }
 
-const DIA_CELL: Record<string, string> = {
-  Lunes:      'border-l-2 border-blue-400 dark:border-primary bg-blue-50/50 dark:bg-blue-500/5',
-  Martes:     'border-l-2 border-violet-400 dark:border-violet-500 bg-violet-50/50 dark:bg-violet-500/5',
-  Miércoles:  'border-l-2 border-emerald-400 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-500/5',
-  Jueves:     'border-l-2 border-orange-400 dark:border-orange-500 bg-orange-50/50 dark:bg-orange-500/5',
-  Viernes:    'border-l-2 border-rose-400 dark:border-rose-500 bg-rose-50/50 dark:bg-rose-500/5',
-  Sábado:     'border-l-2 border-amber-400 dark:border-amber-500 bg-amber-50/50 dark:bg-amber-500/5',
-}
+interface Props { role: Role; initialData?: HorariosBootstrap }
 
-interface Props { role: Role }
-
-export default function HorariosClient({ role }: Props) {
+export default function HorariosClient({ role, initialData }: Props) {
   const {
     horarios, cursos, allCursos, materias, allMaterias, especializaciones, profesores,
     loading, saving, savingCurso, savingMateria, savingEspecializacion, error,
@@ -56,7 +62,7 @@ export default function HorariosClient({ role }: Props) {
     openAsignacionesModal, closeAsignacionesModal,
     openCreateAsignacion, openEditAsignacion, closeAsignacionForm,
     handleCreateAsignacion, handleUpdateAsignacion, handleDeleteAsignacion,
-  } = useHorarios()
+  } = useHorarios(initialData)
 
   const [filterJornada, setFilterJornada] = useState('')
 
@@ -70,27 +76,24 @@ export default function HorariosClient({ role }: Props) {
     [filterJornada, cursos]
   )
 
-  // Calcular slots únicos (horaInicio+horaFin) ordenados
-  const slots: { inicio: string; fin: string }[] = []
-  const slotKeys = new Set<string>()
-  horarios.forEach(h => {
-    const key = `${h.horaInicio}|${h.horaFin}`
-    if (!slotKeys.has(key)) {
-      slotKeys.add(key)
-      slots.push({ inicio: h.horaInicio, fin: h.horaFin })
+  // En la vista de profesores agrupamos los bloques por instructor: cada
+  // profesor tiene su propia grilla semanal en vez de una grilla general
+  // mezclada (donde dos clases podían colisionar en la misma celda).
+  const horariosPorProfesor = useMemo(() => {
+    const map = new Map<number, { idProfesor: number; nombre: string; items: Horario[] }>()
+    for (const h of horarios) {
+      const id = h.idProfesor ?? -1
+      if (!map.has(id)) {
+        map.set(id, {
+          idProfesor: id,
+          nombre: id === -1 ? 'Sin profesor asignado' : (h.nombreProfesor ?? `Profesor #${id}`),
+          items: [],
+        })
+      }
+      map.get(id)!.items.push(h)
     }
-  })
-  slots.sort((a, b) => a.inicio.localeCompare(b.inicio))
-  const slots4 = slots.slice(0, 4)
-
-  // Días que tienen al menos un horario
-  const diasActivos = DIAS_SEMANA.filter(d =>
-    horarios.some(h => h.dia === d)
-  )
-
-  // Lookup rápido: dia+slot → horario
-  const lookup = (dia: string, inicio: string) =>
-    horarios.find(h => h.dia === dia && h.horaInicio === inicio) ?? null
+    return [...map.values()].sort((a, b) => a.nombre.localeCompare(b.nombre))
+  }, [horarios])
 
   return (
     <div className="space-y-6">
@@ -206,7 +209,7 @@ export default function HorariosClient({ role }: Props) {
 
         <select
           value={filterActivo}
-          onChange={e => setFilterActivo(e.target.value as any)}
+          onChange={e => setFilterActivo(e.target.value as 'todos' | 'activo' | 'inactivo')}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="todos">Activos e inactivos</option>
@@ -248,73 +251,53 @@ export default function HorariosClient({ role }: Props) {
             <div key={i} className="h-24 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse" />
           ))}
         </div>
-      ) : horarios.length === 0 ? (
+      ) : vista === 'estudiantes' ? (
+        horarios.length === 0 ? (
+          <div className="text-center py-16 text-slate-400 dark:text-slate-500 text-sm">
+            No hay horarios registrados para este curso.
+          </div>
+        ) : (
+          <HorarioGrid
+            horarios={horarios}
+            vista={vista}
+            canUpdate={canUpdate}
+            canDelete={canDelete}
+            onEdit={openEdit}
+            onToggle={handleToggleActivo}
+            onDelete={handleDelete}
+          />
+        )
+      ) : horariosPorProfesor.length === 0 ? (
         <div className="text-center py-16 text-slate-400 dark:text-slate-500 text-sm">
-          No hay horarios registrados para este curso.
+          No hay horarios registrados.
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <div className="min-w-[700px]">
-
-            {/* Cabecera de días */}
-            <div
-              className="grid gap-2 mb-2"
-              style={{ gridTemplateColumns: `80px repeat(${diasActivos.length}, 1fr)` }}
-            >
-              <div /> {/* esquina vacía */}
-              {diasActivos.map(dia => (
-                <div
-                  key={dia}
-                  className={`rounded-xl px-3 py-2 text-center text-xs font-bold uppercase tracking-wide ${DIA_HEADER[dia] ?? 'bg-slate-100 text-slate-600'}`}
-                >
-                  {dia}
+        // Vista profesores: una grilla independiente por cada instructor
+        <div className="space-y-8">
+          {horariosPorProfesor.map(prof => (
+            <div key={prof.idProfesor} className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black text-sm shrink-0">
+                  {prof.nombre.charAt(0).toUpperCase()}
                 </div>
-              ))}
-            </div>
-
-            {/* Filas de slots (hasta 4) */}
-            <div className="space-y-2">
-              {slots4.map((slot, idx) => (
-                <div
-                  key={`${slot.inicio}-${slot.fin}-${idx}`}
-                  className="grid gap-2 items-stretch"
-                  style={{ gridTemplateColumns: `80px repeat(${diasActivos.length}, 1fr)` }}
-                >
-                  {/* Etiqueta del slot */}
-                  <div className="flex flex-col items-center justify-center py-2">
-                    <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase">
-                      Bloque {idx + 1}
-                    </span>
-                    <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono tabular-nums mt-0.5">
-                      {slot.inicio.slice(0, 5)}
-                    </span>
-                    <span className="text-[10px] text-slate-300 dark:text-slate-600 font-mono tabular-nums">
-                      {slot.fin.slice(0, 5)}
-                    </span>
-                  </div>
-
-                  {/* Celda por día */}
-                  {diasActivos.map(dia => {
-                    const h = lookup(dia, slot.inicio)
-                    return (
-                      <HorarioCell
-                        key={dia}
-                        dia={dia}
-                        horario={h}
-                        vista={vista}
-                        canUpdate={canUpdate}
-                        canDelete={canDelete}
-                        onEdit={openEdit}
-                        onToggle={handleToggleActivo}
-                        onDelete={handleDelete}
-                      />
-                    )
-                  })}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 dark:text-white leading-tight">{prof.nombre}</h3>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">
+                    {prof.items.length} bloque{prof.items.length !== 1 ? 's' : ''}
+                  </p>
                 </div>
-              ))}
+              </div>
+              <HorarioGrid
+                horarios={prof.items}
+                vista={vista}
+                canUpdate={canUpdate}
+                canDelete={canDelete}
+                onEdit={openEdit}
+                onToggle={handleToggleActivo}
+                onDelete={handleDelete}
+              />
             </div>
-
-          </div>
+          ))}
         </div>
       )}
 
@@ -333,6 +316,7 @@ export default function HorariosClient({ role }: Props) {
                   <th className="px-4 py-3 text-left">Horario</th>
                   <th className="px-4 py-3 text-left">Materia</th>
                   <th className="px-4 py-3 text-left">Curso</th>
+                  <th className="px-4 py-3 text-left">Profesor</th>
                   <th className="px-4 py-3 text-left">Salón</th>
                   <th className="px-4 py-3 text-left">Estado</th>
                   {(canUpdate || canDelete) && <th className="px-4 py-3 text-right">Acciones</th>}
@@ -352,8 +336,11 @@ export default function HorariosClient({ role }: Props) {
                     <td className="px-4 py-3 whitespace-nowrap font-mono text-xs text-slate-600 dark:text-slate-300">
                       {h.horaInicio.slice(0, 5)} – {h.horaFin.slice(0, 5)}
                     </td>
-                    <td className="px-4 py-3 font-semibold text-slate-800 dark:text-white">{h.nombreMateria}</td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{h.nombreCurso}</td>
+                    <td className="px-4 py-3 font-semibold text-slate-800 dark:text-white">{h.nombreMateria ?? '—'}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                      {h.nombreCurso ?? '—'}{h.gradoCurso ? ` · ${h.gradoCurso}` : ''}
+                    </td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{h.nombreProfesor ?? <span className="text-slate-400 italic text-xs">Sin profesor</span>}</td>
                     <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{h.salon}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-1 rounded-lg text-xs font-semibold ${h.activo ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300' : 'bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-400'}`}>
@@ -491,10 +478,107 @@ export default function HorariosClient({ role }: Props) {
   )
 }
 
+// ── Grilla semanal (reutilizable por curso o por profesor) ────────────────────
+
+interface GridProps {
+  horarios: Horario[]
+  vista: 'estudiantes' | 'profesores'
+  canUpdate: boolean
+  canDelete: boolean
+  onEdit: (h: Horario) => void
+  onToggle: (h: Horario) => void
+  onDelete: (id: number) => void
+}
+
+function HorarioGrid({ horarios, vista, canUpdate, canDelete, onEdit, onToggle, onDelete }: GridProps) {
+  // Slots únicos (horaInicio+horaFin) ordenados — se muestran TODOS (6 a.m. a 6 p.m.)
+  const slots: { inicio: string; fin: string }[] = []
+  const slotKeys = new Set<string>()
+  horarios.forEach(h => {
+    const key = `${h.horaInicio}|${h.horaFin}`
+    if (!slotKeys.has(key)) {
+      slotKeys.add(key)
+      slots.push({ inicio: h.horaInicio, fin: h.horaFin })
+    }
+  })
+  slots.sort((a, b) => a.inicio.localeCompare(b.inicio))
+
+  // Días que tienen al menos un bloque
+  const diasActivos = DIAS_SEMANA.filter(d => horarios.some(h => h.dia === d))
+
+  // Lookup rápido: dia+slot → horario
+  const lookup = (dia: string, inicio: string) =>
+    horarios.find(h => h.dia === dia && h.horaInicio === inicio) ?? null
+
+  return (
+    <div className="overflow-x-auto">
+      <div className="min-w-[700px]">
+
+        {/* Cabecera de días */}
+        <div
+          className="grid gap-2 mb-2"
+          style={{ gridTemplateColumns: `80px repeat(${diasActivos.length}, 1fr)` }}
+        >
+          <div /> {/* esquina vacía */}
+          {diasActivos.map(dia => (
+            <div
+              key={dia}
+              className={`rounded-xl px-3 py-2 text-center text-xs font-bold uppercase tracking-wide ${DIA_HEADER[dia] ?? 'bg-slate-100 text-slate-600'}`}
+            >
+              {dia}
+            </div>
+          ))}
+        </div>
+
+        {/* Filas de slots */}
+        <div className="space-y-2">
+          {slots.map((slot, idx) => (
+            <div
+              key={`${slot.inicio}-${slot.fin}-${idx}`}
+              className="grid gap-2 items-stretch"
+              style={{ gridTemplateColumns: `80px repeat(${diasActivos.length}, 1fr)` }}
+            >
+              {/* Etiqueta del slot */}
+              <div className="flex flex-col items-center justify-center py-2">
+                <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase">
+                  Bloque {idx + 1}
+                </span>
+                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono tabular-nums mt-0.5">
+                  {slot.inicio.slice(0, 5)}
+                </span>
+                <span className="text-[10px] text-slate-300 dark:text-slate-600 font-mono tabular-nums">
+                  {slot.fin.slice(0, 5)}
+                </span>
+              </div>
+
+              {/* Celda por día */}
+              {diasActivos.map(dia => {
+                const h = lookup(dia, slot.inicio)
+                return (
+                  <HorarioCell
+                    key={dia}
+                    horario={h}
+                    vista={vista}
+                    canUpdate={canUpdate}
+                    canDelete={canDelete}
+                    onEdit={onEdit}
+                    onToggle={onToggle}
+                    onDelete={onDelete}
+                  />
+                )
+              })}
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </div>
+  )
+}
+
 // ── Celda de la grilla ────────────────────────────────────────────────────────
 
 interface CellProps {
-  dia: string
   horario: Horario | null
   vista: 'estudiantes' | 'profesores'
   canUpdate: boolean
@@ -504,7 +588,7 @@ interface CellProps {
   onDelete: (id: number) => void
 }
 
-function HorarioCell({ dia, horario: h, vista, canUpdate, canDelete, onEdit, onToggle, onDelete }: CellProps) {
+function HorarioCell({ horario: h, vista, canUpdate, canDelete, onEdit, onToggle, onDelete }: CellProps) {
   const [hover, setHover] = useState(false)
 
   if (!h) {
@@ -520,7 +604,7 @@ function HorarioCell({ dia, horario: h, vista, canUpdate, canDelete, onEdit, onT
       className={`
         relative rounded-xl border border-slate-100 dark:border-white/10 p-3 h-24 flex flex-col justify-between
         transition-all cursor-default
-        ${DIA_CELL[dia] ?? ''}
+        ${colorPorMateria(h.idMateria)}
         ${!h.activo ? 'opacity-40' : ''}
         ${hover ? 'shadow-md' : ''}
       `}
@@ -529,15 +613,17 @@ function HorarioCell({ dia, horario: h, vista, canUpdate, canDelete, onEdit, onT
     >
       <div className="overflow-hidden">
         <p className="text-xs font-bold text-slate-800 dark:text-white truncate leading-tight">
-          {h.nombreMateria}
+          {h.nombreMateria ?? '—'}
         </p>
         <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
           {vista === 'profesores'
-            ? (h.nombreProfesor ?? h.nombreCurso)
-            : h.nombreCurso}
+            ? `${h.nombreCurso ?? ''}${h.gradoCurso ? ` · ${h.gradoCurso}` : ''}`
+            : (h.nombreProfesor ?? 'Sin profesor')}
         </p>
-        <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
-          Salón {h.salon}
+        <p className="text-[10px] text-slate-400 dark:text-slate-500 truncate mt-0.5">
+          {vista === 'profesores'
+            ? `Salón ${h.salon}`
+            : `${h.nombreCurso ?? ''} · Salón ${h.salon}`}
         </p>
       </div>
 
@@ -585,7 +671,7 @@ interface ModalProps {
   saving: boolean
   onClose: () => void
   onCreate: (p: Omit<Horario, 'idHorario' | 'nombreCurso' | 'gradoCurso' | 'nombreMateria'>, idProfesor?: number) => void
-  onUpdate: (id: number, p: Partial<Omit<Horario, 'idHorario' | 'nombreCurso' | 'gradoCurso' | 'nombreMateria'>>) => void
+  onUpdate: (id: number, p: Partial<Omit<Horario, 'idHorario' | 'nombreCurso' | 'gradoCurso' | 'nombreMateria'>>, idProfesor?: number) => void
 }
 
 function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onClose, onCreate, onUpdate }: ModalProps) {
@@ -601,7 +687,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
   })
   const [idCurso, setIdCurso] = useState<string>(String(horario?.idCurso ?? ''))
   const [idMateria, setIdMateria] = useState(String(horario?.idMateria ?? ''))
-  const [idProfesor, setIdProfesor] = useState<string>('')
+  const [idProfesor, setIdProfesor] = useState<string>(String(horario?.idProfesor ?? ''))
   const [activo, setActivo] = useState(horario?.activo ?? true)
   const [formError, setFormError] = useState<string | null>(null)
 
@@ -614,8 +700,8 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setFormError(null)
-    if (!idCurso) { setFormError('Selecciona un curso.'); return }
-    if (!idMateria) { setFormError('Selecciona una materia.'); return }
+    if (!idCurso) { setFormError('Selecciona un curso.'); notifyWarning('Seleccione todos los campos requeridos'); return }
+    if (!idMateria) { setFormError('Selecciona una materia.'); notifyWarning('Seleccione todos los campos requeridos'); return }
     if (horaFin <= horaInicio) { setFormError('La hora fin debe ser mayor que la de inicio.'); return }
 
     const payload = {
@@ -629,7 +715,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
     }
     mode === 'create'
       ? onCreate(payload, idProfesor ? Number(idProfesor) : undefined)
-      : onUpdate(horario!.idHorario, payload)
+      : onUpdate(horario!.idHorario, payload, idProfesor ? Number(idProfesor) : undefined)
   }
 
   return (
@@ -702,18 +788,16 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
           </div>
 
-          {mode === 'create' && (
-            <div>
-              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Profesor (opcional)</label>
-              <select value={idProfesor} onChange={e => setIdProfesor(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
-                <option value="">Sin asignar</option>
-                {profesores.map(p => (
-                  <option key={p.idProfesor} value={String(p.idProfesor)}>{p.nombre}</option>
-                ))}
-              </select>
-            </div>
-          )}
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Profesor</label>
+            <select value={idProfesor} onChange={e => setIdProfesor(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+              <option value="">Sin asignar</option>
+              {profesores.map(p => (
+                <option key={p.idProfesor} value={String(p.idProfesor)}>{p.nombre}</option>
+              ))}
+            </select>
+          </div>
 
           {mode === 'edit' && (
             <label className="flex items-center gap-3 cursor-pointer">

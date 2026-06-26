@@ -44,6 +44,12 @@ function toCamel(v: unknown): unknown {
   return v
 }
 
+function nombreCompleto(c: Record<string, unknown>): string {
+  return [c.primerNombre, c.segundoNombre, c.primerApellido, c.segundoApellido]
+    .filter(Boolean)
+    .join(' ')
+}
+
 export async function createNotaAction(
   payload: Pick<Nota, 'idEstudiante' | 'idMateria' | 'idPeriodo' | 'nota' | 'observacion' | 'registradoPor'>
 ) {
@@ -84,14 +90,23 @@ export async function getNotasAction(): Promise<Nota[]> {
 
 export async function getEstudiantesAction() {
   type Raw = Record<string, unknown>
-  const data = await apiFetch<Raw[]>('/estudiantes?estado=Activo&limit=500')
-  return data.map(r => {
+  // Sin filtro `estado`: el backend lo compara de forma exacta y sensible a
+  // mayúsculas (== "Activo"), y el campo no es confiable (puede venir null,
+  // "activo", etc.). Usuarios tampoco lo filtra, así que lo pedimos parejo para
+  // que todo estudiante visible en Usuarios aparezca también en Notas.
+  // El nombre viene embebido en /estudiantes (join con usuario en el backend);
+  // ya no se consulta /usuarios (directorio completo = solo-admin).
+  const estData = await apiFetch<Raw[]>('/estudiantes?limit=500')
+
+  return estData.map(r => {
     const c = toCamel(r) as Raw
+    const idEstudiante = c.idEstudiante as number
+    const nombre = nombreCompleto(c)
     return {
-      idEstudiante:     c.idEstudiante as number,
+      idEstudiante,
       codigoEstudiante: c.codigoEstudiante as string,
       idCursoActual:    (c.idCursoActual as number | null) ?? null,
-      nombre:           `Estudiante #${c.idEstudiante}`,
+      nombre:           nombre || `Estudiante #${idEstudiante}`,
     }
   })
 }
@@ -110,7 +125,10 @@ export async function getMateriasAction() {
 
 export async function getCursosAction() {
   type Raw = Record<string, unknown>
-  const data = await apiFetch<Raw[]>('/cursos?activo=true&limit=200')
+  // Sin filtro `activo`: un estudiante puede estar asignado a un curso marcado
+  // inactivo; si no lo listamos, su curso no aparece en el desplegable y el
+  // estudiante queda inaccesible. Usuarios tampoco lo filtra (paridad total).
+  const data = await apiFetch<Raw[]>('/cursos?limit=200')
   return data.map(r => {
     const c = toCamel(r) as Raw
     return {
@@ -120,4 +138,26 @@ export async function getCursosAction() {
       jornada:     c.jornada as string,
     }
   })
+}
+
+export type NotasBootstrap = {
+  notas: Awaited<ReturnType<typeof getNotasAction>>
+  estudiantes: Awaited<ReturnType<typeof getEstudiantesAction>>
+  materias: Awaited<ReturnType<typeof getMateriasAction>>
+  cursos: Awaited<ReturnType<typeof getCursosAction>>
+}
+
+/**
+ * Carga inicial de la página de notas en UNA sola llamada (en vez de 4 server
+ * actions separadas desde el cliente). Internamente las cuatro consultas al
+ * backend siguen yendo en paralelo.
+ */
+export async function getNotasBootstrapAction(): Promise<NotasBootstrap> {
+  const [notas, estudiantes, materias, cursos] = await Promise.all([
+    getNotasAction(),
+    getEstudiantesAction(),
+    getMateriasAction(),
+    getCursosAction(),
+  ])
+  return { notas, estudiantes, materias, cursos }
 }

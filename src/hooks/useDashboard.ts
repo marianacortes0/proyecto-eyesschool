@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { getAdminDashboardAction } from "@/services/dashboard/dashboardActions";
 
-type ChartData = {
-  periodo: string;
-  promedio: number;
-};
+export type EstudiantesPorCursoPoint = { curso: string; estudiantes: number };
+export type PromedioPorMateriaPoint = { materia: string; promedio: number };
+export type RolPoint = { name: string; value: number };
 
 export const useDashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -14,10 +13,14 @@ export const useDashboard = () => {
     aprobacion: 0,
     estudiantes: 0,
     asistencia: 0,
+    profesores: 0,
+    cursos: 0,
+    novedades: 0,
   });
 
-  const [charts, setCharts] = useState<ChartData[]>([]);
-  const [distribucionUsuarios, setDistribucionUsuarios] = useState<{ name: string; value: number }[]>([]);
+  const [estudiantesPorCurso, setEstudiantesPorCurso] = useState<EstudiantesPorCursoPoint[]>([]);
+  const [usuariosPorRol, setUsuariosPorRol] = useState<RolPoint[]>([]);
+  const [promedioPorMateria, setPromedioPorMateria] = useState<PromedioPorMateriaPoint[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,9 +31,13 @@ export const useDashboard = () => {
           aprobacion:  d?.tasaAprobacion     ?? 0,
           estudiantes: d?.totalEstudiantes   ?? 0,
           asistencia:  d?.porcentajeAsistencia ?? 0,
+          profesores:  d?.totalProfesores    ?? 0,
+          cursos:      d?.totalCursos        ?? 0,
+          novedades:   d?.totalNovedadesActivas ?? 0,
         });
-        setCharts([]);
-        setDistribucionUsuarios([]);
+        setEstudiantesPorCurso(d?.estudiantesPorCurso ?? []);
+        setUsuariosPorRol(d?.usuariosPorRol ?? []);
+        setPromedioPorMateria(d?.promedioPorMateria ?? []);
       } catch (error) {
         console.error("ERROR DASHBOARD:", error);
       } finally {
@@ -41,5 +48,5 @@ export const useDashboard = () => {
     fetchData();
   }, []);
 
-  return { stats, charts, distribucionUsuarios, loading };
+  return { stats, estudiantesPorCurso, usuariosPorRol, promedioPorMateria, loading };
 };

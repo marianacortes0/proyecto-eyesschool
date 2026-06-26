@@ -477,8 +477,8 @@ export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9b6bff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg>
           </div>
           <h3 style="margin:0 0 8px;font-family:'Orbitron',sans-serif;font-size:16px;color:#fff;">Enviar correo</h3>
-          <p style="margin:0 0 18px;font-size:13px;line-height:1.5;color:#bca9e6;">Escríbenos y te responderemos lo más pronto posible.</p>
-          <button style="width:100%;padding:12px;border:none;border-radius:11px;font-family:'Orbitron',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.5px;color:#fff;cursor:pointer;background:linear-gradient(92deg,#9b6bff,#7a4fd0);box-shadow:0 0 22px rgba(155,107,255,.45);transition:transform .2s,box-shadow .3s;" style-hover="transform:translateY(-2px);box-shadow:0 0 32px rgba(155,107,255,.7);">Enviar email</button>
+          <p style="margin:0 0 10px;font-size:13px;line-height:1.5;color:#bca9e6;">Escríbenos y te responderemos lo más pronto posible.</p>
+          <a href="mailto:eyesschool.soporte@gmail.com" style="display:block;margin:0;font-size:13px;font-weight:600;color:#c9b4ff;text-decoration:none;word-break:break-all;">eyesschool.soporte@gmail.com</a>
         </div>
         <!-- Llamar -->
         <div style="flex:1 1 230px;max-width:270px;border-radius:18px;padding:24px 24px 22px;text-align:left;background:linear-gradient(160deg, rgba(44,30,86,.6), rgba(22,14,52,.55));border:1px solid rgba(56,232,255,.3);backdrop-filter:blur(12px);box-shadow:0 16px 42px rgba(0,0,0,.42),0 0 26px rgba(56,232,255,.12);">
@@ -486,8 +486,9 @@ export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#38e8ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
           </div>
           <h3 style="margin:0 0 8px;font-family:'Orbitron',sans-serif;font-size:16px;color:#fff;">Llamar</h3>
-          <p style="margin:0 0 18px;font-size:13px;line-height:1.5;color:#bca9e6;">Contáctanos por teléfono para atención inmediata.</p>
-          <button style="width:100%;padding:12px;border:none;border-radius:11px;font-family:'Orbitron',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.5px;color:#0c2a22;cursor:pointer;background:linear-gradient(92deg,#38e8ff,#4df0c8);box-shadow:0 0 22px rgba(56,232,255,.45);transition:transform .2s,box-shadow .3s;" style-hover="transform:translateY(-2px);box-shadow:0 0 32px rgba(56,232,255,.7);">Ver número</button>
+          <p style="margin:0 0 10px;font-size:13px;line-height:1.5;color:#bca9e6;">Contáctanos por WhatsApp para atención inmediata.</p>
+          <a href="https://wa.me/573011836458" target="_blank" rel="noopener noreferrer" style="display:block;margin:0 0 16px;font-size:13px;font-weight:600;color:#9be8ff;text-decoration:none;">+57 301 183 6458</a>
+          <a href="https://wa.me/573011836458" target="_blank" rel="noopener noreferrer" style="display:block;box-sizing:border-box;text-align:center;text-decoration:none;width:100%;padding:12px;border:none;border-radius:11px;font-family:'Orbitron',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.5px;color:#0c2a22;cursor:pointer;background:linear-gradient(92deg,#38e8ff,#4df0c8);box-shadow:0 0 22px rgba(56,232,255,.45);transition:transform .2s,box-shadow .3s;" style-hover="transform:translateY(-2px);box-shadow:0 0 32px rgba(56,232,255,.7);">Abrir WhatsApp</a>
         </div>
       </div>
     </div>

@@ -24,14 +24,15 @@ function readUserCookie(): AuthUser | null {
 }
 
 export function useAuth() {
-  const [authUser, setAuthUser] = useState<AuthUser | null>(() => {
-    if (typeof window === 'undefined') return null
-    return readUserCookie()
-  })
+  // Empezamos en null para que el primer render del cliente coincida con el SSR
+  // (la cookie solo existe en el navegador). Evita el hydration mismatch.
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null)
   const loading = false
 
-  // Re-sync on focus (handles login in another tab)
+  // Leemos la cookie tras el montaje y re-sincronizamos al volver al foco
+  // (maneja login en otra pestaña).
   useEffect(() => {
+    setAuthUser(readUserCookie())
     const sync = () => setAuthUser(readUserCookie())
     window.addEventListener('focus', sync)
     return () => window.removeEventListener('focus', sync)

@@ -5,10 +5,18 @@ import { useReportes } from '@/hooks/useReportes'
 import {
   TIPOS_REPORTE,
   ESTADOS_REPORTE,
+  FORMATOS_REPORTE,
   uploadArchivoReporte,
+  validarArchivoReporte,
+  downloadReporteArchivo,
+  fileUrl,
   type Reporte,
 } from '@/services/reportes/reportesService'
 import { can, type Role } from '@/lib/utils/permissions'
+import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
+import { getErrorMessage } from '@/lib/errors'
+import Pagination from '@/components/ui/Pagination'
+import { usePagination } from '@/hooks/usePagination'
 
 const ESTADO_STYLE: Record<string, string> = {
   Pendiente:   'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-300',
@@ -33,9 +41,9 @@ const TIPO_ICON: Record<string, string> = {
   Estadistico:   'bar_chart',
 }
 
-interface Props { role: Role; idAdministrador: number }
+interface Props { role: Role; idAdministrador: number; initialReportes?: Reporte[] }
 
-export default function ReportesClient({ role, idAdministrador }: Props) {
+export default function ReportesClient({ role, idAdministrador, initialReportes }: Props) {
   const {
     reportes, allReportes, totalCount, loading, saving, error,
     filterTipo, setFilterTipo,
@@ -44,12 +52,14 @@ export default function ReportesClient({ role, idAdministrador }: Props) {
     modalMode, selected,
     openCreate, openEdit, closeModal,
     handleCreate, handleUpdate, handleDelete,
-  } = useReportes(idAdministrador)
+  } = useReportes(idAdministrador, initialReportes)
 
   const canCreate = can(role, 'create', 'reportes')
   const canUpdate = can(role, 'update', 'reportes')
   const canDelete = can(role, 'delete', 'reportes')
   const canDownload = can(role, 'download', 'reportes')
+
+  const { page, setPage, totalPages, pageItems, total, from, to } = usePagination(reportes)
 
   // Contadores por estado
   const countByEstado = (estado: string) =>
@@ -141,19 +151,30 @@ export default function ReportesClient({ role, idAdministrador }: Props) {
           No hay reportes que coincidan con los filtros.
         </div>
       ) : (
-        <div className="space-y-3">
-          {reportes.map(r => (
-            <ReporteCard
-              key={r.idReporte}
-              reporte={r}
-              canUpdate={canUpdate}
-              canDelete={canDelete}
-              canDownload={canDownload}
-              onEdit={openEdit}
-              onDelete={handleDelete}
-            />
-          ))}
-        </div>
+        <>
+          <div className="space-y-3">
+            {pageItems.map(r => (
+              <ReporteCard
+                key={r.idReporte}
+                reporte={r}
+                canUpdate={canUpdate}
+                canDelete={canDelete}
+                canDownload={canDownload}
+                onEdit={openEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            from={from}
+            to={to}
+            onPageChange={setPage}
+            itemLabel="reportes"
+          />
+        </>
       )}
 
       {/* ── Modal ────────────────────────────────────────────────────────────── */}
@@ -221,15 +242,30 @@ function ReporteCard({ reporte: r, canUpdate, canDelete, canDownload, onEdit, on
 
       {/* Acciones */}
       <div className="flex items-center gap-2 flex-shrink-0">
-        {canDownload && r.archivoGenerado && (
+        {r.archivoGenerado && (
           <a
-            href={r.archivoGenerado}
+            href={fileUrl(r.archivoGenerado)}
             target="_blank"
             rel="noopener noreferrer"
+            className="px-3 py-2 rounded-xl bg-blue-100 dark:bg-blue-500/20 hover:bg-blue-200 dark:hover:bg-blue-500/30 text-blue-700 dark:text-blue-300 text-xs font-semibold transition-colors"
+          >
+            Ver
+          </a>
+        )}
+        {canDownload && r.archivoGenerado && (
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                await downloadReporteArchivo(r.idReporte, r.nombreReporte)
+              } catch (e) {
+                notifyError(getErrorMessage(e, 'Error al descargar el archivo'))
+              }
+            }}
             className="px-3 py-2 rounded-xl bg-green-100 dark:bg-green-500/20 hover:bg-green-200 dark:hover:bg-green-500/30 text-green-700 dark:text-green-300 text-xs font-semibold transition-colors"
           >
             Descargar
-          </a>
+          </button>
         )}
         {canUpdate && (
           <button
@@ -274,20 +310,34 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
   const [archivoUrl, setArchivoUrl] = useState<string | null>(reporte?.archivoGenerado ?? null)
   const [archivoNombre, setArchivoNombre] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
+  const [progress, setProgress] = useState(0)
   const [formError, setFormError] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (!file) return
+    if (!file) {
+      notifyWarning('Seleccione un archivo para subir')
+      return
+    }
+    const check = validarArchivoReporte(file)
+    if (!check.ok) {
+      setFormError(check.motivo)
+      notifyError(check.motivo)
+      if (fileRef.current) fileRef.current.value = ''
+      return
+    }
     setUploading(true)
+    setProgress(0)
     setFormError(null)
     try {
-      const url = await uploadArchivoReporte(file)
+      const url = await uploadArchivoReporte(file, setProgress)
       setArchivoUrl(url)
       setArchivoNombre(file.name)
-    } catch (err: any) {
-      setFormError(err.message ?? 'Error al subir archivo')
+      notifySuccess('Archivo subido exitosamente')
+    } catch (err) {
+      setFormError(getErrorMessage(err, 'Error al subir el archivo'))
+      notifyError('Error al subir el archivo')
     } finally {
       setUploading(false)
     }
@@ -393,7 +443,13 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">
               Archivo generado <span className="font-normal text-slate-400">(opcional)</span>
             </label>
-            <input ref={fileRef} type="file" className="hidden" onChange={handleFileChange} />
+            <input
+              ref={fileRef}
+              type="file"
+              accept={FORMATOS_REPORTE.join(',')}
+              className="hidden"
+              onChange={handleFileChange}
+            />
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
@@ -417,13 +473,33 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
                 </>
               )}
             </button>
-            {archivoUrl && (
+            {/* Barra de progreso de carga */}
+            {uploading && (
+              <div className="mt-2">
+                <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
+                  <span>Subiendo archivo…</span>
+                  <span>{progress}%</span>
+                </div>
+                <div className="w-full h-2 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
+                  <div
+                    className="h-full bg-primary transition-all duration-150"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+              </div>
+            )}
+
+            <p className="mt-1.5 text-[11px] text-slate-400">
+              Formatos: {FORMATOS_REPORTE.join(', ')} · Máx. 10 MB
+            </p>
+
+            {archivoUrl && !uploading && (
               <div className="mt-2 flex items-center gap-2">
                 <svg className="w-4 h-4 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
                 <a
-                  href={archivoUrl}
+                  href={fileUrl(archivoUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-primary dark:text-blue-400 hover:underline truncate"

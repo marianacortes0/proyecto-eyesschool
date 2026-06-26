@@ -19,8 +19,8 @@
 
   --radius-super: 2rem;
 
-  --font-headline: "Hanken Grotesk", sans-serif;
-  --font-body: "Inter", sans-serif;
+  --font-headline: var(--font-hanken), "Hanken Grotesk", sans-serif;
+  --font-body: var(--font-inter), "Inter", sans-serif;
 }
 
 
@@ -126,7 +126,7 @@ html.dark {
 body {
   color: var(--foreground);
   background-color: var(--background);
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 

@@ -1,18 +1,29 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Modal from '@/components/ui/Modal'
-import { type UsuarioConRol, type CreateUsuarioData, type UpdateUsuarioData } from '@/services/usuarios/usuariosService'
+import { type UsuarioConRol, type CreateUsuarioData, type UpdateUsuarioData, type CursoOpt, type EstudianteOpt, type EspecializacionOpt, PARENTESCOS, NIVELES_ACCESO } from '@/services/usuarios/usuariosService'
 import { type ModalMode } from '@/hooks/useUsuarios'
+import { notifyWarning } from '@/lib/toast'
+
+const HOY = new Date().toISOString().slice(0, 10)
 
 interface UsuarioModalProps {
   mode: ModalMode
   usuario: UsuarioConRol | null
   saving: boolean
+  cursos: CursoOpt[]
+  estudiantes: EstudianteOpt[]
+  especializaciones: EspecializacionOpt[]
   onClose: () => void
   onCreate: (data: CreateUsuarioData) => Promise<void>
   onUpdate: (data: UpdateUsuarioData) => Promise<void>
 }
+
+const ID_ROL_PROFESOR = 1
+const ID_ROL_ESTUDIANTE = 2
+const ID_ROL_ADMIN = 3
+const ID_ROL_PADRE = 4
 
 const TIPOS_DOCUMENTO = ['CC', 'CE', 'TI', 'PAS'] as const
 const GENEROS = [
@@ -41,6 +52,16 @@ type FormState = {
   genero: string
   direccion: string
   idRol: number
+  idCursoActual: string
+  cursoEstudiante: string
+  idEstudianteRelacionado: string
+  parentesco: string
+  especializacion: string
+  institucion: string
+  cargo: string
+  nivelAcceso: string
+  fechaAsignacion: string
+  fechaFin: string
 }
 
 const EMPTY_FORM: FormState = {
@@ -56,12 +77,28 @@ const EMPTY_FORM: FormState = {
   genero: '',
   direccion: '',
   idRol: 4,
+  idCursoActual: '',
+  cursoEstudiante: '',
+  idEstudianteRelacionado: '',
+  parentesco: '',
+  especializacion: '',
+  institucion: '',
+  cargo: '',
+  nivelAcceso: 'Bajo',
+  fechaAsignacion: HOY,
+  fechaFin: HOY,
 }
+
+// Clave de curso para el filtro de estudiantes ('' = sin elegir; 'none' = estudiante sin curso)
+const cursoKey = (idCurso: number | null): string => (idCurso != null ? String(idCurso) : 'none')
 
 export default function UsuarioModal({
   mode,
   usuario,
   saving,
+  cursos,
+  estudiantes,
+  especializaciones,
   onClose,
   onCreate,
   onUpdate,
@@ -71,6 +108,12 @@ export default function UsuarioModal({
 
   useEffect(() => {
     if (mode === 'edit' && usuario) {
+      // Curso del estudiante vinculado (para preseleccionar el filtro de curso)
+      const hijo = usuario.idEstudianteRelacionado != null
+        ? estudiantes.find((e) => e.idEstudiante === usuario.idEstudianteRelacionado)
+        : undefined
+      // Especialización actual del profesor (tratada como única)
+      const esp = usuario.especializaciones?.[0]
       setForm({
         primerNombre: usuario.primerNombre,
         segundoNombre: usuario.segundoNombre ?? '',
@@ -83,13 +126,40 @@ export default function UsuarioModal({
         genero: usuario.genero ?? '',
         direccion: usuario.direccion ?? '',
         idRol: usuario.idRol,
+        idCursoActual: usuario.idCursoActual != null ? String(usuario.idCursoActual) : '',
+        cursoEstudiante: hijo ? cursoKey(hijo.idCurso) : '',
+        idEstudianteRelacionado: usuario.idEstudianteRelacionado != null ? String(usuario.idEstudianteRelacionado) : '',
+        parentesco: usuario.parentesco ?? '',
+        especializacion: esp?.nombre ?? '',
+        institucion: esp?.institucion ?? '',
+        cargo: usuario.cargo ?? '',
+        nivelAcceso: usuario.nivelAcceso ?? 'Bajo',
+        fechaAsignacion: usuario.fechaAsignacion ?? HOY,
+        fechaFin: usuario.fechaFin ?? HOY,
         password: '',
       })
     } else {
       setForm(EMPTY_FORM)
     }
     setFormError(null)
-  }, [mode, usuario])
+  }, [mode, usuario, estudiantes])
+
+  // Cursos disponibles a partir de los estudiantes (para el filtro previo del padre)
+  const cursosDeEstudiantes = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const e of estudiantes) {
+      const key = cursoKey(e.idCurso)
+      if (!map.has(key)) map.set(key, e.cursoLabel ?? 'Sin curso')
+    }
+    return Array.from(map, ([value, label]) => ({ value, label }))
+      .sort((a, b) => a.label.localeCompare(b.label))
+  }, [estudiantes])
+
+  // Estudiantes filtrados por el curso elegido
+  const estudiantesFiltrados = useMemo(() => {
+    if (!form.cursoEstudiante) return []
+    return estudiantes.filter((e) => cursoKey(e.idCurso) === form.cursoEstudiante)
+  }, [estudiantes, form.cursoEstudiante])
 
   const set = (field: keyof FormState) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -101,20 +171,47 @@ export default function UsuarioModal({
 
     if (!form.primerNombre.trim() || !form.primerApellido.trim()) {
       setFormError('El nombre y apellido son obligatorios.')
+      notifyWarning('Complete todos los campos obligatorios')
       return
     }
     if (!form.numeroDocumento.trim()) {
       setFormError('El número de documento es obligatorio.')
+      notifyWarning('Complete todos los campos obligatorios')
       return
     }
     if (mode === 'create' && !form.correo.trim()) {
       setFormError('El correo es obligatorio.')
+      notifyWarning('Complete todos los campos obligatorios')
       return
     }
     if (mode === 'create' && form.password.length < 6) {
       setFormError('La contraseña debe tener al menos 6 caracteres.')
       return
     }
+
+    const esEstudiante = form.idRol === ID_ROL_ESTUDIANTE
+    const idCursoActual = esEstudiante
+      ? (form.idCursoActual ? Number(form.idCursoActual) : null)
+      : undefined
+
+    const esPadre = form.idRol === ID_ROL_PADRE
+    if (esPadre && (!form.idEstudianteRelacionado || !form.parentesco)) {
+      setFormError('Selecciona el estudiante vinculado y el parentesco.')
+      return
+    }
+    const idEstudianteRelacionado = esPadre ? Number(form.idEstudianteRelacionado) : undefined
+    const parentesco = esPadre ? form.parentesco : undefined
+
+    const esProfesor = form.idRol === ID_ROL_PROFESOR
+    const especializacion = esProfesor ? form.especializacion.trim() : undefined
+    const institucion = esProfesor ? form.institucion.trim() : undefined
+
+    const esAdmin = form.idRol === ID_ROL_ADMIN
+    const cargo = esAdmin ? form.cargo.trim() : undefined
+    const nivelAcceso = esAdmin ? form.nivelAcceso : undefined
+    // Vigencia: todos los usuarios
+    const fechaAsignacion = form.fechaAsignacion || HOY
+    const fechaFin = form.fechaFin || HOY
 
     try {
       if (mode === 'create') {
@@ -131,6 +228,15 @@ export default function UsuarioModal({
           genero: (form.genero as CreateUsuarioData['genero']) || undefined,
           direccion: form.direccion.trim() || undefined,
           idRol: form.idRol,
+          idCursoActual,
+          idEstudianteRelacionado,
+          parentesco,
+          especializacion,
+          institucion,
+          cargo,
+          nivelAcceso,
+          fechaAsignacion,
+          fechaFin,
         })
       } else {
         await onUpdate({
@@ -143,6 +249,16 @@ export default function UsuarioModal({
           telefono: form.telefono.trim() || undefined,
           genero: (form.genero as UpdateUsuarioData['genero']) || undefined,
           direccion: form.direccion.trim() || undefined,
+          idRol: form.idRol,
+          idCursoActual,
+          idEstudianteRelacionado,
+          parentesco,
+          especializacion,
+          institucion,
+          cargo,
+          nivelAcceso,
+          fechaAsignacion,
+          fechaFin,
         })
       }
     } catch (err) {
@@ -151,6 +267,7 @@ export default function UsuarioModal({
   }
 
   const isOpen = mode === 'create' || mode === 'edit'
+  const isEdit = mode === 'edit'
   const title = mode === 'create' ? 'Nuevo Usuario' : 'Editar Usuario'
 
   return (
@@ -220,13 +337,18 @@ export default function UsuarioModal({
           </div>
         </div>
 
-        {/* Documento */}
+        {/* Documento — bloqueado en edición por seguridad (identidad inmutable) */}
         <div className="grid grid-cols-3 gap-3">
           <div>
             <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
               Tipo Doc. <span className="text-red-500">*</span>
             </label>
-            <select value={form.tipoDocumento} onChange={set('tipoDocumento')} className={selectClass}>
+            <select
+              value={form.tipoDocumento}
+              onChange={set('tipoDocumento')}
+              className={isEdit ? lockedSelectClass : selectClass}
+              disabled={isEdit}
+            >
               {TIPOS_DOCUMENTO.map((t) => (
                 <option key={t} value={t}>{t}</option>
               ))}
@@ -240,12 +362,33 @@ export default function UsuarioModal({
               type="text"
               value={form.numeroDocumento}
               onChange={set('numeroDocumento')}
-              className={inputClass}
+              className={isEdit ? lockedInputClass : inputClass}
               placeholder="1234567890"
               required
+              disabled={isEdit}
             />
           </div>
         </div>
+
+        {/* Correo — solo lectura en edición (no editable por seguridad) */}
+        {isEdit && (
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+              Correo electrónico
+            </label>
+            <input
+              type="email"
+              value={usuario?.correo ?? ''}
+              className={lockedInputClass}
+              placeholder="Sin correo"
+              disabled
+            />
+            <p className="mt-1 text-[11px] text-slate-400 dark:text-slate-500 flex items-center gap-1">
+              <span className="material-symbols-outlined !text-sm">lock</span>
+              El documento y el correo no se pueden modificar por seguridad.
+            </p>
+          </div>
+        )}
 
         {/* Correo + Contraseña (solo en create) */}
         {mode === 'create' && (
@@ -337,6 +480,179 @@ export default function UsuarioModal({
           </select>
         </div>
 
+        {/* Curso actual (solo estudiantes) */}
+        {form.idRol === ID_ROL_ESTUDIANTE && (
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+              Curso actual
+            </label>
+            <select
+              value={form.idCursoActual}
+              onChange={(e) => setForm((prev) => ({ ...prev, idCursoActual: e.target.value }))}
+              className={selectClass}
+            >
+              <option value="">— Sin asignar —</option>
+              {cursos.map((c) => (
+                <option key={c.idCurso} value={c.idCurso}>{c.label}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Vínculo del padre: primero el curso, luego el estudiante, luego el parentesco */}
+        {form.idRol === ID_ROL_PADRE && (
+          <div className="grid grid-cols-2 gap-3">
+            {/* 1) Curso */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                Curso <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={form.cursoEstudiante}
+                onChange={(e) =>
+                  // Al cambiar de curso se limpia el estudiante seleccionado
+                  setForm((prev) => ({ ...prev, cursoEstudiante: e.target.value, idEstudianteRelacionado: '' }))
+                }
+                className={selectClass}
+              >
+                <option value="">— Selecciona —</option>
+                {cursosDeEstudiantes.map((c) => (
+                  <option key={c.value} value={c.value}>{c.label}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* 2) Estudiante (filtrado por el curso elegido) */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                Estudiante vinculado <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={form.idEstudianteRelacionado}
+                onChange={(e) => setForm((prev) => ({ ...prev, idEstudianteRelacionado: e.target.value }))}
+                className={selectClass}
+                disabled={!form.cursoEstudiante}
+              >
+                <option value="">
+                  {form.cursoEstudiante ? '— Selecciona —' : 'Elige un curso primero'}
+                </option>
+                {estudiantesFiltrados.map((e) => (
+                  <option key={e.idEstudiante} value={e.idEstudiante}>{e.nombre}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* 3) Parentesco */}
+            <div className="col-span-2">
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                Parentesco <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={form.parentesco}
+                onChange={(e) => setForm((prev) => ({ ...prev, parentesco: e.target.value }))}
+                className={selectClass}
+              >
+                <option value="">— Selecciona —</option>
+                {PARENTESCOS.map((p) => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
+
+        {/* Especialización + institución (solo profesores) */}
+        {form.idRol === ID_ROL_PROFESOR && (
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                Especialización
+              </label>
+              <select
+                value={form.especializacion}
+                onChange={(e) => setForm((prev) => ({ ...prev, especializacion: e.target.value }))}
+                className={selectClass}
+              >
+                <option value="">— Selecciona una especialización —</option>
+                {especializaciones.map((e) => (
+                  <option key={e.idEspecializacion} value={e.label}>{e.label}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                Institución
+              </label>
+              <input
+                type="text"
+                value={form.institucion}
+                onChange={(e) => setForm((prev) => ({ ...prev, institucion: e.target.value }))}
+                className={inputClass}
+                placeholder="Universidad / entidad"
+                disabled={!form.especializacion.trim()}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Cargo + nivel de acceso (solo administradores) */}
+        {form.idRol === ID_ROL_ADMIN && (
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                Cargo <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={form.cargo}
+                onChange={(e) => setForm((prev) => ({ ...prev, cargo: e.target.value }))}
+                className={inputClass}
+                placeholder="Coordinador, Rector…"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                Nivel de acceso
+              </label>
+              <select
+                value={form.nivelAcceso}
+                onChange={(e) => setForm((prev) => ({ ...prev, nivelAcceso: e.target.value }))}
+                className={selectClass}
+              >
+                {NIVELES_ACCESO.map((n) => (
+                  <option key={n} value={n}>{n}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
+
+        {/* Vigencia del rol (todos los usuarios) */}
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+              Fecha de asignación
+            </label>
+            <input
+              type="date"
+              value={form.fechaAsignacion}
+              onChange={(e) => setForm((prev) => ({ ...prev, fechaAsignacion: e.target.value }))}
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+              Fecha de fin
+            </label>
+            <input
+              type="date"
+              value={form.fechaFin}
+              onChange={(e) => setForm((prev) => ({ ...prev, fechaFin: e.target.value }))}
+              className={inputClass}
+            />
+          </div>
+        </div>
+
         {/* Actions */}
         <div className="flex gap-3 pt-2">
           <button
@@ -365,3 +681,9 @@ const inputClass =
 
 const selectClass =
   'w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#1a1a1a] text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50'
+
+// Variante de solo lectura: campos de identidad que no se pueden editar.
+const lockedInputClass =
+  'w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 text-sm cursor-not-allowed select-none'
+
+const lockedSelectClass = lockedInputClass

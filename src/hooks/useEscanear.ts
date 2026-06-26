@@ -8,7 +8,10 @@ import {
 import {
   getCodigoQRByValueAction,
   createAsistenciaAction,
+  getRegistrosAsistenciaAction,
 } from '@/services/qr/qrActions'
+import { normalizeTipo } from '@/services/asistencia/asistenciaService'
+import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
 
 export type ScanEstado = 'Presente' | 'Ausente' | 'Tarde'
 
@@ -53,7 +56,8 @@ export function useEscanear(idUsuarioRegistrador: number) {
         // Decodificar QR con goqr.me
         const codigoTexto = await readQRFromImage(imageBlob)
         if (!codigoTexto) {
-          setErrorMsg('No se detectó ningún código QR en la imagen.')
+          setErrorMsg('No se pudo leer el código QR, intente nuevamente')
+          notifyWarning('No se pudo leer el código QR, intente nuevamente')
           setStatus('error')
           return
         }
@@ -61,7 +65,8 @@ export function useEscanear(idUsuarioRegistrador: number) {
         // Buscar en codigos_qr
         const qrData = await getCodigoQRByValueAction(codigoTexto)
         if (!qrData) {
-          setErrorMsg('Código QR no reconocido, inactivo o vencido.')
+          setErrorMsg('Código QR inválido')
+          notifyError('Código QR inválido')
           setStatus('error')
           return
         }
@@ -71,6 +76,7 @@ export function useEscanear(idUsuarioRegistrador: number) {
         const ultimoScan = lastScanTime.get(qrData.idEstudiante) ?? 0
         if (ahora - ultimoScan < DEBOUNCE_MS) {
           setErrorMsg(`${qrData.nombreCompleto} ya fue detectado recientemente.`)
+          notifyWarning(`${qrData.nombreCompleto} ya fue detectado recientemente.`)
           setStatus('error')
           return
         }
@@ -81,6 +87,7 @@ export function useEscanear(idUsuarioRegistrador: number) {
         setStatus('pending')
       } catch (err) {
         setErrorMsg(err instanceof Error ? err.message : 'Error al procesar el escaneo')
+        notifyError(err instanceof Error ? err.message : 'Error al procesar el escaneo')
         setStatus('error')
       }
     },
@@ -90,29 +97,39 @@ export function useEscanear(idUsuarioRegistrador: number) {
   // ── Paso 2: confirmar y registrar asistencia ──────────────────────────────
 
   const confirmRegistration = useCallback(
-    async (estado: ScanEstado, observacion: string) => {
+    async (tipo: 'entrada' | 'salida') => {
       if (!pending || status === 'saving') return
       setStatus('saving')
       setErrorMsg(null)
 
       try {
-        const hora = pending.detectedAt.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })
-        const tipoLabel =
-          pending.qrData.tipo === 'ingreso' ? 'Ingreso' :
-          pending.qrData.tipo === 'salida'  ? 'Salida'  : 'Ingreso/Salida'
+        const hoy = new Date().toISOString().split('T')[0]
+        const tipoLabel = tipo === 'entrada' ? 'Entrada' : 'Salida'
 
-        const obsTexto = observacion.trim()
-          ? observacion.trim()
-          : `Registro por QR (${tipoLabel}) a las ${hora}`
+        // Evita duplicar el mismo tipo (entrada/salida) en el día para el estudiante.
+        const registrosHoy = (await getRegistrosAsistenciaAction(hoy))
+          .filter((r) => r.idEstudiante === pending.qrData.idEstudiante)
+        if (registrosHoy.some((r) => normalizeTipo(r.tipo) === tipo)) {
+          setErrorMsg(`El estudiante ya tiene registro de ${tipoLabel.toLowerCase()} hoy`)
+          notifyError(`El estudiante ya tiene registro de ${tipoLabel.toLowerCase()} hoy`)
+          setStatus('error')
+          return
+        }
+
+        // El escaneo QR solo pide estudiante + tipo: el estado se asume "Presente"
+        // y la observación se genera automáticamente.
+        const estado: ScanEstado = 'Presente'
+        const hora = pending.detectedAt.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })
+        const obsTexto = `Registro por QR (${tipoLabel}) a las ${hora}`
 
         await createAsistenciaAction({
           idEstudiante:  pending.qrData.idEstudiante,
           estado,
-          fecha:         new Date().toISOString().split('T')[0],
+          fecha:         hoy,
           observacion:   obsTexto,
           registradoPor: idUsuarioRegistrador,
           codigo_qr:     pending.qrData.codigo,
-          tipo:          pending.qrData.tipo,
+          tipo,
         })
 
         const result: ScanResult = {
@@ -128,9 +145,14 @@ export function useEscanear(idUsuarioRegistrador: number) {
         setPending(null)
         setStatus('success')
 
+        notifySuccess('¡Asistencia registrada correctamente!')
+        notifySuccess(`Bienvenido ${pending.qrData.nombreCompleto}`)
+        notifySuccess(`${tipoLabel} registrada: ${hora}`)
+
         setTimeout(() => setStatus('idle'), 3_000)
       } catch (err) {
-        setErrorMsg(err instanceof Error ? err.message : 'Error al guardar asistencia')
+        setErrorMsg(err instanceof Error ? err.message : 'Error al registrar la asistencia, intente nuevamente')
+        notifyError(err instanceof Error ? err.message : 'Error al registrar la asistencia, intente nuevamente')
         setStatus('error')
       }
     },

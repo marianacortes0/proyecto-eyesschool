@@ -17,8 +17,9 @@ export const PERMISSIONS: PermissionMap = {
     usuarios:            ['create', 'read', 'update', 'delete'],
     qr:                  ['create', 'read', 'download'],
     'qr:escanear':       ['create'],
-    asistencia:          ['read'],
-    notas:               ['read'],
+    asistencia:          ['create', 'read', 'update', 'delete'],
+    // Notas: el CRUD es exclusivo del docente; el admin solo LEE (y descarga boletín).
+    notas:               ['read', 'download'],
     novedades:           ['create', 'read', 'update', 'delete'],
     reportes:            ['create', 'read', 'update', 'delete', 'download'],
     horarios:            ['create', 'read', 'update', 'delete'],
@@ -26,7 +27,7 @@ export const PERMISSIONS: PermissionMap = {
   },
   docente: {
     'qr:escanear':       ['create'],
-    asistencia:          ['read'],
+    asistencia:          ['create', 'read', 'update', 'delete'],
     notas:               ['create', 'read', 'update', 'delete'],
     novedades:           ['create', 'read', 'update', 'delete'],
     horarios:            ['read'],

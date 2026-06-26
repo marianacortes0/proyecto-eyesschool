@@ -13,6 +13,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "@/auth/actions";
+import { notifySuccess, notifyInfo } from "@/lib/toast";
 import { LANDING_MARKUP } from "./eyeschoolMarkup";
 import SignupModal from "./SignupModal";
 
@@ -762,8 +763,22 @@ function createEngine(root: HTMLElement, handlers: LandingHandlers) {
 
   // Abre el modal de login al llegar con ?login=1 (redirecciones de auth y botón "Entrar").
   try {
-    if (new URLSearchParams(window.location.search).get("login") === "1") {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("login") === "1") {
       actions.openLogin();
+    }
+    const registered = params.get("registered");
+    if (registered) {
+      const rol = params.get("rol") ?? "usuario";
+      if (registered === "pending") {
+        notifyInfo(`Solicitud de registro enviada como ${rol}. Espere la aprobación del administrador.`);
+      } else if (registered === "true") {
+        notifySuccess(`Usuario registrado exitosamente como ${rol}`);
+      }
+      // Limpia los parámetros para no repetir el toast al refrescar.
+      try {
+        window.history.replaceState({}, "", window.location.pathname);
+      } catch { /* noop */ }
     }
   } catch {
     /* noop */

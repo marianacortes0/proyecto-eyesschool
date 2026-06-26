@@ -69,12 +69,14 @@ export async function createReporteAction(
   await apiFetch('/reportes', {
     method: 'POST',
     body: JSON.stringify({
-      nombre_reporte:  payload.nombreReporte,
-      tipo_reporte:    payload.tipoReporte,
-      fecha_inicio:    payload.fechaInicio,
-      fecha_fin:       payload.fechaFin,
+      nombre_reporte:   payload.nombreReporte,
+      tipo_reporte:     payload.tipoReporte,
+      fecha_inicio:     payload.fechaInicio,
+      fecha_fin:        payload.fechaFin,
       id_administrador: payload.idAdministrador,
-      parametros:      payload.parametros ?? ' ',
+      parametros:       payload.parametros ?? ' ',
+      // archivo_generado es la ruta /static/reportes/... que devolvió POST /reportes/archivo.
+      archivo_generado: payload.archivoGenerado ?? null,
     }),
   })
 }
@@ -93,8 +95,5 @@ export async function updateReporteAction(
 }
 
 export async function deleteReporteAction(idReporte: number) {
-  await apiFetch(`/reportes/${idReporte}/estado`, {
-    method: 'PATCH',
-    body: JSON.stringify({ estado: 'Error', archivo_generado: null }),
-  })
+  await apiFetch(`/reportes/${idReporte}`, { method: 'DELETE' })
 }

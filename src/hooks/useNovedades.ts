@@ -8,26 +8,26 @@ import {
   type EstudianteOpt,
 } from '@/services/novedades/novedadesService'
 import {
-  getNovedadesAction,
-  getTiposNovedadAction,
-  getCursosParaNovedadesAction,
-  getEstudiantesParaNovedadesAction,
+  getNovedadesBootstrapAction,
+  type NovedadesBootstrap,
   createNovedadAction,
   updateNovedadAction,
   deleteNovedadAction,
 } from '@/services/novedades/novedadesActions'
-import { useAuth } from './useAuth'
+import { notifySuccess, notifyError } from '@/lib/toast'
+import { getErrorMessage } from '@/lib/errors'
+import { useConfirm } from '@/components/ui/ConfirmDialog'
 
 export type ModalMode = 'create' | 'edit' | null
 
-export function useNovedades(registradoPor: number = 0) {
-  const { userId } = useAuth()
+export function useNovedades(registradoPor: number = 0, initialData?: NovedadesBootstrap) {
+  const confirm = useConfirm()
 
-  const [novedades, setNovedades] = useState<Novedad[]>([])
-  const [tiposNovedad, setTiposNovedad] = useState<TipoNovedad[]>([])
-  const [cursos, setCursos] = useState<CursoOpt[]>([])
-  const [estudiantes, setEstudiantes] = useState<EstudianteOpt[]>([])
-  const [loading, setLoading] = useState(true)
+  const [novedades, setNovedades] = useState<Novedad[]>(initialData?.novedades ?? [])
+  const [tiposNovedad, setTiposNovedad] = useState<TipoNovedad[]>(initialData?.tiposNovedad ?? [])
+  const [cursos, setCursos] = useState<CursoOpt[]>(initialData?.cursos ?? [])
+  const [estudiantes, setEstudiantes] = useState<EstudianteOpt[]>(initialData?.estudiantes ?? [])
+  const [loading, setLoading] = useState(!initialData)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -44,24 +44,23 @@ export function useNovedades(registradoPor: number = 0) {
     setLoading(true)
     setError(null)
     try {
-      const [nov, tipos, curs, ests] = await Promise.all([
-        getNovedadesAction(),
-        getTiposNovedadAction(),
-        getCursosParaNovedadesAction(),
-        getEstudiantesParaNovedadesAction(),
-      ])
-      setNovedades(nov)
-      setTiposNovedad(tipos)
-      setCursos(curs)
-      setEstudiantes(ests)
-    } catch (e: any) {
-      setError(e.message ?? 'Error al cargar novedades')
+      const data = await getNovedadesBootstrapAction()
+      setNovedades(data.novedades)
+      setTiposNovedad(data.tiposNovedad)
+      setCursos(data.cursos)
+      setEstudiantes(data.estudiantes)
+    } catch (e) {
+      setError(getErrorMessage(e, 'Error al cargar novedades'))
     } finally {
       setLoading(false)
     }
   }
 
-  useEffect(() => { fetchAll() }, [])
+  useEffect(() => {
+    // Si la página entregó los datos desde el servidor, no refetcheamos al montar.
+    if (initialData) return
+    fetchAll()
+  }, [initialData])
 
   const filtered = novedades.filter(n => {
     if (filterEstado && n.estado !== filterEstado) return false
@@ -87,8 +86,9 @@ export function useNovedades(registradoPor: number = 0) {
       await createNovedadAction({ ...payload, registradoPor })
       await fetchAll()
       closeModal()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Novedad creada exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al guardar la novedad'))
     } finally {
       setSaving(false)
     }
@@ -109,20 +109,26 @@ export function useNovedades(registradoPor: number = 0) {
       await updateNovedadAction(idNovedad, payload)
       await fetchAll()
       closeModal()
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Novedad editada exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al guardar la novedad'))
     } finally {
       setSaving(false)
     }
   }
 
   const handleDelete = async (idNovedad: number) => {
-    if (!confirm('¿Eliminar esta novedad?')) return
+    const ok = await confirm({
+      title: 'Eliminar novedad',
+      message: '¿Está seguro de eliminar esta novedad? Esta acción no se puede deshacer.',
+    })
+    if (!ok) return
     try {
       await deleteNovedadAction(idNovedad)
       setNovedades(prev => prev.filter(n => n.idNovedad !== idNovedad))
-    } catch (e: any) {
-      setError(e.message)
+      notifySuccess('Novedad eliminada exitosamente')
+    } catch (e) {
+      notifyError(getErrorMessage(e, 'Error al eliminar la novedad'))
     }
   }
 
