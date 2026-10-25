@@ -10,9 +10,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev      # start dev server
 npm run build    # production build
 npm run lint     # ESLint
+npm run typecheck  # tsc --noEmit
+npm test         # Vitest (tests/*.test.ts)
 ```
 
-No test suite is configured.
+Tests live in `tests/` and run in Node with Vitest; CI (`.github/workflows/ci.yml`) runs lint, typecheck, tests, build and `npm audit` on every pull request.
 
 ## Architecture
 
