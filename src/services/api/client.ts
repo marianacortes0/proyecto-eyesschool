@@ -39,8 +39,18 @@ export async function apiFetch<T>(
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
-    throw new Error((body as Record<string, unknown>).detail as string ?? `HTTP ${res.status}`)
+    throw new Error(errorMessage((body as Record<string, unknown>).detail, res.status))
   }
   if (res.status === 204) return null as T
   return toCamel(await res.json()) as T
+}
+
+// FastAPI responde `detail` como texto, o como lista de errores en un 422.
+export function errorMessage(detail: unknown, status: number): string {
+  if (typeof detail === 'string' && detail) return detail
+  if (Array.isArray(detail) && detail.length > 0) {
+    const first = detail[0] as { msg?: unknown } | null
+    if (first && typeof first.msg === 'string') return first.msg
+  }
+  return `HTTP ${status}`
 }
