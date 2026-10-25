@@ -1,0 +1,45 @@
+name: CI
+
+# Punto de control QG3 del modelo de calidad (MC-01): cada pull request debe
+# pasar lint, tipos, pruebas, build y auditoría antes de fusionarse.
+on:
+  pull_request:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  lint_test_build:
+    name: Lint, tipos, pruebas y build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: https://api.example.invalid/api/v1
+
+      # Falla con vulnerabilidades altas o críticas en dependencias de producción.
+      - name: Dependency audit
+        run: npm audit --omit=dev --audit-level=high
