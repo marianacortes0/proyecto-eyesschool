@@ -2,7 +2,7 @@
 
 > **Qué es:** resumen de lo implementado a partir de las planeaciones de `planeacion/tests/` (correcciones, unitarias, integración, sistema y análisis estático).
 > **Para quién:** Mariana Cortés (QA), Samuel Sierra (líder de pruebas) y quien revise el PR.
-> **Fecha:** 02/11/2026 · **Rama:** `feat/web-calidad-pruebas` (14 commits locales sobre `develop`; sin push). Actualizado al cierre el 02/11/2026: ver la sección 8.
+> **Fecha:** 02/11/2026 · **Rama:** `feat/web-calidad-pruebas` (13 commits locales sobre `develop`; sin push). Actualizado al cierre el 02/11/2026: ver la sección 8.
 
 ---
 
@@ -151,7 +151,7 @@ E2E_BASE_URL=... npx playwright test --project=chromium --project=firefox
 
 | Tema | Archivos |
 |---|---|
-| Rama y commits | `feat/web-calidad-pruebas`, 14 commits por corrección (los cambios compartían archivos, por eso la prueba y el arreglo van juntos) |
+| Rama y commits | `feat/web-calidad-pruebas`, 13 commits por corrección (los cambios compartían archivos, por eso la prueba y el arreglo van juntos) |
 | `/qr/escanear` del docente | `tests/routeRoles.test.ts` (4 pruebas nuevas); el mapa `src/lib/auth/routeRoles.ts` ya separaba la ruta |
 | Padre sin BE-07 | `src/services/asociado/asociadoActions.ts` (respaldo a `/padres/me`), `tests/asociadoActions.test.ts` (3 pruebas) |
 | Proxy endurecido | `src/app/api/proxy/[...path]/route.ts`, `tests/apiProxy.test.ts` (11 pruebas nuevas) |
@@ -170,7 +170,7 @@ E2E_BASE_URL=... npx playwright test --project=chromium --project=firefox
 **Lo que no se hizo o se hizo distinto:**
 - CP-SIS-065 usa la alternativa B, no el reloj simulado (el proxy usa el reloj del servidor).
 - Los 25 `eslint-disable` se documentaron pero no se refactorizaron (riesgo de hidratación sin E2E).
-- La evidencia «antes del arreglo» (U0) no se reconstruyó; se apoya en el historial (D-WEB-… «otras decisiones»).
+- La evidencia «antes del arreglo» (U0) no se reconstruyó; se apoya en el historial (`docs/decisiones-qa.md`, «Otras decisiones menores»).
 - Los E2E y la integración siguen sin ejecutarse: dependen de QA (mañana, 03/11).
 - No se hizo push ni PR; no se fusionó nada.
 - `planeacion/tests/` sigue sin versionar (carpeta de planeación del equipo).
