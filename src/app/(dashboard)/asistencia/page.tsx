@@ -3,11 +3,14 @@
 import { redirect } from 'next/navigation'
 import { getServerUser, getServerToken, userToRole } from '@/lib/auth/server'
 import { getAsistenciaBootstrapAction, type AsistenciaBootstrap } from '@/services/asistencia/asistenciaActions'
+import { getAsociadoAction } from '@/services/asociado/asociadoActions'
+import SelectorHijo from '@/components/asociado/SelectorHijo'
+import type { Hijo } from '@/lib/utils/hijoActivo'
 import AsistenciaClient from './AsistenciaClient'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
-export default async function AsistenciaPage() {
+export default async function AsistenciaPage({ searchParams }: { searchParams: Promise<{ hijo?: string }> }) {
   const user = await getServerUser()
   if (!user) redirect('/?login=1')
 
@@ -17,6 +20,7 @@ export default async function AsistenciaPage() {
   const token = await getServerToken()
   let idEstudiantePropio: number | undefined
   let nombreEstudiantePropio: string | undefined
+  let hijos: Hijo[] = []
 
   // Estudiante: ve SU propia asistencia (id vía /estudiantes/me; nombre desde la cookie).
   if (role === 'estudiante' && token) {
@@ -35,18 +39,14 @@ export default async function AsistenciaPage() {
     }
   }
 
-  // Padre: ve la asistencia del estudiante asociado (id + nombre vía /dashboard/padre).
-  if (role === 'padre' && token) {
+  // Padre: ve la asistencia del hijo activo (`?hijo=`, o el primero) entre los que tiene vinculados.
+  if (role === 'padre') {
     try {
-      const res = await fetch(`${API}/dashboard/padre`, {
-        headers: { Authorization: `Bearer ${token}` },
-        cache: 'no-store',
-      })
-      if (res.ok) {
-        const d = await res.json() as Record<string, unknown>
-        idEstudiantePropio = (d.id_estudiante ?? d.idEstudiante) as number | undefined
-        nombreEstudiantePropio = (d.nombre_estudiante ?? d.nombreEstudiante) as string | undefined
-      }
+      const { hijo } = await searchParams
+      const asociado = await getAsociadoAction(hijo)
+      hijos = asociado.hijos
+      idEstudiantePropio = asociado.info?.idEstudiante
+      nombreEstudiantePropio = asociado.info?.nombre
     } catch {
       // leave idEstudiantePropio undefined
     }
@@ -63,12 +63,16 @@ export default async function AsistenciaPage() {
   }
 
   return (
-    <AsistenciaClient
-      role={role}
-      idUsuarioRegistrador={user.idUsuario}
-      idEstudiantePropio={idEstudiantePropio}
-      nombreEstudiantePropio={nombreEstudiantePropio}
-      initialData={initialData}
-    />
+    <>
+      <SelectorHijo hijos={hijos} activoId={idEstudiantePropio ?? null} />
+      <AsistenciaClient
+        key={idEstudiantePropio ?? 'sin-hijo'}
+        role={role}
+        idUsuarioRegistrador={user.idUsuario}
+        idEstudiantePropio={idEstudiantePropio}
+        nombreEstudiantePropio={nombreEstudiantePropio}
+        initialData={initialData}
+      />
+    </>
   )
 }

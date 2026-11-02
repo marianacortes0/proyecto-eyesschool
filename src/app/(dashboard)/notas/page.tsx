@@ -7,8 +7,9 @@ import { getNotasBootstrapAction, type NotasBootstrap } from '@/services/notas/n
 import { getNotasAsociadoAction } from '@/services/asociado/asociadoActions'
 import NotasClient from './NotasClient'
 import NotasViewerClient from './NotasViewerClient'
+import SelectorHijo from '@/components/asociado/SelectorHijo'
 
-export default async function NotasPage() {
+export default async function NotasPage({ searchParams }: { searchParams: Promise<{ hijo?: string }> }) {
   const user = await getServerUser()
   if (!user) redirect('/?login=1')
 
@@ -23,8 +24,14 @@ export default async function NotasPage() {
 
   // Padre y estudiante: vista acotada de SOLO LECTURA del estudiante asociado.
   if (role === 'padre' || role === 'estudiante') {
-    const data = await getNotasAsociadoAction()
-    return <NotasViewerClient {...data} />
+    const { hijo } = await searchParams
+    const data = await getNotasAsociadoAction(hijo)
+    return (
+      <>
+        <SelectorHijo hijos={data.hijos} activoId={data.info?.idEstudiante ?? null} />
+        <NotasViewerClient {...data} />
+      </>
+    )
   }
 
   // Docente: gestión completa. Datos en el render del servidor.

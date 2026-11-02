@@ -6,8 +6,9 @@ import { getHorariosBootstrapAction, type HorariosBootstrap } from '@/services/h
 import { getHorarioAsociadoAction } from '@/services/asociado/asociadoActions'
 import HorariosClient from './HorariosClient'
 import HorariosViewerClient from './HorariosViewerClient'
+import SelectorHijo from '@/components/asociado/SelectorHijo'
 
-export default async function HorariosPage() {
+export default async function HorariosPage({ searchParams }: { searchParams: Promise<{ hijo?: string }> }) {
   const user = await getServerUser()
   if (!user) redirect('/?login=1')
 
@@ -16,8 +17,14 @@ export default async function HorariosPage() {
 
   // Padre y estudiante: solo el horario del curso del estudiante asociado (lectura).
   if (role === 'padre' || role === 'estudiante') {
-    const data = await getHorarioAsociadoAction()
-    return <HorariosViewerClient {...data} />
+    const { hijo } = await searchParams
+    const data = await getHorarioAsociadoAction(hijo)
+    return (
+      <>
+        <SelectorHijo hijos={data.hijos} activoId={data.info?.idEstudiante ?? null} />
+        <HorariosViewerClient {...data} />
+      </>
+    )
   }
 
   // Admin/docente: vista de gestión. Datos en el render del servidor.
