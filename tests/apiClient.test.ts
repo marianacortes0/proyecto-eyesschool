@@ -78,3 +78,45 @@ describe('errorMessage', () => {
     expect(errorMessage({ raro: true }, 400)).toBe('HTTP 400')
   })
 })
+
+// ── WEB-02: sin token en el navegador ────────────────────────────────────────
+import { readFileSync } from 'node:fs'
+import * as cliente from '@/services/api/client'
+
+describe('WEB-02 · sin token en el navegador', () => {
+  it('getClientToken ya no existe', () => {
+    expect('getClientToken' in cliente).toBe(false)
+  })
+
+  it('en el navegador apiFetch llama al proxy del servidor y no manda Authorization', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(200, { primer_nombre: 'Ana' }))
+    vi.stubGlobal('fetch', fetchMock)
+    vi.stubGlobal('window', {})
+
+    const data = await apiFetch<{ primerNombre: string }>('/auth/me')
+
+    expect(data.primerNombre).toBe('Ana')
+    const [url, init] = fetchMock.mock.calls[0]
+    expect(url).toBe('/api/proxy/auth/me')
+    expect(init.headers.Authorization).toBeUndefined()
+  })
+
+  it('el error 409 de la API llega como ApiError con status', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse(409, { detail: 'Ya existe' })))
+
+    const error = (await apiFetch('/asistencia', { method: 'POST' }, 't').catch((e: unknown) => e)) as InstanceType<typeof cliente.ApiError>
+
+    expect(error).toBeInstanceOf(cliente.ApiError)
+    expect(error.status).toBe(409)
+    expect(error.message).toBe('Ya existe')
+  })
+
+  it.each([
+    'src/services/dashboard/dashboardService.ts',
+    'src/services/notas/notasService.ts',
+    'src/services/reportes/reportesService.ts',
+  ])('%s no lee el token desde el navegador', (archivo) => {
+    const codigo = readFileSync(archivo, 'utf-8')
+    expect(codigo).not.toMatch(/getClientToken|document\.cookie|eys_access/)
+  })
+})

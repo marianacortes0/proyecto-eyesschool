@@ -1,5 +1,8 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
+/** Ruta del route handler que agrega el token en el servidor (src/app/api/proxy). */
+export const PROXY_URL = '/api/proxy'
+
 // Recursive snake_case → camelCase converter
 export function toCamel(v: unknown): unknown {
   if (Array.isArray(v)) return v.map(toCamel)
@@ -14,20 +17,30 @@ export function toCamel(v: unknown): unknown {
   return v
 }
 
-// Read access token from cookie — client-side only
-export function getClientToken(): string | null {
-  if (typeof document === 'undefined') return null
-  const m = document.cookie.match(/(?:^|; )eys_access=([^;]*)/)
-  return m ? decodeURIComponent(m[1]) : null
+// Error de la API con el código HTTP y el `detail` original de FastAPI, para que
+// quien llama distinga, por ejemplo, un 409 (ya registrado) de un 500.
+export class ApiError extends Error {
+  constructor(
+    public readonly status: number,
+    message: string,
+    public readonly detail?: unknown
+  ) {
+    super(message)
+    this.name = 'ApiError'
+  }
 }
 
-// Generic fetch wrapper — accepts an explicit token for server-side use
+// Generic fetch wrapper — en el servidor acepta un token explícito
 export async function apiFetch<T>(
   path: string,
   options: RequestInit = {},
   token?: string | null
 ): Promise<T> {
-  const t = token ?? getClientToken()
+  // En el navegador no hay token (cookie httpOnly, WEB-02): la llamada pasa por el
+  // proxy del servidor, que lo agrega. En el servidor se llama a la API directo
+  // con el token explícito.
+  const enNavegador = typeof window !== 'undefined'
+  const t = enNavegador ? null : token
   const isFormData = options.body instanceof FormData
   const headers: Record<string, string> = {
     ...(t ? { Authorization: `Bearer ${t}` } : {}),
@@ -35,11 +48,12 @@ export async function apiFetch<T>(
   }
   if (!isFormData) headers['Content-Type'] = 'application/json'
 
-  const res = await fetch(`${BASE_URL}${path}`, { ...options, headers })
+  const res = await fetch(`${enNavegador ? PROXY_URL : BASE_URL}${path}`, { ...options, headers })
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
-    throw new Error(errorMessage((body as Record<string, unknown>).detail, res.status))
+    const detail = (body as Record<string, unknown>).detail
+    throw new ApiError(res.status, errorMessage(detail, res.status), detail)
   }
   if (res.status === 204) return null as T
   return toCamel(await res.json()) as T
