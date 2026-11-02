@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.test.example
 
 # vercel
 .vercel
@@ -40,3 +41,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env.local
+
+# playwright
+/playwright-report/
+/test-results/
+
+# E2E: el reporte HTML puede incluir trazas con cookies; solo se versiona el junit
+/evidencias/PR-06/web/reporte-html/
