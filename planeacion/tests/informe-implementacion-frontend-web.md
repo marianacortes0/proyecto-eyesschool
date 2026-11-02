@@ -1,0 +1,176 @@
+# Informe de implementación — Pruebas y código testeable del frontend web · Eyes School
+
+> **Qué es:** resumen de lo implementado a partir de las planeaciones de `planeacion/tests/` (correcciones, unitarias, integración, sistema y análisis estático).
+> **Para quién:** Mariana Cortés (QA), Samuel Sierra (líder de pruebas) y quien revise el PR.
+> **Fecha:** 02/11/2026 · **Rama:** `feat/web-calidad-pruebas` (14 commits locales sobre `develop`; sin push). Actualizado al cierre el 02/11/2026: ver la sección 8.
+
+---
+
+## 1. Resultado de las verificaciones locales
+
+| Verificación | Resultado |
+|---|---|
+| `npx vitest run` | **233 pruebas en 28 archivos, todas pasan** (línea base: 28 en 4; el primer informe tenía 121 en 19) |
+| `npx tsc --noEmit` | 0 errores |
+| `npx eslint . --max-warnings=0` | 0 errores y **0 advertencias** (línea base: 28) |
+| `npm run build` | Compila (incluye `proxy.ts` y `/api/proxy/[...path]`) |
+| `npm audit --omit=dev` | 0 vulnerabilidades |
+| `npm run test:int` | 9 pruebas **omitidas**: no hay `QA_API_URL` (comportamiento esperado) |
+| E2E (`npx playwright test`) | **No ejecutado**: no hay URL de QA ni usuarios (ver sección 5) |
+
+**Cobertura medida por primera vez (`npm run test:cov`, línea base U1 del PR-04):**
+
+| Carpeta | Líneas cubiertas |
+|---|---|
+| `src/lib` | 110 / 129 (85,3 %) · umbral 80 % |
+| `src/services` | 600 / 880 (68,2 %), antes 11,9 % · umbral 60 % |
+| `src/hooks` | 4 / 915 (0,4 %) |
+| Total medido | ver `evidencias/PR-04/web/U1_cobertura.txt` (los hooks y las pantallas se cubren con Playwright; D-WEB-05) |
+
+**Pruebas primero:** antes de tocar el código se ejecutó la suite con las pruebas nuevas: fallaban al menos 46 pruebas y 6 archivos no cargaban (módulos que aún no existían). Después de cada corrección pasaron.
+
+## 2. Preparación del repositorio
+
+`develop` no tenía la base de pruebas que la planeación da por hecha (Vitest, CI, `routeGuard`…). Está en `chore/calidad-seguridad`, que iba 3 commits por delante, así que se hizo el avance rápido local `develop ← origin/chore/calidad-seguridad` (sección 7 de la planeación). No se hizo push.
+
+## 3. Archivos por corrección
+
+### WEB-INF-1/2 · Entorno de pruebas y cobertura
+| Archivo | Cambio |
+|---|---|
+| `vitest.config.mts` | Dos proyectos: `unitarias` (node, `*.test.ts`) y `componentes` (jsdom, `*.test.tsx`); cobertura v8 sobre `src/lib`, `src/services`, `src/hooks` |
+| `vitest.integration.config.mts` | Config aparte para `tests/integration/**/*.int.test.ts` (timeout 20 s) |
+| `tests/setup/nextMocks.ts` | Dobles de `next/headers` (`cookieJar`), `next/navigation`, `next/cache` |
+| `tests/setup/rtl.ts`, `tests/setup/loadEnvTest.ts` | Limpieza del DOM entre pruebas; carga de `.env.test.local` |
+| `tests/helpers.ts` | `jwt()`, `json()` compartidos |
+| `src/services/api/serverFetch.ts` | `serverFetch(path, { token })`; lanza `ApiError` con `status` y `detail` |
+| `src/services/api/client.ts` | Nueva clase `ApiError`; `getClientToken` eliminado; en el navegador `apiFetch` llama a `/api/proxy` |
+| `src/services/asistencia/asistenciaActions.ts`, `src/services/asociado/asociadoActions.ts` | Migrados a `serverFetch` (las copias de `apiFetch` con `cookies()` ya no existen aquí) |
+| `package.json` | Scripts `test:cov`, `test:int`, `e2e`; dependencias de desarrollo `jsdom`, `@testing-library/{react,dom,user-event}`, `@vitest/coverage-v8`, `@playwright/test` |
+| `tests/hooks/usePermissions.test.tsx` | Prueba de humo con `renderHook` |
+| `tests/serverFetch.test.ts` | Datos / lista vacía y 204 / error |
+
+### WEB-01 · Sesión y rutas
+| Archivo | Cambio |
+|---|---|
+| `src/lib/auth/sessionMiddleware.ts` | Reescrito: renueva con `/auth/refresh`, deja la cookie nueva también en la petición, cierra la sesión a los 30 min sin actividad (`eys_last`, httpOnly) y protege todo el panel. Recibe `ahora` por parámetro |
+| `src/lib/auth/routeRoles.ts` | **Mapa único** ruta → roles (`rolesDeRuta`, `puedeEntrar`, `inicioDeRol`) |
+| `src/lib/auth/navItems.ts` | Enlaces del riel por rol (pura); `PanelSidebar.tsx` ahora la usa |
+| `src/lib/auth/jwt.ts`, `cookies.ts` | Decodificación del JWT; opciones y constantes de las cookies |
+| `proxy.ts` (antes `middleware.ts`) | Convención de Next 16; se renombró a mano (equivale al codemod) |
+| `src/services/supabase/` | **Eliminado** |
+| `tests/routeGuard.test.ts` | Reescrito contra el módulo nuevo: 7 casos previos + 11 nuevos (los 8 de la planeación y 3 extra: todas las rutas, `eys_last` httpOnly, cookie en la petición) |
+| `tests/routeRoles.test.ts` | Mapa único contra los enlaces del sidebar |
+
+### WEB-02 · Cookies de sesión
+| Archivo | Cambio |
+|---|---|
+| `src/auth/actions.ts` | `eys_access` y `eys_refresh` `httpOnly`; todas `secure` en producción y `sameSite: lax`; nueva `eys_last` |
+| `src/app/api/auth/refresh/route.ts` | Cookie de acceso httpOnly y misma limpieza de sesión |
+| `src/app/api/proxy/[...path]/route.ts` | **Nuevo**: agrega el Bearer desde la cookie, reenvía cuerpo y `Content-Disposition`, rechaza `..` |
+| `src/lib/auth/decodeRol.ts`, `src/lib/auth/server.ts` | El rol sale del token; sin token de acceso no hay usuario |
+| `notasService.ts`, `reportesService.ts`, `dashboardService.ts` | Pasan por el proxy; ya no leen el token |
+| `tests/authCookies.test.ts`, `decodeRol.test.ts`, `apiProxy.test.ts`, `apiClient.test.ts` (4 casos nuevos) | Cubren lo anterior |
+
+### WEB-03 · Varios hijos (depende de BE-07)
+| Archivo | Cambio |
+|---|---|
+| `src/lib/utils/hijoActivo.ts` | `elegirHijoActivo`, tipo `Hijo`, `MSG_SIN_HIJOS` |
+| `src/services/asociado/asociadoActions.ts` | `getHijosAction` (`GET /padres/me/hijos`), `getAsociadoAction`; las acciones reciben `idEstudiante` |
+| `src/components/asociado/SelectorHijo.tsx` | Visible con 2 hijos o más; cambia `?hijo=` |
+| Páginas `notas`, `novedades`, `horarios`, `asistencia`, `general` | Leen `?hijo=` y muestran el selector |
+| `dashboardService.ts` | `?id_estudiante=` hacia `/dashboard/padre` |
+| `tests/hijoActivo.test.ts`, `asociadoActions.test.ts`, `components/SelectorHijo.test.tsx` | 6 + 5 + 4 casos |
+
+### WEB-04 · Permisos
+`src/lib/utils/permissions.ts` (el docente ya no borra asistencia) · `tests/fixtures/apiRoles.ts` (tabla armada con los `require_roles` del backend) · `tests/permissions.test.ts` (3 casos nuevos, incluida la prueba de contrato).
+
+### WEB-05 · Restablecer contraseña
+`src/auth/actions.ts` (`resetPassword` usa `isPasswordValid` y nombra la regla que falta) · `tests/resetPassword.test.ts` (5 casos). **Pendiente de la parte visual:** `src/app/(auth)/reset-password/page.tsx` aún no muestra las reglas en vivo (la planeación lo pide; no se tocó).
+
+### WEB-06 · Registro masivo
+`src/services/asistencia/asistenciaService.ts` (`clasificarResultados`, `itemsParaReintento`, tipos) · `asistenciaActions.ts` (resultado `{ guardados, duplicados, fallidos }`) · `src/components/asistencia/FallidosMasivo.tsx` (nuevo) · `src/components/qr/RegistroMasivo.tsx` · `src/hooks/useAsistencia.ts` · `tests/registroMasivo.test.ts` (7) · `tests/components/RegistroMasivo.test.tsx` (4).
+
+### WEB-09 · Boletín y mensajes
+`notasService.ts` (`MSG_SIN_NOTAS_PERIODO`, `MSG_SIN_BOLETIN`, 404 → mensaje del CA) · `NotasViewerClient.tsx` · `tests/notasService.test.ts` (4) · `tests/components/NotasViewerClient.test.tsx` (5).
+
+### WEB-08 · Código heredado y advertencias
+`src/services/supabase/` borrado · 28 advertencias → 0: 1 corregida con `usePagination` (se deriva la página sin efecto), 5 ternarios de `HorariosClient.tsx` pasados a `if/else`, 1 importación sin uso, y **20 documentadas** con `eslint-disable-next-line … -- motivo` (lectura del navegador al montar, imágenes de QR externas, fuente del layout raíz) · `eslint.config.mjs` ignora `coverage/`, `playwright-report/`, `test-results/`.
+
+### WEB-INF-3 · Playwright
+`playwright.config.ts` · `e2e/utils.ts` · `e2e/login-roles.spec.ts` · `sesion.spec.ts` · `padre-dos-hijos.spec.ts` · `registro-masivo.spec.ts` · `registro-padre.spec.ts` · `boletin-padre.spec.ts` · `usuarios.spec.ts`.
+
+### WEB-INF-4 · Calidad y despliegue
+`.github/workflows/ci.yml` (`eslint --max-warnings=0`, `test:cov`, gitleaks, SonarQube, `fetch-depth: 0`) · `sonar-project.properties` · `.github/workflows/main_eyesschool.yml` **eliminado** · `.gitignore`.
+
+### Integración (PR-05)
+`tests/integration/contrato-api.int.test.ts` (IT-WEB-03, 04 y 05; se omite sin `QA_API_URL`) · IT-WEB-01 e IT-WEB-02 están en `permissions.test.ts` y `asociadoActions.test.ts` · `tests/arquitectura.test.ts` (6 reglas de la sección 5 y criterios de aceptación de WEB-01/04 vigilados leyendo el código).
+
+## 4. Discrepancias entre la planeación y el código
+
+1. **Boletín del padre (WEB-09):** la planeación dice que `NotasViewerClient.tsx` no tiene opción de boletín. Ya tenía un botón «Descargar boletín PDF». Se renombró a «Descargar boletín» y se agregó lo que sí faltaba (texto del periodo vacío, mensaje del 404, ruta por el proxy).
+2. **`/padres/me/hijos` no existe todavía en el backend** (`padres.py` solo tiene `/padres/me`). Hasta que BE-07 llegue a `develop`, las páginas de notas, novedades, horarios y asistencia del padre fallan al cargar. El inicio (`/general`) sí degrada al vínculo de siempre.
+3. **Tabla `apiRoles`:** armada con el backend local `backend-Eyes-School` (rama `developer`). La prueba de contrato encontró **una sola diferencia**, la de WEB-04.
+4. **Ruta `/qr`:** la planeación no la lista. Se fijó en admin + estudiante, que es lo que ya mostraba el sidebar con `can('read','qr')`.
+
+## 5. Pendiente o no hecho (y por qué)
+
+| Qué | Motivo |
+|---|---|
+| Ejecutar los E2E y las pruebas de integración | Faltan `E2E_BASE_URL`, `QA_API_URL`, `QA_PASSWORD` y los correos por rol. Los specs **no se han corrido**: sus selectores de formularios (usuarios, registro de padre, registro masivo) son los más propensos a ajustarse en la primera corrida |
+| Datos de QA | Se marcan «Pendiente» y el spec se omite: `E2E_HIJO_1_NOMBRE`, `E2E_HIJO_2_NOMBRE`, `E2E_PADRE_UN_HIJO_EMAIL`, `E2E_JORNADA_MASIVO`, `E2E_CURSO_MASIVO`, `E2E_ESTUDIANTE_VINCULADO_ID`, `E2E_ESTUDIANTE_VINCULADO_NOMBRE` |
+| CP-SIS-065 (sesión de 40 min) | Ya no es `test.fixme`: corre a escala contra una web de QA con `SESSION_IDLE_MINUTES=1` (D-WEB-07). Pendiente de desplegar así en QA |
+| Resultado esperado de `usePermissions` | Resuelto: la prueba recorre los 4 roles contra `PERMISSIONS` (UT-WEB-01) |
+| Reglas de contraseña en vivo en `reset-password/page.tsx` | Resuelto con `PasswordChecklist` (D-WEB-04) |
+| Revocar la clave `service_role` de Supabase, crear `SONAR_TOKEN`, importar el proyecto en SonarQube Cloud, detener la Azure Web App, ajustar variables en Vercel | Acciones externas al repositorio |
+| Quitar `registrado_por` del cuerpo (BE-10) | Opcional en la planeación y el backend actual todavía lo usa |
+| Manuales del PR-06 (Lighthouse, axe, ZAP, cámara QR, API caída, Brave) y los documentos de UAT y gestión de defectos | Son ejecución manual o proceso; no se leyeron a fondo ni generan código |
+| Push y PR | No se hicieron: la rama solo existe en local |
+
+## 6. Cambios de comportamiento a revisar antes de liberar
+
+- `eys_access` ya no se puede leer desde JavaScript: **toda** llamada del navegador pasa por `/api/proxy`. El build y los 121 casos pasan, pero no se probó la aplicación completa contra una API real; conviene un recorrido manual de cada módulo en QA.
+- `getServerUser()` devuelve `null` si no hay token de acceso, aunque exista `eys_user`.
+- La sesión se cierra a los 30 min sin actividad (cualquier petición cuenta como actividad).
+
+## 7. Cómo ejecutar
+
+```bash
+npm ci
+npm test                  # unitarias y de componentes
+npm run test:cov          # con cobertura (coverage/)
+npm run test:int          # contrato contra QA (necesita .env.test.local)
+E2E_BASE_URL=... npx playwright test --project=chromium --project=firefox
+```
+
+---
+
+## 8. Cierre del 02/11/2026 (instrucciones de cierre del frontend)
+
+**Nuevos archivos y cambios**
+
+| Tema | Archivos |
+|---|---|
+| Rama y commits | `feat/web-calidad-pruebas`, 14 commits por corrección (los cambios compartían archivos, por eso la prueba y el arreglo van juntos) |
+| `/qr/escanear` del docente | `tests/routeRoles.test.ts` (4 pruebas nuevas); el mapa `src/lib/auth/routeRoles.ts` ya separaba la ruta |
+| Padre sin BE-07 | `src/services/asociado/asociadoActions.ts` (respaldo a `/padres/me`), `tests/asociadoActions.test.ts` (3 pruebas) |
+| Proxy endurecido | `src/app/api/proxy/[...path]/route.ts`, `tests/apiProxy.test.ts` (11 pruebas nuevas) |
+| Reglas de contraseña en vivo | `src/components/auth/PasswordChecklist.tsx`, `src/app/(auth)/reset-password/page.tsx`, `src/components/home/SignupModal.tsx`, `tests/components/PasswordChecklist.test.tsx` |
+| Trazabilidad | `tests/trazabilidad.json`, `scripts/trazabilidad.mjs` (`npm run trazabilidad`), `docs/trazabilidad-ut-web.md` |
+| Evidencias U1 | `evidencias/PR-04/web/` (commit, junit, cobertura, ESLint) |
+| Cobertura de servicios | `tests/services/*` (7 archivos), umbrales en `vitest.config.mts` |
+| `eslint-disable` | `docs/eslint-excepciones.md` (25 excepciones documentadas) |
+| `usePermissions` | `tests/hooks/usePermissions.test.tsx` (4 roles + 4 casos concretos) |
+| CP-SIS-065 | `src/lib/auth/cookies.ts` (`inactividadMs`), `src/lib/auth/sessionMiddleware.ts`, `e2e/sesion.spec.ts` |
+| E2E listos para correr | `.env.test.example`, `playwright.config.ts` (carga `.env.test.local`, evidencias en `evidencias/PR-06/web/`), `e2e/*.spec.ts` (`aria-label` en `SignupModal`, `test.fail()` con BE-07 y BE-08, limpieza de la cuenta creada) |
+| Documentos | `docs/decisiones-qa.md`, `docs/acciones-externas.md`, `docs/pruebas-manuales-pr06-web.md` |
+
+**Resultados al cierre:** `tsc` 0 errores · ESLint 0 advertencias · 233 pruebas pasan (9 de integración omitidas sin `QA_API_URL`) · `test:cov` cumple los umbrales · `build` compila.
+
+**Lo que no se hizo o se hizo distinto:**
+- CP-SIS-065 usa la alternativa B, no el reloj simulado (el proxy usa el reloj del servidor).
+- Los 25 `eslint-disable` se documentaron pero no se refactorizaron (riesgo de hidratación sin E2E).
+- La evidencia «antes del arreglo» (U0) no se reconstruyó; se apoya en el historial (D-WEB-… «otras decisiones»).
+- Los E2E y la integración siguen sin ejecutarse: dependen de QA (mañana, 03/11).
+- No se hizo push ni PR; no se fusionó nada.
+- `planeacion/tests/` sigue sin versionar (carpeta de planeación del equipo).
