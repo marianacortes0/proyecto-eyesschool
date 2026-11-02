@@ -96,6 +96,7 @@ export function useUsuarios(initialData?: UsuariosBootstrap) {
   useEffect(() => {
     // Si la página ya entregó los datos desde el servidor, no refetcheamos al montar.
     if (initialData) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- carga inicial cuando la página no entregó los datos desde el servidor
     fetchBootstrap()
   }, [initialData, fetchBootstrap])
 

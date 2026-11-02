@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Salidas generadas por las pruebas.
+    "coverage/**",
+    "playwright-report/**",
+    "test-results/**",
     // Scripts de utilidad/administración (CommonJS, se ejecutan con `node` y
     // no forman parte del build de la app). No se lintean con las reglas de TS.
     "create-first-admin.js",
