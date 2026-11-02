@@ -3,7 +3,8 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { mapRolToKey } from '@/lib/utils/permissions'
-import { isPasswordValid } from '@/lib/utils/password'
+import { isPasswordValid, passwordChecks, PASSWORD_RULE_LABELS } from '@/lib/utils/password'
+import { ACCESS_MAX_AGE, REFRESH_MAX_AGE, cookieOptions } from '@/lib/auth/cookies'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -24,18 +25,11 @@ async function setAuthCookies(accessToken: string, refreshToken: string) {
 
   const store = await cookies()
 
-  store.set('eys_access', accessToken, {
-    path: '/',
-    maxAge: 30 * 60,
-    sameSite: 'lax',
-    httpOnly: false,
-  })
-  store.set('eys_refresh', refreshToken, {
-    path: '/',
-    maxAge: 7 * 24 * 60 * 60,
-    sameSite: 'lax',
-    httpOnly: true,
-  })
+  // eys_access y eys_refresh no se pueden leer desde JavaScript (WEB-02): las
+  // llamadas del navegador pasan por /api/proxy, que agrega el token en el servidor.
+  store.set('eys_access', accessToken, cookieOptions(true, ACCESS_MAX_AGE))
+  store.set('eys_refresh', refreshToken, cookieOptions(true, REFRESH_MAX_AGE))
+  // eys_user solo sirve para mostrar el nombre; el rol sale del token.
   store.set(
     'eys_user',
     JSON.stringify({
@@ -45,8 +39,10 @@ async function setAuthCookies(accessToken: string, refreshToken: string) {
       primerNombre: me.primer_nombre ?? '',
       primerApellido: me.primer_apellido ?? '',
     }),
-    { path: '/', maxAge: 7 * 24 * 60 * 60, sameSite: 'lax', httpOnly: false }
+    cookieOptions(false, REFRESH_MAX_AGE)
   )
+  // Hora de la última actividad: el proxy cierra la sesión tras 30 min sin ella.
+  store.set('eys_last', String(Date.now()), cookieOptions(true, REFRESH_MAX_AGE))
 
   return me
 }
@@ -110,6 +106,7 @@ export async function logout() {
   store.delete('eys_access')
   store.delete('eys_refresh')
   store.delete('eys_user')
+  store.delete('eys_last')
   redirect('/')
 }
 
@@ -144,7 +141,10 @@ export async function resetPassword(prevState: unknown, formData: FormData) {
 
   if (!token) return { error: 'Enlace inválido o incompleto. Solicita uno nuevo.' }
   if (!password || !confirmPassword) return { error: 'Por favor completa todos los campos.' }
-  if (password.length < 8) return { error: 'La contraseña debe tener al menos 8 caracteres.' }
+  if (!isPasswordValid(password)) {
+    const faltan = PASSWORD_RULE_LABELS.filter(({ key }) => !passwordChecks(password)[key]).map(({ label }) => label.toLowerCase())
+    return { error: `La contraseña no cumple la política: falta ${faltan.join(', ')}.` }
+  }
   if (password !== confirmPassword) return { error: 'Las contraseñas no coinciden.' }
 
   const res = await fetch(`${API}/auth/reset-password`, {
