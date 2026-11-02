@@ -62,10 +62,12 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
   }, [])
 
   // Cargar al montar
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- carga inicial y recarga de los registros del día desde el servidor
   useEffect(() => { fetchToday() }, [fetchToday])
 
   // Recargar cuando se completa un escaneo exitoso
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- carga inicial y recarga de los registros del día desde el servidor
     if (status === 'success') fetchToday()
   }, [status, fetchToday])
 

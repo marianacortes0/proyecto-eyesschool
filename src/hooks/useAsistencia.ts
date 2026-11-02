@@ -12,7 +12,7 @@ import {
   type CreateRegistroData,
   type UpdateRegistroData,
 } from '@/services/asistencia/asistenciaService'
-import { notifySuccess, notifyError } from '@/lib/toast'
+import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
 import { useConfirm } from '@/components/ui/ConfirmDialog'
 import {
   crearRegistroAction,
@@ -217,8 +217,10 @@ export function useAsistencia(
       })
       await fetchRegistros()
       closeModal()
-      if (res.ok > 0) notifySuccess(`${res.ok} registro${res.ok !== 1 ? 's' : ''} de asistencia guardado${res.ok !== 1 ? 's' : ''}`)
-      if (res.fail > 0) notifyError(`${res.fail} no se pudieron registrar (¿ya marcados hoy?)`)
+      const ok = res.guardados.length
+      if (ok > 0) notifySuccess(`${ok} registro${ok !== 1 ? 's' : ''} de asistencia guardado${ok !== 1 ? 's' : ''}`)
+      if (res.duplicados.length > 0) notifyWarning(`${res.duplicados.length} ya tenían registro ese día`)
+      if (res.fallidos.length > 0) notifyError(`${res.fallidos.length} no se pudieron registrar. Inténtalo de nuevo.`)
     } catch (err) {
       notifyError(err instanceof Error ? err.message : 'Error al registrar el lote')
     } finally {
