@@ -3,13 +3,19 @@
 import { useActionState, useEffect, useState } from 'react'
 import { resetPassword } from '@/auth/actions'
 import Link from 'next/link'
+import PasswordChecklist from '@/components/auth/PasswordChecklist'
+import { isPasswordValid } from '@/lib/utils/password'
 
 export default function ResetPasswordPage() {
   const [state, formAction, pending] = useActionState(resetPassword, null)
   const [token, setToken] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
+  const puedeEnviar = isPasswordValid(password) && password === confirm
 
   // El token llega como ?token=... en el enlace del correo.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- el token llega en la URL y solo se puede leer en el navegador tras montar
     setToken(new URLSearchParams(window.location.search).get('token') ?? '')
   }, [])
 
@@ -69,10 +75,14 @@ export default function ResetPasswordPage() {
                       required
                       minLength={8}
                       placeholder="Mínimo 8 caracteres"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="block w-full px-3 py-2 bg-slate-50/50 dark:bg-zinc-900/50 border border-slate-200 dark:border-zinc-800 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-slate-900 dark:text-white text-xs outline-none transition-all"
                     />
                   </div>
                 </div>
+
+                <PasswordChecklist password={password} />
 
                 <div className="flex flex-col gap-1 group">
                   <label htmlFor="confirmPassword" className="text-[10px] font-semibold text-slate-700 dark:text-slate-300 ml-1">
@@ -85,10 +95,16 @@ export default function ResetPasswordPage() {
                       type="password"
                       required
                       placeholder="Repite la contraseña"
+                      value={confirm}
+                      onChange={(e) => setConfirm(e.target.value)}
                       className="block w-full px-3 py-2 bg-slate-50/50 dark:bg-zinc-900/50 border border-slate-200 dark:border-zinc-800 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-slate-900 dark:text-white text-xs outline-none transition-all"
                     />
                   </div>
                 </div>
+
+                {confirm.length > 0 && password !== confirm && (
+                  <p role="alert" className="text-[10px] text-red-600 dark:text-red-400">Las contraseñas no coinciden.</p>
+                )}
 
                 {state?.error && (
                   <div className="p-2 bg-red-50/80 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-[10px] font-medium rounded-xl border border-red-200 dark:border-red-800/50 flex items-center gap-2">
@@ -101,8 +117,8 @@ export default function ResetPasswordPage() {
 
                 <button
                   type="submit"
-                  disabled={pending}
-                  className="flex justify-center py-2.5 px-4 text-xs font-bold rounded-xl text-white bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 transition-all shadow-[0_0_15px_rgba(37,99,235,0.2)] active:scale-[0.98]"
+                  disabled={pending || !puedeEnviar}
+                  className="flex justify-center py-2.5 px-4 text-xs font-bold rounded-xl text-white bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 transition-all shadow-[0_0_15px_rgba(37,99,235,0.2)] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {pending ? '...' : 'Actualizar'}
                 </button>
