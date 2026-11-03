@@ -183,7 +183,7 @@ export async function register(prevState: unknown, formData: FormData) {
   const genero = (formData.get('genero') as string) || null
   const direccion = (formData.get('direccion') as string)?.trim() || null
   const telefono = (formData.get('telefono') as string)?.trim() || null
-  const roleId = parseInt(formData.get('roleId') as string)
+  const roleId = Number.parseInt(formData.get('roleId') as string, 10)
   const courseId = formData.get('courseId') as string | null
   const especializacionId = formData.get('especializacionId') as string | null
   const institucion = (formData.get('institucion') as string)?.trim() || null
@@ -192,7 +192,7 @@ export async function register(prevState: unknown, formData: FormData) {
   const cargo = (formData.get('cargo') as string) || null
 
   // Validaciones comunes
-  if (!email || !password || !firstName || !lastName || !docType || !docNumber || isNaN(roleId)) {
+  if (!email || !password || !firstName || !lastName || !docType || !docNumber || Number.isNaN(roleId)) {
     return { error: 'Por favor, completa todos los campos' }
   }
   if (!isPasswordValid(password)) {
@@ -203,15 +203,15 @@ export async function register(prevState: unknown, formData: FormData) {
   const especifico: Record<string, unknown> = {}
   if (roleId === 2) {
     if (!courseId) return { error: 'Selecciona el curso al que perteneces' }
-    especifico.id_curso_actual = parseInt(courseId)
+    especifico.id_curso_actual = Number.parseInt(courseId, 10)
   } else if (roleId === 4) {
     if (!idEstudianteVinculado) return { error: 'Ingresa el ID del estudiante vinculado' }
     if (!parentesco) return { error: 'Selecciona el parentesco' }
-    especifico.id_estudiante_vinculado = parseInt(idEstudianteVinculado)
+    especifico.id_estudiante_vinculado = Number.parseInt(idEstudianteVinculado, 10)
     especifico.parentesco = parentesco
   } else if (roleId === 1) {
     if (!especializacionId) return { error: 'Selecciona tu especialización' }
-    especifico.id_especializacion = parseInt(especializacionId)
+    especifico.id_especializacion = Number.parseInt(especializacionId, 10)
     if (institucion) especifico.institucion = institucion
   } else if (roleId === 3) {
     if (!cargo) return { error: 'Selecciona tu cargo' }

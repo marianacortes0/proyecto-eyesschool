@@ -25,6 +25,6 @@ export const MSG_SIN_HIJOS = 'No hay estudiantes vinculados'
  */
 export function elegirHijoActivo(hijos: Hijo[], idSolicitado?: number | string | null): Hijo | null {
   if (hijos.length === 0) return null
-  const id = idSolicitado === undefined || idSolicitado === null || idSolicitado === '' ? NaN : Number(idSolicitado)
+  const id = idSolicitado === undefined || idSolicitado === null || idSolicitado === '' ? Number.NaN : Number(idSolicitado)
   return hijos.find((h) => h.idEstudiante === id) ?? hijos[0]
 }

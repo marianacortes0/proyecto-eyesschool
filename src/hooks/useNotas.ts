@@ -74,7 +74,7 @@ export function useNotas(idUsuarioRegistrador: number, initialData?: NotasBootst
     // Si la página entregó los datos desde el servidor, no refetcheamos al montar.
     if (initialData) return
     // eslint-disable-next-line react-hooks/set-state-in-effect -- carga inicial cuando la página no entregó los datos desde el servidor
-    fetchAll()
+    void fetchAll()
   }, [initialData, fetchAll])
 
   // Resuelve nombre real, materia y curso de cada nota (idEstudiante → estudiante → curso)

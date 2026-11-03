@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 
+import { apiBase, quitarBarrasFinales } from '@/lib/utils/apiBase'
+
 /**
  * Proxy hacia la API de Eyes School (WEB-02). El navegador ya no puede leer el
  * token de acceso (cookie httpOnly), así que sus llamadas pasan por aquí: este
@@ -11,9 +13,9 @@ import { cookies } from 'next/headers'
  * tamaño acotados, cabeceras en lista blanca y verificación de origen (CSRF).
  */
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
-const API_ORIGIN = new URL(API).origin
-const API_PATH = new URL(API).pathname.replace(/\/+$/, '')
+const API_URL = apiBase()
+const API_ORIGIN = API_URL.origin
+const API_PATH = quitarBarrasFinales(API_URL.pathname)
 
 const METODOS = new Set(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
 const MAX_CUERPO = 5 * 1024 * 1024

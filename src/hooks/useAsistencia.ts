@@ -97,7 +97,7 @@ export function useAsistencia(
       seededRef.current = false
       return
     }
-    fetchAll()
+    void fetchAll()
   }, [fetchAll])
 
   // ── Enriquecimiento y filtros en cliente ─────────────────────────────────────

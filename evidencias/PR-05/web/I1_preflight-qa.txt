@@ -1,13 +1,31 @@
-Preflight del entorno de QA — 2026-11-03 01:30 UTC
-Sin credenciales: solo se consultan rutas publicas y se registra el codigo HTTP.
+Preflight del entorno de QA — 2026-11-03 15:11 UTC
+Commit de la rama: 0ee35ea
+Sin credenciales: solo rutas publicas y codigos HTTP. Ningun token ni clave.
 
-API  /docs (FastAPI)              200
-API  /openapi.json                200
-API  /api/v1/cursos               500
-API  POST /api/v1/auth/login      500
-WEB  qaeyesschool.netlify.app     404
+API /docs                                     200
+API /openapi.json                             200
+API /api/v1/cursos (publica, sin token)       500
+API /api/v1/cursos/1 (publica, sin token)     500
+API /api/v1/auth/me (sin token)               401
+API /api/v1/usuarios (sin token)              401
+API /api/v1/materias (sin token)              401
+WEB deploy-preview-34 (inicio)                200
+WEB deploy-preview-34 /home/beneficios        200
+WEB deploy-preview-34 /login                  404
+WEB qaeyesschool.netlify.app (develop)        404
 
-Lectura: la app FastAPI esta arriba (/docs 200, rutas registradas), pero toda
-ruta que consulta la base responde 500 -> DATABASE_URL de apieyeschool-q no
-resuelve (accion externa 6). La web de QA aun no tiene despliegue publicado (404).
-Consecuencia: integracion (PR-05) y E2E (PR-06) no se pueden ejecutar hoy.
+Lectura
+-------
+1. La web del deploy preview del PR #34 responde 200 y sirve las paginas
+   publicas. `/login` da 404 y es correcto: el inicio de sesion es un modal
+   sobre `/`, no una pagina propia (ver CLAUDE.md). No es un defecto.
+2. La autenticacion ya funciona: /auth/me, /usuarios y /materias sin token
+   responden 401 (antes todo daba 500).
+3. PERO /api/v1/cursos y /api/v1/cursos/1 —las unicas rutas sin autenticacion—
+   siguen dando 500. Con credenciales se distinguiria entre base inaccesible y
+   defecto de ese endpoint; sin QA_PASSWORD no se puede. Queda DEF-WEB-01.
+4. qaeyesschool.netlify.app (contexto develop) sigue en 404: se publica al
+   fusionar el PR #34.
+
+Consecuencia: integracion (PR-05, nivel 6) y E2E (PR-06, nivel 7) siguen sin
+poder ejecutarse. Falta QA_PASSWORD (accion externa 7) y resolver el 500.

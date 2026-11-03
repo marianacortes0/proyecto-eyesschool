@@ -80,6 +80,24 @@ Cada decisión toma la opción por defecto (A) del documento de cierre del front
 - Opción aplicada: adelantar la parte del contrato que no necesita base ni credenciales. `scripts/contrato-rutas.mjs` (`npm run qa:contrato-rutas`) saca las rutas que llaman `apiFetch`/`serverFetch` en `src` y las compara con el `openapi.json` de QA: **43 de 44 existen**; la única que falta es `/padres/me/hijos` (BE-07), lo que confirma que el respaldo de D-WEB-02 sigue siendo necesario y que `E2E_BE07` queda en `false`. Informe: `evidencias/PR-05/web/I1_contrato_rutas.json`.
 - No reemplaza a `I1_contrato_qa.xml` (PR-05), que exige la base de QA en pie.
 
+## D-WEB-13 · Exclusiones de cobertura en SonarQube
+- Fecha: 03/11/2026
+- Nota de numeración: la planeación de cierre la llama «D-WEB-11», pero ese número ya estaba usado (horario del estudiante asociado). Es la misma decisión.
+- Problema: el Quality Gate fallaba con 60,6 % de cobertura en código nuevo. `sonar.sources=src,proxy.ts` sin `sonar.coverage.exclusions`, mientras Vitest solo mide `src/lib`, `src/services` y `src/hooks`: Sonar contaba como no cubierta cada línea nueva de páginas y componentes de pantalla, que D-WEB-05 asigna a los E2E.
+- Opción aplicada: A, en dos pasos y en este orden.
+  1. **Pruebas reales primero.** `tests/hooks/cargaInicial.test.tsx` (15 casos) cubre la carga inicial de `useReportes`, `useNotas`, `useUsuarios`, `useAsistencia` y `useHorarios` —justo las líneas que Sonar marcó como promesas sin esperar—, `tests/apiBase.test.ts` (12) cubre los arreglos del proxy y `tests/components/FallidosMasivo.test.tsx` (5) el componente nuevo de WEB-06. Efecto: `src/hooks` pasó de 0,4 % a **32,6 %**, `src/lib` de 85,5 % a **87,8 %** y el total de líneas de 37,5 % a **53,1 %**. Los umbrales de `vitest.config.mts` no se tocaron.
+  2. **Alinear Sonar con D-WEB-05:** `sonar.coverage.exclusions` con `page/layout/loading/error/not-found.tsx` de `src/app`, `src/types/**`, `proxy.ts` y los componentes de pantalla **uno por uno**. Quedan **dentro** de la cobertura `src/hooks`, `src/lib`, `src/services`, `src/app/api/**` y los componentes con lógica y prueba propia: `PasswordChecklist`, `SelectorHijo`, `RegistroMasivo` y `FallidosMasivo`.
+- Esto solo saca esos archivos del **cálculo de cobertura**: Sonar los sigue analizando por bugs, *code smells* y seguridad, y `sonar.exclusions` no creció.
+- Qué cubre cada vista excluida: `login-roles.spec.ts` (inicio y paneles por rol), `usuarios.spec.ts` (`/usuarios` y su modal), `boletin-padre.spec.ts` (`/notas` del padre), `registro-masivo.spec.ts` (QR y asistencia masiva), `registro-padre.spec.ts` (registro y vínculo), `sesion.spec.ts` (guardia de rutas y layout), `padre-dos-hijos.spec.ts` (selector de hijo).
+
+## D-WEB-14 · Arreglos de SonarQube (Reliability)
+- Fecha: 03/11/2026
+- Qué se corrigió, con su prueba:
+  - `src/lib/utils/hijoActivo.ts`: `NaN` → `Number.NaN`. Y, de la misma regla, `isNaN`/`parseInt`/`parseFloat` → `Number.*` en `src/auth/actions.ts` y `src/app/(dashboard)/notas/NotasClient.tsx`, con radio 10 explícito en los `parseInt`.
+  - Proxy: la regex `/\/+$/` (backtracking super-lineal) se reemplazó por `quitarBarrasFinales`, que recorre desde el final. Y `process.env.NEXT_PUBLIC_API_URL ?? …` dejaba pasar la cadena vacía, con lo que `new URL('')` rompía el build en Netlify: ahora `apiBase()` trata vacío y espacios como no definido y un valor sin protocolo lanza un error que nombra la variable. Las dos funciones viven en `src/lib/utils/apiBase.ts` porque un `route.ts` solo debe exportar métodos HTTP. Pruebas: `tests/apiBase.test.ts`, incluida una con 50 000 barras que debe tardar menos de 100 ms.
+  - Promesas sin esperar (`useNotas`, `useUsuarios`, `useReportes`, `useAsistencia`, `useHorarios` y las dos de `EscanearClient`): las cinco funciones de carga y `fetchToday` ya atrapan sus propios errores y los dejan en `error`, así que llevan `void`. **No se usó `void` para esconder un rechazo**: lo prueban los casos «si la carga falla, el mensaje queda en error y loading se apaga» de `tests/hooks/cargaInicial.test.tsx`.
+- Ningún issue se marcó como *falso positivo* ni *won't fix*, y ningún umbral bajó.
+
 ## Otras decisiones menores (02/11/2026)
 - **Mapeo de trazabilidad:** se usó `tests/trazabilidad.json` (alternativa de 6.1) en vez de prefijar cada `describe`, para no renombrar los archivos de prueba. El script `npm run trazabilidad` regenera `docs/trazabilidad-ut-web.md`.
 - **Specs que dependen del backend:** `padre-dos-hijos` (BE-07) y la segunda corrida de `registro-masivo` (BE-08) corren con `test.fail()` hasta que `E2E_BE07` / `E2E_BE08` valgan `true`.
