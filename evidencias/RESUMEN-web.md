@@ -16,14 +16,14 @@ Todas las cifras salen de las salidas guardadas en `evidencias/`. Ninguna eviden
 |---|---|---|---|---|---|---|---|
 | 1 | Tipos (`tsc --noEmit`) | — | **0 errores** | 0 | — | — | `PR-04/web/U3_tsc.txt` |
 | 2 | Lint (`eslint --max-warnings=0`) | 193 archivos | **0 errores, 0 advertencias** | 0 | — | — | `PR-04/web/U3_eslint.json` |
-| 3 | Unitarias y de componentes | **274** en 32 archivos | 274 | 0 | 0 | 0 | `PR-04/web/U3_unitarias.xml` |
+| 3 | Unitarias y de componentes | **302** en 34 archivos | 302 | 0 | 0 | 0 | `PR-04/web/U3_unitarias.xml` |
 | 4 | Cobertura | ver abajo | cumple | — | — | — | `PR-04/web/U3_cobertura.txt`, `U3_cobertura-summary.json` |
-| 5 | Trazabilidad | 283 mapeadas | 126 UT · 136 extra · 21 IT | — | — | — | `docs/trazabilidad-ut-web.md` |
+| 5 | Trazabilidad | 311 mapeadas | 126 UT · 164 extra · 21 IT | — | — | — | `docs/trazabilidad-ut-web.md` |
 | 6 | Integración / contrato contra QA | **9 ejecutadas** (ninguna omitida) | 1 | 0 | **8** | 0 | `PR-05/web/I2_integracion.xml` |
 | 7 | E2E (humo, Chromium) | 8 ejecutadas de 48 | 0 | 0 | **8** | 40 sin correr | `PR-06/web/E1_humo-login.xml` |
 | 8 | Build de producción | — | **compila** | — | — | — | `PR-04/web/U3_build.txt` |
 | 9 | Dependencias (`npm audit --omit=dev`) | — | **0 vulnerabilidades** | — | — | — | `PR-03/web/npm-audit.txt` |
-| 10 | Secretos (gitleaks, 75 commits) | 4 hallazgos | — | — | — | — | `PR-03/web/gitleaks.json` |
+| 10 | Secretos (gitleaks, 77 commits) | 4 hallazgos | — | — | — | — | `PR-03/web/gitleaks.json` |
 | 11 | Pruebas manuales (Brave, accesibilidad, responsive) | 24 casos | — | — | — | **pendientes** | `docs/pruebas-manuales-pr06-web.md` |
 
 ## Cobertura (umbrales de `vitest.config.mts`, sin tocar)
@@ -31,11 +31,23 @@ Todas las cifras salen de las salidas guardadas en `evidencias/`. Ninguna eviden
 | Área | Líneas | Umbral | Antes del 03/11 |
 |---|---|---|---|
 | `src/lib` | **87,8 %** (122/139) | 80 % ✔ | 85,5 % |
-| `src/services` | **68,8 %** (609/885) | 60 % ✔ | 68,8 % |
+| `src/services` | **73,9 %** (654/885) | 60 % ✔ | 68,8 % |
 | `src/hooks` | **32,6 %** (298/915) | sin umbral (D-WEB-05) | 0,4 % |
-| Total de líneas | **53,1 %** (1029/1939) | — | 37,5 % |
+| Lógica (las tres juntas) | **55,4 %** (1074/1939) | — | 37,5 % |
+| Todo `src` | 28,1 % (1385/4922) | — | no se medía |
 
-Lo que subió viene de las pruebas nuevas de los arreglos de SonarQube: `tests/hooks/cargaInicial.test.tsx` (15), `tests/apiBase.test.ts` (12) y `tests/components/FallidosMasivo.test.tsx` (5). Ver D-WEB-13 y D-WEB-14 en `docs/decisiones-qa.md`.
+Desde hoy la cobertura mide **todo `src`**, no solo `lib`, `services` y `hooks`: el informe `lcov` dejaba fuera archivos que sí tienen pruebas (el proxy con sus 17 casos, `PasswordChecklist`, `SelectorHijo`, `RegistroMasivo`, `FallidosMasivo`, los dos `*ViewerClient`) y SonarQube los contaba con 0 %. Por eso «todo `src`» no se puede comparar con el 53,1 % de la medición anterior: cambió el denominador. Qué vistas quedan fuera del **cálculo** de Sonar lo decide `sonar-project.properties` (D-WEB-13).
+
+Pruebas nuevas de hoy: `tests/hooks/cargaInicial.test.tsx` (15), `tests/register.test.ts` (19), `tests/apiBase.test.ts` (12), `tests/asociadoViewer.test.ts` (9) y `tests/components/FallidosMasivo.test.tsx` (5). `src/services/asociado/asociadoActions.ts` quedó en 100 % y `src/auth/actions.ts` pasó de 0 % a 68,8 %.
+
+### Cobertura del código nuevo (Quality Gate)
+
+| Momento | Cobertura nueva |
+|---|---|
+| Análisis de las 10:00 (commit `8abe760`) | 60,6 % → **64,4 %** tras los arreglos de D-WEB-14 |
+| Estimación con el `lcov` corregido | **~86 %** (350 líneas nuevas, ~302 cubiertas) |
+
+El valor real lo publica el CI del PR #34. En ese análisis de las 10:00 la condición de *Reliability* ya **dejó de fallar**: la única que quedaba era la cobertura.
 
 ## Por qué hay 16 casos bloqueados
 

@@ -10,11 +10,15 @@ export default defineConfig({
   },
   test: {
     setupFiles: ['tests/setup/nextMocks.ts'],
-    // WEB-INF-2: la cobertura mide solo la lógica; las vistas se cubren con E2E.
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json-summary', 'lcov', 'html'],
-      include: ['src/lib/**', 'src/services/**', 'src/hooks/**'],
+      // Se mide TODO `src`. Antes se medían solo lib, services y hooks, y el
+      // informe lcov no incluía archivos que sí tienen pruebas (el proxy,
+      // PasswordChecklist, SelectorHijo, RegistroMasivo…): SonarQube los veía
+      // con 0 % y hundía la cobertura del código nuevo. Qué vistas quedan fuera
+      // del cálculo de Sonar se decide en `sonar-project.properties` (D-WEB-13).
+      include: ['src/**'],
       // D-WEB-05: la meta se mide sobre la lógica (lib y services). Los hooks y las
       // pantallas se cubren con Playwright (PR-06), por eso no llevan umbral.
       thresholds: {
