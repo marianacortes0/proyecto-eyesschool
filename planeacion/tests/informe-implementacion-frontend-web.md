@@ -174,3 +174,41 @@ E2E_BASE_URL=... npx playwright test --project=chromium --project=firefox
 - Los E2E y la integración siguen sin ejecutarse: dependen de QA (mañana, 03/11).
 - No se hizo push ni PR; no se fusionó nada.
 - `planeacion/tests/` sigue sin versionar (carpeta de planeación del equipo).
+
+## 9. Jornada del 03/11/2026 (desbloquear el despliegue y correr las pruebas)
+
+**Qué se hizo**
+
+| Tema | Archivos / evidencia |
+|---|---|
+| `.env` y despliegue de Netlify | `netlify.toml` (build `npm run build`, publish `.next`, `NODE_VERSION=20`, `SECRETS_SCAN_OMIT_KEYS=NEXT_PUBLIC_API_URL`), `.env.example`, `.gitignore` (`!.env.example`) |
+| Escaneo de secretos | gitleaks 8.21.2 sobre 67 commits → `evidencias/PR-03/web/gitleaks.json` (con `--redact`) |
+| Planeaciones versionadas | `planeacion/tests/**` (8 documentos), revisados sin contraseñas ni URL con credenciales |
+| `planeacion/Bugs/bugs.md` | Restaurado (D-WEB-10): sus 455 líneas son requisitos, no defectos con id |
+| Horario del padre con error | `src/services/asociado/asociadoActions.ts`, `src/services/asociado/mensajes.ts`, `src/lib/utils/hijoActivo.ts`, `src/app/(dashboard)/horarios/HorariosViewerClient.tsx`, `tests/asociadoActions.test.ts` (3 pruebas), `tests/components/HorariosViewerClient.test.tsx` (4) |
+| Regla nueva de arquitectura | `tests/arquitectura.test.ts`: los módulos `'use server'` solo exportan funciones async |
+| Datos de QA | `scripts/qa-datos.mjs` (`npm run qa:datos`) imprime `E2E_ESTUDIANTE_VINCULADO_ID/NOMBRE` sin imprimir la contraseña ni el token |
+| Contrato sin base de datos | `scripts/contrato-rutas.mjs` (`npm run qa:contrato-rutas`) → `evidencias/PR-05/web/I1_contrato_rutas.json` |
+| Excepciones de ESLint | `docs/eslint-excepciones.md`: ninguna de las 25 viene de código nuevo de la rama |
+
+**Cifras**
+
+| Corrida | Resultado |
+|---|---|
+| `npx tsc --noEmit` | 0 errores |
+| `npx eslint . --max-warnings=0` | 0 errores y 0 advertencias |
+| `npx vitest run` | **241 pruebas en 29 archivos, todas pasan** (eran 233 en 28) · `evidencias/PR-04/web/U2_unitarias.xml` |
+| `npm run test:cov` | `src/lib` 85,5 % y `src/services` 68,8 % de líneas: cumple los umbrales (80 % / 60 %) · `evidencias/PR-04/web/U2_cobertura.txt` |
+| `npm run build` | compila |
+| `npm run trazabilidad` | 250 pruebas mapeadas (126 UT, 103 extra, 21 IT) |
+| Contrato de rutas contra QA | **43 de 44**; falta `/padres/me/hijos` (BE-07) |
+| `npx playwright test --list` | 48 casos en 7 specs compilan; navegadores instalados |
+
+**Lo que sigue bloqueado (no es de la web)**
+
+`evidencias/PR-05/web/I1_preflight-qa.txt`:
+
+- La API de QA está arriba (`/docs` 200, `/openapi.json` 200) pero **`/api/v1/cursos` y `POST /api/v1/auth/login` responden 500**: la base de QA no responde (acción externa 6).
+- **`https://qaeyesschool.netlify.app` responde 404**: todavía no hay despliegue publicado (acción externa 5b).
+- Sin eso no se pueden ejecutar las 9 pruebas de integración (`I1_contrato_qa.xml`, PR-05) ni los 48 E2E (PR-06), y tampoco se puede obtener `E2E_ESTUDIANTE_VINCULADO_ID`. `QA_PASSWORD` sigue pendiente de entrega por canal privado (acción externa 7).
+- `E2E_BE07=false` queda confirmado por el `openapi.json` de QA: `/padres/me/hijos` no existe allí, así que el respaldo de D-WEB-02 sigue en uso.
