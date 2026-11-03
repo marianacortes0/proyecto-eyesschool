@@ -212,3 +212,53 @@ E2E_BASE_URL=... npx playwright test --project=chromium --project=firefox
 - **`https://qaeyesschool.netlify.app` responde 404**: todavía no hay despliegue publicado (acción externa 5b).
 - Sin eso no se pueden ejecutar las 9 pruebas de integración (`I1_contrato_qa.xml`, PR-05) ni los 48 E2E (PR-06), y tampoco se puede obtener `E2E_ESTUDIANTE_VINCULADO_ID`. `QA_PASSWORD` sigue pendiente de entrega por canal privado (acción externa 7).
 - `E2E_BE07=false` queda confirmado por el `openapi.json` de QA: `/padres/me/hijos` no existe allí, así que el respaldo de D-WEB-02 sigue en uso.
+
+## 10. Cierre del 03/11/2026 · SonarQube y corrida completa
+
+### 10.1 Arreglos de SonarQube (D-WEB-14)
+
+| Issue de Sonar | Arreglo | Prueba |
+|---|---|---|
+| `Prefer Number.NaN over NaN` (`hijoActivo.ts:28`) | `Number.NaN`. De la misma regla: `isNaN`/`parseInt`/`parseFloat` → `Number.*` en `auth/actions.ts` y `NotasClient.tsx`, con radio 10 | `tests/hijoActivo.test.ts` (ya existía) |
+| Regex con backtracking super-lineal (`proxy/route.ts:16`) | `quitarBarrasFinales()`, que recorre desde el final | `tests/apiBase.test.ts`, incluida una entrada de 50 000 barras bajo 100 ms |
+| `'' ?? fallback` dejaba pasar la cadena vacía y `new URL('')` rompía el build en Netlify | `apiBase()` trata vacío y espacios como no definido; un valor sin protocolo lanza un error que nombra `NEXT_PUBLIC_API_URL` | `tests/apiBase.test.ts` (`''`, `'   '`, `undefined`, `'sin-protocolo'`) |
+| 7 promesas sin esperar (`useNotas`, `useUsuarios`, `useReportes`, `useAsistencia`, `useHorarios`, `EscanearClient` ×2) | `void`, porque las seis funciones de carga atrapan sus errores y los dejan en `error` | `tests/hooks/cargaInicial.test.tsx`, 15 casos, con el caso de fallo de cada hook |
+
+Las dos funciones del proxy viven en `src/lib/utils/apiBase.ts`: un `route.ts` solo debe exportar métodos HTTP.
+
+### 10.2 Cobertura en código nuevo (D-WEB-13)
+
+Primero pruebas, después exclusiones:
+
+| Área | Antes | Ahora |
+|---|---|---|
+| `src/lib` | 85,5 % | **87,8 %** |
+| `src/services` | 68,8 % | 68,8 % |
+| `src/hooks` | 0,4 % | **32,6 %** |
+| Total de líneas | 37,5 % | **53,1 %** |
+
+`sonar.coverage.exclusions` deja fuera del **cálculo** de cobertura las vistas que D-WEB-05 asigna a los E2E (`page`, `layout`, `loading`, `error`, `not-found`, componentes de pantalla uno por uno, `src/types/**`, `proxy.ts`). Siguen dentro `src/hooks`, `src/lib`, `src/services`, `src/app/api/**` y los componentes con prueba propia (`PasswordChecklist`, `SelectorHijo`, `RegistroMasivo`, `FallidosMasivo`). Ningún umbral de Vitest bajó y ningún issue se marcó como falso positivo.
+
+### 10.3 Corrida completa (commit `b991e88`)
+
+| Nivel | Resultado |
+|---|---|
+| 1 · tipos | 0 errores |
+| 2 · lint | 0 errores y 0 advertencias en 193 archivos |
+| 3 · unitarias y componentes | **274 pruebas en 32 archivos**, todas pasan |
+| 4 · cobertura | `src/lib` 87,8 % · `src/services` 68,8 % (umbrales 80/60) |
+| 5 · trazabilidad | 283 pruebas mapeadas (126 UT, 136 extra, 21 IT) |
+| 6 · integración | **9 ejecutadas, ninguna omitida**: 1 pasa, 8 bloqueadas por DEF-WEB-01 |
+| 7 · E2E | Humo de `login-roles` en Chromium: 8 casos, bloqueados por lo mismo. Los 48 quedan pendientes |
+| 8 · build | compila |
+| 9 · dependencias | 0 vulnerabilidades |
+| 10 · secretos | gitleaks en 75 commits: los 4 hallazgos históricos de Supabase, nada nuevo |
+| 11 · manuales | pendientes (Mariana) |
+
+Resumen con todas las cifras: `evidencias/RESUMEN-web.md`.
+
+### 10.4 Lo que bloquea el cierre
+
+**DEF-WEB-01 (backend, alta):** la API de QA no puede consultar su base. `POST /auth/login` responde 500 incluso con un correo inexistente (debería ser 401), mientras un cuerpo inválido sí responde 422: la aplicación está sana y lo que falla es la base. Con eso resuelto, los niveles 6 y 7 se corren de una pasada, porque `.env.test.local` está completo y los navegadores están instalados.
+
+Lo que sí quedó verificado: el deploy preview del PR #34 responde 200, el modal de inicio de sesión y los selectores de los E2E funcionan (el humo llena y envía el formulario), la autenticación de la API responde 401 sin token y el contrato cubre 43 de 44 rutas.
