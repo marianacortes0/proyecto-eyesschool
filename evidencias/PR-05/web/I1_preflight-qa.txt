@@ -1,0 +1,13 @@
+Preflight del entorno de QA — 2026-11-03 01:30 UTC
+Sin credenciales: solo se consultan rutas publicas y se registra el codigo HTTP.
+
+API  /docs (FastAPI)              200
+API  /openapi.json                200
+API  /api/v1/cursos               500
+API  POST /api/v1/auth/login      500
+WEB  qaeyesschool.netlify.app     404
+
+Lectura: la app FastAPI esta arriba (/docs 200, rutas registradas), pero toda
+ruta que consulta la base responde 500 -> DATABASE_URL de apieyeschool-q no
+resuelve (accion externa 6). La web de QA aun no tiene despliegue publicado (404).
+Consecuencia: integracion (PR-05) y E2E (PR-06) no se pueden ejecutar hoy.
