@@ -9,6 +9,12 @@ export type Hijo = {
   idCursoActual: number | null
   /** Código del estudiante (EST001…), si la API lo entrega. */
   codigoEstudiante?: string
+  /**
+   * `true` cuando el curso NO se pudo leer porque la consulta del estudiante
+   * falló, no porque el estudiante no tenga curso. Las pantallas que dependen
+   * del curso muestran un error con reintento en vez de «sin curso asignado».
+   */
+  cursoNoDisponible?: boolean
 }
 
 export const MSG_SIN_HIJOS = 'No hay estudiantes vinculados'

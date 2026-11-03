@@ -4,6 +4,7 @@ import { getServerToken, getServerUser, userToRole } from '@/lib/auth/server'
 import { elegirHijoActivo, type Hijo } from '@/lib/utils/hijoActivo'
 import { ApiError, toCamel } from '@/services/api/client'
 import { serverFetch } from '@/services/api/serverFetch'
+import { MSG_HORARIO_ERROR } from '@/services/asociado/mensajes'
 import { PERIODOS } from '@/services/notas/notasService'
 
 /**
@@ -51,18 +52,20 @@ async function hijoDesdePadresMe(): Promise<Hijo[]> {
   const c = toCamel(await apiFetch<Raw>('/padres/me')) as Raw
   const id = c.idEstudiante as number | undefined
   if (id == null) return []
+  // /padres/me no trae el curso: hay que pedir el estudiante. Si esa consulta
+  // falla no se puede afirmar que el estudiante no tenga curso, así que se marca
+  // para que la pantalla muestre un error con reintento (ver `cursoNoDisponible`).
   const est = await apiFetch<Raw>(`/estudiantes/${id}`).catch(() => null)
   const e = est ? (toCamel(est) as Raw) : {}
-  return [
-    aHijo({
-      id_estudiante: id,
-      nombre: c.nombreEstudiante,
-      documento: c.documentoEstudiante,
-      parentesco: c.parentesco,
-      id_curso_actual: e.idCursoActual ?? null,
-      codigo_estudiante: e.codigoEstudiante,
-    }),
-  ]
+  const hijo = aHijo({
+    id_estudiante: id,
+    nombre: c.nombreEstudiante,
+    documento: c.documentoEstudiante,
+    parentesco: c.parentesco,
+    id_curso_actual: e.idCursoActual ?? null,
+    codigo_estudiante: e.codigoEstudiante,
+  })
+  return [est ? hijo : { ...hijo, cursoNoDisponible: true }]
 }
 
 /** Hijos vinculados al padre actual (GET /padres/me/hijos, BE-07). */
@@ -75,7 +78,13 @@ export async function getHijosAction(): Promise<Hijo[]> {
   }
 }
 
-type Asociado = { info: AsociadoInfo | null; hijos: Hijo[]; idCursoActual: number | null }
+type Asociado = {
+  info: AsociadoInfo | null
+  hijos: Hijo[]
+  idCursoActual: number | null
+  /** El curso no se pudo leer (la consulta falló); no es que no tenga curso. */
+  cursoNoDisponible: boolean
+}
 
 /**
  * Resuelve el estudiante asociado al usuario actual:
@@ -86,33 +95,35 @@ type Asociado = { info: AsociadoInfo | null; hijos: Hijo[]; idCursoActual: numbe
  */
 async function resolveAsociado(idEstudiante?: number | string | null): Promise<Asociado> {
   const user = await getServerUser()
-  if (!user) return { info: null, hijos: [], idCursoActual: null }
+  if (!user) return { info: null, hijos: [], idCursoActual: null, cursoNoDisponible: false }
   const role = userToRole(user)
 
   if (role === 'padre') {
     const hijos = await getHijosAction()
     const hijo = elegirHijoActivo(hijos, idEstudiante)
-    if (!hijo) return { info: null, hijos, idCursoActual: null }
+    if (!hijo) return { info: null, hijos, idCursoActual: null, cursoNoDisponible: false }
     return {
       info: { idEstudiante: hijo.idEstudiante, nombre: hijo.nombre, codigo: hijo.codigoEstudiante ?? '' },
       hijos,
       idCursoActual: hijo.idCursoActual,
+      cursoNoDisponible: hijo.cursoNoDisponible === true,
     }
   }
 
   if (role === 'estudiante') {
     const e = toCamel(await apiFetch<Raw>('/estudiantes/me')) as Raw
     const id = e.idEstudiante as number | undefined
-    if (id == null) return { info: null, hijos: [], idCursoActual: null }
+    if (id == null) return { info: null, hijos: [], idCursoActual: null, cursoNoDisponible: false }
     const nombre = [user.primerNombre, user.primerApellido].filter(Boolean).join(' ') || `Estudiante #${id}`
     return {
       info: { idEstudiante: id, nombre, codigo: (e.codigoEstudiante as string) ?? '' },
       hijos: [],
       idCursoActual: (e.idCursoActual as number | null) ?? null,
+      cursoNoDisponible: false,
     }
   }
 
-  return { info: null, hijos: [], idCursoActual: null }
+  return { info: null, hijos: [], idCursoActual: null, cursoNoDisponible: false }
 }
 
 /** Estudiante asociado y lista de hijos, para páginas que arman sus propios datos (asistencia). */
@@ -251,20 +262,32 @@ export type HorarioAsociadoBootstrap = {
   hijos: Hijo[]
   curso: CursoInfo | null
   horarios: HorarioViewer[]
+  /** Mensaje para el usuario cuando el horario no se pudo cargar (con reintento). */
+  error?: string
 }
 
 export async function getHorarioAsociadoAction(idEstudiante?: number | string | null): Promise<HorarioAsociadoBootstrap> {
-  const { info, hijos, idCursoActual } = await resolveAsociado(idEstudiante)
+  const { info, hijos, idCursoActual, cursoNoDisponible } = await resolveAsociado(idEstudiante)
   if (!info) return { info: null, hijos, curso: null, horarios: [] }
+  // Sin curso puede ser «no tiene curso» o «no se pudo consultar»: solo el
+  // segundo caso es un error, y se muestra como tal en vez de un horario vacío.
+  if (cursoNoDisponible) return { info, hijos, curso: null, horarios: [], error: MSG_HORARIO_ERROR }
   if (idCursoActual == null) return { info, hijos, curso: null, horarios: [] }
 
   // /horarios?id_curso= ya está protegido para los 4 roles: no expone más que el
   // horario de ESE curso (el del estudiante asociado).
-  const [horariosRaw, materiasRaw, cursoRaw] = await Promise.all([
-    apiFetch<Raw[]>(`/horarios?id_curso=${idCursoActual}&limit=500`),
-    apiFetch<Raw[]>('/materias?activa=true&limit=200'),
-    apiFetch<Raw>(`/cursos/${idCursoActual}`).catch(() => null),
-  ])
+  let horariosRaw: Raw[]
+  let materiasRaw: Raw[]
+  let cursoRaw: Raw | null
+  try {
+    ;[horariosRaw, materiasRaw, cursoRaw] = await Promise.all([
+      apiFetch<Raw[]>(`/horarios?id_curso=${idCursoActual}&limit=500`),
+      apiFetch<Raw[]>('/materias?activa=true&limit=200'),
+      apiFetch<Raw>(`/cursos/${idCursoActual}`).catch(() => null),
+    ])
+  } catch {
+    return { info, hijos, curso: null, horarios: [], error: MSG_HORARIO_ERROR }
+  }
 
   const materiaById = new Map<number, string>()
   for (const r of materiasRaw) {

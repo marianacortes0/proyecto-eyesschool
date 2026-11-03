@@ -55,6 +55,31 @@ Cada decisión toma la opción por defecto (A) del documento de cierre del front
 - Condición: si en la acción externa 4 (`docs/acciones-externas.md`) la Web App recibe tráfico real, se restaura con `git restore .github/workflows/main_eyesschool.yml` y se anota aquí.
 - Prueba que lo vigila: `tests/arquitectura.test.ts` («hay un solo despliegue»; habría que quitarla si se restaura).
 
+## D-WEB-09 · Despliegue de la web de QA y escaneo de secretos
+- Fecha: 03/11/2026
+- Opción aplicada: A, con la configuración en el repositorio (`netlify.toml`) en vez de solo en el panel: `command = "npm run build"`, `publish = ".next"`, `NODE_VERSION = "20"` y `SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_API_URL"`. Así la causa y el motivo de la omisión quedan versionados y revisables.
+- Por qué se omite esa variable: `NEXT_PUBLIC_*` es pública por diseño (Next la graba en el JavaScript del navegador), así que el escaneo de Netlify siempre la encuentra; no es una fuga. **Ninguna variable con un secreto real se agrega a esa lista**: esas se leen en el servidor. No se usó la alternativa B (`SECRETS_SCAN_ENABLED=false`).
+- A qué API apunta cada despliegue sigue fuera del repositorio (Netlify / Vercel → *Environment variables*), con `.env.example` como plantilla de nombres.
+- Revisión de `.env` (sección 1.2): ningún `.env` versionado hoy ni en la historia; el único archivo `.env*` del repositorio es `.env.test.example` (solo nombres). `.gitignore` cubre `.env*` con `!.env.example` y `!.env.test.example`. El `.env` local está vacío (0 bytes).
+- gitleaks 8.21.2 sobre los 67 commits (`evidencias/PR-03/web/gitleaks.json`, con `--redact`): 4 hallazgos, los 4 en el commit `b7e20f5` (13/04/2026), en `check-profs.js`, `diag.json`, `diagnose-docente.js` y `setup-samuel.js`, archivos de diagnóstico que el mismo día se revirtieron y hoy no existen. Son claves del proyecto Supabase `odenqixjgsrgehnyllfn`: **borrar los archivos no las invalida**, así que la mitigación es la acción externa 1 (eliminar o pausar ese proyecto). El árbol de trabajo de hoy no tiene hallazgos. El CI ya corre `gitleaks/gitleaks-action@v2` en cada PR.
+
+## D-WEB-10 · `planeacion/Bugs/bugs.md` restaurado
+- Fecha: 03/11/2026
+- Opción aplicada: la rama condicional («si no, restaurarlo»). Se restauró con `git restore` porque nadie confirmó que sus 455 líneas estén en Azure Boards y no son defectos con id: son requisitos funcionales sueltos (mensajes de confirmación, historial de asistencia) que no se repiten en `planeacion/tests/GestionDefectos/` (DEF-020 a DEF-028).
+- Para borrarlo hay que confirmar antes que esos requisitos estén en Azure Boards (acción externa 10).
+
+## D-WEB-11 · Horario del estudiante asociado con error y reintento
+- Fecha: 03/11/2026
+- Opción aplicada: A. Antes, si `/estudiantes/{id}` fallaba, el padre veía «El estudiante aún no está asignado a un curso» (el error se tragaba con `.catch(() => null)`) o una pantalla vacía.
+- Cómo: `Hijo.cursoNoDisponible` distingue «no tiene curso» de «no se pudo consultar el curso», `getHorarioAsociadoAction` devuelve `error: MSG_HORARIO_ERROR` («No pudimos cargar el horario. Intenta de nuevo.») —también si fallan `/horarios` o `/materias`— y `HorariosViewerClient` muestra ese mensaje con `role="alert"` y un botón **Reintentar** que llama a `router.refresh()`.
+- Pruebas: `tests/asociadoActions.test.ts` («horario del padre muestra error si /estudiantes/{id} falla», «… si /horarios falla», «sin curso asignado no es un error») y `tests/components/HorariosViewerClient.test.tsx` (4 casos).
+
+## D-WEB-12 · Contrato verificado contra el `openapi.json` de QA
+- Fecha: 03/11/2026
+- Situación: la API de QA está arriba (`/docs` 200) pero toda ruta que consulta la base responde 500, y la web de QA todavía no tiene despliegue (404), así que las 9 pruebas de integración y los 48 E2E no se pueden ejecutar (`evidencias/PR-05/web/I1_preflight-qa.txt`).
+- Opción aplicada: adelantar la parte del contrato que no necesita base ni credenciales. `scripts/contrato-rutas.mjs` (`npm run qa:contrato-rutas`) saca las rutas que llaman `apiFetch`/`serverFetch` en `src` y las compara con el `openapi.json` de QA: **43 de 44 existen**; la única que falta es `/padres/me/hijos` (BE-07), lo que confirma que el respaldo de D-WEB-02 sigue siendo necesario y que `E2E_BE07` queda en `false`. Informe: `evidencias/PR-05/web/I1_contrato_rutas.json`.
+- No reemplaza a `I1_contrato_qa.xml` (PR-05), que exige la base de QA en pie.
+
 ## Otras decisiones menores (02/11/2026)
 - **Mapeo de trazabilidad:** se usó `tests/trazabilidad.json` (alternativa de 6.1) en vez de prefijar cada `describe`, para no renombrar los archivos de prueba. El script `npm run trazabilidad` regenera `docs/trazabilidad-ut-web.md`.
 - **Specs que dependen del backend:** `padre-dos-hijos` (BE-07) y la segunda corrida de `registro-masivo` (BE-08) corren con `test.fail()` hasta que `E2E_BE07` / `E2E_BE08` valgan `true`.

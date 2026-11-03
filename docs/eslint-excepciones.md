@@ -30,6 +30,18 @@ Generado con `grep -rn "eslint-disable" src`. 25 excepciones; cada una con su mo
 | 24 | `src/hooks/useReportes.ts:48` | `react-hooks/set-state-in-effect` | carga inicial cuando la página no entregó los datos desde el servidor | Se deja. Lectura de un valor que solo existe en el navegador (localStorage, cookie, URL) o carga inicial; inicializarlo en el render provoca un hydration mismatch. Pendiente de evaluar `useSyncExternalStore` en una versión con prueba E2E que cubra la hidratación. |
 | 25 | `src/hooks/useUsuarios.ts:99` | `react-hooks/set-state-in-effect` | carga inicial cuando la página no entregó los datos desde el servidor | Se deja. Lectura de un valor que solo existe en el navegador (localStorage, cookie, URL) o carga inicial; inicializarlo en el render provoca un hydration mismatch. Pendiente de evaluar `useSyncExternalStore` en una versión con prueba E2E que cubra la hidratación. |
 
+## ¿Cuáles son nuevas? (sección 4.5 del cierre)
+
+`git diff develop -- src | grep '^+.*eslint-disable'` muestra 22 líneas agregadas, pero **ninguna viene de código nuevo de esta rama**:
+
+| Comprobación | Resultado |
+|---|---|
+| Excepciones en `develop` | 3 (`useDocenteDashboard.ts`, `useEstudianteDashboard.ts`, `usePadreDashboard.ts`, todas `react-hooks/exhaustive-deps`) |
+| Excepciones en esta rama | 25 |
+| Excepciones en archivos **creados** en esta rama (`route.ts` del proxy, `PasswordChecklist.tsx`, `SelectorHijo.tsx`, `cookies.ts`, `decodeRol.ts`, `jwt.ts`, `navItems.ts`, `routeRoles.ts`, `hijoActivo.ts`, `serverFetch.ts`, `FallidosMasivo.tsx`) | **0** |
+
+Las 22 nuevas están todas en archivos que ya existían y aparecen porque el CI pasó a `eslint . --max-warnings=0` (WEB-INF-2): lo que en `develop` eran advertencias de `react-hooks/set-state-in-effect`, `@next/next/no-img-element` y `@next/next/no-page-custom-font` ahora tiene que estar silenciado con su motivo escrito. Por eso no hay nada que corregir por la regla «las que vengan de código nuevo se corrigen»; el refactor de las lecturas del navegador al montar sigue pendiente para después del PR-06.
+
 ## Criterio
 
 - Imágenes QR externas: se mantienen (origen variable).

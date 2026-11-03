@@ -51,4 +51,21 @@ describe('arquitectura (reglas 1 a 4)', () => {
   it('WEB-INF-4: hay un solo despliegue (se eliminó el flujo de Azure)', () => {
     expect(existsSync('.github/workflows/main_eyesschool.yml')).toBe(false)
   })
+
+  it("los módulos 'use server' solo exportan funciones async (si no, el build los deja sin exports)", () => {
+    const servidor = fuentes.filter((r) => /^['"]use server['"]/.test(leer(r).trimStart()))
+    expect(servidor.length).toBeGreaterThan(0)
+
+    const infractoras: string[] = []
+    for (const ruta of servidor) {
+      for (const linea of leer(ruta).split('\n')) {
+        // `export type`/`export interface` desaparecen al compilar: están permitidos.
+        const m = /^export\s+(?!type\b|interface\b|default\s+async\b)(.*)$/.exec(linea.trim())
+        // Vale `export async function f` y `export const f = async (…)`.
+        const asincrona = /^async\s+function\b/.test(m?.[1] ?? '') || /^const\s+\w+\s*=\s*async\b/.test(m?.[1] ?? '')
+        if (m && !asincrona) infractoras.push(`${norm(ruta)}: ${linea.trim()}`)
+      }
+    }
+    expect(infractoras).toEqual([])
+  })
 })

@@ -1,15 +1,15 @@
 # Trazabilidad de pruebas — Frontend web
 
 > Generado con `node scripts/trazabilidad.mjs` (no editar a mano). Mapeo en `tests/trazabilidad.json`.
-> Fecha de generación: 2026-11-02
+> Fecha de generación: 2026-11-03
 
 ## Resumen
 
 | Grupo | Resultado |
 |---|---|
-| UT-WEB-01 a 08 (planeadas, PR-04) | 122 de 122 pasan |
-| UT-WEB-EXTRA (no planeadas) | 102 de 102 pasan |
-| IT-WEB-01 a 05 (contrato, PR-05) | 9 de 18 pasan · «Omitida» = necesita `QA_API_URL` |
+| UT-WEB-01 a 08 (planeadas, PR-04) | 126 de 126 pasan |
+| UT-WEB-EXTRA (no planeadas) | 103 de 103 pasan |
+| IT-WEB-01 a 05 (contrato, PR-05) | 12 de 21 pasan · «Omitida» = necesita `QA_API_URL` |
 
 ## Pruebas unitarias y de componentes (PR-04)
 
@@ -100,6 +100,10 @@
 | UT-WEB-04 | WEB-03 · varios hijos | `tests/hijoActivo.test.ts` | elegirHijoActivo (WEB-03) con el id como texto de la URL (?hijo=11) también lo encuentra | Sí |
 | UT-WEB-04 | WEB-03 · varios hijos | `tests/hijoActivo.test.ts` | elegirHijoActivo (WEB-03) sin hijos devuelve null | Sí |
 | UT-WEB-04 | WEB-03 · varios hijos | `tests/hijoActivo.test.ts` | elegirHijoActivo (WEB-03) el mensaje para un padre sin vínculos es 'No hay estudiantes vinculados' | Sí |
+| UT-WEB-04 | WEB-03 · horario del estudiante asociado | `tests/components/HorariosViewerClient.test.tsx` | HorariosViewerClient (WEB-03 · horario del estudiante asociado) con error muestra el mensaje y un botón de reintentar, no una pantalla vacía | Sí |
+| UT-WEB-04 | WEB-03 · horario del estudiante asociado | `tests/components/HorariosViewerClient.test.tsx` | HorariosViewerClient (WEB-03 · horario del estudiante asociado) reintentar vuelve a pedir los datos al servidor | Sí |
+| UT-WEB-04 | WEB-03 · horario del estudiante asociado | `tests/components/HorariosViewerClient.test.tsx` | HorariosViewerClient (WEB-03 · horario del estudiante asociado) sin error y sin curso avisa que el estudiante no tiene curso | Sí |
+| UT-WEB-04 | WEB-03 · horario del estudiante asociado | `tests/components/HorariosViewerClient.test.tsx` | HorariosViewerClient (WEB-03 · horario del estudiante asociado) con bloques muestra la grilla del curso | Sí |
 | UT-WEB-04 | WEB-03 · varios hijos | `tests/components/SelectorHijo.test.tsx` | SelectorHijo (WEB-03) con un solo hijo no se ve | Sí |
 | UT-WEB-04 | WEB-03 · varios hijos | `tests/components/SelectorHijo.test.tsx` | SelectorHijo (WEB-03) con dos hijos se ve y al elegir el segundo cambia ?hijo= | Sí |
 | UT-WEB-04 | WEB-03 · varios hijos | `tests/components/SelectorHijo.test.tsx` | SelectorHijo (WEB-03) muestra al hijo activo como seleccionado | Sí |
@@ -148,102 +152,103 @@
 | UT-WEB-EXTRA-04 | Reglas de código testeable leídas del código fuente | `tests/arquitectura.test.ts` | arquitectura (reglas 1 a 4) WEB-01/08: ya no existe src/services/supabase ni algo que lo importe | Sí |
 | UT-WEB-EXTRA-05 | Reglas de código testeable leídas del código fuente | `tests/arquitectura.test.ts` | arquitectura (reglas 1 a 4) WEB-01: el guardia de rutas es proxy.ts y usa sessionMiddleware | Sí |
 | UT-WEB-EXTRA-06 | Reglas de código testeable leídas del código fuente | `tests/arquitectura.test.ts` | arquitectura (reglas 1 a 4) WEB-INF-4: hay un solo despliegue (se eliminó el flujo de Azure) | Sí |
-| UT-WEB-EXTRA-07 | Política de contraseñas (base de WEB-05) | `tests/password.test.ts` | política de contraseñas acepta una contraseña que cumple las cinco reglas | Sí |
-| UT-WEB-EXTRA-08 | Política de contraseñas (base de WEB-05) | `tests/password.test.ts` | política de contraseñas rechaza Ab1# por la regla length | Sí |
-| UT-WEB-EXTRA-09 | Política de contraseñas (base de WEB-05) | `tests/password.test.ts` | política de contraseñas rechaza colegio#2026 por la regla upper | Sí |
-| UT-WEB-EXTRA-10 | Política de contraseñas (base de WEB-05) | `tests/password.test.ts` | política de contraseñas rechaza COLEGIO#2026 por la regla lower | Sí |
-| UT-WEB-EXTRA-11 | Política de contraseñas (base de WEB-05) | `tests/password.test.ts` | política de contraseñas rechaza Colegio#ocho por la regla number | Sí |
-| UT-WEB-EXTRA-12 | Política de contraseñas (base de WEB-05) | `tests/password.test.ts` | política de contraseñas rechaza Colegio2026 por la regla special | Sí |
-| UT-WEB-EXTRA-13 | Prueba no planeada | `tests/permissions.test.ts` | permisos por rol solo el administrador gestiona usuarios | Sí |
-| UT-WEB-EXTRA-14 | Prueba no planeada | `tests/permissions.test.ts` | permisos por rol las notas las escribe el docente; el admin solo las lee | Sí |
-| UT-WEB-EXTRA-15 | Prueba no planeada | `tests/permissions.test.ts` | permisos por rol estudiante y padre solo leen lo propio | Sí |
-| UT-WEB-EXTRA-16 | Prueba no planeada | `tests/permissions.test.ts` | permisos por rol escanear QR es de docentes y administradores | Sí |
-| UT-WEB-EXTRA-17 | Prueba no planeada | `tests/permissions.test.ts` | mapRolToKey traduce los nombres de rol del backend | Sí |
-| UT-WEB-EXTRA-18 | Prueba no planeada | `tests/permissions.test.ts` | mapRolToKey traduce el id_rol de la base (1 docente, 2 estudiante, 3 admin, 4 padre) | Sí |
-| UT-WEB-EXTRA-19 | Prueba no planeada | `tests/permissions.test.ts` | mapRolToKey un rol desconocido no se convierte en ninguno | Sí |
-| UT-WEB-EXTRA-20 | serverFetch y ApiError (WEB-INF-1) | `tests/serverFetch.test.ts` | serverFetch (WEB-INF-1) con datos: manda el token por parámetro y devuelve el JSON sin tocar | Sí |
-| UT-WEB-EXTRA-21 | serverFetch y ApiError (WEB-INF-1) | `tests/serverFetch.test.ts` | serverFetch (WEB-INF-1) con lista vacía devuelve []; con un 204 devuelve null | Sí |
-| UT-WEB-EXTRA-22 | serverFetch y ApiError (WEB-INF-1) | `tests/serverFetch.test.ts` | serverFetch (WEB-INF-1) con error lanza ApiError con status, mensaje legible y detail original | Sí |
-| UT-WEB-EXTRA-23 | serverFetch y ApiError (WEB-INF-1) | `tests/serverFetch.test.ts` | serverFetch (WEB-INF-1) sin token no manda Authorization | Sí |
-| UT-WEB-EXTRA-24 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions getNotasAction manda el Bearer del servidor y mapea la nota a número | Sí |
-| UT-WEB-EXTRA-25 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions con lista vacía devuelve [] | Sí |
-| UT-WEB-EXTRA-26 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions getEstudiantesAction arma el nombre completo o uno provisional | Sí |
-| UT-WEB-EXTRA-27 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions createNotaAction manda el cuerpo en snake_case | Sí |
-| UT-WEB-EXTRA-28 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions getNotasBootstrapAction junta las cuatro consultas | Sí |
-| UT-WEB-EXTRA-29 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions un error de la API lanza con su detail | Sí |
-| UT-WEB-EXTRA-30 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions un 500 sin cuerpo lanza HTTP 500 | Sí |
-| UT-WEB-EXTRA-31 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · novedadesActions getNovedadesAction cruza el estudiante por id y usa uno provisional si falta | Sí |
-| UT-WEB-EXTRA-32 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · novedadesActions getNovedadesBootstrapAction resuelve nombre y gravedad del tipo | Sí |
-| UT-WEB-EXTRA-33 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · novedadesActions cursos y estudiantes con lista vacía devuelven [] | Sí |
-| UT-WEB-EXTRA-34 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · novedadesActions crear manda la fecha de hoy; actualizar solo lo informado; borrar hace DELETE | Sí |
-| UT-WEB-EXTRA-35 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · novedadesActions un 403 lanza con su detail | Sí |
-| UT-WEB-EXTRA-36 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · reportesActions getReportesAction mapea y completa parametros vacío | Sí |
-| UT-WEB-EXTRA-37 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · reportesActions con lista vacía devuelve [] | Sí |
-| UT-WEB-EXTRA-38 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · reportesActions crear, actualizar estado y borrar | Sí |
-| UT-WEB-EXTRA-39 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · reportesActions un 404 lanza con su detail | Sí |
-| UT-WEB-EXTRA-40 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardActions.test.ts` | Servicios · dashboardActions (KPI del administrador) calcula totales, promedio, aprobación, asistencia y novedades activas | Sí |
-| UT-WEB-EXTRA-41 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardActions.test.ts` | Servicios · dashboardActions (KPI del administrador) arma las gráficas: estudiantes por curso, usuarios por rol y promedio por materia | Sí |
-| UT-WEB-EXTRA-42 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardActions.test.ts` | Servicios · dashboardActions (KPI del administrador) sin datos devuelve ceros y promedios nulos, no lanza | Sí |
-| UT-WEB-EXTRA-43 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardActions.test.ts` | Servicios · dashboardActions (KPI del administrador) si un endpoint falla (500 o sin red) esa lista cuenta como vacía | Sí |
-| UT-WEB-EXTRA-44 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardActions.test.ts` | Servicios · dashboardActions (KPI del administrador) los atajos devuelven el valor del KPI y 0 si no hay dato | Sí |
-| UT-WEB-EXTRA-45 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardActions.test.ts` | Servicios · dashboardActions (KPI del administrador) las series sin endpoint dedicado devuelven [] | Sí |
-| UT-WEB-EXTRA-46 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardService.test.ts` | Servicios · dashboardService rutaPadre agrega id_estudiante solo cuando hay un hijo activo | Sí |
-| UT-WEB-EXTRA-47 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardService.test.ts` | Servicios · dashboardService docente: mapea los contadores (cliente y servidor) | Sí |
-| UT-WEB-EXTRA-48 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardService.test.ts` | Servicios · dashboardService estudiante: promedios nulos pasan a 0 | Sí |
-| UT-WEB-EXTRA-49 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardService.test.ts` | Servicios · dashboardService padre: arma un hijo con el id pedido | Sí |
-| UT-WEB-EXTRA-50 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardService.test.ts` | Servicios · dashboardService con error de la API o sin red devuelve el estado vacío, no lanza | Sí |
-| UT-WEB-EXTRA-51 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardService.test.ts` | Servicios · dashboardService los helpers heredados devuelven valores neutros | Sí |
-| UT-WEB-EXTRA-52 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService getHorarios mapea a camelCase y ordena por día y hora | Sí |
-| UT-WEB-EXTRA-53 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService con lista vacía devuelve [] | Sí |
-| UT-WEB-EXTRA-54 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService cursos y materias activos/todos usan su consulta y mapean los campos | Sí |
-| UT-WEB-EXTRA-55 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService crear curso, materia y especialización manda el cuerpo en snake_case | Sí |
-| UT-WEB-EXTRA-56 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService actualizar manda solo los campos informados | Sí |
-| UT-WEB-EXTRA-57 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService eliminar es una baja lógica (PUT activo=false) | Sí |
-| UT-WEB-EXTRA-58 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService crear horario devuelve el id y asignar profesor lo vincula | Sí |
-| UT-WEB-EXTRA-59 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService getProfesores arma el nombre y ordena alfabéticamente | Sí |
-| UT-WEB-EXTRA-60 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService asignaciones: lista, crea con fecha_finalizacion nula y getAsignacionesProfesores es vacío | Sí |
-| UT-WEB-EXTRA-61 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService un 422 lanza con el detail de la API | Sí |
-| UT-WEB-EXTRA-62 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService un 500 lanza HTTP 500 | Sí |
-| UT-WEB-EXTRA-63 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · novedadesService getNovedades mapea y arma código y nombre provisionales del estudiante | Sí |
-| UT-WEB-EXTRA-64 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · novedadesService con lista vacía devuelve [] en novedades, tipos, cursos y estudiantes | Sí |
-| UT-WEB-EXTRA-65 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · novedadesService tipos, cursos y estudiantes se mapean a camelCase | Sí |
-| UT-WEB-EXTRA-66 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · novedadesService crear, actualizar y borrar una novedad | Sí |
-| UT-WEB-EXTRA-67 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · novedadesService un 403 lanza con el detail | Sí |
-| UT-WEB-EXTRA-68 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · qrService getQRImageUrl codifica el código y fija el tamaño | Sí |
-| UT-WEB-EXTRA-69 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · qrService readQRFromImage devuelve el contenido leído | Sí |
-| UT-WEB-EXTRA-70 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · qrService readQRFromImage devuelve null si no hay símbolo o trae error | Sí |
-| UT-WEB-EXTRA-71 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · qrService readQRFromImage lanza si el servicio externo falla | Sí |
-| UT-WEB-EXTRA-72 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService fileUrl: vacío, absoluta y relativa | Sí |
-| UT-WEB-EXTRA-73 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService validarArchivoReporte rechaza el formato y el tamaño | Sí |
-| UT-WEB-EXTRA-74 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService getReportes mapea a camelCase; con lista vacía devuelve [] | Sí |
-| UT-WEB-EXTRA-75 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService crear, actualizar y borrar un reporte | Sí |
-| UT-WEB-EXTRA-76 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService downloadReporteArchivo lanza con el detail si la API responde error | Sí |
-| UT-WEB-EXTRA-77 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService downloadReporteArchivo descarga con el nombre del Content-Disposition | Sí |
-| UT-WEB-EXTRA-78 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · themeService lee el tema guardado y, sin nada guardado, el preferido del sistema | Sí |
-| UT-WEB-EXTRA-79 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · themeService applyTheme pone la clase dark y persiste | Sí |
-| UT-WEB-EXTRA-80 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfil mapea el perfil y resuelve la foto relativa contra el backend | Sí |
-| UT-WEB-EXTRA-81 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfil devuelve null si la API falla | Sí |
-| UT-WEB-EXTRA-82 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) updateMiPerfil manda solo los campos informados | Sí |
-| UT-WEB-EXTRA-83 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) uploadAvatar acepta un texto o un objeto con la URL | Sí |
-| UT-WEB-EXTRA-84 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getAvatarUrl no inventa una URL | Sí |
-| UT-WEB-EXTRA-85 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfilProfesor busca al profesor por idUsuario en la lista y trae sus especializaciones | Sí |
-| UT-WEB-EXTRA-86 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfilProfesor devuelve null si no hay fila para ese usuario o falla la API | Sí |
-| UT-WEB-EXTRA-87 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfilAdmin busca en la lista; null si no está | Sí |
-| UT-WEB-EXTRA-88 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) actualizar profesor y administrador usa snake_case | Sí |
-| UT-WEB-EXTRA-89 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) insertAdminPerfil crea el perfil Activo con la fecha de hoy | Sí |
-| UT-WEB-EXTRA-90 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiEPS usa /estudiantes/me y luego /ips; [] si no hay estudiante o falla | Sí |
-| UT-WEB-EXTRA-91 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) upsertMiEPS manda la afiliación activa con fecha de hoy | Sí |
-| UT-WEB-EXTRA-92 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiEstudianteInfo devuelve id y curso; null si la lista viene vacía | Sí |
-| UT-WEB-EXTRA-93 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) updateEstudianteCurso y getCursosParaPerfil | Sí |
-| UT-WEB-EXTRA-94 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService getUsuarios pide los activos y agrega el nombre del rol | Sí |
-| UT-WEB-EXTRA-95 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService getPendingUsuarios pide los inactivos y con lista vacía devuelve [] | Sí |
-| UT-WEB-EXTRA-96 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService getUsuarioById devuelve el usuario y null si la API falla | Sí |
-| UT-WEB-EXTRA-97 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService createUsuario manda el cuerpo en snake_case con nulos para lo opcional | Sí |
-| UT-WEB-EXTRA-98 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService updateUsuario manda solo lo que cambió | Sí |
-| UT-WEB-EXTRA-99 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService toggleUsuarioEstado manda el estado como query param | Sí |
-| UT-WEB-EXTRA-100 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService validarUsuario cambia el rol y luego activa | Sí |
-| UT-WEB-EXTRA-101 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService deleteUsuario y rechazarUsuario hacen DELETE | Sí |
-| UT-WEB-EXTRA-102 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService un 409 por correo duplicado lanza con el detail | Sí |
+| UT-WEB-EXTRA-07 | Reglas de código testeable leídas del código fuente | `tests/arquitectura.test.ts` | arquitectura (reglas 1 a 4) los módulos 'use server' solo exportan funciones async (si no, el build los deja sin exports) | Sí |
+| UT-WEB-EXTRA-08 | Política de contraseñas (base de WEB-05) | `tests/password.test.ts` | política de contraseñas acepta una contraseña que cumple las cinco reglas | Sí |
+| UT-WEB-EXTRA-09 | Política de contraseñas (base de WEB-05) | `tests/password.test.ts` | política de contraseñas rechaza Ab1# por la regla length | Sí |
+| UT-WEB-EXTRA-10 | Política de contraseñas (base de WEB-05) | `tests/password.test.ts` | política de contraseñas rechaza colegio#2026 por la regla upper | Sí |
+| UT-WEB-EXTRA-11 | Política de contraseñas (base de WEB-05) | `tests/password.test.ts` | política de contraseñas rechaza COLEGIO#2026 por la regla lower | Sí |
+| UT-WEB-EXTRA-12 | Política de contraseñas (base de WEB-05) | `tests/password.test.ts` | política de contraseñas rechaza Colegio#ocho por la regla number | Sí |
+| UT-WEB-EXTRA-13 | Política de contraseñas (base de WEB-05) | `tests/password.test.ts` | política de contraseñas rechaza Colegio2026 por la regla special | Sí |
+| UT-WEB-EXTRA-14 | Prueba no planeada | `tests/permissions.test.ts` | permisos por rol solo el administrador gestiona usuarios | Sí |
+| UT-WEB-EXTRA-15 | Prueba no planeada | `tests/permissions.test.ts` | permisos por rol las notas las escribe el docente; el admin solo las lee | Sí |
+| UT-WEB-EXTRA-16 | Prueba no planeada | `tests/permissions.test.ts` | permisos por rol estudiante y padre solo leen lo propio | Sí |
+| UT-WEB-EXTRA-17 | Prueba no planeada | `tests/permissions.test.ts` | permisos por rol escanear QR es de docentes y administradores | Sí |
+| UT-WEB-EXTRA-18 | Prueba no planeada | `tests/permissions.test.ts` | mapRolToKey traduce los nombres de rol del backend | Sí |
+| UT-WEB-EXTRA-19 | Prueba no planeada | `tests/permissions.test.ts` | mapRolToKey traduce el id_rol de la base (1 docente, 2 estudiante, 3 admin, 4 padre) | Sí |
+| UT-WEB-EXTRA-20 | Prueba no planeada | `tests/permissions.test.ts` | mapRolToKey un rol desconocido no se convierte en ninguno | Sí |
+| UT-WEB-EXTRA-21 | serverFetch y ApiError (WEB-INF-1) | `tests/serverFetch.test.ts` | serverFetch (WEB-INF-1) con datos: manda el token por parámetro y devuelve el JSON sin tocar | Sí |
+| UT-WEB-EXTRA-22 | serverFetch y ApiError (WEB-INF-1) | `tests/serverFetch.test.ts` | serverFetch (WEB-INF-1) con lista vacía devuelve []; con un 204 devuelve null | Sí |
+| UT-WEB-EXTRA-23 | serverFetch y ApiError (WEB-INF-1) | `tests/serverFetch.test.ts` | serverFetch (WEB-INF-1) con error lanza ApiError con status, mensaje legible y detail original | Sí |
+| UT-WEB-EXTRA-24 | serverFetch y ApiError (WEB-INF-1) | `tests/serverFetch.test.ts` | serverFetch (WEB-INF-1) sin token no manda Authorization | Sí |
+| UT-WEB-EXTRA-25 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions getNotasAction manda el Bearer del servidor y mapea la nota a número | Sí |
+| UT-WEB-EXTRA-26 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions con lista vacía devuelve [] | Sí |
+| UT-WEB-EXTRA-27 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions getEstudiantesAction arma el nombre completo o uno provisional | Sí |
+| UT-WEB-EXTRA-28 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions createNotaAction manda el cuerpo en snake_case | Sí |
+| UT-WEB-EXTRA-29 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions getNotasBootstrapAction junta las cuatro consultas | Sí |
+| UT-WEB-EXTRA-30 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions un error de la API lanza con su detail | Sí |
+| UT-WEB-EXTRA-31 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · notasActions un 500 sin cuerpo lanza HTTP 500 | Sí |
+| UT-WEB-EXTRA-32 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · novedadesActions getNovedadesAction cruza el estudiante por id y usa uno provisional si falta | Sí |
+| UT-WEB-EXTRA-33 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · novedadesActions getNovedadesBootstrapAction resuelve nombre y gravedad del tipo | Sí |
+| UT-WEB-EXTRA-34 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · novedadesActions cursos y estudiantes con lista vacía devuelven [] | Sí |
+| UT-WEB-EXTRA-35 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · novedadesActions crear manda la fecha de hoy; actualizar solo lo informado; borrar hace DELETE | Sí |
+| UT-WEB-EXTRA-36 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · novedadesActions un 403 lanza con su detail | Sí |
+| UT-WEB-EXTRA-37 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · reportesActions getReportesAction mapea y completa parametros vacío | Sí |
+| UT-WEB-EXTRA-38 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · reportesActions con lista vacía devuelve [] | Sí |
+| UT-WEB-EXTRA-39 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · reportesActions crear, actualizar estado y borrar | Sí |
+| UT-WEB-EXTRA-40 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/actionsNotasNovedadesReportes.test.ts` | Servicios · reportesActions un 404 lanza con su detail | Sí |
+| UT-WEB-EXTRA-41 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardActions.test.ts` | Servicios · dashboardActions (KPI del administrador) calcula totales, promedio, aprobación, asistencia y novedades activas | Sí |
+| UT-WEB-EXTRA-42 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardActions.test.ts` | Servicios · dashboardActions (KPI del administrador) arma las gráficas: estudiantes por curso, usuarios por rol y promedio por materia | Sí |
+| UT-WEB-EXTRA-43 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardActions.test.ts` | Servicios · dashboardActions (KPI del administrador) sin datos devuelve ceros y promedios nulos, no lanza | Sí |
+| UT-WEB-EXTRA-44 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardActions.test.ts` | Servicios · dashboardActions (KPI del administrador) si un endpoint falla (500 o sin red) esa lista cuenta como vacía | Sí |
+| UT-WEB-EXTRA-45 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardActions.test.ts` | Servicios · dashboardActions (KPI del administrador) los atajos devuelven el valor del KPI y 0 si no hay dato | Sí |
+| UT-WEB-EXTRA-46 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardActions.test.ts` | Servicios · dashboardActions (KPI del administrador) las series sin endpoint dedicado devuelven [] | Sí |
+| UT-WEB-EXTRA-47 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardService.test.ts` | Servicios · dashboardService rutaPadre agrega id_estudiante solo cuando hay un hijo activo | Sí |
+| UT-WEB-EXTRA-48 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardService.test.ts` | Servicios · dashboardService docente: mapea los contadores (cliente y servidor) | Sí |
+| UT-WEB-EXTRA-49 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardService.test.ts` | Servicios · dashboardService estudiante: promedios nulos pasan a 0 | Sí |
+| UT-WEB-EXTRA-50 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardService.test.ts` | Servicios · dashboardService padre: arma un hijo con el id pedido | Sí |
+| UT-WEB-EXTRA-51 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardService.test.ts` | Servicios · dashboardService con error de la API o sin red devuelve el estado vacío, no lanza | Sí |
+| UT-WEB-EXTRA-52 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/dashboardService.test.ts` | Servicios · dashboardService los helpers heredados devuelven valores neutros | Sí |
+| UT-WEB-EXTRA-53 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService getHorarios mapea a camelCase y ordena por día y hora | Sí |
+| UT-WEB-EXTRA-54 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService con lista vacía devuelve [] | Sí |
+| UT-WEB-EXTRA-55 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService cursos y materias activos/todos usan su consulta y mapean los campos | Sí |
+| UT-WEB-EXTRA-56 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService crear curso, materia y especialización manda el cuerpo en snake_case | Sí |
+| UT-WEB-EXTRA-57 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService actualizar manda solo los campos informados | Sí |
+| UT-WEB-EXTRA-58 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService eliminar es una baja lógica (PUT activo=false) | Sí |
+| UT-WEB-EXTRA-59 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService crear horario devuelve el id y asignar profesor lo vincula | Sí |
+| UT-WEB-EXTRA-60 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService getProfesores arma el nombre y ordena alfabéticamente | Sí |
+| UT-WEB-EXTRA-61 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService asignaciones: lista, crea con fecha_finalizacion nula y getAsignacionesProfesores es vacío | Sí |
+| UT-WEB-EXTRA-62 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService un 422 lanza con el detail de la API | Sí |
+| UT-WEB-EXTRA-63 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/horariosService.test.ts` | Servicios · horariosService un 500 lanza HTTP 500 | Sí |
+| UT-WEB-EXTRA-64 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · novedadesService getNovedades mapea y arma código y nombre provisionales del estudiante | Sí |
+| UT-WEB-EXTRA-65 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · novedadesService con lista vacía devuelve [] en novedades, tipos, cursos y estudiantes | Sí |
+| UT-WEB-EXTRA-66 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · novedadesService tipos, cursos y estudiantes se mapean a camelCase | Sí |
+| UT-WEB-EXTRA-67 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · novedadesService crear, actualizar y borrar una novedad | Sí |
+| UT-WEB-EXTRA-68 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · novedadesService un 403 lanza con el detail | Sí |
+| UT-WEB-EXTRA-69 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · qrService getQRImageUrl codifica el código y fija el tamaño | Sí |
+| UT-WEB-EXTRA-70 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · qrService readQRFromImage devuelve el contenido leído | Sí |
+| UT-WEB-EXTRA-71 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · qrService readQRFromImage devuelve null si no hay símbolo o trae error | Sí |
+| UT-WEB-EXTRA-72 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · qrService readQRFromImage lanza si el servicio externo falla | Sí |
+| UT-WEB-EXTRA-73 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService fileUrl: vacío, absoluta y relativa | Sí |
+| UT-WEB-EXTRA-74 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService validarArchivoReporte rechaza el formato y el tamaño | Sí |
+| UT-WEB-EXTRA-75 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService getReportes mapea a camelCase; con lista vacía devuelve [] | Sí |
+| UT-WEB-EXTRA-76 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService crear, actualizar y borrar un reporte | Sí |
+| UT-WEB-EXTRA-77 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService downloadReporteArchivo lanza con el detail si la API responde error | Sí |
+| UT-WEB-EXTRA-78 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService downloadReporteArchivo descarga con el nombre del Content-Disposition | Sí |
+| UT-WEB-EXTRA-79 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · themeService lee el tema guardado y, sin nada guardado, el preferido del sistema | Sí |
+| UT-WEB-EXTRA-80 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · themeService applyTheme pone la clase dark y persiste | Sí |
+| UT-WEB-EXTRA-81 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfil mapea el perfil y resuelve la foto relativa contra el backend | Sí |
+| UT-WEB-EXTRA-82 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfil devuelve null si la API falla | Sí |
+| UT-WEB-EXTRA-83 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) updateMiPerfil manda solo los campos informados | Sí |
+| UT-WEB-EXTRA-84 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) uploadAvatar acepta un texto o un objeto con la URL | Sí |
+| UT-WEB-EXTRA-85 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getAvatarUrl no inventa una URL | Sí |
+| UT-WEB-EXTRA-86 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfilProfesor busca al profesor por idUsuario en la lista y trae sus especializaciones | Sí |
+| UT-WEB-EXTRA-87 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfilProfesor devuelve null si no hay fila para ese usuario o falla la API | Sí |
+| UT-WEB-EXTRA-88 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfilAdmin busca en la lista; null si no está | Sí |
+| UT-WEB-EXTRA-89 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) actualizar profesor y administrador usa snake_case | Sí |
+| UT-WEB-EXTRA-90 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) insertAdminPerfil crea el perfil Activo con la fecha de hoy | Sí |
+| UT-WEB-EXTRA-91 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiEPS usa /estudiantes/me y luego /ips; [] si no hay estudiante o falla | Sí |
+| UT-WEB-EXTRA-92 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) upsertMiEPS manda la afiliación activa con fecha de hoy | Sí |
+| UT-WEB-EXTRA-93 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiEstudianteInfo devuelve id y curso; null si la lista viene vacía | Sí |
+| UT-WEB-EXTRA-94 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) updateEstudianteCurso y getCursosParaPerfil | Sí |
+| UT-WEB-EXTRA-95 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService getUsuarios pide los activos y agrega el nombre del rol | Sí |
+| UT-WEB-EXTRA-96 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService getPendingUsuarios pide los inactivos y con lista vacía devuelve [] | Sí |
+| UT-WEB-EXTRA-97 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService getUsuarioById devuelve el usuario y null si la API falla | Sí |
+| UT-WEB-EXTRA-98 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService createUsuario manda el cuerpo en snake_case con nulos para lo opcional | Sí |
+| UT-WEB-EXTRA-99 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService updateUsuario manda solo lo que cambió | Sí |
+| UT-WEB-EXTRA-100 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService toggleUsuarioEstado manda el estado como query param | Sí |
+| UT-WEB-EXTRA-101 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService validarUsuario cambia el rol y luego activa | Sí |
+| UT-WEB-EXTRA-102 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService deleteUsuario y rechazarUsuario hacen DELETE | Sí |
+| UT-WEB-EXTRA-103 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService un 409 por correo duplicado lanza con el detail | Sí |
 
 ## Pruebas de contrato (PR-05)
 
@@ -257,6 +262,9 @@
 | IT-WEB-02 | WEB-03 · contrato /padres/me/hijos | `tests/asociadoActions.test.ts` | asociadoActions (WEB-03 · IT-WEB-02) con el hijo 11 llama /padres/me/hijos y luego /estudiantes/11/notas | Sí |
 | IT-WEB-02 | WEB-03 · contrato /padres/me/hijos | `tests/asociadoActions.test.ts` | asociadoActions (WEB-03 · IT-WEB-02) sin id pedido usa el primer hijo (10) | Sí |
 | IT-WEB-02 | WEB-03 · contrato /padres/me/hijos | `tests/asociadoActions.test.ts` | asociadoActions (WEB-03 · IT-WEB-02) un padre sin hijos recibe info null y no pide notas | Sí |
+| IT-WEB-02 | WEB-03 · contrato /padres/me/hijos | `tests/asociadoActions.test.ts` | asociadoActions (WEB-03 · IT-WEB-02) horario del padre muestra error si /estudiantes/{id} falla | Sí |
+| IT-WEB-02 | WEB-03 · contrato /padres/me/hijos | `tests/asociadoActions.test.ts` | asociadoActions (WEB-03 · IT-WEB-02) horario del padre muestra error si /horarios falla | Sí |
+| IT-WEB-02 | WEB-03 · contrato /padres/me/hijos | `tests/asociadoActions.test.ts` | asociadoActions (WEB-03 · IT-WEB-02) horario del padre sin curso asignado no es un error | Sí |
 | IT-WEB-02 | WEB-03 · contrato /padres/me/hijos | `tests/asociadoActions.test.ts` | asociadoActions (WEB-03 · IT-WEB-02) si la API falla, el error llega con el detail para mostrarlo | Sí |
 | IT-WEB-03 | R-07 · contrato real | `tests/integration/contrato-api.int.test.ts` | IT-WEB-03 · contrato de lectura por rol admin: usuarios, asistencia del día y reportes | Omitida |
 | IT-WEB-03 | R-07 · contrato real | `tests/integration/contrato-api.int.test.ts` | IT-WEB-03 · contrato de lectura por rol docente: notas, novedades, horarios y asignaciones | Omitida |

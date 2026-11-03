@@ -2,7 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { enUnaHora, json, jwt } from './helpers'
 import { cookieJar } from './setup/nextMocks'
-import { getHijosAction, getNotasAsociadoAction } from '@/services/asociado/asociadoActions'
+import { getHijosAction, getHorarioAsociadoAction, getNotasAsociadoAction } from '@/services/asociado/asociadoActions'
+import { MSG_HORARIO_ERROR } from '@/services/asociado/mensajes'
 
 // Respuesta con la forma de GET /padres/me/hijos (BE-07).
 const HIJOS_API = [
@@ -88,6 +89,53 @@ describe('asociadoActions (WEB-03 · IT-WEB-02)', () => {
 
     expect(r.info).toBeNull()
     expect(rutas().some((p) => p.includes('/notas'))).toBe(false)
+  })
+
+  it('horario del padre muestra error si /estudiantes/{id} falla', async () => {
+    // Sin BE-07 el curso sale de /estudiantes/{id}: si esa consulta falla no se
+    // puede decir que el estudiante no tenga curso.
+    fetchMock.mockImplementation(async (url: string) => {
+      const u = String(url)
+      if (u.includes('/padres/me/hijos')) return json(404, { detail: 'Not Found' })
+      if (u.includes('/padres/me')) return json(200, { id_estudiante: 10, parentesco: 'Madre', nombre_estudiante: 'Ana Pérez', documento_estudiante: '1001' })
+      if (u.includes('/estudiantes/10')) return json(500, { detail: 'Error interno' })
+      return json(200, [])
+    })
+
+    const r = await getHorarioAsociadoAction()
+
+    expect(r.error).toBe(MSG_HORARIO_ERROR)
+    expect(r.info?.idEstudiante).toBe(10)
+    expect(r.horarios).toEqual([])
+    // No se pide el horario de un curso que no se conoce.
+    expect(rutas().some((p) => p.startsWith('/horarios'))).toBe(false)
+  })
+
+  it('horario del padre muestra error si /horarios falla', async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      const u = String(url)
+      if (u.includes('/padres/me/hijos')) return json(200, [HIJOS_API[0]])
+      if (u.includes('/horarios')) return json(500, { detail: 'Error interno' })
+      return json(200, [])
+    })
+
+    const r = await getHorarioAsociadoAction()
+
+    expect(r.error).toBe(MSG_HORARIO_ERROR)
+    expect(r.horarios).toEqual([])
+  })
+
+  it('horario del padre sin curso asignado no es un error', async () => {
+    fetchMock.mockImplementation(async (url: string) =>
+      String(url).includes('/padres/me/hijos')
+        ? json(200, [{ ...HIJOS_API[0], id_curso_actual: null }])
+        : json(200, [])
+    )
+
+    const r = await getHorarioAsociadoAction()
+
+    expect(r.error).toBeUndefined()
+    expect(r.curso).toBeNull()
   })
 
   it('si la API falla, el error llega con el detail para mostrarlo', async () => {

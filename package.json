@@ -12,7 +12,9 @@
     "test:cov": "vitest run --coverage",
     "test:int": "vitest run --config vitest.integration.config.mts",
     "e2e": "playwright test",
-    "trazabilidad": "node scripts/trazabilidad.mjs"
+    "trazabilidad": "node scripts/trazabilidad.mjs",
+    "qa:datos": "node scripts/qa-datos.mjs",
+    "qa:contrato-rutas": "node scripts/contrato-rutas.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

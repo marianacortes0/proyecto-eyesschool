@@ -10,6 +10,7 @@
     { "archivo": "tests/apiProxy.test.ts", "id": "UT-WEB-03", "correccion": "WEB-02 · cookies y proxy" },
     { "archivo": "tests/hijoActivo.test.ts", "id": "UT-WEB-04", "correccion": "WEB-03 · varios hijos" },
     { "archivo": "tests/components/SelectorHijo.test.tsx", "id": "UT-WEB-04", "correccion": "WEB-03 · varios hijos" },
+    { "archivo": "tests/components/HorariosViewerClient.test.tsx", "id": "UT-WEB-04", "correccion": "WEB-03 · horario del estudiante asociado" },
     { "archivo": "tests/asociadoActions.test.ts", "id": "IT-WEB-02", "correccion": "WEB-03 · contrato /padres/me/hijos" },
     { "archivo": "tests/permissions.test.ts", "nombre": "contrato PERMISSIONS", "id": "IT-WEB-01", "correccion": "WEB-04 · contrato con la API" },
     { "archivo": "tests/permissions.test.ts", "nombre": "WEB-04", "id": "UT-WEB-05", "correccion": "WEB-04 · permisos" },
