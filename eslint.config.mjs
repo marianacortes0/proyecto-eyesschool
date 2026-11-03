@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Salidas generadas por las pruebas.
     "coverage/**",
+    // Evidencias: incluyen el reporte HTML de Playwright, con su propio bundle.
+    "evidencias/**",
     "playwright-report/**",
     "test-results/**",
     // Scripts de utilidad/administración (CommonJS, se ejecutan con `node` y

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="9" failures="8" errors="0" time="2.2967432">
+    <testsuite name="tests/integration/contrato-api.int.test.ts" timestamp="2026-11-03T15:18:27.434Z" hostname="Mariana" tests="9" failures="8" errors="0" skipped="0" time="2.2967432">
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-03 · contrato de lectura por rol &gt; admin: usuarios, asistencia del día y reportes" time="0.5381944">
+            <failure message="Login de admin falló: HTTP 500" type="Error">
+Error: Login de admin falló: HTTP 500
+ ❯ iniciarSesion tests/integration/contrato-api.int.test.ts:37:22
+ ❯ tests/integration/contrato-api.int.test.ts:69:15
+            </failure>
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-03 · contrato de lectura por rol &gt; docente: notas, novedades, horarios y asignaciones" time="0.4894516">
+            <failure message="Login de docente falló: HTTP 500" type="Error">
+Error: Login de docente falló: HTTP 500
+ ❯ iniciarSesion tests/integration/contrato-api.int.test.ts:37:22
+ ❯ tests/integration/contrato-api.int.test.ts:86:15
+            </failure>
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-03 · contrato de lectura por rol &gt; estudiante: notas, novedades y horario del estudiante asociado" time="0.1581669">
+            <failure message="Login de estudiante falló: HTTP 500" type="Error">
+Error: Login de estudiante falló: HTTP 500
+ ❯ iniciarSesion tests/integration/contrato-api.int.test.ts:37:22
+ ❯ tests/integration/contrato-api.int.test.ts:104:17
+            </failure>
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-03 · contrato de lectura por rol &gt; padre: notas, novedades y horario del estudiante asociado" time="0.1552084">
+            <failure message="Login de padre falló: HTTP 500" type="Error">
+Error: Login de padre falló: HTTP 500
+ ❯ iniciarSesion tests/integration/contrato-api.int.test.ts:37:22
+ ❯ tests/integration/contrato-api.int.test.ts:104:17
+            </failure>
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-04 · inicio del estudiante (BE-03) &gt; GET /dashboard/estudiante responde 200 y el inicio carga" time="0.155188">
+            <failure message="Login de estudiante falló: HTTP 500" type="Error">
+Error: Login de estudiante falló: HTTP 500
+ ❯ iniciarSesion tests/integration/contrato-api.int.test.ts:37:22
+ ❯ tests/integration/contrato-api.int.test.ts:122:24
+            </failure>
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-05 · errores reales de la API llegan como mensaje &gt; 401: sin token" time="0.3420282">
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-05 · errores reales de la API llegan como mensaje &gt; 403: un padre pide la lista de usuarios" time="0.1509687">
+            <failure message="Login de padre falló: HTTP 500" type="Error">
+Error: Login de padre falló: HTTP 500
+ ❯ iniciarSesion tests/integration/contrato-api.int.test.ts:37:22
+ ❯ tests/integration/contrato-api.int.test.ts:150:24
+            </failure>
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-05 · errores reales de la API llegan como mensaje &gt; 404: un recurso que no existe" time="0.1508026">
+            <failure message="Login de admin falló: HTTP 500" type="Error">
+Error: Login de admin falló: HTTP 500
+ ❯ iniciarSesion tests/integration/contrato-api.int.test.ts:37:22
+ ❯ tests/integration/contrato-api.int.test.ts:157:24
+            </failure>
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-05 · errores reales de la API llegan como mensaje &gt; 422: cuerpo inválido, con el primer mensaje de validación" time="0.152339">
+            <failure message="Login de admin falló: HTTP 500" type="Error">
+Error: Login de admin falló: HTTP 500
+ ❯ iniciarSesion tests/integration/contrato-api.int.test.ts:37:22
+ ❯ tests/integration/contrato-api.int.test.ts:164:24
+            </failure>
+        </testcase>
+    </testsuite>
+</testsuites>
