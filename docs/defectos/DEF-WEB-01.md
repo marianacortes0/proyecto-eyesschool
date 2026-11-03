@@ -1,4 +1,4 @@
-# DEF-WEB-01 · `GET /api/v1/cursos` responde 500 en QA
+# DEF-WEB-01 · la API de QA no puede consultar su base de datos (500)
 
 | Campo | Valor |
 |---|---|
@@ -32,12 +32,19 @@
 
 `/cursos` es la **única** ruta sin autenticación, y es la única que se puede comprobar sin `QA_PASSWORD`.
 
-## Dos hipótesis (no se pueden separar sin credenciales)
+## Causa, ya acotada con credenciales
 
-1. **La base de QA no responde** para el motor de la API (`DATABASE_URL`, red o credenciales de Postgres). Entonces todas las rutas con datos fallarán igual en cuanto se pase la autenticación, y la integración y los E2E seguirán bloqueados.
-2. **Defecto solo del endpoint de cursos** (consulta, modelo de respuesta o datos del seed). El resto del sistema funcionaría.
+Con `QA_PASSWORD` se pudo separar la validación de la consulta a la base:
 
-Para distinguirlas basta un `POST /api/v1/auth/login` con una cuenta del seed y, con ese token, un `GET /api/v1/materias`: si devuelve 200, es la hipótesis 2.
+| Petición | Código | Qué prueba |
+|---|---|---|
+| `POST /api/v1/auth/login` sin el campo `password` | **422** | FastAPI valida el cuerpo: la ruta y el esquema funcionan |
+| `POST /api/v1/auth/login` con un correo inexistente y contraseña cualquiera | **500** | Debería ser **401**. El 500 aparece al buscar el usuario |
+| `POST /api/v1/auth/login` con la cuenta de admin del seed y su clave real | **500** | Igual |
+| `GET /api/v1/cursos`, `/cursos/1` | **500** | Única ruta pública; también consulta la base |
+| `GET /api/v1/auth/me`, `/usuarios`, `/materias` sin token | **401** | Rechazan antes de tocar la base: no dicen nada de su estado |
+
+**Conclusión: la aplicación está sana y la base de datos no responde para la API.** Un 500 en un login con un usuario que no existe solo puede venir de la consulta. Es configuración de Azure (`DATABASE_URL`, red o credenciales de Postgres), no del frontend ni de las pruebas.
 
 ## Impacto en el frontend
 
@@ -45,4 +52,6 @@ El frontend llama `/cursos` en horarios, usuarios, asistencia y notas (contrato 
 
 ## Siguiente paso
 
-Backend: revisar el log de la aplicación en Azure (*Log stream* de `apieyeschool-q`) para ver la excepción del endpoint, y entregar `QA_PASSWORD` por canal privado (acción externa 7) para poder correr el resto del preflight.
+Backend: abrir el *Log stream* de `apieyeschool-q` en Azure y leer la excepción del login; revisar `DATABASE_URL` (host, puerto, base, usuario, `sslmode`) y que la base de Render acepte conexiones desde la IP de salida de la Web App. Si la contraseña de Postgres se rotó (acción externa 3), hay que actualizar `DATABASE_URL` y reiniciar.
+
+En cuanto el login devuelva 200, no falta nada más del lado del frontend: `.env.test.local` ya está completo (salvo `E2E_ESTUDIANTE_VINCULADO_ID`, que lo imprime `npm run qa:datos`) y los navegadores de Playwright están instalados, así que los niveles 6 y 7 se corren de una pasada.

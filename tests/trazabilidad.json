@@ -28,6 +28,9 @@
     "tests/password.test.ts": "Política de contraseñas (base de WEB-05)",
     "tests/serverFetch.test.ts": "serverFetch y ApiError (WEB-INF-1)",
     "tests/arquitectura.test.ts": "Reglas de código testeable leídas del código fuente",
-    "tests/services/": "Cobertura de servicios (umbral 60 %, D-WEB-05)"
+    "tests/services/": "Cobertura de servicios (umbral 60 %, D-WEB-05)",
+    "tests/hooks/cargaInicial.test.tsx": "Carga inicial de los hooks (arreglos de SonarQube, D-WEB-14)",
+    "tests/apiBase.test.ts": "Base de la API del proxy (arreglos de SonarQube, D-WEB-14)",
+    "tests/components/FallidosMasivo.test.tsx": "Fallidos del registro masivo (WEB-06, cobertura D-WEB-13)"
   }
 }
