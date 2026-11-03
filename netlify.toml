@@ -1,0 +1,17 @@
+# Despliegue de la web de QA. Las pruebas corren en el CI de GitHub, no aquí:
+# este build solo compila (`next build`).
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  # `NEXT_PUBLIC_*` es pública por diseño: Next la graba en el JavaScript del
+  # navegador, así que el escaneo de secretos de Netlify la encuentra siempre.
+  # Solo se omite esta; cualquier variable con un secreto real se lee en el
+  # servidor (Server Action, route handler o /api/proxy) y NUNCA se omite aquí.
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_API_URL"
+
+# El resto de las variables (NEXT_PUBLIC_API_URL, SESSION_IDLE_MINUTES) se
+# configuran por sitio en Netlify → Environment variables, para no escribir en
+# el repositorio a qué API apunta cada despliegue.
