@@ -3,7 +3,9 @@
 | | |
 |---|---|
 | Rama | `feat/web-calidad-pruebas` (PR #34) |
-| Commit | ver `evidencias/commit.txt` |
+| Commit | `8ce9da3` (ver `evidencias/commit.txt`) |
+| CI del PR #34 | **verde**: «Lint, tipos, pruebas y build» y «SonarCloud Code Analysis» |
+| Quality Gate | **Passed** — cobertura nueva 86,2 %, Reliability A, 0 issues nuevos |
 | Fecha | 03/11/2026 |
 | Web de QA | `https://deploy-preview-34--qaeyesschool.netlify.app` (deploy preview del PR #34) |
 | API de QA | `apieyeschool-q-g4hfgrgvepbecacc.chilecentral-01.azurewebsites.net/api/v1` |
@@ -42,12 +44,13 @@ Pruebas nuevas de hoy: `tests/hooks/cargaInicial.test.tsx` (15), `tests/register
 
 ### Cobertura del código nuevo (Quality Gate)
 
-| Momento | Cobertura nueva |
-|---|---|
-| Análisis de las 10:00 (commit `8abe760`) | 60,6 % → **64,4 %** tras los arreglos de D-WEB-14 |
-| Estimación con el `lcov` corregido | **~86 %** (350 líneas nuevas, ~302 cubiertas) |
+| Análisis | Cobertura nueva | Reliability | Gate |
+|---|---|---|---|
+| Antes de esta jornada | 60,6 % | C | Falla |
+| Commit `8abe760` (arreglos de D-WEB-14) | 64,4 % | **A** | Falla (solo cobertura) |
+| Commit `8ce9da3` (lcov corregido + pruebas nuevas) | **86,2 %** | A | **Passed** |
 
-El valor real lo publica el CI del PR #34. En ese análisis de las 10:00 la condición de *Reliability* ya **dejó de fallar**: la única que quedaba era la cobertura.
+368 líneas nuevas por cubrir, 32 sin cubrir. Duplicación en código nuevo 0,0 %; Security y Maintainability también A; 0 *security hotspots*. Detalle en `PR-03/web/sonar-resumen.md`.
 
 ## Por qué hay 16 casos bloqueados
 
@@ -73,5 +76,5 @@ El valor real lo publica el CI del PR #34. En ese análisis de las 10:00 la cond
 
 1. Backend: arreglar DEF-WEB-01 (Azure → `DATABASE_URL` de `apieyeschool-q`).
 2. Con el login en 200: `npm run qa:datos`, repetir el nivel 6 y correr el nivel 7 completo en Chromium y Firefox, y rehacer este resumen.
-3. SonarQube: el Quality Gate se evalúa en el CI del PR #34 con los arreglos de D-WEB-14 y las exclusiones de cobertura de D-WEB-13. La captura va a `PR-03/web/sonar-quality-gate.png` y el resumen a `PR-03/web/sonar-resumen.md`.
+3. SonarQube: el Quality Gate ya está **Passed** (`PR-03/web/sonar-resumen.md`). Solo falta la captura del panel, `PR-03/web/sonar-quality-gate.png`, que la toma Mariana.
 4. Nivel 11: pruebas manuales sobre la URL de QA.

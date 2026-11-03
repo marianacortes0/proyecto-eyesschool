@@ -262,3 +262,17 @@ Resumen con todas las cifras: `evidencias/RESUMEN-web.md`.
 **DEF-WEB-01 (backend, alta):** la API de QA no puede consultar su base. `POST /auth/login` responde 500 incluso con un correo inexistente (debería ser 401), mientras un cuerpo inválido sí responde 422: la aplicación está sana y lo que falla es la base. Con eso resuelto, los niveles 6 y 7 se corren de una pasada, porque `.env.test.local` está completo y los navegadores están instalados.
 
 Lo que sí quedó verificado: el deploy preview del PR #34 responde 200, el modal de inicio de sesión y los selectores de los E2E funcionan (el humo llena y envía el formulario), la autenticación de la API responde 401 sin token y el contrato cubre 43 de 44 rutas.
+
+### 10.5 Quality Gate en verde (commit `8ce9da3`)
+
+| Análisis | Cobertura nueva | Reliability | Gate |
+|---|---|---|---|
+| Antes de la jornada | 60,6 % | C | Falla |
+| `8abe760` · arreglos de D-WEB-14 | 64,4 % | **A** | Falla (solo cobertura) |
+| `8ce9da3` · `lcov` corregido + pruebas nuevas | **86,2 %** | A | **Passed** |
+
+La causa principal de la cobertura baja no eran las exclusiones: `coverage.include` de Vitest dejaba fuera del informe `lcov` archivos que **sí** tienen pruebas (el proxy con sus 17 casos, `PasswordChecklist`, `SelectorHijo`, `RegistroMasivo`, `FallidosMasivo` y los dos `*ViewerClient`), y SonarQube los contaba con 0 %: 107 de las 158 líneas nuevas descubiertas eran código ya probado. Se pasó a medir todo `src` y se escribieron las pruebas que faltaban en los dos archivos con más líneas nuevas sin cubrir (`tests/register.test.ts`, 19 casos; `tests/asociadoViewer.test.ts`, 9).
+
+Cifras finales: 368 líneas nuevas por cubrir con 32 sin cubrir, 0 issues nuevos, 0 vulnerabilidades, 0 *security hotspots*, 0,0 % de duplicación, y Reliability, Security y Maintainability en **A**. El CI del PR #34 («Lint, tipos, pruebas y build» y «SonarCloud Code Analysis») quedó verde. Resumen en `evidencias/PR-03/web/sonar-resumen.md`.
+
+Con eso, de la definición de terminado quedan dos cosas, y ninguna es del frontend: **DEF-WEB-01** (la base de QA) para correr los niveles 6 y 7, y las pruebas manuales del nivel 11.
