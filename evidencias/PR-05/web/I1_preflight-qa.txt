@@ -1,31 +1,28 @@
-Preflight del entorno de QA — 2026-11-03 15:11 UTC
-Commit de la rama: 0ee35ea
-Sin credenciales: solo rutas publicas y codigos HTTP. Ningun token ni clave.
+Preflight del entorno de QA — 2026-11-05 20:57 UTC
+Commit de la rama: 77d5629
+Solo codigos HTTP. Ningun token, clave ni cookie se escribe aqui.
 
-API /docs                                     200
-API /openapi.json                             200
-API /api/v1/cursos (publica, sin token)       500
-API /api/v1/cursos/1 (publica, sin token)     500
-API /api/v1/auth/me (sin token)               401
-API /api/v1/usuarios (sin token)              401
-API /api/v1/materias (sin token)              401
-WEB deploy-preview-34 (inicio)                200
-WEB deploy-preview-34 /home/beneficios        200
-WEB deploy-preview-34 /login                  404
-WEB qaeyesschool.netlify.app (develop)        404
+API /docs                                   200
+API /openapi.json                           200
+API /api/v1/cursos/ (sin token)             500
+API /api/v1/cursos (sin token)              500
+API /api/v1/auth/me (sin token)             401
+API POST /auth/login cuerpo invalido        422
+API POST /auth/login admin del seed         500
+WEB / (deploy preview del PR 34)            200
+WEB /usuarios sin sesion (HTTP)             200
+WEB /home/beneficios                        200
+WEB qaeyesschool.netlify.app                404
 
 Lectura
 -------
-1. La web del deploy preview del PR #34 responde 200 y sirve las paginas
-   publicas. `/login` da 404 y es correcto: el inicio de sesion es un modal
-   sobre `/`, no una pagina propia (ver CLAUDE.md). No es un defecto.
-2. La autenticacion ya funciona: /auth/me, /usuarios y /materias sin token
-   responden 401 (antes todo daba 500).
-3. PERO /api/v1/cursos y /api/v1/cursos/1 —las unicas rutas sin autenticacion—
-   siguen dando 500. Con credenciales se distinguiria entre base inaccesible y
-   defecto de ese endpoint; sin QA_PASSWORD no se puede. Queda DEF-WEB-01.
-4. qaeyesschool.netlify.app (contexto develop) sigue en 404: se publica al
-   fusionar el PR #34.
+1. La Web App de QA volvio a estar encendida (/docs 200): la pausa del 03/11 se levanto.
+2. DEF-WEB-01 SIGUE ABIERTO: /cursos y el login del admin responden 500 (a veces 502),
+   mientras un cuerpo invalido si responde 422. La aplicacion esta sana y la base no responde.
+3. La web del deploy preview responde 200. /usuarios sin sesion devuelve 200 por HTTP, pero
+   el guardia SI funciona: la redireccion a /?login=1 llega por el cliente y la prueba
+   E2E del guardia pasa en Chromium y en Firefox (evidencias/PR-06/web/E2_guardia-rutas.xml).
+4. qaeyesschool.netlify.app (contexto develop) sigue en 404: se publica al fusionar el PR.
 
-Consecuencia: integracion (PR-05, nivel 6) y E2E (PR-06, nivel 7) siguen sin
-poder ejecutarse. Falta QA_PASSWORD (accion externa 7) y resolver el 500.
+Consecuencia: la integracion (8 de 9 casos) y los E2E que necesitan iniciar sesion siguen
+BLOQUEADOS. Lo unico que se pudo ejecutar de verdad es el guardia de rutas.

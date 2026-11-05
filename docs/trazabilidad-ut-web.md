@@ -1,28 +1,20 @@
 # Trazabilidad de pruebas — Frontend web
 
 > Generado con `node scripts/trazabilidad.mjs` (no editar a mano). Mapeo en `tests/trazabilidad.json`.
-> Fecha de generación: 2026-11-03
+> Fecha de generación: 2026-11-05
 
 ## Resumen
 
 | Grupo | Resultado |
 |---|---|
-| UT-WEB-01 a 08 (planeadas, PR-04) | 126 de 126 pasan |
-| UT-WEB-EXTRA (no planeadas) | 164 de 164 pasan |
+| UT-WEB-01 a 08 (planeadas, PR-04) | 116 de 118 pasan |
+| UT-WEB-EXTRA (no planeadas) | 155 de 156 pasan |
 | IT-WEB-01 a 05 (contrato, PR-05) | 12 de 21 pasan · «Omitida» = necesita `QA_API_URL` |
 
 ## Pruebas unitarias y de componentes (PR-04)
 
 | ID | Corrección | Archivo | Caso | Pasa |
 |---|---|---|---|---|
-| UT-WEB-01 | WEB-INF-1 · entorno | `tests/hooks/usePermissions.test.tsx` | UT-WEB-01 · usePermissions (WEB-04) admin: el hook devuelve lo mismo que PERMISSIONS para cada recurso y acción | Sí |
-| UT-WEB-01 | WEB-INF-1 · entorno | `tests/hooks/usePermissions.test.tsx` | UT-WEB-01 · usePermissions (WEB-04) docente: el hook devuelve lo mismo que PERMISSIONS para cada recurso y acción | Sí |
-| UT-WEB-01 | WEB-INF-1 · entorno | `tests/hooks/usePermissions.test.tsx` | UT-WEB-01 · usePermissions (WEB-04) estudiante: el hook devuelve lo mismo que PERMISSIONS para cada recurso y acción | Sí |
-| UT-WEB-01 | WEB-INF-1 · entorno | `tests/hooks/usePermissions.test.tsx` | UT-WEB-01 · usePermissions (WEB-04) padre: el hook devuelve lo mismo que PERMISSIONS para cada recurso y acción | Sí |
-| UT-WEB-01 | WEB-INF-1 · entorno | `tests/hooks/usePermissions.test.tsx` | UT-WEB-01 · usePermissions (WEB-04) docente no puede borrar asistencia | Sí |
-| UT-WEB-01 | WEB-INF-1 · entorno | `tests/hooks/usePermissions.test.tsx` | UT-WEB-01 · usePermissions (WEB-04) docente puede crear asistencia | Sí |
-| UT-WEB-01 | WEB-INF-1 · entorno | `tests/hooks/usePermissions.test.tsx` | UT-WEB-01 · usePermissions (WEB-04) padre no puede crear usuarios | Sí |
-| UT-WEB-01 | WEB-INF-1 · entorno | `tests/hooks/usePermissions.test.tsx` | UT-WEB-01 · usePermissions (WEB-04) sin rol no puede nada | Sí |
 | UT-WEB-02 | WEB-01 · sesión y rutas | `tests/routeGuard.test.ts` | guardia de rutas del panel las rutas públicas pasan sin sesión | Sí |
 | UT-WEB-02 | WEB-01 · sesión y rutas | `tests/routeGuard.test.ts` | guardia de rutas del panel sin sesión /admin manda al login | Sí |
 | UT-WEB-02 | WEB-01 · sesión y rutas | `tests/routeGuard.test.ts` | guardia de rutas del panel un token ilegible manda al login | Sí |
@@ -119,7 +111,7 @@
 | UT-WEB-06 | WEB-05 · reglas en vivo | `tests/components/PasswordChecklist.test.tsx` | WEB-05 · PasswordChecklist (reglas en vivo) con Colegio#2026 las cinco reglas aparecen cumplidas | Sí |
 | UT-WEB-06 | WEB-05 · reglas en vivo | `tests/components/PasswordChecklist.test.tsx` | WEB-05 · PasswordChecklist (reglas en vivo) anuncia los cambios con aria-live | Sí |
 | UT-WEB-06 | WEB-05 · reglas en vivo | `tests/components/PasswordChecklist.test.tsx` | WEB-05 · PasswordChecklist (reglas en vivo) con ocultarSiVacio no dibuja nada mientras el campo está vacío | Sí |
-| UT-WEB-06 | WEB-05 · reglas en vivo | `tests/components/PasswordChecklist.test.tsx` | WEB-05 · página reset-password el botón está deshabilitado con Colegio2026 y habilitado con Colegio#2026 confirmada | Sí |
+| UT-WEB-06 | WEB-05 · reglas en vivo | `tests/components/PasswordChecklist.test.tsx` | WEB-05 · página reset-password el botón está deshabilitado con Colegio2026 y habilitado con Colegio#2026 confirmada | No |
 | UT-WEB-06 | WEB-05 · reglas en vivo | `tests/components/PasswordChecklist.test.tsx` | WEB-05 · página reset-password deshabilitado si las contraseñas no coinciden | Sí |
 | UT-WEB-07 | WEB-06 · registro masivo | `tests/registroMasivo.test.ts` | clasificarResultados (WEB-06) 2 éxitos, un 409 y un 500 → 2 guardados, 1 duplicado y 1 fallido | Sí |
 | UT-WEB-07 | WEB-06 · registro masivo | `tests/registroMasivo.test.ts` | clasificarResultados (WEB-06) un error sin status (red caída) va a fallidos con un motivo legible | Sí |
@@ -130,7 +122,7 @@
 | UT-WEB-07 | WEB-06 · registro masivo | `tests/registroMasivo.test.ts` | crearRegistrosMasivoAction (WEB-06) el segundo envío del mismo curso deja a todos como duplicados (409) | Sí |
 | UT-WEB-07 | WEB-06 · registro masivo | `tests/components/RegistroMasivo.test.tsx` | RegistroMasivo (WEB-06) lista a cada fallido por nombre con los botones Reintentar y Descartar | Sí |
 | UT-WEB-07 | WEB-06 · registro masivo | `tests/components/RegistroMasivo.test.tsx` | RegistroMasivo (WEB-06) Reintentar reenvía solo al estudiante fallido | Sí |
-| UT-WEB-07 | WEB-06 · registro masivo | `tests/components/RegistroMasivo.test.tsx` | RegistroMasivo (WEB-06) Descartar quita al fallido de la lista sin llamar a la API | Sí |
+| UT-WEB-07 | WEB-06 · registro masivo | `tests/components/RegistroMasivo.test.tsx` | RegistroMasivo (WEB-06) Descartar quita al fallido de la lista sin llamar a la API | No |
 | UT-WEB-07 | WEB-06 · registro masivo | `tests/components/RegistroMasivo.test.tsx` | RegistroMasivo (WEB-06) cuando todos ya estaban registrados dice «ya registrado» y no ofrece reintentar | Sí |
 | UT-WEB-08 | WEB-09 · boletín y mensajes | `tests/notasService.test.ts` | notasService · boletín y mensajes (WEB-09) el texto del periodo sin notas es el del criterio de aceptación | Sí |
 | UT-WEB-08 | WEB-09 · boletín y mensajes | `tests/notasService.test.ts` | notasService · boletín y mensajes (WEB-09) un 404 sin datos lanza «No hay datos disponibles para generar el boletín.» | Sí |
@@ -161,7 +153,7 @@
 | UT-WEB-EXTRA-13 | Base de la API del proxy (arreglos de SonarQube, D-WEB-14) | `tests/apiBase.test.ts` | apiBase con un valor que no es URL avisa nombrando la variable | Sí |
 | UT-WEB-EXTRA-14 | Reglas de código testeable leídas del código fuente | `tests/arquitectura.test.ts` | arquitectura (reglas 1 a 4) regla 1: ninguna vista (*Client.tsx ni componente) llama a la API directamente | Sí |
 | UT-WEB-EXTRA-15 | Reglas de código testeable leídas del código fuente | `tests/arquitectura.test.ts` | arquitectura (reglas 1 a 4) regla 3: ningún código lee el token de acceso desde el navegador | Sí |
-| UT-WEB-EXTRA-16 | Reglas de código testeable leídas del código fuente | `tests/arquitectura.test.ts` | arquitectura (reglas 1 a 4) regla 4: las páginas toman el rol del token, no de la cookie eys_user | Sí |
+| UT-WEB-EXTRA-16 | Reglas de código testeable leídas del código fuente | `tests/arquitectura.test.ts` | arquitectura (reglas 1 a 4) regla 4: las páginas toman el rol del token, no de la cookie eys_user | No |
 | UT-WEB-EXTRA-17 | Reglas de código testeable leídas del código fuente | `tests/arquitectura.test.ts` | arquitectura (reglas 1 a 4) WEB-01/08: ya no existe src/services/supabase ni algo que lo importe | Sí |
 | UT-WEB-EXTRA-18 | Reglas de código testeable leídas del código fuente | `tests/arquitectura.test.ts` | arquitectura (reglas 1 a 4) WEB-01: el guardia de rutas es proxy.ts y usa sessionMiddleware | Sí |
 | UT-WEB-EXTRA-19 | Reglas de código testeable leídas del código fuente | `tests/arquitectura.test.ts` | arquitectura (reglas 1 a 4) WEB-INF-4: hay un solo despliegue (se eliminó el flujo de Azure) | Sí |
@@ -279,37 +271,29 @@
 | UT-WEB-EXTRA-131 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · qrService readQRFromImage devuelve el contenido leído | Sí |
 | UT-WEB-EXTRA-132 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · qrService readQRFromImage devuelve null si no hay símbolo o trae error | Sí |
 | UT-WEB-EXTRA-133 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/novedadesQrService.test.ts` | Servicios · qrService readQRFromImage lanza si el servicio externo falla | Sí |
-| UT-WEB-EXTRA-134 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService fileUrl: vacío, absoluta y relativa | Sí |
-| UT-WEB-EXTRA-135 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService validarArchivoReporte rechaza el formato y el tamaño | Sí |
-| UT-WEB-EXTRA-136 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService getReportes mapea a camelCase; con lista vacía devuelve [] | Sí |
-| UT-WEB-EXTRA-137 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService crear, actualizar y borrar un reporte | Sí |
-| UT-WEB-EXTRA-138 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService downloadReporteArchivo lanza con el detail si la API responde error | Sí |
-| UT-WEB-EXTRA-139 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · reportesService downloadReporteArchivo descarga con el nombre del Content-Disposition | Sí |
-| UT-WEB-EXTRA-140 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · themeService lee el tema guardado y, sin nada guardado, el preferido del sistema | Sí |
-| UT-WEB-EXTRA-141 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/reportesService.test.tsx` | Servicios · themeService applyTheme pone la clase dark y persiste | Sí |
-| UT-WEB-EXTRA-142 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfil mapea el perfil y resuelve la foto relativa contra el backend | Sí |
-| UT-WEB-EXTRA-143 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfil devuelve null si la API falla | Sí |
-| UT-WEB-EXTRA-144 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) updateMiPerfil manda solo los campos informados | Sí |
-| UT-WEB-EXTRA-145 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) uploadAvatar acepta un texto o un objeto con la URL | Sí |
-| UT-WEB-EXTRA-146 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getAvatarUrl no inventa una URL | Sí |
-| UT-WEB-EXTRA-147 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfilProfesor busca al profesor por idUsuario en la lista y trae sus especializaciones | Sí |
-| UT-WEB-EXTRA-148 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfilProfesor devuelve null si no hay fila para ese usuario o falla la API | Sí |
-| UT-WEB-EXTRA-149 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfilAdmin busca en la lista; null si no está | Sí |
-| UT-WEB-EXTRA-150 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) actualizar profesor y administrador usa snake_case | Sí |
-| UT-WEB-EXTRA-151 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) insertAdminPerfil crea el perfil Activo con la fecha de hoy | Sí |
-| UT-WEB-EXTRA-152 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiEPS usa /estudiantes/me y luego /ips; [] si no hay estudiante o falla | Sí |
-| UT-WEB-EXTRA-153 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) upsertMiEPS manda la afiliación activa con fecha de hoy | Sí |
-| UT-WEB-EXTRA-154 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiEstudianteInfo devuelve id y curso; null si la lista viene vacía | Sí |
-| UT-WEB-EXTRA-155 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) updateEstudianteCurso y getCursosParaPerfil | Sí |
-| UT-WEB-EXTRA-156 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService getUsuarios pide los activos y agrega el nombre del rol | Sí |
-| UT-WEB-EXTRA-157 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService getPendingUsuarios pide los inactivos y con lista vacía devuelve [] | Sí |
-| UT-WEB-EXTRA-158 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService getUsuarioById devuelve el usuario y null si la API falla | Sí |
-| UT-WEB-EXTRA-159 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService createUsuario manda el cuerpo en snake_case con nulos para lo opcional | Sí |
-| UT-WEB-EXTRA-160 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService updateUsuario manda solo lo que cambió | Sí |
-| UT-WEB-EXTRA-161 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService toggleUsuarioEstado manda el estado como query param | Sí |
-| UT-WEB-EXTRA-162 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService validarUsuario cambia el rol y luego activa | Sí |
-| UT-WEB-EXTRA-163 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService deleteUsuario y rechazarUsuario hacen DELETE | Sí |
-| UT-WEB-EXTRA-164 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService un 409 por correo duplicado lanza con el detail | Sí |
+| UT-WEB-EXTRA-134 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfil mapea el perfil y resuelve la foto relativa contra el backend | Sí |
+| UT-WEB-EXTRA-135 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfil devuelve null si la API falla | Sí |
+| UT-WEB-EXTRA-136 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) updateMiPerfil manda solo los campos informados | Sí |
+| UT-WEB-EXTRA-137 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) uploadAvatar acepta un texto o un objeto con la URL | Sí |
+| UT-WEB-EXTRA-138 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getAvatarUrl no inventa una URL | Sí |
+| UT-WEB-EXTRA-139 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfilProfesor busca al profesor por idUsuario en la lista y trae sus especializaciones | Sí |
+| UT-WEB-EXTRA-140 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfilProfesor devuelve null si no hay fila para ese usuario o falla la API | Sí |
+| UT-WEB-EXTRA-141 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiPerfilAdmin busca en la lista; null si no está | Sí |
+| UT-WEB-EXTRA-142 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) actualizar profesor y administrador usa snake_case | Sí |
+| UT-WEB-EXTRA-143 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) insertAdminPerfil crea el perfil Activo con la fecha de hoy | Sí |
+| UT-WEB-EXTRA-144 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiEPS usa /estudiantes/me y luego /ips; [] si no hay estudiante o falla | Sí |
+| UT-WEB-EXTRA-145 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) upsertMiEPS manda la afiliación activa con fecha de hoy | Sí |
+| UT-WEB-EXTRA-146 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) getMiEstudianteInfo devuelve id y curso; null si la lista viene vacía | Sí |
+| UT-WEB-EXTRA-147 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuarioService.test.ts` | Servicios · usuarioService (perfil) updateEstudianteCurso y getCursosParaPerfil | Sí |
+| UT-WEB-EXTRA-148 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService getUsuarios pide los activos y agrega el nombre del rol | Sí |
+| UT-WEB-EXTRA-149 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService getPendingUsuarios pide los inactivos y con lista vacía devuelve [] | Sí |
+| UT-WEB-EXTRA-150 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService getUsuarioById devuelve el usuario y null si la API falla | Sí |
+| UT-WEB-EXTRA-151 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService createUsuario manda el cuerpo en snake_case con nulos para lo opcional | Sí |
+| UT-WEB-EXTRA-152 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService updateUsuario manda solo lo que cambió | Sí |
+| UT-WEB-EXTRA-153 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService toggleUsuarioEstado manda el estado como query param | Sí |
+| UT-WEB-EXTRA-154 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService validarUsuario cambia el rol y luego activa | Sí |
+| UT-WEB-EXTRA-155 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService deleteUsuario y rechazarUsuario hacen DELETE | Sí |
+| UT-WEB-EXTRA-156 | Cobertura de servicios (umbral 60 %, D-WEB-05) | `tests/services/usuariosService.test.ts` | Servicios · usuariosService un 409 por correo duplicado lanza con el detail | Sí |
 
 ## Pruebas de contrato (PR-05)
 

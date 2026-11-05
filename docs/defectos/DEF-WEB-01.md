@@ -6,6 +6,7 @@
 | Severidad | **Alta** — bloquea las pruebas de integración (PR-05) y los E2E (PR-06) |
 | Estado | Abierto · **bloquea** los niveles 6 y 7 de la planeación de cierre |
 | Detectado el | 03/11/2026, en el preflight del entorno de QA |
+| Vuelto a comprobar | **05/11/2026: sigue igual.** La Web App volvió a estar encendida (`/docs` 200) pero `/cursos` y el login del admin siguen en 500 (a veces 502), y un cuerpo inválido sigue respondiendo 422 (`evidencias/PR-05/web/I1_preflight-qa.txt`) |
 | Caso relacionado | Preflight de la sección 2.3; indirectamente CP-INT y CP-SIS que entran a horarios, usuarios y asistencia |
 | Evidencia | `evidencias/PR-05/web/I1_preflight-qa.txt` |
 
@@ -49,6 +50,18 @@ Con `QA_PASSWORD` se pudo separar la validación de la consulta a la base:
 ## Impacto en el frontend
 
 El frontend llama `/cursos` en horarios, usuarios, asistencia y notas (contrato de rutas: `evidencias/PR-05/web/I1_contrato_rutas.json`). Mientras devuelva 500, esas pantallas mostrarán su mensaje de error. **No se arregla desde el front**: los casos que dependen de cursos quedan *bloqueados*, no *fallidos*.
+
+## Comprobación del 05/11/2026
+
+| Petición | 03/11 | 05/11 |
+|---|---|---|
+| `GET /docs` | 200 | **200** (el 03/11 por la noche daba 403 «web app is stopped»; ya se reanudó) |
+| `GET /api/v1/cursos` sin token | 500 | **500** |
+| `POST /auth/login` admin del seed | 500 | **500**, y en un intento **502** |
+| `POST /auth/login` sin `password` | 422 | **422** |
+| `GET /api/v1/auth/me` sin token | 401 | **401** |
+
+El 502 aislado apunta a que el proceso de la API se cae al intentar la conexión. Diagnóstico sin cambios: **la aplicación responde y la base no.**
 
 ## Siguiente paso
 

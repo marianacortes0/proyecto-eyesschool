@@ -3,10 +3,10 @@
 | | |
 |---|---|
 | Rama | `feat/web-calidad-pruebas` (PR #34) |
-| Commit | `8ce9da3` (ver `evidencias/commit.txt`) |
+| Commit | `77d5629` · corrida del **05/11/2026** (ver `evidencias/commit.txt`) |
 | CI del PR #34 | **verde**: «Lint, tipos, pruebas y build» y «SonarCloud Code Analysis» |
 | Quality Gate | **Passed** — cobertura nueva 86,2 %, Reliability A, 0 issues nuevos |
-| Fecha | 03/11/2026 |
+| Fecha | 03/11/2026, repetida el **05/11/2026** sobre `77d5629` |
 | Web de QA | `https://deploy-preview-34--qaeyesschool.netlify.app` (deploy preview del PR #34) |
 | API de QA | `apieyeschool-q-g4hfgrgvepbecacc.chilecentral-01.azurewebsites.net/api/v1` |
 
@@ -22,7 +22,7 @@ Todas las cifras salen de las salidas guardadas en `evidencias/`. Ninguna eviden
 | 4 | Cobertura | ver abajo | cumple | — | — | — | `PR-04/web/U3_cobertura.txt`, `U3_cobertura-summary.json` |
 | 5 | Trazabilidad | 311 mapeadas | 126 UT · 164 extra · 21 IT | — | — | — | `docs/trazabilidad-ut-web.md` |
 | 6 | Integración / contrato contra QA | **9 ejecutadas** (ninguna omitida) | 1 | 0 | **8** | 0 | `PR-05/web/I2_integracion.xml` |
-| 7 | E2E (humo, Chromium) | 8 ejecutadas de 48 | 0 | 0 | **8** | 40 sin correr | `PR-06/web/E1_humo-login.xml` |
+| 7 | E2E | **10 ejecuciones** de 48 | **2** (guardia de rutas, Chromium y Firefox) | 0 | **8** | 38 sin correr | `PR-06/web/E2_guardia-rutas.xml`, `E1_humo-login.xml` |
 | 8 | Build de producción | — | **compila** | — | — | — | `PR-04/web/U3_build.txt` |
 | 9 | Dependencias (`npm audit --omit=dev`) | — | **0 vulnerabilidades** | — | — | — | `PR-03/web/npm-audit.txt` |
 | 10 | Secretos (gitleaks, 77 commits) | 4 hallazgos | — | — | — | — | `PR-03/web/gitleaks.json` |
@@ -57,7 +57,7 @@ Pruebas nuevas de hoy: `tests/hooks/cargaInicial.test.tsx` (15), `tests/register
 **DEF-WEB-01 (backend, severidad alta): la API de QA no puede consultar su base de datos.** `POST /auth/login` responde 500 con cualquier cuenta, y también con un correo inexistente (debería ser 401); un cuerpo inválido sí responde 422, así que la aplicación está sana y lo que falla es la base. Detalle y pasos en `docs/defectos/DEF-WEB-01.md`, códigos HTTP en `PR-05/web/I1_preflight-qa.txt`.
 
 - **Nivel 6:** los 9 casos se **ejecutaron** (ya no se omiten: `.env.test.local` está completo). Las 8 fallas son todas «Login de *rol* falló: HTTP 500». El caso que pasa es «401: sin token», que no necesita base.
-- **Nivel 7:** el humo (`login-roles`, Chromium, 8 casos) confirma que el deploy preview, el modal de inicio de sesión y los selectores funcionan: el navegador llena el formulario y la web se queda en `/?login=1` porque la API devuelve 500. No se corrieron los 48 casos en Chromium y Firefox porque fallarían todos por la misma causa y `registro-masivo` y `registro-padre` necesitan escribir en la base.
+- **Nivel 7:** el humo (`login-roles`, Chromium, 8 casos) confirma que el deploy preview, el modal de inicio de sesión y los selectores funcionan: el navegador llena el formulario y la web se queda en `/?login=1` porque la API devuelve 500. El 05/11 se ejecutó además el **único caso que no necesita sesión** —el guardia de rutas— y **pasa en Chromium y en Firefox** sobre las ocho rutas del panel. Los 15 casos restantes por navegador siguen sin correr: fallarían por la misma causa y `registro-masivo` y `registro-padre` necesitan escribir en la base.
 - **Bloqueados por el backend, no por el frontend.** No se cambió ninguna prueba ni ningún comportamiento para ocultarlo.
 
 ## Lo que ya está verificado del entorno
