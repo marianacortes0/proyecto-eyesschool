@@ -87,6 +87,7 @@ export default function AsistenciaModal({
 
   useEffect(() => {
     if (mode === 'edit' && registro) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sincroniza el formulario con el registro que se abre en el modal
       setSelectedIds([registro.idEstudiante])
       setTipo(normalizeTipo(registro.tipo) ?? 'entrada')
       setEstado(registro.estado)

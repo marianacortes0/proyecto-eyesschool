@@ -114,6 +114,7 @@ export default function UsuarioModal({
         : undefined
       // Especialización actual del profesor (tratada como única)
       const esp = usuario.especializaciones?.[0]
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- marca el montaje en cliente (portal) y bloquea el scroll del body
       setForm({
         primerNombre: usuario.primerNombre,
         segundoNombre: usuario.segundoNombre ?? '',

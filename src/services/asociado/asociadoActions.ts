@@ -1,18 +1,19 @@
 'use server'
 
-import { cookies } from 'next/headers'
-import { getServerUser, userToRole } from '@/lib/auth/server'
+import { getServerToken, getServerUser, userToRole } from '@/lib/auth/server'
+import { elegirHijoActivo, type Hijo } from '@/lib/utils/hijoActivo'
+import { ApiError, toCamel } from '@/services/api/client'
+import { serverFetch } from '@/services/api/serverFetch'
+import { MSG_HORARIO_ERROR } from '@/services/asociado/mensajes'
 import { PERIODOS } from '@/services/notas/notasService'
 
 /**
- * Capa de datos para el "estudiante asociado": lo que un padre (su hijo) o un
- * estudiante (él mismo) puede VISUALIZAR en modo solo-lectura. Todo se pide a los
- * endpoints acotados /estudiantes/{id}/notas|novedades, que el backend autoriza
- * por propiedad (un padre solo accede a su hijo). El directorio global de
- * estudiantes/notas/novedades sigue siendo solo de gestión (docente/admin).
+ * Capa de datos para el "estudiante asociado": lo que un padre (su hijo activo) o
+ * un estudiante (él mismo) puede VISUALIZAR en modo solo-lectura. Todo se pide a
+ * los endpoints acotados /estudiantes/{id}/notas|novedades, que el backend
+ * autoriza por propiedad (un padre solo accede a sus hijos). El directorio global
+ * de estudiantes/notas/novedades sigue siendo solo de gestión (docente/admin).
  */
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
 type Raw = Record<string, unknown>
 
@@ -21,42 +22,8 @@ const DIA_ORDER: Record<string, number> = {
   Viernes: 4, 'Sábado': 5, Sabado: 5, Domingo: 6,
 }
 
-async function getToken(): Promise<string | null> {
-  const store = await cookies()
-  return store.get('eys_access')?.value ?? null
-}
-
-async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const token = await getToken()
-  const res = await fetch(`${API}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options.headers as Record<string, string> | undefined),
-    },
-    cache: 'no-store',
-  })
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
-    throw new Error((body as Record<string, unknown>).detail as string ?? `HTTP ${res.status}`)
-  }
-  if (res.status === 204) return null as T
-  return res.json() as Promise<T>
-}
-
-function toCamelKey(k: string): string {
-  return k.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase())
-}
-
-function toCamel(v: unknown): unknown {
-  if (Array.isArray(v)) return v.map(toCamel)
-  if (v !== null && typeof v === 'object') {
-    return Object.fromEntries(
-      Object.entries(v as Record<string, unknown>).map(([k, val]) => [toCamelKey(k), toCamel(val)])
-    )
-  }
-  return v
+async function apiFetch<T>(path: string): Promise<T> {
+  return serverFetch<T>(path, { token: await getServerToken() })
 }
 
 export type AsociadoInfo = {
@@ -65,37 +32,104 @@ export type AsociadoInfo = {
   codigo: string
 }
 
+function aHijo(r: Raw): Hijo {
+  const c = toCamel(r) as Raw
+  return {
+    idEstudiante: c.idEstudiante as number,
+    nombre: (c.nombre as string) || `Estudiante #${c.idEstudiante}`,
+    documento: (c.documento as string) ?? '',
+    parentesco: (c.parentesco as string) ?? '',
+    idCursoActual: (c.idCursoActual as number | null) ?? null,
+    codigoEstudiante: (c.codigoEstudiante as string | undefined) ?? undefined,
+  }
+}
+
+/**
+ * Respaldo mientras BE-07 no esté desplegado. Quitar cuando /padres/me/hijos exista en producción.
+ * Arma una lista de un solo hijo con el vínculo de GET /padres/me.
+ */
+async function hijoDesdePadresMe(): Promise<Hijo[]> {
+  const c = toCamel(await apiFetch<Raw>('/padres/me')) as Raw
+  const id = c.idEstudiante as number | undefined
+  if (id == null) return []
+  // /padres/me no trae el curso: hay que pedir el estudiante. Si esa consulta
+  // falla no se puede afirmar que el estudiante no tenga curso, así que se marca
+  // para que la pantalla muestre un error con reintento (ver `cursoNoDisponible`).
+  const est = await apiFetch<Raw>(`/estudiantes/${id}`).catch(() => null)
+  const e = est ? (toCamel(est) as Raw) : {}
+  const hijo = aHijo({
+    id_estudiante: id,
+    nombre: c.nombreEstudiante,
+    documento: c.documentoEstudiante,
+    parentesco: c.parentesco,
+    id_curso_actual: e.idCursoActual ?? null,
+    codigo_estudiante: e.codigoEstudiante,
+  })
+  return [est ? hijo : { ...hijo, cursoNoDisponible: true }]
+}
+
+/** Hijos vinculados al padre actual (GET /padres/me/hijos, BE-07). */
+export async function getHijosAction(): Promise<Hijo[]> {
+  try {
+    return (await apiFetch<Raw[]>('/padres/me/hijos')).map(aHijo)
+  } catch (error) {
+    if (error instanceof ApiError && (error.status === 404 || error.status === 405)) return hijoDesdePadresMe()
+    throw error
+  }
+}
+
+type Asociado = {
+  info: AsociadoInfo | null
+  hijos: Hijo[]
+  idCursoActual: number | null
+  /** El curso no se pudo leer (la consulta falló); no es que no tenga curso. */
+  cursoNoDisponible: boolean
+}
+
 /**
  * Resuelve el estudiante asociado al usuario actual:
- *   - padre      → el hijo vinculado (vía /dashboard/padre, que devuelve id + nombre).
+ *   - padre      → el hijo pedido en `?hijo=` (o el primero) entre los que tiene
+ *                  vinculados (GET /padres/me/hijos).
  *   - estudiante → él mismo (vía /estudiantes/me; el nombre sale de la cookie de usuario).
- * Devuelve null para cualquier otro rol o si no hay vínculo.
+ * Devuelve `info: null` para cualquier otro rol o si no hay vínculo.
  */
-async function resolveAsociado(): Promise<AsociadoInfo | null> {
+async function resolveAsociado(idEstudiante?: number | string | null): Promise<Asociado> {
   const user = await getServerUser()
-  if (!user) return null
+  if (!user) return { info: null, hijos: [], idCursoActual: null, cursoNoDisponible: false }
   const role = userToRole(user)
 
   if (role === 'padre') {
-    const d = toCamel(await apiFetch<Raw>('/dashboard/padre')) as Raw
-    const id = d.idEstudiante as number | undefined
-    if (id == null) return null
+    const hijos = await getHijosAction()
+    const hijo = elegirHijoActivo(hijos, idEstudiante)
+    if (!hijo) return { info: null, hijos, idCursoActual: null, cursoNoDisponible: false }
     return {
-      idEstudiante: id,
-      nombre: (d.nombreEstudiante as string) || `Estudiante #${id}`,
-      codigo: (d.codigoEstudiante as string) ?? '',
+      info: { idEstudiante: hijo.idEstudiante, nombre: hijo.nombre, codigo: hijo.codigoEstudiante ?? '' },
+      hijos,
+      idCursoActual: hijo.idCursoActual,
+      cursoNoDisponible: hijo.cursoNoDisponible === true,
     }
   }
 
   if (role === 'estudiante') {
     const e = toCamel(await apiFetch<Raw>('/estudiantes/me')) as Raw
     const id = e.idEstudiante as number | undefined
-    if (id == null) return null
+    if (id == null) return { info: null, hijos: [], idCursoActual: null, cursoNoDisponible: false }
     const nombre = [user.primerNombre, user.primerApellido].filter(Boolean).join(' ') || `Estudiante #${id}`
-    return { idEstudiante: id, nombre, codigo: (e.codigoEstudiante as string) ?? '' }
+    return {
+      info: { idEstudiante: id, nombre, codigo: (e.codigoEstudiante as string) ?? '' },
+      hijos: [],
+      idCursoActual: (e.idCursoActual as number | null) ?? null,
+      cursoNoDisponible: false,
+    }
   }
 
-  return null
+  return { info: null, hijos: [], idCursoActual: null, cursoNoDisponible: false }
+}
+
+/** Estudiante asociado y lista de hijos, para páginas que arman sus propios datos (asistencia). */
+export async function getAsociadoAction(idEstudiante?: number | string | null): Promise<{ info: AsociadoInfo | null; hijos: Hijo[] }> {
+  const { info, hijos } = await resolveAsociado(idEstudiante)
+  return { info, hijos }
 }
 
 // ── Notas del estudiante asociado ───────────────────────────────────────────
@@ -115,13 +149,14 @@ export type MateriaOpt = { idMateria: number; nombreMateria: string }
 
 export type NotasAsociadoBootstrap = {
   info: AsociadoInfo | null
+  hijos: Hijo[]
   notas: NotaViewer[]
   materias: MateriaOpt[]
 }
 
-export async function getNotasAsociadoAction(): Promise<NotasAsociadoBootstrap> {
-  const info = await resolveAsociado()
-  if (!info) return { info: null, notas: [], materias: [] }
+export async function getNotasAsociadoAction(idEstudiante?: number | string | null): Promise<NotasAsociadoBootstrap> {
+  const { info, hijos } = await resolveAsociado(idEstudiante)
+  if (!info) return { info: null, hijos, notas: [], materias: [] }
 
   const [notasRaw, materiasRaw] = await Promise.all([
     apiFetch<Raw[]>(`/estudiantes/${info.idEstudiante}/notas`),
@@ -150,7 +185,7 @@ export async function getNotasAsociadoAction(): Promise<NotasAsociadoBootstrap> 
     }
   })
 
-  return { info, notas, materias }
+  return { info, hijos, notas, materias }
 }
 
 // ── Novedades del estudiante asociado ───────────────────────────────────────
@@ -168,12 +203,13 @@ export type NovedadViewer = {
 
 export type NovedadesAsociadoBootstrap = {
   info: AsociadoInfo | null
+  hijos: Hijo[]
   novedades: NovedadViewer[]
 }
 
-export async function getNovedadesAsociadoAction(): Promise<NovedadesAsociadoBootstrap> {
-  const info = await resolveAsociado()
-  if (!info) return { info: null, novedades: [] }
+export async function getNovedadesAsociadoAction(idEstudiante?: number | string | null): Promise<NovedadesAsociadoBootstrap> {
+  const { info, hijos } = await resolveAsociado(idEstudiante)
+  if (!info) return { info: null, hijos, novedades: [] }
 
   const [novedadesRaw, tiposRaw] = await Promise.all([
     apiFetch<Raw[]>(`/estudiantes/${info.idEstudiante}/novedades`),
@@ -204,55 +240,10 @@ export async function getNovedadesAsociadoAction(): Promise<NovedadesAsociadoBoo
     }
   })
 
-  return { info, novedades }
+  return { info, hijos, novedades }
 }
 
 // ── Horario del estudiante asociado ─────────────────────────────────────────
-
-/** Igual que el asociado, pero resolviendo además su curso actual. */
-async function resolveAsociadoConCurso(): Promise<(AsociadoInfo & { idCursoActual: number | null }) | null> {
-  const user = await getServerUser()
-  if (!user) return null
-  const role = userToRole(user)
-
-  if (role === 'padre') {
-    const d = toCamel(await apiFetch<Raw>('/dashboard/padre')) as Raw
-    const id = d.idEstudiante as number | undefined
-    if (id == null) return null
-    let idCursoActual: number | null = null
-    let codigo = (d.codigoEstudiante as string) ?? ''
-    // El curso actual no viene en el dashboard: se lee del expediente del hijo
-    // (el backend autoriza por propiedad en /estudiantes/{id}).
-    try {
-      const e = toCamel(await apiFetch<Raw>(`/estudiantes/${id}`)) as Raw
-      idCursoActual = (e.idCursoActual as number | null) ?? null
-      codigo = (e.codigoEstudiante as string) ?? codigo
-    } catch {
-      // sin curso → se mostrará el vacío
-    }
-    return {
-      idEstudiante: id,
-      nombre: (d.nombreEstudiante as string) || `Estudiante #${id}`,
-      codigo,
-      idCursoActual,
-    }
-  }
-
-  if (role === 'estudiante') {
-    const e = toCamel(await apiFetch<Raw>('/estudiantes/me')) as Raw
-    const id = e.idEstudiante as number | undefined
-    if (id == null) return null
-    const nombre = [user.primerNombre, user.primerApellido].filter(Boolean).join(' ') || `Estudiante #${id}`
-    return {
-      idEstudiante: id,
-      nombre,
-      codigo: (e.codigoEstudiante as string) ?? '',
-      idCursoActual: (e.idCursoActual as number | null) ?? null,
-    }
-  }
-
-  return null
-}
 
 export type HorarioViewer = {
   idHorario: number
@@ -268,24 +259,35 @@ export type CursoInfo = { idCurso: number; nombreCurso: string; grado: string; j
 
 export type HorarioAsociadoBootstrap = {
   info: AsociadoInfo | null
+  hijos: Hijo[]
   curso: CursoInfo | null
   horarios: HorarioViewer[]
+  /** Mensaje para el usuario cuando el horario no se pudo cargar (con reintento). */
+  error?: string
 }
 
-export async function getHorarioAsociadoAction(): Promise<HorarioAsociadoBootstrap> {
-  const resolved = await resolveAsociadoConCurso()
-  if (!resolved) return { info: null, curso: null, horarios: [] }
-
-  const info: AsociadoInfo = { idEstudiante: resolved.idEstudiante, nombre: resolved.nombre, codigo: resolved.codigo }
-  if (resolved.idCursoActual == null) return { info, curso: null, horarios: [] }
+export async function getHorarioAsociadoAction(idEstudiante?: number | string | null): Promise<HorarioAsociadoBootstrap> {
+  const { info, hijos, idCursoActual, cursoNoDisponible } = await resolveAsociado(idEstudiante)
+  if (!info) return { info: null, hijos, curso: null, horarios: [] }
+  // Sin curso puede ser «no tiene curso» o «no se pudo consultar»: solo el
+  // segundo caso es un error, y se muestra como tal en vez de un horario vacío.
+  if (cursoNoDisponible) return { info, hijos, curso: null, horarios: [], error: MSG_HORARIO_ERROR }
+  if (idCursoActual == null) return { info, hijos, curso: null, horarios: [] }
 
   // /horarios?id_curso= ya está protegido para los 4 roles: no expone más que el
   // horario de ESE curso (el del estudiante asociado).
-  const [horariosRaw, materiasRaw, cursoRaw] = await Promise.all([
-    apiFetch<Raw[]>(`/horarios?id_curso=${resolved.idCursoActual}&limit=500`),
-    apiFetch<Raw[]>('/materias?activa=true&limit=200'),
-    apiFetch<Raw>(`/cursos/${resolved.idCursoActual}`).catch(() => null),
-  ])
+  let horariosRaw: Raw[]
+  let materiasRaw: Raw[]
+  let cursoRaw: Raw | null
+  try {
+    ;[horariosRaw, materiasRaw, cursoRaw] = await Promise.all([
+      apiFetch<Raw[]>(`/horarios?id_curso=${idCursoActual}&limit=500`),
+      apiFetch<Raw[]>('/materias?activa=true&limit=200'),
+      apiFetch<Raw>(`/cursos/${idCursoActual}`).catch(() => null),
+    ])
+  } catch {
+    return { info, hijos, curso: null, horarios: [], error: MSG_HORARIO_ERROR }
+  }
 
   const materiaById = new Map<number, string>()
   for (const r of materiasRaw) {
@@ -325,5 +327,5 @@ export async function getHorarioAsociadoAction(): Promise<HorarioAsociadoBootstr
     }
   }
 
-  return { info, curso, horarios }
+  return { info, hijos, curso, horarios }
 }

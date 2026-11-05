@@ -1,0 +1,360 @@
+{
+  "api": "apieyeschool-q-g4hfgrgvepbecacc.chilecentral-01.azurewebsites.net",
+  "fecha": "2026-11-03T01:30:46.378Z",
+  "total": 44,
+  "faltan": 1,
+  "rutas": [
+    {
+      "ruta": "/padres/me/hijos",
+      "existe": false,
+      "archivos": [
+        "src/services/asociado/asociadoActions.ts"
+      ]
+    },
+    {
+      "ruta": "/administradores",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/usuarios/actions.ts"
+      ]
+    },
+    {
+      "ruta": "/administradores/{}",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/perfil/actions.ts",
+        "src/app/(dashboard)/usuarios/actions.ts",
+        "src/services/usuario/usuarioService.ts"
+      ]
+    },
+    {
+      "ruta": "/asignaciones",
+      "existe": true,
+      "archivos": [
+        "src/services/horarios/horariosActions.ts",
+        "src/services/horarios/horariosService.ts"
+      ]
+    },
+    {
+      "ruta": "/asignaciones/{}",
+      "existe": true,
+      "archivos": [
+        "src/services/horarios/horariosActions.ts",
+        "src/services/horarios/horariosService.ts"
+      ]
+    },
+    {
+      "ruta": "/asistencia",
+      "existe": true,
+      "archivos": [
+        "src/services/asistencia/asistenciaActions.ts",
+        "src/services/qr/qrActions.ts"
+      ]
+    },
+    {
+      "ruta": "/asistencia/{}",
+      "existe": true,
+      "archivos": [
+        "src/services/asistencia/asistenciaService.ts"
+      ]
+    },
+    {
+      "ruta": "/auth/me/avatar",
+      "existe": true,
+      "archivos": [
+        "src/services/usuario/usuarioService.ts"
+      ]
+    },
+    {
+      "ruta": "/cursos",
+      "existe": true,
+      "archivos": [
+        "src/services/asistencia/asistenciaActions.ts",
+        "src/services/horarios/horariosActions.ts",
+        "src/services/horarios/horariosService.ts",
+        "src/services/notas/notasActions.ts",
+        "src/services/novedades/novedadesActions.ts",
+        "src/services/qr/qrActions.ts"
+      ]
+    },
+    {
+      "ruta": "/cursos/{}",
+      "existe": true,
+      "archivos": [
+        "src/services/asociado/asociadoActions.ts",
+        "src/services/horarios/horariosService.ts"
+      ]
+    },
+    {
+      "ruta": "/dashboard/docente",
+      "existe": true,
+      "archivos": [
+        "src/services/dashboard/dashboardService.ts"
+      ]
+    },
+    {
+      "ruta": "/dashboard/estudiante",
+      "existe": true,
+      "archivos": [
+        "src/services/dashboard/dashboardService.ts"
+      ]
+    },
+    {
+      "ruta": "/especializaciones",
+      "existe": true,
+      "archivos": [
+        "src/services/horarios/horariosActions.ts",
+        "src/services/horarios/horariosService.ts"
+      ]
+    },
+    {
+      "ruta": "/especializaciones/{}",
+      "existe": true,
+      "archivos": [
+        "src/services/horarios/horariosService.ts"
+      ]
+    },
+    {
+      "ruta": "/estudiantes",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/usuarios/actions.ts",
+        "src/services/asistencia/asistenciaActions.ts",
+        "src/services/notas/notasActions.ts",
+        "src/services/novedades/novedadesActions.ts",
+        "src/services/qr/qrActions.ts"
+      ]
+    },
+    {
+      "ruta": "/estudiantes/{}",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/perfil/actions.ts",
+        "src/app/(dashboard)/usuarios/actions.ts",
+        "src/services/asociado/asociadoActions.ts",
+        "src/services/usuario/usuarioService.ts"
+      ]
+    },
+    {
+      "ruta": "/estudiantes/{}/asistencia",
+      "existe": true,
+      "archivos": [
+        "src/services/asistencia/asistenciaActions.ts"
+      ]
+    },
+    {
+      "ruta": "/estudiantes/{}/ips",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/perfil/actions.ts",
+        "src/services/usuario/usuarioService.ts"
+      ]
+    },
+    {
+      "ruta": "/estudiantes/{}/notas",
+      "existe": true,
+      "archivos": [
+        "src/services/asociado/asociadoActions.ts"
+      ]
+    },
+    {
+      "ruta": "/estudiantes/{}/novedades",
+      "existe": true,
+      "archivos": [
+        "src/services/asociado/asociadoActions.ts"
+      ]
+    },
+    {
+      "ruta": "/estudiantes/me",
+      "existe": true,
+      "archivos": [
+        "src/services/asociado/asociadoActions.ts"
+      ]
+    },
+    {
+      "ruta": "/horarios",
+      "existe": true,
+      "archivos": [
+        "src/services/asociado/asociadoActions.ts",
+        "src/services/horarios/horariosActions.ts"
+      ]
+    },
+    {
+      "ruta": "/horarios/{}",
+      "existe": true,
+      "archivos": [
+        "src/services/horarios/horariosActions.ts",
+        "src/services/horarios/horariosService.ts"
+      ]
+    },
+    {
+      "ruta": "/horarios/{}/profesores",
+      "existe": true,
+      "archivos": [
+        "src/services/horarios/horariosActions.ts",
+        "src/services/horarios/horariosService.ts"
+      ]
+    },
+    {
+      "ruta": "/materias",
+      "existe": true,
+      "archivos": [
+        "src/services/asociado/asociadoActions.ts",
+        "src/services/horarios/horariosActions.ts",
+        "src/services/horarios/horariosService.ts",
+        "src/services/notas/notasActions.ts"
+      ]
+    },
+    {
+      "ruta": "/materias/{}",
+      "existe": true,
+      "archivos": [
+        "src/services/horarios/horariosService.ts"
+      ]
+    },
+    {
+      "ruta": "/notas",
+      "existe": true,
+      "archivos": [
+        "src/services/notas/notasActions.ts",
+        "src/services/notas/notasService.ts"
+      ]
+    },
+    {
+      "ruta": "/notas/{}",
+      "existe": true,
+      "archivos": [
+        "src/services/notas/notasService.ts"
+      ]
+    },
+    {
+      "ruta": "/novedades",
+      "existe": true,
+      "archivos": [
+        "src/services/novedades/novedadesActions.ts",
+        "src/services/novedades/novedadesService.ts"
+      ]
+    },
+    {
+      "ruta": "/novedades/{}",
+      "existe": true,
+      "archivos": [
+        "src/services/novedades/novedadesActions.ts",
+        "src/services/novedades/novedadesService.ts"
+      ]
+    },
+    {
+      "ruta": "/padres",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/perfil/actions.ts",
+        "src/app/(dashboard)/usuarios/actions.ts"
+      ]
+    },
+    {
+      "ruta": "/padres/{}",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/perfil/actions.ts",
+        "src/app/(dashboard)/usuarios/actions.ts"
+      ]
+    },
+    {
+      "ruta": "/padres/me",
+      "existe": true,
+      "archivos": [
+        "src/services/asociado/asociadoActions.ts"
+      ]
+    },
+    {
+      "ruta": "/profesores",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/usuarios/actions.ts",
+        "src/services/horarios/horariosActions.ts"
+      ]
+    },
+    {
+      "ruta": "/profesores/{}",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/perfil/actions.ts",
+        "src/app/(dashboard)/usuarios/actions.ts",
+        "src/services/usuario/usuarioService.ts"
+      ]
+    },
+    {
+      "ruta": "/profesores/{}/especializaciones",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/perfil/actions.ts",
+        "src/app/(dashboard)/usuarios/actions.ts"
+      ]
+    },
+    {
+      "ruta": "/profesores/{}/especializaciones/{}",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/perfil/actions.ts",
+        "src/app/(dashboard)/usuarios/actions.ts"
+      ]
+    },
+    {
+      "ruta": "/reportes",
+      "existe": true,
+      "archivos": [
+        "src/services/reportes/reportesActions.ts",
+        "src/services/reportes/reportesService.ts"
+      ]
+    },
+    {
+      "ruta": "/reportes/{}",
+      "existe": true,
+      "archivos": [
+        "src/services/reportes/reportesActions.ts",
+        "src/services/reportes/reportesService.ts"
+      ]
+    },
+    {
+      "ruta": "/reportes/{}/estado",
+      "existe": true,
+      "archivos": [
+        "src/services/reportes/reportesActions.ts"
+      ]
+    },
+    {
+      "ruta": "/tipos-novedad",
+      "existe": true,
+      "archivos": [
+        "src/services/asociado/asociadoActions.ts",
+        "src/services/novedades/novedadesActions.ts"
+      ]
+    },
+    {
+      "ruta": "/usuarios",
+      "existe": true,
+      "archivos": [
+        "src/services/qr/qrActions.ts",
+        "src/services/usuarios/usuariosService.ts"
+      ]
+    },
+    {
+      "ruta": "/usuarios/{}",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/perfil/actions.ts",
+        "src/app/(dashboard)/usuarios/actions.ts",
+        "src/services/usuario/usuarioService.ts",
+        "src/services/usuarios/usuariosService.ts"
+      ]
+    },
+    {
+      "ruta": "/usuarios/{}/estado",
+      "existe": true,
+      "archivos": [
+        "src/app/(dashboard)/usuarios/actions.ts",
+        "src/services/usuarios/usuariosService.ts"
+      ]
+    }
+  ]
+}

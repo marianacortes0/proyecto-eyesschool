@@ -22,12 +22,14 @@ export default function LegalModal({
   const [tab, setTab] = useState<"privacy" | "terms">(initialTab);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- marca el montaje en cliente y respeta la pestaña inicial al abrir el modal
     setMounted(true);
   }, []);
 
   // 🔥 Cada vez que abres el modal, respeta el tab inicial
   useEffect(() => {
     if (isOpen) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- marca el montaje en cliente y respeta la pestaña inicial al abrir el modal
       setTab(initialTab);
       document.body.style.overflow = "hidden";
     } else {

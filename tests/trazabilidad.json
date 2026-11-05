@@ -1,0 +1,38 @@
+{
+  "_nota": "Mapeo archivo → ID de la planeación (UT-WEB-01 a 08, IT-WEB-01 a 05). La primera regla que coincide gana; 'nombre' es una expresión regular sobre el nombre completo de la prueba. Lo que no coincide va como UT-WEB-EXTRA-nn.",
+  "reglas": [
+    { "archivo": "tests/hooks/usePermissions.test.tsx", "id": "UT-WEB-01", "correccion": "WEB-INF-1 · entorno" },
+    { "archivo": "tests/routeGuard.test.ts", "id": "UT-WEB-02", "correccion": "WEB-01 · sesión y rutas" },
+    { "archivo": "tests/routeRoles.test.ts", "id": "UT-WEB-02", "correccion": "WEB-01 · sesión y rutas" },
+    { "archivo": "tests/authCookies.test.ts", "id": "UT-WEB-03", "correccion": "WEB-02 · cookies" },
+    { "archivo": "tests/decodeRol.test.ts", "id": "UT-WEB-03", "correccion": "WEB-02 · cookies" },
+    { "archivo": "tests/apiClient.test.ts", "id": "UT-WEB-03", "correccion": "WEB-02 · cookies" },
+    { "archivo": "tests/apiProxy.test.ts", "id": "UT-WEB-03", "correccion": "WEB-02 · cookies y proxy" },
+    { "archivo": "tests/hijoActivo.test.ts", "id": "UT-WEB-04", "correccion": "WEB-03 · varios hijos" },
+    { "archivo": "tests/components/SelectorHijo.test.tsx", "id": "UT-WEB-04", "correccion": "WEB-03 · varios hijos" },
+    { "archivo": "tests/components/HorariosViewerClient.test.tsx", "id": "UT-WEB-04", "correccion": "WEB-03 · horario del estudiante asociado" },
+    { "archivo": "tests/asociadoActions.test.ts", "id": "IT-WEB-02", "correccion": "WEB-03 · contrato /padres/me/hijos" },
+    { "archivo": "tests/permissions.test.ts", "nombre": "contrato PERMISSIONS", "id": "IT-WEB-01", "correccion": "WEB-04 · contrato con la API" },
+    { "archivo": "tests/permissions.test.ts", "nombre": "WEB-04", "id": "UT-WEB-05", "correccion": "WEB-04 · permisos" },
+    { "archivo": "tests/resetPassword.test.ts", "id": "UT-WEB-06", "correccion": "WEB-05 · restablecer contraseña" },
+    { "archivo": "tests/components/PasswordChecklist.test.tsx", "id": "UT-WEB-06", "correccion": "WEB-05 · reglas en vivo" },
+    { "archivo": "tests/registroMasivo.test.ts", "id": "UT-WEB-07", "correccion": "WEB-06 · registro masivo" },
+    { "archivo": "tests/components/RegistroMasivo.test.tsx", "id": "UT-WEB-07", "correccion": "WEB-06 · registro masivo" },
+    { "archivo": "tests/components/NotasViewerClient.test.tsx", "id": "UT-WEB-08", "correccion": "WEB-09 · boletín y mensajes" },
+    { "archivo": "tests/notasService.test.ts", "id": "UT-WEB-08", "correccion": "WEB-09 · boletín y mensajes" },
+    { "archivo": "tests/integration/contrato-api.int.test.ts", "nombre": "IT-WEB-03", "id": "IT-WEB-03", "correccion": "R-07 · contrato real" },
+    { "archivo": "tests/integration/contrato-api.int.test.ts", "nombre": "IT-WEB-04", "id": "IT-WEB-04", "correccion": "CP-INT-060 desde la web" },
+    { "archivo": "tests/integration/contrato-api.int.test.ts", "nombre": "IT-WEB-05", "id": "IT-WEB-05", "correccion": "Errores de la API" }
+  ],
+  "extras": {
+    "tests/password.test.ts": "Política de contraseñas (base de WEB-05)",
+    "tests/serverFetch.test.ts": "serverFetch y ApiError (WEB-INF-1)",
+    "tests/arquitectura.test.ts": "Reglas de código testeable leídas del código fuente",
+    "tests/services/": "Cobertura de servicios (umbral 60 %, D-WEB-05)",
+    "tests/hooks/cargaInicial.test.tsx": "Carga inicial de los hooks (arreglos de SonarQube, D-WEB-14)",
+    "tests/apiBase.test.ts": "Base de la API del proxy (arreglos de SonarQube, D-WEB-14)",
+    "tests/components/FallidosMasivo.test.tsx": "Fallidos del registro masivo (WEB-06, cobertura D-WEB-13)",
+    "tests/register.test.ts": "Validación por rol de register (WEB-05, cobertura D-WEB-13)",
+    "tests/asociadoViewer.test.ts": "Notas, novedades y horario del estudiante asociado (WEB-03)"
+  }
+}

@@ -6,8 +6,9 @@ import { getNovedadesBootstrapAction, type NovedadesBootstrap } from '@/services
 import { getNovedadesAsociadoAction } from '@/services/asociado/asociadoActions'
 import NovedadesClient from './NovedadesClient'
 import NovedadesViewerClient from './NovedadesViewerClient'
+import SelectorHijo from '@/components/asociado/SelectorHijo'
 
-export default async function NovedadesPage() {
+export default async function NovedadesPage({ searchParams }: { searchParams: Promise<{ hijo?: string }> }) {
   const user = await getServerUser()
   if (!user) redirect('/?login=1')
 
@@ -16,8 +17,14 @@ export default async function NovedadesPage() {
 
   // Padre y estudiante: vista acotada de SOLO LECTURA del estudiante asociado.
   if (role === 'padre' || role === 'estudiante') {
-    const data = await getNovedadesAsociadoAction()
-    return <NovedadesViewerClient {...data} />
+    const { hijo } = await searchParams
+    const data = await getNovedadesAsociadoAction(hijo)
+    return (
+      <>
+        <SelectorHijo hijos={data.hijos} activoId={data.info?.idEstudiante ?? null} />
+        <NovedadesViewerClient {...data} />
+      </>
+    )
   }
 
   // Admin (solo lectura) y docente (CRUD): vista de gestión.

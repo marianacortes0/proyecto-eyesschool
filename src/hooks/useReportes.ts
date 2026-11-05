@@ -45,7 +45,8 @@ export function useReportes(idAdministrador: number, initialReportes?: Reporte[]
   useEffect(() => {
     // Si la página entregó los reportes desde el servidor, no refetcheamos al montar.
     if (initialReportes) return
-    fetchAll()
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- carga inicial cuando la página no entregó los datos desde el servidor
+    void fetchAll()
   }, [initialReportes, fetchAll])
 
   const filtered = reportes.filter(r => {

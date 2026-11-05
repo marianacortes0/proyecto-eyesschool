@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { register, getCursos, getEspecializaciones } from '@/auth/actions';
-import { passwordChecks, PASSWORD_RULE_LABELS } from '@/lib/utils/password';
+import PasswordChecklist from '@/components/auth/PasswordChecklist';
 
 type Curso = { idCurso: number; nombreCurso: string; grado: string; jornada: string };
 type Especializacion = { idEspecializacion: number; nombreEspecializacion: string };
@@ -41,7 +41,6 @@ export default function SignupModal({
   const [grado, setGrado] = useState('');
   const [password, setPassword] = useState('');
 
-  const checks = passwordChecks(password);
 
   useEffect(() => {
     if (!open) return;
@@ -131,11 +130,11 @@ export default function SignupModal({
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             <div>
               <label style={label}>NOMBRE</label>
-              <input name="firstName" required placeholder="Tu nombre" style={field} />
+              <input name="firstName" aria-label="Nombre" required placeholder="Tu nombre" style={field} />
             </div>
             <div>
               <label style={label}>APELLIDO</label>
-              <input name="lastName" required placeholder="Tu apellido" style={field} />
+              <input name="lastName" aria-label="Apellido" required placeholder="Tu apellido" style={field} />
             </div>
           </div>
 
@@ -153,7 +152,7 @@ export default function SignupModal({
           <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: 10 }}>
             <div>
               <label style={label}>DOC.</label>
-              <select name="docType" required defaultValue="CC" style={{ ...field, cursor: 'pointer' }}>
+              <select name="docType" aria-label="Tipo de documento" required defaultValue="CC" style={{ ...field, cursor: 'pointer' }}>
                 <option value="CC">CC</option>
                 <option value="TI">TI</option>
                 <option value="CE">CE</option>
@@ -162,7 +161,7 @@ export default function SignupModal({
             </div>
             <div>
               <label style={label}>N° DOCUMENTO</label>
-              <input name="docNumber" required placeholder="Número" style={field} />
+              <input name="docNumber" aria-label="Número de documento" required placeholder="Número" style={field} />
             </div>
           </div>
 
@@ -190,7 +189,7 @@ export default function SignupModal({
           <div>
             <label style={label}>¿QUIÉN ERES?</label>
             <select
-              name="roleId" required value={roleId}
+              name="roleId" aria-label="Rol" required value={roleId}
               onChange={e => handleRole(e.target.value)}
               style={{ ...field, cursor: 'pointer' }}
             >
@@ -241,11 +240,11 @@ export default function SignupModal({
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <div>
                 <label style={label}>ID ESTUDIANTE</label>
-                <input name="idEstudianteVinculado" required type="number" placeholder="N° de estudiante" style={field} />
+                <input name="idEstudianteVinculado" aria-label="ID del estudiante" required type="number" placeholder="N° de estudiante" style={field} />
               </div>
               <div>
                 <label style={label}>PARENTESCO</label>
-                <select name="parentesco" required defaultValue="" style={{ ...field, cursor: 'pointer' }}>
+                <select name="parentesco" aria-label="Parentesco" required defaultValue="" style={{ ...field, cursor: 'pointer' }}>
                   <option value="" disabled>Selecciona</option>
                   {PARENTESCOS.map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
@@ -262,12 +261,12 @@ export default function SignupModal({
 
           <div>
             <label style={label}>CORREO</label>
-            <input name="email" type="email" required placeholder="tu@institucion.edu" style={field} />
+            <input name="email" aria-label="Correo" type="email" required placeholder="tu@institucion.edu" style={field} />
           </div>
           <div>
             <label style={label}>CONTRASEÑA</label>
             <input
-              name="password"
+              name="password" aria-label="Contraseña"
               type="password"
               required
               placeholder="••••••••"
@@ -275,18 +274,7 @@ export default function SignupModal({
               onChange={e => setPassword(e.target.value)}
               style={field}
             />
-            {password.length > 0 && (
-              <ul style={{ listStyle: 'none', margin: '8px 0 0', padding: 0, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 10px' }}>
-                {PASSWORD_RULE_LABELS.map(({ key, label: text }) => {
-                  const ok = checks[key];
-                  return (
-                    <li key={key} style={{ fontSize: 10, color: ok ? NEON : '#a99bd0', display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <span>{ok ? '✓' : '○'}</span> {text}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
+            <PasswordChecklist password={password} ocultarSiVacio colorCumplida={NEON} colorPendiente="#a99bd0" />
           </div>
 
           {state?.error && (

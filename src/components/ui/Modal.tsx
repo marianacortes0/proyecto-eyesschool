@@ -13,6 +13,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- marca el montaje en cliente (portal) y bloquea el scroll del body
     setMounted(true);
 
     // 🔥 bloquear scroll

@@ -37,6 +37,7 @@ export default function QRCodigoModal({
 
   useEffect(() => {
     if (mode === 'edit' && codigo) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sincroniza el formulario con el código que se abre en el modal
       setIdEstudiante(codigo.idEstudiante)
       setTipo(codigo.tipo)
       setFechaVencimiento(codigo.fechaVencimiento ?? '')

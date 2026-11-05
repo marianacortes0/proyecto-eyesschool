@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EyeSchool — Panel web
 
-## Getting Started
+Panel web de EyeSchool en Next.js 16 (App Router), React 19, Tailwind CSS v4 y TypeScript. Lo usan administradores, docentes, estudiantes y acudientes. Consume la API de EyeSchool (FastAPI) y se despliega en Azure App Service.
 
-First, run the development server:
+## Cómo correrlo
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Variable | Para qué |
+|---|---|
+| `NEXT_PUBLIC_API_URL` | URL de la API, por ejemplo `https://<api>.azurewebsites.net/api/v1`. Se fija **al compilar**: el build de producción debe tenerla definida o la web apunta a `http://localhost:8000/api/v1`. |
+| `RESEND_API_KEY` | Envío de correos desde `/api/send-email`. |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Calidad: lint, tipos, pruebas y auditoría
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm audit --omit=dev --audit-level=high
+```
 
-## Learn More
+| Prueba | Qué verifica |
+|---|---|
+| `tests/permissions.test.ts` | Qué puede ver y hacer cada rol (`can`, `canRead`, `canWrite`, `canDelete`) y la traducción de roles del backend. |
+| `tests/routeGuard.test.ts` | El guardia de rutas: sin sesión o con token vencido se va al login, y un docente no entra a `/admin`. |
+| `tests/apiClient.test.ts` | `apiFetch`: token Bearer, conversión a camelCase, 204 y mensajes de error de FastAPI (incluido el 422). |
+| `tests/password.test.ts` | La política de contraseñas del registro. |
 
-To learn more about Next.js, take a look at the following resources:
+El workflow [`ci.yml`](.github/workflows/ci.yml) corre todo esto en cada pull request. Es el punto de control QG3 del modelo de calidad (MC-01). El despliegue está en `main_eyesschool.yml`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Arquitectura
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Ver [`CLAUDE.md`](CLAUDE.md): autenticación con JWT propio en cookies, permisos por rol en `src/lib/utils/permissions.ts`, el cliente `apiFetch` y el patrón `page.tsx` (servidor), `*Client.tsx`, `use*` y `services/`.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+La autenticación ya no usa Supabase. Quedan nombres heredados (`src/services/supabase/middleware.ts`) y scripts sueltos (`create-first-admin.js`, `sync-auth-users.js`, `test-auth.js`) que dependen de `@supabase/supabase-js`, que ya no está en las dependencias.
