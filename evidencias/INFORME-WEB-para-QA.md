@@ -26,6 +26,8 @@
 
 Las evidencias `U3_*` de la corrida del 03/11 se conservan como histórico; las cifras no cambiaron entre las dos corridas.
 
+**Precisión para el informe formal:** las pruebas se ejecutaron sobre `77d5629`, que era HEAD en ese momento. Los archivos de evidencia se versionaron después, en `cebc03d`, que **solo agrega evidencias y documentos** (ningún archivo de `src/`, `tests/`, `e2e/` ni configuración de pruebas). Un commit no puede contener su propio hash: la corrida corresponde a `77d5629`.
+
 ### 1.2 Fecha y hora de cada corrida
 
 Las evidencias vigentes son las del **05/11/2026**, todas sobre el commit `77d5629`. Las duraciones se midieron con reloj (incluyen el arranque de la herramienta) [`evidencias/PR-04/web/U4_duraciones.txt`].
