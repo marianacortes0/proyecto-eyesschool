@@ -79,8 +79,18 @@ test.describe('sesión (WEB-01)', () => {
 
 test('una ruta del panel sin sesión pide iniciar sesión', async ({ page }) => {
   requiere('E2E_BASE_URL')
+  // Ocho navegaciones completas, cada una con su redirección a la portada: no
+  // caben en el tiempo normal de una prueba.
+  test.setTimeout(180_000)
   for (const ruta of ['/usuarios', '/reportes', '/notas', '/asistencia', '/novedades', '/horarios', '/perfil', '/qr']) {
-    await page.goto(ruta)
-    await expect(page, ruta).toHaveURL(/\/\?login=1$/)
+    // `domcontentloaded` en vez del `load` por defecto: el destino es la portada,
+    // que carga vídeos, un reproductor de YouTube y la fuente de iconos de
+    // Google, así que `load` puede tardar más que el tiempo de la prueba. La
+    // comprobación no cambia: `toHaveURL` espera a que el guardia redirija.
+    await page.goto(ruta, { waitUntil: 'domcontentloaded' })
+    // En Netlify el guardia no responde con un 307: la ruta se renderiza y la
+    // redirección llega por el cliente, y eso tarda varios segundos. Los 5 s
+    // que `expect` espera por defecto no alcanzan; la comprobación es la misma.
+    await expect(page, ruta).toHaveURL(/\/\?login=1$/, { timeout: 20_000 })
   }
 })

@@ -17,6 +17,10 @@ process.env.E2E_PADRE_EMAIL ??= process.env.E2E_PADRE_DOS_HIJOS_EMAIL
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: false,
+  // Un solo trabajador: con Chromium y Firefox a la vez, la portada (vídeos,
+  // reproductor de YouTube y la fuente de iconos de Google) agota el ancho de
+  // banda y las navegaciones se pasan de tiempo. En serie son estables.
+  workers: 1,
   retries: process.env.CI ? 1 : 0,
   // Evidencias del PR-06 en el repositorio (sin tokens: las trazas se descartan si pasan).
   outputDir: 'test-results',
