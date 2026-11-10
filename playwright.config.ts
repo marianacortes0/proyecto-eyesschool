@@ -21,6 +21,10 @@ export default defineConfig({
   // reproductor de YouTube y la fuente de iconos de Google) agota el ancho de
   // banda y las navegaciones se pasan de tiempo. En serie son estables.
   workers: 1,
+  // En el deploy preview de Netlify la portada tarda ~20 s en cargar y el inicio
+  // de sesión (Server Action → API de QA) otros 14–17 s (medido el 10/11/2026):
+  // juntos superan los 30 s por defecto de Playwright. Las comprobaciones no cambian.
+  timeout: 90_000,
   retries: process.env.CI ? 1 : 0,
   // Evidencias del PR-06 en el repositorio (sin tokens: las trazas se descartan si pasan).
   outputDir: 'test-results',

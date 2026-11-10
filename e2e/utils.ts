@@ -38,7 +38,8 @@ export async function iniciarSesion(page: Page, rol: Rol, opciones: { esperarIni
   await vista.locator('input[type="password"]').fill(password!)
   await vista.locator('button').first().click()
 
-  if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 20_000 })
+  // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+  if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
 }
 
 export async function cerrarSesion(page: Page) {
