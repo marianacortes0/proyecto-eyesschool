@@ -142,7 +142,7 @@ Las advertencias de ESLint, las vulnerabilidades moderadas o bajas, las de depen
 
 ## 8. Registro de hallazgos
 
-- Todo secreto, toda vulnerabilidad alta o crítica y todo issue Blocker o Critical de SonarQube se registra como **Bug en Azure Boards** con la etiqueta `analisis-estatico`, y va en la Tabla 4 del PR-03 y luego en el PR-07.
+- Todo secreto, toda vulnerabilidad alta o crítica y todo issue Blocker o Critical de SonarQube se registra como **issue de defecto en GitHub** (plantilla «Defecto», origen «Análisis estático» → etiqueta `analisis-estatico`), y va en la Tabla 4 del PR-03 y luego en el PR-07.
 - Si ya tiene corrección en la planeación (WEB-xx), el bug se enlaza a ella; no se duplica.
 - Advertencias, duplicación y complejidad entran al plan de remediación del PR-03 (sección 7).
 - Los falsos positivos se marcan en SonarQube o con `// eslint-disable-next-line <regla> -- motivo`, siempre con el motivo escrito.
@@ -163,5 +163,5 @@ Las advertencias de ESLint, las vulnerabilidades moderadas o bajas, las de depen
 - [ ] Clave de Supabase revocada (o proyecto dado de baja) y registrada en el PR-07.
 - [ ] SonarQube Cloud muestra el proyecto con la cobertura de `coverage/lcov.info`.
 - [ ] E1 y E2 ejecutadas, con evidencias en `evidencias/PR-03/web/` y sin ningún valor secreto copiado.
-- [ ] Bugs registrados en Azure Boards y enlazados a su corrección WEB-xx cuando existe.
+- [ ] Defectos registrados en GitHub Issues y enlazados a su corrección WEB-xx (`Corrige #<n>` en el PR) cuando existe.
 - [ ] Columna Web del PR-03 diligenciada y revisada por el líder de pruebas.

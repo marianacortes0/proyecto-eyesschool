@@ -313,7 +313,7 @@ npx eslint .
 - [ ] `npm run test:cov` en verde y la cobertura de `src/lib`, `src/services` y `src/hooks` no baja.
 - [ ] `npm audit` sin vulnerabilidades críticas ni altas, `gitleaks` limpio y Quality Gate de SonarQube aprobado.
 - [ ] Lighthouse Accessibility ≥ 90 en las páginas tocadas (meta del MC-01).
-- [ ] PR revisado por otro integrante, con `AB#<id>` del bug en Azure Boards.
+- [ ] PR revisado por otro integrante, con `Corrige #<n>` del defecto en GitHub Issues (plantilla del PR).
 - [ ] Desplegado en QA y E2E del escenario en verde.
 
 ## 7. Ramas y calendario

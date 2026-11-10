@@ -83,7 +83,7 @@ npm run test:int -- --reporter=default --reporter=junit \
 | Totales de los dos reportes JUnit | Tabla 1 (sumados con la API y la app) |
 | IT-WEB-01 a 05 | Tabla 2, fila «Web ↔ API» |
 | Detalle de CP-INT-076 y del contrato | Tabla 3 |
-| Servicio que no lee bien una respuesta | Bug en Azure Boards (etiqueta `pruebas-integracion`) con el endpoint y el campo |
+| Servicio que no lee bien una respuesta | Issue de defecto en GitHub (plantilla «Defecto», origen «Pruebas de integración») con el endpoint y el campo |
 
 ## 8. Responsables y calendario
 

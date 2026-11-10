@@ -184,7 +184,7 @@ Escenarios que solo aplican en la app (sesión guardada, directorio móvil, cola
 | Observaciones clasificadas | Sección 5 |
 | Decisión y firmas | Acta de aceptación |
 
-Cada escenario rechazado y cada observación clasificada como Defecto es un bug en Azure Boards con la etiqueta `uat` (ficha del PR-07).
+Cada escenario rechazado y cada observación clasificada como Defecto es un issue de defecto en GitHub con la plantilla «Defecto» y origen «UAT» (ficha del PR-07).
 
 ## 10. Responsables y calendario
 
@@ -200,5 +200,5 @@ Cada escenario rechazado y cada observación clasificada como Defecto es un bug 
 
 - [ ] Todos los escenarios de la sección 5 tienen resultado y, si aplica, observación.
 - [ ] Tareas medidas y SUS registrados por participante.
-- [ ] Bugs de la UAT en Azure Boards con la etiqueta `uat`.
+- [ ] Defectos de la UAT en GitHub Issues con la etiqueta `uat`.
 - [ ] Acta firmada por el PO, el líder del equipo y el instructor.

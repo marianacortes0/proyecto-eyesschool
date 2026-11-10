@@ -176,7 +176,7 @@ npx lighthouse "$QA_WEB" --preset=desktop --output=html --output-path=evidencias
 ## 7. Registro en el PR-06 y defectos
 
 - Evidencia por caso (reporte de Playwright, video o captura) con el nombre `CP-SIS-xxx_<navegador>` en `evidencias/PR-06/web/`.
-- Caso fallido → bug en Azure Boards con la plantilla del PR-07, el ID del caso y el navegador. Si tenía falla esperada, se enlaza al bug de su corrección.
+- Caso fallido → issue de defecto en GitHub con la plantilla «Defecto» (ficha del PR-07), el ID del caso y el navegador. Si tenía falla esperada, se enlaza al defecto de su corrección.
 - Resultados: Tabla 2 (detalle), sección 6 (Lighthouse por pantalla), sección 7 (compatibilidad) y recuadro de DAST del PR-06.
 
 ## 8. Responsables y calendario
@@ -192,5 +192,5 @@ npx lighthouse "$QA_WEB" --preset=desktop --output=html --output-path=evidencias
 
 - [ ] Los 65 casos de sistema de la web ejecutados en los navegadores indicados, con evidencia.
 - [ ] Lighthouse y axe en las páginas principales; ZAP baseline guardado.
-- [ ] Bugs registrados en Azure Boards y enlazados a su corrección cuando existe.
+- [ ] Defectos registrados en GitHub Issues y enlazados a su corrección (`Corrige #<n>`) cuando existe.
 - [ ] Parte web del PR-06 diligenciada y revisada.

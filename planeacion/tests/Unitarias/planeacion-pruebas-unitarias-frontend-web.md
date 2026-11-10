@@ -116,7 +116,7 @@ cp -r coverage evidencias/PR-04/web/U1_coverage_html
 | Totales de `U2_junit.xml` y tiempo | Tabla 1 |
 | `U2_inventario.txt` | Tabla 2 |
 | Cobertura por carpeta | Tabla 3 y sección 4.2 |
-| Prueba fallida sin corrección planeada | Bug en Azure Boards (etiqueta `pruebas-unitarias`) y Tabla 4 |
+| Prueba fallida sin corrección planeada | Issue de defecto en GitHub (plantilla «Defecto», origen «Pruebas unitarias») y Tabla 4 |
 | Prueba nueva que falla porque su corrección no se ha fusionado | Tabla 4 con estado «Falla esperada» y la referencia WEB-xx |
 
 ## 11. Responsables y calendario
