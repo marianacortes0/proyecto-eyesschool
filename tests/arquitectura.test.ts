@@ -57,6 +57,28 @@ describe('arquitectura (reglas 1 a 4)', () => {
     expect(ignorados.filter((r) => existsSync(r))).toEqual([])
   })
 
+  // DEF-WEB-02: un solo <main> por página (HTML y axe: landmark-no-duplicate-main,
+  // landmark-main-is-top-level). Se cuentan los de la página y los de todos los
+  // layouts que la envuelven, desde src/app hasta su carpeta.
+  it('DEF-WEB-02: cada página queda envuelta por exactamente un <main>', () => {
+    const paginas = archivos('src/app', (r) => /[\\/]page\.tsx$/.test(r)).map(norm)
+    expect(paginas.length).toBeGreaterThan(0)
+    // Sin comentarios: que un comentario mencione la etiqueta no la vuelve un elemento.
+    const sinComentarios = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+    const mains = (r: string) => (sinComentarios(leer(r)).match(/<main\b/g) ?? []).length
+    const cuenta: Record<string, number> = {}
+    for (const pagina of paginas) {
+      const partes = pagina.split('/').slice(0, -1)
+      let total = mains(pagina)
+      for (let i = 2; i <= partes.length; i++) {
+        const layout = [...partes.slice(0, i), 'layout.tsx'].join('/')
+        if (existsSync(layout)) total += mains(layout)
+      }
+      cuenta[pagina] = total
+    }
+    expect(Object.entries(cuenta).filter(([, n]) => n !== 1)).toEqual([])
+  })
+
   it('WEB-INF-4: hay un solo despliegue (se eliminó el flujo de Azure)', () => {
     expect(existsSync('.github/workflows/main_eyesschool.yml')).toBe(false)
   })

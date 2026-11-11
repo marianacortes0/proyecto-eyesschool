@@ -61,9 +61,12 @@ export default function RootLayout({
           {THEME_INIT_SCRIPT}
         </Script>
         <PageTransition>
-          <main className="flex-1">
+          {/* Contenedor, no <main>: cada página trae el suyo (el panel en su layout,
+              la portada, (auth) y home en su página). Dos <main> anidados rompían
+              la región principal para los lectores de pantalla (DEF-WEB-02). */}
+          <div className="flex-1">
             {children}
-          </main>
+          </div>
         </PageTransition>
 
         {/* 🔥 SOLO COOKIE GLOBAL */}
