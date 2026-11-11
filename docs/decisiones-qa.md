@@ -128,8 +128,21 @@ Cada decisión toma la opción por defecto (A) del documento de cierre del front
   2. **Registro del padre (CP-SIS-014).** Usaba `e2e+<n>@eyeschool.test`. `.test` es un dominio reservado y la API lo rechaza con 422, comprobado con `POST /auth/register` directo. Con `@example.com` la API responde 201; la cuenta de esa comprobación (id 116) se borró. Ahora usa `padre.e2e.<n>@example.com`, como `usuarios.spec.ts`. El mensaje genérico que mostró la web es un defecto aparte (DEF-WEB-05).
   3. **Esperas de 5 s para Server Actions.** El login propio de «un padre con un solo hijo» (medido: **11,8 s**), la vuelta tras el registro y los avisos de crear, editar y eliminar usuario pasan a 45 s o 30 s. En la corrida E3, las cuentas de docente 114 y 115 **sí se crearon** (y la 115 se editó) aunque la prueba no vio el aviso a tiempo: la acción funcionó y el límite era corto.
   4. **Registro del padre, segunda parte** (commit `c3e491f`). Con el correo válido, la prueba seguía terminando en `/`: la portada muestra el aviso «Usuario registrado exitosamente como Padre / Acudiente» al volver con `?registered=true` y **borra el parámetro en el acto** (`history.replaceState`, `src/components/home/EyeSchoolLanding.tsx:780`), así que `toHaveURL` no alcanzaba a verlo. Medido con un script que escucha cada navegación: `/?login=1&registered=true…` a los **36,0 s**, cuenta 121 creada y borrada. El oráculo pasa a ser el aviso (60 s). En E6 el registro y el login pasan y el caso cae después por DEF-WEB-03.
+  5. **Nombre del hijo en la página** (commit `e387ee4`). Con DEF-WEB-03 corregido, la prueba llegó por primera vez a buscar el nombre en la página y `getByText(...).first()` resolvía la `<option>` del selector, que Playwright trata como oculta; la página sí mostraba «Sofía Rodríguez · 4 notas». Se filtra por texto visible.
+  6. **Cierre por inactividad** (commit `7d927df`). Con el proxy activo, en Netlify su 307 no llega al navegador: la sesión se borra y la página redirige por el cliente en varios segundos. La espera pasa de 5 s a 20 s, la misma que el guardia de rutas. Sin esto fallaba en Firefox (E8); con esto pasa en los dos navegadores (E9).
 - **No se tocaron**, porque fallan por defectos reales de la app: el `locator('main')` de CP-SIS-001 (DEF-WEB-02), los nombres del selector de hijos de CP-SIS-060 (DEF-WEB-03) y el cierre por inactividad de CP-SIS-004 (DEF-WEB-04).
 - Datos de QA: las cuentas 114 y 115 que dejaron las pruebas interrumpidas se borraron por la API después de comprobar que su correo era de E2E (`docente.e2e.<n>@example.com`).
+
+## D-WEB-18 · Corrección de DEF-WEB-02, 03 y 04 en esta rama
+- Fecha: 11/11/2026 · Pedido de Mariana: «arregla todos los fallos que identificaste».
+- Se corrigieron en el PR #34, un commit por defecto y cada uno con una prueba que fallaba antes y pasa después:
+  - `138db97` (DEF-WEB-04): `proxy.ts` → `src/proxy.ts`, más una regla de arquitectura;
+  - `4067c18` (DEF-WEB-03): `aHijo` lee `nombre_estudiante`, con los fixtures y la integración contra QA;
+  - `e886144` (DEF-WEB-02): un solo `<main>` por página, con una regla de arquitectura.
+- Verificación en QA: corrida completa E7 sobre `e886144` y reintentos E8 y E9. **0 FALLA**: los 14 fallos de E4 pasan.
+- **DEF-WEB-05 (Baja) no se corrigió**: no estaba entre los 14 fallos E2E y no hay un caso E2E que lo vigile.
+- **Observación de la plataforma:** en Netlify el proxy de Node se ejecuta (cookies borradas, función de borde `___netlify-edge-handler-node-middleware`), pero el 307 de `NextResponse.redirect` no llega al navegador; redirige la página. Con `next start`, como en Vercel, el 307 sí llega. Next 16 no deja cambiar el runtime del proxy, así que no se forzó *edge*.
+- Los defectos quedan **verificados en QA**, no cerrados. Cerrar el issue es de QA cuando se registren (acción externa 11).
 
 ## Otras decisiones menores (02/11/2026)
 - **Mapeo de trazabilidad:** se usó `tests/trazabilidad.json` (alternativa de 6.1) en vez de prefijar cada `describe`, para no renombrar los archivos de prueba. El script `npm run trazabilidad` regenera `docs/trazabilidad-ut-web.md`.

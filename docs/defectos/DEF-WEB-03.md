@@ -4,7 +4,7 @@
 |---|---|
 | Componente | **Web** (`src/services/asociado/asociadoActions.ts`, `aHijo`) |
 | Severidad | **Media** · prioridad propuesta P3 |
-| Estado | **Abierto** |
+| Estado | **Corregido** en `4067c18` (11/11/2026) · **Verificado en QA** el 11/11 (E7 a E9): falta cerrarlo como issue, lo cierra QA |
 | Detectado el | 10/11/2026, corrida E2E E3, el primer día con BE-07 desplegado en QA |
 | Caso que lo detectó | CP-SIS-060 · `e2e/padre-dos-hijos.spec.ts` «el padre de prueba cambia de hijo…» (Chromium y Firefox). También rompe **CP-SIS-014** (`e2e/registro-padre.spec.ts`): el padre recién registrado ve «Estudiante #4» en vez de «María Rodríguez» (corrida E6) |
 | Corrección relacionada | WEB-03 (DEF-022), que depende de BE-07 |
@@ -43,9 +43,22 @@ Respuesta real de `GET /padres/me/hijos` en QA el 10/11 (datos sintéticos del s
 - La unitaria simula la forma equivocada.
 - La integración (IT-WEB-03, padre) solo exige que los campos no lleguen `undefined`, y el respaldo hace que `nombre` siempre tenga valor.
 
-## Corrección propuesta (no aplicada)
+## Corrección propuesta (aplicada el 11/11/2026, ver abajo)
 
 - En `aHijo()`, leer `nombreEstudiante` y `documentoEstudiante`, con `nombre` y `documento` como alternativa.
 - Corregir el fixture `HIJOS_API` a la forma real de `HijoOut`.
 - Corregir la línea 151 de la planeación del frontend.
 - Hacer que IT-WEB-03 (padre) compruebe que el nombre del hijo no es el texto de respaldo.
+
+## Corrección y verificación (11/11/2026)
+
+**Commit `4067c18`**: `aHijo()` lee `nombreEstudiante ?? nombre` y `documentoEstudiante ?? documento`, y deja el respaldo `Estudiante #<id>` solo cuando no llega ninguno.
+
+| Comprobación | Antes | Después |
+|---|---|---|
+| `tests/asociadoActions.test.ts` y `asociadoViewer.test.ts` con la forma real de `HijoOut` | Fallan 2 | Pasan (22 de 22) |
+| IT-WEB-03 nuevo «los hijos llegan con su nombre real», **contra la API de QA** | Falla: hijos 1 y 3 sin nombre | **Pasa** |
+| CP-SIS-014 «el padre que se registra ve los datos de su hijo» (E2E) | FALLA («Estudiante #4», E6) | **APROBADO en los dos navegadores** (Chromium en E7 y E8; Firefox en E8, tras agotar el tiempo de carga en E7) |
+| CP-SIS-060 «el padre cambia de hijo» (E2E) | FALLA («Estudiante #1/#3») | **APROBADO en los dos navegadores (E8).** En E7 el selector ya mostraba «Sofía Rodríguez» y «Santiago López», pero la prueba cayó en el paso siguiente por su propio oráculo (buscaba el nombre en la `<option>` oculta), corregido en `e387ee4` |
+
+También se corrigió la línea 151 de la planeación del frontend, que fijaba el contrato equivocado.
