@@ -37,7 +37,8 @@ test('un padre con un solo hijo no ve el selector', async ({ page }) => {
   await vista.locator('input[type="email"]').fill(process.env.E2E_PADRE_UN_HIJO_EMAIL!)
   await vista.locator('input[type="password"]').fill(process.env.E2E_PASSWORD!)
   await vista.locator('button').first().click()
-  await expect(page).toHaveURL(/\/general$/)
+  // El login es una Server Action: en QA tarda 11–17 s (D-WEB-16).
+  await expect(page).toHaveURL(/\/general$/, { timeout: 45_000 })
 
   await page.goto('/notas')
   await expect(page.getByRole('combobox', { name: /estudiante/i })).toHaveCount(0)

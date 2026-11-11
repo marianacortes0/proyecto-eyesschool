@@ -1,10 +1,16 @@
 import { expect, test } from '@playwright/test'
+import { puedeEntrar } from '../src/lib/auth/routeRoles'
 import { enlacesDelMenu, iniciarSesion, type Rol } from './utils'
 
 // CP-SIS-001 (inicio por rol, depende de BE-03) y CP-SIS-006 (módulos por rol).
+// El oráculo de CP-SIS-006 es el mapa `routeRoles` (planeación de sistema): el
+// menú no puede traer un enlace al que el rol no puede entrar. Además se fijan a
+// mano los módulos clave de cada rol. El admin puede entrar a todo el panel
+// (`/notas` es de TODOS: lee notas y descarga boletines), así que no tiene
+// lista de prohibidos (D-WEB-17).
 
 const MENU: Record<Rol, { debe: string[]; noDebe: string[] }> = {
-  admin: { debe: ['/admin', '/usuarios', '/reportes', '/qr/escanear'], noDebe: ['/notas'] },
+  admin: { debe: ['/admin', '/usuarios', '/reportes', '/qr/escanear'], noDebe: [] },
   docente: { debe: ['/general', '/notas', '/asistencia', '/novedades', '/qr/escanear'], noDebe: ['/usuarios', '/reportes'] },
   estudiante: { debe: ['/general', '/notas', '/asistencia', '/horarios', '/qr'], noDebe: ['/usuarios', '/reportes', '/qr/escanear'] },
   padre: { debe: ['/general', '/notas', '/asistencia', '/novedades', '/horarios'], noDebe: ['/usuarios', '/reportes', '/qr/escanear'] },
@@ -26,6 +32,7 @@ for (const rol of ['admin', 'docente', 'estudiante', 'padre'] as Rol[]) {
       const enlaces = await enlacesDelMenu(page)
       for (const ruta of MENU[rol].debe) expect(enlaces, `falta ${ruta}`).toContain(ruta)
       for (const ruta of MENU[rol].noDebe) expect(enlaces, `sobra ${ruta}`).not.toContain(ruta)
+      for (const ruta of enlaces) expect(puedeEntrar(rol, ruta), `sobra ${ruta}: routeRoles no deja entrar al ${rol}`).toBe(true)
     })
   })
 }

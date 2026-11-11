@@ -19,7 +19,7 @@ test.afterAll(async ({ browser }) => {
     await page.getByPlaceholder('Buscar por nombre, correo o documento...').fill(correoCreado)
     await page.getByTitle('Eliminar').first().click()
     await page.getByRole('button', { name: /eliminar|confirmar/i }).last().click()
-    await expect(page.getByText('Usuario eliminado exitosamente')).toBeVisible()
+    await expect(page.getByText('Usuario eliminado exitosamente')).toBeVisible({ timeout: 30_000 })
   } finally {
     await page.close()
   }
@@ -28,7 +28,8 @@ test.afterAll(async ({ browser }) => {
 test('el padre que se registra ve los datos de su hijo vinculado', async ({ page }) => {
   requiere('E2E_ESTUDIANTE_VINCULADO_ID', 'E2E_ESTUDIANTE_VINCULADO_NOMBRE', 'E2E_PASSWORD')
   const unico = Date.now()
-  const correo = `e2e+${unico}@eyeschool.test`
+  // `.test` es un dominio reservado: la API lo rechaza con 422 (D-WEB-17).
+  const correo = `padre.e2e.${unico}@example.com`
   const password = process.env.E2E_PASSWORD!
   correoCreado = correo
 
@@ -48,13 +49,14 @@ test('el padre que se registra ve los datos de su hijo vinculado', async ({ page
   await modal.getByRole('button', { name: /crear cuenta|registr/i }).click()
 
   // Cuenta creada: vuelve al inicio de sesión (el padre no requiere aprobación).
-  await expect(page).toHaveURL(/registered=true/)
+  // El registro y el login son Server Actions: en QA tardan 11–17 s (D-WEB-16).
+  await expect(page).toHaveURL(/registered=true/, { timeout: 45_000 })
 
   const vista = page.locator('[data-view="login"]')
   await vista.locator('input[type="email"]').fill(correo)
   await vista.locator('input[type="password"]').fill(password)
   await vista.locator('button').first().click()
-  await expect(page).toHaveURL(/\/general$/)
+  await expect(page).toHaveURL(/\/general$/, { timeout: 45_000 })
 
   for (const modulo of ['/notas', '/asistencia', '/novedades']) {
     await page.goto(modulo)

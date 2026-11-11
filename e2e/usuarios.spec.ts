@@ -6,6 +6,10 @@ import { iniciarSesion } from './utils'
 
 const unico = () => String(Date.now())
 
+// Los avisos salen cuando termina la Server Action, que en QA tarda varios
+// segundos (D-WEB-16): los 5 s por defecto no alcanzan. La comprobación es la misma.
+const AVISO = { timeout: 30_000 }
+
 async function abrirNuevoUsuario(page: Page) {
   await page.goto('/usuarios')
   await page.getByRole('button', { name: /nuevo|crear|agregar/i }).first().click()
@@ -29,7 +33,7 @@ test.describe('gestión de usuarios (admin)', () => {
     await page.getByRole('combobox').filter({ hasText: /docente|profesor/i }).first().selectOption({ label: 'Profesor' }).catch(() => null)
     await llenarDocente(page, correo)
     await page.getByRole('button', { name: 'Crear Usuario' }).click()
-    await expect(page.getByText('Usuario creado exitosamente')).toBeVisible()
+    await expect(page.getByText('Usuario creado exitosamente')).toBeVisible(AVISO)
 
     // Filtrar (CP-SIS-027)
     await page.getByPlaceholder('Buscar por nombre, correo o documento...').fill(correo)
@@ -39,7 +43,7 @@ test.describe('gestión de usuarios (admin)', () => {
     await page.getByTitle('Editar').first().click()
     await page.getByPlaceholder('Juan').fill('Docente Editado')
     await page.getByRole('button', { name: 'Guardar Cambios' }).click()
-    await expect(page.getByText('Usuario editado exitosamente')).toBeVisible()
+    await expect(page.getByText('Usuario editado exitosamente')).toBeVisible(AVISO)
 
     // Eliminar: primero cancela, luego confirma (CP-SIS-025)
     await page.getByTitle('Eliminar').first().click()
@@ -48,7 +52,7 @@ test.describe('gestión de usuarios (admin)', () => {
 
     await page.getByTitle('Eliminar').first().click()
     await page.getByRole('button', { name: /eliminar|confirmar/i }).last().click()
-    await expect(page.getByText('Usuario eliminado exitosamente')).toBeVisible()
+    await expect(page.getByText('Usuario eliminado exitosamente')).toBeVisible(AVISO)
   })
 
   test('crear con un campo vacío no guarda e indica el campo (CP-SIS-021)', async ({ page }) => {
