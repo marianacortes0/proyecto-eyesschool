@@ -1,2 +1,7 @@
-commit=77d5629
-fecha=2026-11-05 21:00 UTC
+commit=c3e491f
+fecha=2026-11-11 16:44 UTC
+niveles locales (U5): c3e491f
+integracion (I3): 8bdc307 (src y tests/integration iguales a c3e491f)
+e2e completa (E4) y reintento (E5): 360b599 (difiere de c3e491f solo en e2e/registro-padre.spec.ts)
+e2e registro del padre (E6): c3e491f
+e2e descubrimiento (E3): arbol de 73bf2b2
