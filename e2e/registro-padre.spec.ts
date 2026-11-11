@@ -48,9 +48,11 @@ test('el padre que se registra ve los datos de su hijo vinculado', async ({ page
   await modal.getByLabel('Contraseña', { exact: true }).fill(password)
   await modal.getByRole('button', { name: /crear cuenta|registr/i }).click()
 
-  // Cuenta creada: vuelve al inicio de sesión (el padre no requiere aprobación).
-  // El registro y el login son Server Actions: en QA tardan 11–17 s (D-WEB-16).
-  await expect(page).toHaveURL(/registered=true/, { timeout: 45_000 })
+  // Cuenta creada: vuelve al inicio de sesión (el padre no requiere aprobación) con
+  // `?registered=true`, que la portada muestra como aviso y borra de la URL en el
+  // acto (`history.replaceState` en EyeSchoolLanding): por eso se comprueba el
+  // aviso y no la URL (D-WEB-17). El registro tarda ~36 s en QA (D-WEB-16).
+  await expect(page.getByText(/Usuario registrado exitosamente como Padre/)).toBeVisible({ timeout: 60_000 })
 
   const vista = page.locator('[data-view="login"]')
   await vista.locator('input[type="email"]').fill(correo)
