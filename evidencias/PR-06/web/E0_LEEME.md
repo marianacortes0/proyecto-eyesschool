@@ -1,24 +1,28 @@
-# PR-06 · estado al 03/11/2026
+# PR-06 · evidencias E2E (estado al 11/11/2026)
 
 | Archivo | Qué es |
 |---|---|
-| `E0_listado-specs.xml` | Salida de `npx playwright test --list`: **no es una corrida**. Confirma que los 7 specs compilan y enumeran 48 casos (Chromium y Firefox) |
-| `E1_humo-login.xml` | Corrida real de humo: `e2e/login-roles.spec.ts` en Chromium, 8 casos, los 8 **bloqueados** por DEF-WEB-01 |
-| `reporte-html/` | Reporte HTML de la corrida de humo (no se versiona: está en `.gitignore`) |
+| `E0_listado-specs.xml` | Salida de `playwright test --list` del 02/11: **no es una corrida**. Enumera los 48 casos (24 por navegador) |
+| `E1_humo-login.xml` | 03/11 · humo de `login-roles` en Chromium, bloqueado por DEF-WEB-01 (histórico) |
+| `E2_guardia-rutas.xml` | 05/11 · guardia de rutas, aprobado en Chromium y Firefox (histórico) |
+| `E3_e2e-consola.txt` | 10/11 · primera corrida completa con la base de QA en pie. Sirvió para descubrir los defectos DEF-WEB-02 a 05 y los de las propias pruebas (D-WEB-17). **Solo la consola**: su JUnit se sobrescribió por error con un `--list` |
+| `E4_e2e.xml` · `E4_e2e-consola.txt` | 11/11 · **corrida de referencia**, 48 casos sobre `360b599` |
+| `E5_reintento.xml` · `E5_reintento-consola.txt` | 11/11 · repetición de los casos que cambiaron de resultado entre E3 y E4 |
+| `E6_registro-padre.xml` · `E6_registro-padre-consola.txt` | 11/11 · `registro-padre` con el oráculo del aviso, sobre `c3e491f` |
+| `reporte-html/` | Reporte HTML de la última corrida. **No se versiona** (`.gitignore`) porque sus trazas guardan lo que se escribe en el campo de contraseña |
 
-## Qué dice el humo
+## Resultado (E4, con E5 y E6 para los casos repetidos)
 
-El navegador llega al deploy preview, abre el modal de inicio de sesión, llena el formulario y envía. La web se queda en `/?login=1` porque `POST /api/v1/auth/login` responde **500**: la API de QA no puede consultar su base (`../../../docs/defectos/DEF-WEB-01.md`).
+48 ejecuciones: **22 APROBADO · 14 FALLA · 6 BLOQUEADO · 6 INESTABLE**. Las 14 fallas son tres defectos de la web: DEF-WEB-02 (8), DEF-WEB-03 (4) y DEF-WEB-04 (2). Detalle caso por caso en `../../INFORME-WEB-para-QA.md`, sección 5.3.
 
-Es decir: el despliegue, los selectores y el manejo de error de la web funcionan; lo que falta es el backend.
-
-## Qué falta
-
-Los 48 casos en Chromium y Firefox no se corrieron: fallarían todos por la misma causa, y `registro-masivo` y `registro-padre` necesitan escribir en la base. Los navegadores ya están instalados y `.env.test.local` está completo, así que en cuanto el login devuelva 200 basta con:
+## Cómo repetirlo
 
 ```powershell
-npm run qa:datos          # llena E2E_ESTUDIANTE_VINCULADO_ID y _NOMBRE
-npx playwright test --project=chromium --project=firefox
+# Desde C:\ con la C en mayúscula: si la carpeta abre como c:\…, Vitest falla al cargar.
+npm run qa:datos          # llena E2E_ESTUDIANTE_VINCULADO_ID y _NOMBRE en .env.test.local
+npx playwright test       # Chromium y Firefox, en serie (workers: 1); ~36 min
 ```
 
-`padre-dos-hijos` seguirá como falla esperada mientras `E2E_BE07` esté vacío (BE-07 no está en QA), y CP-SIS-065 sigue bloqueado hasta confirmar `SESSION_IDLE_MINUTES=1` en el contexto *Deploy Previews* de Netlify.
+`usuarios`, `registro-masivo` y `registro-padre` **escriben en la base de QA** y borran lo que crean. Si una prueba se corta a mitad, puede dejar una cuenta `docente.e2e.<n>@example.com` o `padre.e2e.<n>@example.com`: hay que borrarla.
+
+Después de cada corrida, borra `test-results/` y `reporte-html/`: las trazas contienen la clave.
