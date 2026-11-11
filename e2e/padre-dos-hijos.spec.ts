@@ -22,11 +22,13 @@ test('el padre de prueba cambia de hijo y cambian notas, asistencia y novedades'
     await expect(selector.locator('option')).toHaveText([new RegExp(hijo1, 'i'), new RegExp(hijo2, 'i')])
 
     // Con el primero activo, el módulo habla de él; al cambiar, habla del segundo.
-    await expect(page.getByText(new RegExp(hijo1, 'i')).first()).toBeVisible()
+    // Solo texto visible: el primer elemento con el nombre es la <option> del
+    // selector, que Playwright considera oculta (D-WEB-17).
+    await expect(page.getByText(new RegExp(hijo1, 'i')).filter({ visible: true }).first()).toBeVisible()
     const etiquetaHijo2 = (await selector.locator('option', { hasText: new RegExp(hijo2, 'i') }).textContent()) ?? hijo2
     await selector.selectOption({ label: etiquetaHijo2 })
     await expect(page).toHaveURL(/[?&]hijo=\d+/)
-    await expect(page.getByText(new RegExp(hijo2, 'i')).first()).toBeVisible()
+    await expect(page.getByText(new RegExp(hijo2, 'i')).filter({ visible: true }).first()).toBeVisible()
   }
 })
 
