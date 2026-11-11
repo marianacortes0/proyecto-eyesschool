@@ -180,31 +180,31 @@
 | UT-WEB-EXTRA-32 | Fallidos del registro masivo (WEB-06, cobertura D-WEB-13) | `tests/components/FallidosMasivo.test.tsx` | FallidosMasivo (WEB-06) con un solo fallido el texto va en singular | Sí |
 | UT-WEB-EXTRA-33 | Fallidos del registro masivo (WEB-06, cobertura D-WEB-13) | `tests/components/FallidosMasivo.test.tsx` | FallidosMasivo (WEB-06) Reintentar y Descartar avisan al llamador | Sí |
 | UT-WEB-EXTRA-34 | Fallidos del registro masivo (WEB-06, cobertura D-WEB-13) | `tests/components/FallidosMasivo.test.tsx` | FallidosMasivo (WEB-06) mientras se reenvía, los dos botones están deshabilitados | Sí |
-| UT-WEB-EXTRA-35 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · plantilla del issue tiene un campo por cada título que lee el workflow | Sí |
-| UT-WEB-EXTRA-36 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · plantilla del issue ofrece exactamente las opciones que el workflow sabe convertir en etiquetas | Sí |
-| UT-WEB-EXTRA-37 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · plantilla del issue pone la etiqueta «defecto», que es la que activa el ciclo de vida | Sí |
-| UT-WEB-EXTRA-38 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · plantilla del issue cada etiqueta del formulario existe en la lista que crea el workflow | Sí |
-| UT-WEB-EXTRA-39 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · lectura del formulario separa cada campo por su título y trata «_No response_» como vacío | Sí |
-| UT-WEB-EXTRA-40 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · lectura del formulario acepta saltos de línea de Windows y cuerpos vacíos | Sí |
-| UT-WEB-EXTRA-41 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · lectura del formulario convierte componente, origen, severidad y prioridad en etiquetas | Sí |
-| UT-WEB-EXTRA-42 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · lectura del formulario sin prioridad, propone la que corresponde a la severidad (Crítica → P1) | Sí |
-| UT-WEB-EXTRA-43 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · lectura del formulario al editar no toca la prioridad: después de abrir la decide el PO | Sí |
-| UT-WEB-EXTRA-44 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · lectura del formulario ignora valores que no son opciones de la plantilla | Sí |
-| UT-WEB-EXTRA-45 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · etiquetas excluyentes cambiar la severidad quita la anterior y no toca los otros grupos | Sí |
-| UT-WEB-EXTRA-46 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · etiquetas excluyentes no repite etiquetas que el issue ya tiene | Sí |
-| UT-WEB-EXTRA-47 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · etiquetas excluyentes un solo estado a la vez | Sí |
-| UT-WEB-EXTRA-48 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · ciclo de vida (planeación §2) al abrirse queda Nuevo y clasificado | Sí |
-| UT-WEB-EXTRA-49 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · ciclo de vida (planeación §2) un PR abierto lo pasa a En curso, pero no lo saca de En verificación | Sí |
-| UT-WEB-EXTRA-50 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · ciclo de vida (planeación §2) al fusionarse la corrección pasa a En verificación, no a cerrado | Sí |
-| UT-WEB-EXTRA-51 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · ciclo de vida (planeación §2) reabrir lo devuelve a En curso y lo cuenta como reabierto | Sí |
-| UT-WEB-EXTRA-52 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · ciclo de vida (planeación §2) editar un issue sin plantilla no cambia nada | Sí |
-| UT-WEB-EXTRA-53 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · referencias desde un PR reconoce «Corrige #N» y variantes, sin repetir | Sí |
-| UT-WEB-EXTRA-54 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · referencias desde un PR reconoce las palabras de cierre de GitHub para poder reabrir el defecto | Sí |
-| UT-WEB-EXTRA-55 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · referencias desde un PR no confunde menciones sueltas ni el «Corrige #» vacío de la plantilla del PR | Sí |
-| UT-WEB-EXTRA-56 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · registro para el PR-07 el estado sale del issue: abierto por etiqueta, cerrado según el motivo | Sí |
-| UT-WEB-EXTRA-57 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · registro para el PR-07 una fila por defecto, con tantas celdas como columnas | Sí |
-| UT-WEB-EXTRA-58 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · registro para el PR-07 un defecto abierto no tiene fecha de cierre ni días | Sí |
-| UT-WEB-EXTRA-59 | Prueba no planeada | `tests/defectos.test.ts` | Defectos · registro para el PR-07 escapa comillas y comas en el título | Sí |
+| UT-WEB-EXTRA-35 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · plantilla del issue tiene un campo por cada título que lee el workflow | Sí |
+| UT-WEB-EXTRA-36 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · plantilla del issue ofrece exactamente las opciones que el workflow sabe convertir en etiquetas | Sí |
+| UT-WEB-EXTRA-37 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · plantilla del issue pone la etiqueta «defecto», que es la que activa el ciclo de vida | Sí |
+| UT-WEB-EXTRA-38 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · plantilla del issue cada etiqueta del formulario existe en la lista que crea el workflow | Sí |
+| UT-WEB-EXTRA-39 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · lectura del formulario separa cada campo por su título y trata «_No response_» como vacío | Sí |
+| UT-WEB-EXTRA-40 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · lectura del formulario acepta saltos de línea de Windows y cuerpos vacíos | Sí |
+| UT-WEB-EXTRA-41 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · lectura del formulario convierte componente, origen, severidad y prioridad en etiquetas | Sí |
+| UT-WEB-EXTRA-42 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · lectura del formulario sin prioridad, propone la que corresponde a la severidad (Crítica → P1) | Sí |
+| UT-WEB-EXTRA-43 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · lectura del formulario al editar no toca la prioridad: después de abrir la decide el PO | Sí |
+| UT-WEB-EXTRA-44 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · lectura del formulario ignora valores que no son opciones de la plantilla | Sí |
+| UT-WEB-EXTRA-45 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · etiquetas excluyentes cambiar la severidad quita la anterior y no toca los otros grupos | Sí |
+| UT-WEB-EXTRA-46 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · etiquetas excluyentes no repite etiquetas que el issue ya tiene | Sí |
+| UT-WEB-EXTRA-47 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · etiquetas excluyentes un solo estado a la vez | Sí |
+| UT-WEB-EXTRA-48 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · ciclo de vida (planeación §2) al abrirse queda Nuevo y clasificado | Sí |
+| UT-WEB-EXTRA-49 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · ciclo de vida (planeación §2) un PR abierto lo pasa a En curso, pero no lo saca de En verificación | Sí |
+| UT-WEB-EXTRA-50 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · ciclo de vida (planeación §2) al fusionarse la corrección pasa a En verificación, no a cerrado | Sí |
+| UT-WEB-EXTRA-51 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · ciclo de vida (planeación §2) reabrir lo devuelve a En curso y lo cuenta como reabierto | Sí |
+| UT-WEB-EXTRA-52 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · ciclo de vida (planeación §2) editar un issue sin plantilla no cambia nada | Sí |
+| UT-WEB-EXTRA-53 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · referencias desde un PR reconoce «Corrige #N» y variantes, sin repetir | Sí |
+| UT-WEB-EXTRA-54 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · referencias desde un PR reconoce las palabras de cierre de GitHub para poder reabrir el defecto | Sí |
+| UT-WEB-EXTRA-55 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · referencias desde un PR no confunde menciones sueltas ni el «Corrige #» vacío de la plantilla del PR | Sí |
+| UT-WEB-EXTRA-56 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · registro para el PR-07 el estado sale del issue: abierto por etiqueta, cerrado según el motivo | Sí |
+| UT-WEB-EXTRA-57 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · registro para el PR-07 una fila por defecto, con tantas celdas como columnas | Sí |
+| UT-WEB-EXTRA-58 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · registro para el PR-07 un defecto abierto no tiene fecha de cierre ni días | Sí |
+| UT-WEB-EXTRA-59 | Gestión de defectos en GitHub Issues (D-WEB-15) | `tests/defectos.test.ts` | Defectos · registro para el PR-07 escapa comillas y comas en el título | Sí |
 | UT-WEB-EXTRA-60 | Carga inicial de los hooks (arreglos de SonarQube, D-WEB-14) | `tests/hooks/cargaInicial.test.tsx` | carga inicial de los hooks de pantalla useReportes sin datos del servidor pide los datos una sola vez y apaga loading | Sí |
 | UT-WEB-EXTRA-61 | Carga inicial de los hooks (arreglos de SonarQube, D-WEB-14) | `tests/hooks/cargaInicial.test.tsx` | carga inicial de los hooks de pantalla useReportes con datos del servidor no vuelve a pedirlos | Sí |
 | UT-WEB-EXTRA-62 | Carga inicial de los hooks (arreglos de SonarQube, D-WEB-14) | `tests/hooks/cargaInicial.test.tsx` | carga inicial de los hooks de pantalla useReportes si la carga falla, el mensaje queda en error y loading se apaga | Sí |

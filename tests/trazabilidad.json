@@ -33,6 +33,7 @@
     "tests/apiBase.test.ts": "Base de la API del proxy (arreglos de SonarQube, D-WEB-14)",
     "tests/components/FallidosMasivo.test.tsx": "Fallidos del registro masivo (WEB-06, cobertura D-WEB-13)",
     "tests/register.test.ts": "Validación por rol de register (WEB-05, cobertura D-WEB-13)",
-    "tests/asociadoViewer.test.ts": "Notas, novedades y horario del estudiante asociado (WEB-03)"
+    "tests/asociadoViewer.test.ts": "Notas, novedades y horario del estudiante asociado (WEB-03)",
+    "tests/defectos.test.ts": "Gestión de defectos en GitHub Issues (D-WEB-15)"
   }
 }
