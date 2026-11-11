@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { mapRolToKey } from '@/lib/utils/permissions'
 import { isPasswordValid, passwordChecks, PASSWORD_RULE_LABELS } from '@/lib/utils/password'
 import { ACCESS_MAX_AGE, REFRESH_MAX_AGE, cookieOptions } from '@/lib/auth/cookies'
+import { errorMessage } from '@/services/api/client'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -242,9 +243,10 @@ export async function register(prevState: unknown, formData: FormData) {
   })
 
   if (!res.ok) {
+    // Misma regla que apiFetch: `detail` puede ser texto o, en un 422, la lista de
+    // errores de validación de FastAPI (DEF-WEB-05: antes se escondía el motivo).
     const body = await res.json().catch(() => ({}))
-    const detail = (body as Record<string, unknown>).detail
-    const motivo = typeof detail === 'string' ? detail : 'No se pudo completar el registro.'
+    const motivo = errorMessage((body as Record<string, unknown>).detail, res.status)
     return { error: `Error al registrar el usuario: ${motivo}` }
   }
 

@@ -122,4 +122,23 @@ describe('register (WEB-05 · validación antes de llamar a la API)', () => {
 
     expect((r as { error: string }).error).toContain('El correo ya está registrado')
   })
+
+  // DEF-WEB-05: FastAPI responde un 422 con `detail` como lista de errores; antes
+  // el formulario mostraba «No se pudo completar el registro» y escondía el motivo.
+  it('DEF-WEB-05: un 422 de validación muestra el primer mensaje de la API', async () => {
+    const detail = [{ type: 'value_error', loc: ['body', 'correo'], msg: 'value is not a valid email address: reserved name' }]
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ detail }), { status: 422 }))
+
+    const r = await register(null, form({ ...COMUNES, roleId: '3', cargo: 'Rectoría' }))
+
+    expect((r as { error: string }).error).toContain('value is not a valid email address: reserved name')
+  })
+
+  it('DEF-WEB-05: sin cuerpo legible, indica el código HTTP en vez de un texto vacío', async () => {
+    fetchMock.mockResolvedValue(new Response('Internal Server Error', { status: 500 }))
+
+    const r = await register(null, form({ ...COMUNES, roleId: '3', cargo: 'Rectoría' }))
+
+    expect((r as { error: string }).error).toBe('Error al registrar el usuario: HTTP 500')
+  })
 })
