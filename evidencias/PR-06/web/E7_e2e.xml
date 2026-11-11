@@ -1,0 +1,543 @@
+<testsuites id="" name="" tests="48" failures="1" skipped="4" errors="7" time="3275.7961">
+<testsuite name="boletin-padre.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="chromium" tests="2" failures="0" skipped="0" time="145.737" errors="0">
+<testcase name="boletín del padre (WEB-09) › el padre descarga un PDF" classname="boletin-padre.spec.ts" time="76.441">
+</testcase>
+<testcase name="boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación" classname="boletin-padre.spec.ts" time="69.296">
+</testcase>
+</testsuite>
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="chromium" tests="8" failures="0" skipped="0" time="403.067" errors="0">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="49.747">
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="51.065">
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="51.012">
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="48.846">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="46.943">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="52.496">
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="56.697">
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="46.261">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="chromium" tests="2" failures="1" skipped="0" time="145.884" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="69.359">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  getByText(/Sofía/i).first()
+    Expected: visible
+    Received: hidden
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeVisible" getByText(/Sofía/i).first() with timeout 5000ms
+      - waiting for getByText(/Sofía/i).first()
+        14 × locator resolved to <option selected value="1">Sofía Rodríguez</option>
+           - unexpected value "hidden"
+
+
+      23 |
+      24 |     // Con el primero activo, el módulo habla de él; al cambiar, habla del segundo.
+    > 25 |     await expect(page.getByText(new RegExp(hijo1, 'i')).first()).toBeVisible()
+         |                                                                  ^
+      26 |     const etiquetaHijo2 = (await selector.locator('option', { hasText: new RegExp(hijo2, 'i') }).textContent()) ?? hijo2
+      27 |     await selector.selectOption({ label: etiquetaHijo2 })
+      28 |     await expect(page).toHaveURL(/[?&]hijo=\d+/)
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:25:66
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="un padre con un solo hijo no ve el selector" classname="padre-dos-hijos.spec.ts" time="76.525">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="chromium" tests="2" failures="0" skipped="0" time="140.204" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="81.197">
+<properties>
+<property name="fail" value="Requiere BE-08: sin el 409 la API duplica el registro">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="59.007">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="chromium" tests="1" failures="0" skipped="0" time="80.641" errors="0">
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="80.641">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="chromium" tests="6" failures="0" skipped="2" time="257.917" errors="0">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="61.73">
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="60.373">
+</testcase>
+<testcase name="sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript" classname="sesion.spec.ts" time="51.499">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)" classname="sesion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente: falta el dato de QA E2E_SESSION_IDLE_MINUTES">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)" classname="sesion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente: falta el dato de QA E2E_SESSION_IDLE_MINUTES">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="84.304">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="chromium" tests="3" failures="0" skipped="0" time="219.124" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="88.781">
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="75.003">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="55.34">
+</testcase>
+</testsuite>
+<testsuite name="boletin-padre.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="firefox" tests="2" failures="0" skipped="0" time="154.674" errors="0">
+<testcase name="boletín del padre (WEB-09) › el padre descarga un PDF" classname="boletin-padre.spec.ts" time="78.932">
+</testcase>
+<testcase name="boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación" classname="boletin-padre.spec.ts" time="75.742">
+</testcase>
+</testsuite>
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="firefox" tests="8" failures="0" skipped="0" time="373.073" errors="0">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="71.289">
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="41.878">
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="40.966">
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="40.823">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="41.732">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="45.745">
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="45.359">
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="45.281">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="firefox" tests="2" failures="0" skipped="0" time="179.716" errors="1">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="92.808">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [firefox] › padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: page.goto: Test timeout of 90000ms exceeded.
+    Call log:
+      - navigating to "https://deploy-preview-34--qaeyesschool.netlify.app/notas", waiting until "load"
+
+
+      16 |
+      17 |   for (const modulo of ['/notas', '/asistencia', '/novedades']) {
+    > 18 |     await page.goto(modulo)
+         |                ^
+      19 |     const selector = page.getByRole('combobox', { name: /estudiante/i })
+      20 |
+      21 |     // Ve solo sus dos hijos.
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:18:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="un padre con un solo hijo no ve el selector" classname="padre-dos-hijos.spec.ts" time="86.908">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="firefox" tests="2" failures="0" skipped="0" time="180.699" errors="1">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="88.522">
+<properties>
+<property name="fail" value="Requiere BE-08: sin el 409 la API duplica el registro">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="92.177">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-firefox\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [firefox] › registro-masivo.spec.ts:35:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: page.goto: Test timeout of 90000ms exceeded.
+    Call log:
+      - navigating to "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1", waiting until "load"
+
+
+       at utils.ts:35
+
+      33 |   requiere(`E2E_${rol.toUpperCase()}_EMAIL`, 'E2E_PASSWORD')
+      34 |
+    > 35 |   await page.goto('/?login=1')
+         |              ^
+      36 |   const vista = page.locator('[data-view="login"]')
+      37 |   await vista.locator('input[type="email"]').fill(correo!)
+      38 |   await vista.locator('input[type="password"]').fill(password!)
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:35:14)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:37:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="firefox" tests="1" failures="0" skipped="0" time="92.127" errors="1">
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="92.127">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [firefox] › registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: page.goto: Test timeout of 90000ms exceeded.
+    Call log:
+      - navigating to "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1", waiting until "load"
+
+
+      34 |   correoCreado = correo
+      35 |
+    > 36 |   await page.goto('/?login=1')
+         |              ^
+      37 |   await page.locator('[data-go-signup]').click()
+      38 |   const modal = page.getByRole('dialog', { name: /crear cuenta/i })
+      39 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:36:14
+
+    "afterAll" hook timeout of 90000ms exceeded.
+
+      11 | let correoCreado: string | null = null
+      12 |
+    > 13 | test.afterAll(async ({ browser }) => {
+         |      ^
+      14 |   if (!correoCreado) return
+      15 |   const page = await browser.newPage({ baseURL: process.env.E2E_BASE_URL })
+      16 |   try {
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:13:6
+
+    Error: page.goto: Test ended.
+    Call log:
+      - navigating to "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1", waiting until "load"
+
+
+       at utils.ts:35
+
+      33 |   requiere(`E2E_${rol.toUpperCase()}_EMAIL`, 'E2E_PASSWORD')
+      34 |
+    > 35 |   await page.goto('/?login=1')
+         |              ^
+      36 |   const vista = page.locator('[data-view="login"]')
+      37 |   await vista.locator('input[type="email"]').fill(correo!)
+      38 |   await vista.locator('input[type="password"]').fill(password!)
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:35:14)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:17:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    Error Context: ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="firefox" tests="6" failures="0" skipped="2" time="301.369" errors="2">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="98.552">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [firefox] › sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.click: Test timeout of 90000ms exceeded.
+    Call log:
+      - waiting for locator('[data-view="login"]').locator('button').first()
+        - locator resolved to <button style-hover="transform:translateY(-2px);box-shadow:0 0 36px color-mix(in srgb,var(--neon2,#4df0c8) 75%, transparent);">ENTRAR</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - performing click action
+
+
+       at utils.ts:39
+
+      37 |   await vista.locator('input[type="email"]').fill(correo!)
+      38 |   await vista.locator('input[type="password"]').fill(password!)
+    > 39 |   await vista.locator('button').first().click()
+         |                                         ^
+      40 |
+      41 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+      42 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:39:41)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:16:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="111.606">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [firefox] › sesion.spec.ts:26:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola 
+
+    Test timeout of 90000ms exceeded.
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript" classname="sesion.spec.ts" time="66.176">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)" classname="sesion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente: falta el dato de QA E2E_SESSION_IDLE_MINUTES">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)" classname="sesion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente: falta el dato de QA E2E_SESSION_IDLE_MINUTES">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="25.018">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-11T17:28:53.897Z" hostname="firefox" tests="3" failures="0" skipped="0" time="378.734" errors="2">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="92.977">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [firefox] › usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Usuario eliminado exitosamente')
+    Expected: visible
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Usuario eliminado exitosamente') with timeout 30000ms
+      - waiting for getByText('Usuario eliminado exitosamente')
+      - Test timeout of 90000ms exceeded.
+
+
+      53 |     await page.getByTitle('Eliminar').first().click()
+      54 |     await page.getByRole('button', { name: /eliminar|confirmar/i }).last().click()
+    > 55 |     await expect(page.getByText('Usuario eliminado exitosamente')).toBeVisible(AVISO)
+         |                                                                    ^
+      56 |   })
+      57 |
+      58 |   test('crear con un campo vacío no guarda e indica el campo (CP-SIS-021)', async ({ page }) => {
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:55:68
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="77.357">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="208.4">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--firefox\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [firefox] › usuarios.spec.ts:67:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) 
+
+    Test timeout of 90000ms exceeded.
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+</testsuites>

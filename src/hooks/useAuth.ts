@@ -32,6 +32,7 @@ export function useAuth() {
   // Leemos la cookie tras el montaje y re-sincronizamos al volver al foco
   // (maneja login en otra pestaña).
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- la cookie eys_user solo existe en el navegador; se lee tras montar (evita hydration mismatch)
     setAuthUser(readUserCookie())
     const sync = () => setAuthUser(readUserCookie())
     window.addEventListener('focus', sync)

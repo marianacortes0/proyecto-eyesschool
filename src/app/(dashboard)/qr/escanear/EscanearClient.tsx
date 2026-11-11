@@ -62,11 +62,13 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
   }, [])
 
   // Cargar al montar
-  useEffect(() => { fetchToday() }, [fetchToday])
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- carga inicial y recarga de los registros del día desde el servidor
+  useEffect(() => { void fetchToday() }, [fetchToday])
 
   // Recargar cuando se completa un escaneo exitoso
   useEffect(() => {
-    if (status === 'success') fetchToday()
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- carga inicial y recarga de los registros del día desde el servidor
+    if (status === 'success') void fetchToday()
   }, [status, fetchToday])
 
   const info = ROLE_LABEL[role] ?? ROLE_LABEL.admin!

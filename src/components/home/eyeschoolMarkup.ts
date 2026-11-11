@@ -4,7 +4,7 @@ export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100
 
   <!-- ═══════════════ PLATAFORMA / VIDEO SECTION · INICIO ═══════════════ -->
   <section id="plataforma" data-screen-label="Plataforma" style="position:relative;min-height:100vh;overflow:hidden;scroll-snap-align:start;font-family:'Space Grotesk',sans-serif;background:#140e2c;">
-    <video data-ref="video" loop muted playsinline preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
+    <video data-ref="video" loop muted playsinline preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
       <source src="/eyeschool/assets/galaxy.mp4" type="video/mp4"></source>
     </video>
     <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom, rgba(8,5,22,.46) 0%, rgba(14,8,32,.34) 42%, rgba(8,5,22,.58) 100%);"></div>
@@ -390,7 +390,7 @@ export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100
 
   <!-- ═══════════════ RESEÑAS SECTION ═══════════════ -->
   <section id="resenas" style="position:relative;min-height:100vh;overflow:hidden;scroll-snap-align:start;font-family:'Space Grotesk',sans-serif;">
-    <video data-parallax="1" loop muted playsinline preload="auto" style="position:absolute;left:50%;top:50%;width:122%;height:128%;transform:translate(-50%,-50%);object-fit:cover;z-index:0;will-change:transform;">
+    <video data-parallax="1" loop muted playsinline preload="metadata" style="position:absolute;left:50%;top:50%;width:122%;height:128%;transform:translate(-50%,-50%);object-fit:cover;z-index:0;will-change:transform;">
       <source src="/eyeschool/assets/loopi.mp4" type="video/mp4"></source>
     </video>
     <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to right, rgba(8,5,22,.60) 0%, rgba(10,6,28,.30) 40%, rgba(8,5,22,.06) 100%);"></div>
@@ -607,7 +607,7 @@ export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100
 
       <!-- responsive 16:9 video frame -->
       <div style="position:relative;z-index:2;width:min(760px,90%);aspect-ratio:16/9;border-radius:18px;overflow:hidden;border:1.5px solid rgba(56,232,255,.35);box-shadow:0 24px 70px rgba(0,0,0,.55),0 0 44px rgba(56,232,255,.2);">
-        <iframe data-ben2-video="1" width="560" height="315" src="https://www.youtube.com/embed/Ow75gjvJDvE?si=iCTryr4iq182K8ID" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
+        <iframe data-ben2-video="1" loading="lazy" width="560" height="315" data-src="https://www.youtube.com/embed/Ow75gjvJDvE?si=iCTryr4iq182K8ID" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
       </div>
     </div>
   </section>

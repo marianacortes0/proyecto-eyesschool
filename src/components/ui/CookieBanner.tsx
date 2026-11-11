@@ -8,6 +8,7 @@ export default function CookieBanner() {
   useEffect(() => {
     const consent = localStorage.getItem("cookie_consent");
     if (!consent) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- lee el consentimiento de localStorage tras montar (evita hydration mismatch)
       setVisible(true);
     }
   }, []);

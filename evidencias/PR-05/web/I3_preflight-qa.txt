@@ -1,0 +1,21 @@
+Preflight del entorno de QA — 2026-11-10 23:36 UTC
+Commit de la rama: 8bdc307
+Solo codigos HTTP. Ningun token, clave ni cookie se escribe aqui.
+
+API /docs                                        200
+API /openapi.json                                200
+API /api/v1/cursos (sin token)                   200
+API /api/v1/auth/me (sin token)                  401
+API POST /auth/login cuerpo invalido             422
+API POST /auth/login correo inexistente          401
+API POST /auth/login admin (QA_PASSWORD)         200
+API POST /auth/login docente (QA_PASSWORD)       200
+API POST /auth/login estudiante (QA_PASSWORD)    200
+API POST /auth/login padre 1 hijo (QA_PASSWORD)  200
+API POST /auth/login padre 2 hijos (QA_PASSWORD) 200
+WEB / (deploy preview del PR 34)                 200
+WEB /usuarios sin sesion (HTTP)                  200
+WEB qaeyesschool.netlify.app                     404
+
+openapi.json: 62 rutas · /padres/me/hijos (BE-07) presente: SI
+/cursos sin token devolvio 10 cursos

@@ -439,8 +439,8 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
     e.preventDefault()
     setFormError(null)
 
-    const n = parseFloat(notaVal)
-    if (isNaN(n) || n < 0 || n > 5) {
+    const n = Number.parseFloat(notaVal)
+    if (Number.isNaN(n) || n < 0 || n > 5) {
       setFormError('La nota debe estar entre 0.0 y 5.0')
       notifyWarning('La nota debe estar entre 0.0 y 5.0')
       return
@@ -474,8 +474,8 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
     }
   }
 
-  const preview = parseFloat(notaVal)
-  const hasPreview = !isNaN(preview) && preview >= 0 && preview <= 5
+  const preview = Number.parseFloat(notaVal)
+  const hasPreview = !Number.isNaN(preview) && preview >= 0 && preview <= 5
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">

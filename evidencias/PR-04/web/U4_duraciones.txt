@@ -1,0 +1,11 @@
+Duraciones de los niveles locales
+Fecha: 2026-11-05T20:57:15.556Z
+Medidas con node:child_process (tiempo de reloj, incluido el arranque de la herramienta).
+
+Tipos (tsc --noEmit)                    7.4 s   codigo de salida=0
+Lint (eslint --max-warnings=0)         25.3 s   codigo de salida=0
+Unitarias y componentes                23.0 s   codigo de salida=0
+Cobertura (test:cov)                   23.8 s   codigo de salida=0
+Trazabilidad                          126.2 s   codigo de salida=0
+Build de produccion                    45.9 s   codigo de salida=0
+Auditoria de dependencias               4.7 s   codigo de salida=0

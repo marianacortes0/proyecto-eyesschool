@@ -1,13 +1,12 @@
-import { getClientToken } from '@/services/api/client'
+import { PROXY_URL } from '@/services/api/client'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
+// Desde el navegador: pasa por el proxy del servidor, que agrega el token (WEB-02).
 async function apiFetchClient<T>(path: string): Promise<T | null> {
-  const token = getClientToken()
-  if (!token) return null
   try {
-    const res = await fetch(`${API}${path}`, {
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    const res = await fetch(`${PROXY_URL}${path}`, {
+      headers: { 'Content-Type': 'application/json' },
     })
     if (!res.ok) return null
     return res.json() as Promise<T>
@@ -158,6 +157,11 @@ function emptyEstudianteStats(): EstudianteStats {
   }
 }
 
+/** Con varios hijos, el inicio del padre pide los datos del hijo activo (WEB-03). */
+export function rutaPadre(idEstudiante?: number): string {
+  return idEstudiante ? `/dashboard/padre?id_estudiante=${idEstudiante}` : '/dashboard/padre'
+}
+
 // ─── Client-side functions ────────────────────────────────────────────────────
 
 export const getDashboardDocente = async (): Promise<DocenteStats> => {
@@ -195,8 +199,8 @@ export const getDashboardEstudiante = async (): Promise<EstudianteStats> => {
   }
 }
 
-export const getDashboardPadre = async (): Promise<PadreStats> => {
-  const raw = await apiFetchClient<PadreAPI>('/dashboard/padre')
+export const getDashboardPadre = async (idEstudiante?: number): Promise<PadreStats> => {
+  const raw = await apiFetchClient<PadreAPI>(rutaPadre(idEstudiante))
   if (!raw) return { hijos: [] }
   return {
     hijos: [{
@@ -254,8 +258,8 @@ export async function getDashboardEstudianteServer(token: string): Promise<Estud
   }
 }
 
-export async function getDashboardPadreServer(token: string): Promise<PadreStats> {
-  const raw = await apiFetchServer<PadreAPI>('/dashboard/padre', token)
+export async function getDashboardPadreServer(token: string, idEstudiante?: number): Promise<PadreStats> {
+  const raw = await apiFetchServer<PadreAPI>(rutaPadre(idEstudiante), token)
   if (!raw) return { hijos: [] }
   return {
     hijos: [{

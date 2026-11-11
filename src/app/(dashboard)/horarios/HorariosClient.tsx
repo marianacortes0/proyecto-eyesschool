@@ -713,9 +713,8 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
       idMateria: Number(idMateria),
       activo,
     }
-    mode === 'create'
-      ? onCreate(payload, idProfesor ? Number(idProfesor) : undefined)
-      : onUpdate(horario!.idHorario, payload, idProfesor ? Number(idProfesor) : undefined)
+    if (mode === 'create') onCreate(payload, idProfesor ? Number(idProfesor) : undefined)
+    else onUpdate(horario!.idHorario, payload, idProfesor ? Number(idProfesor) : undefined)
   }
 
   return (
@@ -971,7 +970,8 @@ function CursoForm({ mode, curso, saving, onClose, onCreate, onUpdate }: CursoFo
       return
     }
     const payload = { nombreCurso: nombreCurso.trim(), grado: grado.trim(), jornada, ano: Number(ano), activo }
-    mode === 'create' ? onCreate(payload) : onUpdate(curso!.idCurso, payload)
+    if (mode === 'create') onCreate(payload)
+    else onUpdate(curso!.idCurso, payload)
   }
 
   const SEL = 'w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary'
@@ -1247,7 +1247,8 @@ function MateriaForm({ mode, materia, saving, onClose, onCreate, onUpdate }: {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const payload = { nombreMateria: nombre.trim(), codigoMateria: codigo.trim(), activa }
-    mode === 'create' ? onCreate(payload) : onUpdate(materia!.idMateria, payload)
+    if (mode === 'create') onCreate(payload)
+    else onUpdate(materia!.idMateria, payload)
   }
 
   return (
@@ -1296,7 +1297,8 @@ function EspecializacionForm({ mode, especializacion, saving, onClose, onCreate,
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const payload = { nombreEspecializacion: nombre.trim(), activo }
-    mode === 'create' ? onCreate(payload) : onUpdate(especializacion!.idEspecializacion, payload)
+    if (mode === 'create') onCreate(payload)
+    else onUpdate(especializacion!.idEspecializacion, payload)
   }
 
   return (
@@ -1455,7 +1457,8 @@ function AsignacionForm({ mode, asignacion, profesores, cursos, materias, saving
       fechaFinalizacion: fechaFinalizacion || null,
       activo
     }
-    mode === 'create' ? onCreate(payload) : onUpdate(asignacion!.idAsignacion, payload)
+    if (mode === 'create') onCreate(payload)
+    else onUpdate(asignacion!.idAsignacion, payload)
   }
 
   return (

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 export const DEFAULT_PAGE_SIZE = 10
 
@@ -10,15 +10,14 @@ export const DEFAULT_PAGE_SIZE = 10
  * se ajusta al rango válido en vez de quedar en blanco.
  */
 export function usePagination<T>(items: T[], pageSize: number = DEFAULT_PAGE_SIZE) {
-  const [page, setPage] = useState(1)
+  const [pedida, setPage] = useState(1)
 
   const total = items.length
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
 
-  // Ajusta la página si el total se reduce por debajo de la página actual.
-  useEffect(() => {
-    if (page > totalPages) setPage(totalPages)
-  }, [page, totalPages])
+  // Si el total se reduce por debajo de la página pedida, se muestra la última
+  // válida (se deriva al renderizar; no hace falta un efecto que ajuste el estado).
+  const page = Math.min(pedida, totalPages)
 
   const pageItems = useMemo(() => {
     const start = (page - 1) * pageSize

@@ -1,16 +1,18 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { crearRegistrosMasivoAction } from '@/services/asistencia/asistenciaActions'
 import {
-  crearRegistrosMasivoAction,
+  itemsParaReintento,
+  type CursoOption,
+  type EstudianteSelector,
+  type EstadoAsistencia,
+  type RegistroFallido,
   type RegistroMasivoItem,
-} from '@/services/asistencia/asistenciaActions'
-import type {
-  CursoOption,
-  EstudianteSelector,
-  EstadoAsistencia,
-  TipoAsistencia,
+  type RegistroMasivoResult,
+  type TipoAsistencia,
 } from '@/services/asistencia/asistenciaService'
+import FallidosMasivo from '@/components/asistencia/FallidosMasivo'
 import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
 
 type Props = {
@@ -48,6 +50,10 @@ export default function RegistroMasivo({ cursos, estudiantes, idUsuarioRegistrad
   const [tipo, setTipo] = useState<TipoAsistencia>('entrada')
   const [estados, setEstados] = useState<Record<number, EstadoAsistencia>>({})
   const [submitting, setSubmitting] = useState(false)
+  // Lo que quedó pendiente del último lote (WEB-06): qué se mandó y a quién le falló.
+  const [lote, setLote] = useState<{ items: RegistroMasivoItem[]; fecha: string; tipo: TipoAsistencia } | null>(null)
+  const [fallidos, setFallidos] = useState<RegistroFallido[]>([])
+  const [duplicados, setDuplicados] = useState<number[]>([])
 
   const jornadas = useMemo(
     () => [...new Set(cursos.map((c) => c.jornada).filter((j): j is string => !!j))].sort(),
@@ -81,34 +87,55 @@ export default function RegistroMasivo({ cursos, estudiantes, idUsuarioRegistrad
     setEstados(next)
   }
 
+  const nombreDe = (id: number) => estudiantes.find((e) => e.idEstudiante === id)?.nombreCompleto ?? `Estudiante #${id}`
+
+  const avisar = (res: RegistroMasivoResult) => {
+    const ok = res.guardados.length
+    if (ok > 0) notifySuccess(`${ok} registro${ok !== 1 ? 's' : ''} de asistencia guardado${ok !== 1 ? 's' : ''}`)
+    if (res.duplicados.length > 0) notifyWarning(`${res.duplicados.length} ya estaban registrados`)
+    if (res.fallidos.length > 0) notifyError(`${res.fallidos.length} no se pudieron registrar`)
+  }
+
+  const enviar = async (items: RegistroMasivoItem[], fechaLote: string, tipoLote: TipoAsistencia) => {
+    setSubmitting(true)
+    try {
+      const res = await crearRegistrosMasivoAction({ items, fecha: fechaLote, tipo: tipoLote, registradoPor: idUsuarioRegistrador })
+      avisar(res)
+      setFallidos(res.fallidos)
+      return res
+    } catch (err) {
+      notifyError(err instanceof Error ? err.message : 'Error al registrar el lote')
+      return null
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   const handleSubmit = async () => {
     if (estudiantesDelCurso.length === 0) {
       notifyWarning('Selecciona un curso con estudiantes')
       return
     }
-    setSubmitting(true)
-    try {
-      const items: RegistroMasivoItem[] = estudiantesDelCurso.map((e) => ({
-        idEstudiante: e.idEstudiante,
-        estado: estadoDe(e.idEstudiante),
-      }))
-      const res = await crearRegistrosMasivoAction({
-        items,
-        fecha,
-        tipo,
-        registradoPor: idUsuarioRegistrador,
-      })
-      if (res.ok > 0) {
-        notifySuccess(`${res.ok} registro${res.ok !== 1 ? 's' : ''} de asistencia guardado${res.ok !== 1 ? 's' : ''}`)
-      }
-      if (res.fail > 0) {
-        notifyError(`${res.fail} no se pudieron registrar (¿ya marcados hoy?)`)
-      }
+    const items: RegistroMasivoItem[] = estudiantesDelCurso.map((e) => ({
+      idEstudiante: e.idEstudiante,
+      estado: estadoDe(e.idEstudiante),
+    }))
+    setLote({ items, fecha, tipo })
+    setDuplicados([])
+    const res = await enviar(items, fecha, tipo)
+    if (res) {
+      setDuplicados(res.duplicados)
       onRegistered?.()
-    } catch (err) {
-      notifyError(err instanceof Error ? err.message : 'Error al registrar el lote')
-    } finally {
-      setSubmitting(false)
+    }
+  }
+
+  // Reintentar reenvía SOLO a los que fallaron, con los mismos parámetros del lote.
+  const handleReintentar = async () => {
+    if (!lote) return
+    const res = await enviar(itemsParaReintento(lote.items, fallidos), lote.fecha, lote.tipo)
+    if (res) {
+      setDuplicados((prev) => [...prev, ...res.duplicados])
+      onRegistered?.()
     }
   }
 
@@ -220,6 +247,29 @@ export default function RegistroMasivo({ cursos, estudiantes, idUsuarioRegistrad
               </div>
             ))}
           </div>
+
+          <FallidosMasivo
+            fallidos={fallidos}
+            nombreDe={nombreDe}
+            onReintentar={handleReintentar}
+            onDescartar={() => setFallidos([])}
+            ocupado={submitting}
+          />
+
+          {duplicados.length > 0 && (
+            <section
+              aria-label="Registros ya existentes"
+              className="rounded-2xl border border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 p-4"
+            >
+              <ul className="text-sm text-amber-800 dark:text-amber-300 space-y-1">
+                {duplicados.map((id) => (
+                  <li key={id}>
+                    {nombreDe(id)} <span className="text-xs font-semibold">· ya registrado</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           {/* Acción de envío */}
           <div className="flex justify-end">

@@ -70,6 +70,7 @@ export default function QREstudianteView({ codigo, loading }: Props) {
           <div className="flex flex-col items-center gap-5 p-7 rounded-2xl bg-white dark:bg-white/5 border border-white/40 dark:border-white/10 shadow-lg max-w-xs w-full">
             {/* Imagen QR vía goqr.me */}
             <div className="rounded-xl overflow-hidden bg-white p-2 shadow-sm">
+              {/* eslint-disable-next-line @next/next/no-img-element -- imagen dinámica de origen externo (QR de goqr.me o avatar de la API); next/image exigiría configurar dominios remotos */}
               <img
                 src={getQRImageUrl(codigo.codigo, 220)}
                 alt={`Código QR de ${codigo.codigoEstudiante}`}

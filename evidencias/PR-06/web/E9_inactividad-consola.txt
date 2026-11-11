@@ -1,0 +1,14 @@
+Corrida E9 · cierre por inactividad y acceso vencido con la espera de 20 s, commit e387ee4 + e2e/sesion.spec.ts (luego commit 7d927df). JUnit: E9_inactividad.xml.
+Salida de consola de Playwright 1.64.1. Revisada: sin clave, tokens ni llamadas fill().
+
+inicio 2026-11-11T18:37:06Z commit e387ee4 + e2e/sesion.spec.ts sin commit
+
+Running 4 tests using 1 worker
+
+  ✓  1 [chromium] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (30.2s)
+  ✓  2 [chromium] › e2e\sesion.spec.ts:29:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola (17.9s)
+  ✓  3 [firefox] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (28.6s)
+  ✓  4 [firefox] › e2e\sesion.spec.ts:29:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola (21.6s)
+
+  4 passed (1.8m)
+salida=0

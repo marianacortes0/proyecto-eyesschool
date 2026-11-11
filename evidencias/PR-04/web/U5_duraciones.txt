@@ -1,0 +1,12 @@
+Duraciones de los niveles locales
+Fecha: 2026-11-11T16:44:26.616Z
+Medidas con node:child_process (tiempo de reloj, incluido el arranque de la herramienta).
+Build con NEXT_PUBLIC_API_URL=https://api.example.invalid/api/v1, como el paso Build de .github/workflows/ci.yml.
+
+Tipos (tsc --noEmit)                   19.4 s   codigo de salida=0
+Lint (eslint --max-warnings=0)         47.6 s   codigo de salida=0
+Unitarias y componentes                29.7 s   codigo de salida=0
+Cobertura (test:cov)                   28.3 s   codigo de salida=0
+Trazabilidad                           25.6 s   codigo de salida=0
+Build de produccion                    26.7 s   codigo de salida=0
+Auditoria de dependencias               4.2 s   codigo de salida=0

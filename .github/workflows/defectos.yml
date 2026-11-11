@@ -1,0 +1,78 @@
+name: Defectos
+
+# PR-07 · Gestión de defectos en GitHub Issues (D-WEB-15). Reemplaza a Azure Boards.
+# Proceso: planeacion/tests/GestionDefectos/planeacion-gestion-defectos-frontend-web.md
+#   - Issue nuevo con la plantilla «Defecto» → Nuevo + severidad, prioridad, componente y origen.
+#   - PR hacia develop que dice «Corrige #N» → En curso; al fusionarse → En verificación.
+#   - QA cierra el issue tras verificar en QA; si lo reabre, se marca como reabierto.
+#   - Manual (Run workflow): crear las etiquetas o exportar el registro a CSV para el corte.
+# Los eventos `issues` ejecutan la versión de este archivo que está en develop.
+on:
+  issues:
+    types: [opened, edited, reopened]
+  pull_request:
+    types: [opened, reopened, edited, closed]
+    branches: [develop]
+  push:
+    branches: [develop]
+    paths: [scripts/defectos/reglas.mjs]
+  workflow_dispatch:
+    inputs:
+      accion:
+        description: Qué hacer
+        type: choice
+        options: [exportar, etiquetas]
+        default: exportar
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+concurrency:
+  group: defectos-${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  etiquetas:
+    name: Etiquetas del proceso
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.accion == 'etiquetas')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+      - run: node scripts/defectos/gestion.mjs etiquetas
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  ciclo-de-vida:
+    name: Ciclo de vida del defecto
+    if: github.event_name == 'issues' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+      - run: node scripts/defectos/gestion.mjs evento
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  exportar:
+    name: Registro de defectos (CSV)
+    if: github.event_name == 'workflow_dispatch' && inputs.accion == 'exportar'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+      - run: node scripts/defectos/gestion.mjs exportar defectos-web.csv
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: defectos-web-${{ github.run_number }}
+          path: defectos-web.csv
