@@ -1,0 +1,30 @@
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /admin
+├ ƒ /api/auth/refresh
+├ ƒ /api/proxy/[...path]
+├ ƒ /api/send-email
+├ ƒ /asistencia
+├ ƒ /auth/confirm
+├ ○ /forgot-password
+├ ƒ /general
+├ ○ /home/beneficios
+├ ○ /home/nosotros
+├ ○ /home/support
+├ ƒ /horarios
+├ ƒ /notas
+├ ƒ /novedades
+├ ƒ /perfil
+├ ƒ /qr
+├ ƒ /qr/escanear
+├ ƒ /reportes
+├ ○ /reset-password
+└ ƒ /usuarios
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

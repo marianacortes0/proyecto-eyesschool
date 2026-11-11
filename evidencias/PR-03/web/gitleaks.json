@@ -1,25 +1,5 @@
 [
  {
-  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
-  "StartLine": 5,
-  "EndLine": 5,
-  "StartColumn": 9,
-  "EndColumn": 56,
-  "Match": "auth_id\": \"REDACTED\"",
-  "Secret": "REDACTED",
-  "File": "diag.json",
-  "SymlinkFile": "",
-  "Commit": "b7e20f56c11871674b67a0a3cf65149e8baa098e",
-  "Entropy": 3.6524475,
-  "Author": "marianacortes0",
-  "Email": "marigenerosita@gmail.com",
-  "Date": "2026-04-13T19:18:42Z",
-  "Message": "pagedasboard",
-  "Tags": [],
-  "RuleID": "generic-api-key",
-  "Fingerprint": "b7e20f56c11871674b67a0a3cf65149e8baa098e:diag.json:generic-api-key:5"
- },
- {
   "Description": "Uncovered a JSON Web Token, which may lead to unauthorized access to web applications and sensitive user data.",
   "StartLine": 5,
   "EndLine": 5,
@@ -38,6 +18,26 @@
   "Tags": [],
   "RuleID": "jwt",
   "Fingerprint": "b7e20f56c11871674b67a0a3cf65149e8baa098e:check-profs.js:jwt:5"
+ },
+ {
+  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+  "StartLine": 5,
+  "EndLine": 5,
+  "StartColumn": 9,
+  "EndColumn": 56,
+  "Match": "auth_id\": \"REDACTED\"",
+  "Secret": "REDACTED",
+  "File": "diag.json",
+  "SymlinkFile": "",
+  "Commit": "b7e20f56c11871674b67a0a3cf65149e8baa098e",
+  "Entropy": 3.6524475,
+  "Author": "marianacortes0",
+  "Email": "marigenerosita@gmail.com",
+  "Date": "2026-04-13T19:18:42Z",
+  "Message": "pagedasboard",
+  "Tags": [],
+  "RuleID": "generic-api-key",
+  "Fingerprint": "b7e20f56c11871674b67a0a3cf65149e8baa098e:diag.json:generic-api-key:5"
  },
  {
   "Description": "Uncovered a JSON Web Token, which may lead to unauthorized access to web applications and sensitive user data.",

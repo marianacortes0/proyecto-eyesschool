@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="10" failures="0" errors="0" time="59.3598604">
+    <testsuite name="tests/integration/contrato-api.int.test.ts" timestamp="2026-11-11T18:46:20.216Z" hostname="Mariana" tests="10" failures="0" errors="0" skipped="0" time="59.3598604">
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-03 · contrato de lectura por rol &gt; admin: usuarios, asistencia del día y reportes" time="10.3346476">
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-03 · contrato de lectura por rol &gt; docente: notas, novedades, horarios y asignaciones" time="7.6549374">
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-03 · contrato de lectura por rol &gt; estudiante: notas, novedades y horario del estudiante asociado" time="10.3377267">
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-03 · contrato de lectura por rol &gt; padre: notas, novedades y horario del estudiante asociado" time="10.1170672">
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-03 · contrato de lectura por rol &gt; padre: los hijos de /padres/me/hijos llegan con su nombre real, no con el respaldo" time="4.7324403">
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-04 · inicio del estudiante (BE-03) &gt; GET /dashboard/estudiante responde 200 y el inicio carga" time="5.8430992">
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-05 · errores reales de la API llegan como mensaje &gt; 401: sin token" time="0.194721">
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-05 · errores reales de la API llegan como mensaje &gt; 403: un padre pide la lista de usuarios" time="4.1988235">
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-05 · errores reales de la API llegan como mensaje &gt; 404: un recurso que no existe" time="3.2771581">
+        </testcase>
+        <testcase classname="tests/integration/contrato-api.int.test.ts" name="IT-WEB-05 · errores reales de la API llegan como mensaje &gt; 422: cuerpo inválido, con el primer mensaje de validación" time="2.662043">
+        </testcase>
+    </testsuite>
+</testsuites>
