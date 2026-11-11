@@ -393,7 +393,12 @@ function createEngine(root: HTMLElement, handlers: LandingHandlers) {
     on(sec.querySelector("[data-ben-close]"), "click", () => (state.benOpen = false));
 
     ben2Panel = sec.querySelector("[data-ben2-panel]");
-    on(sec.querySelector("[data-ben2-open]"), "click", () => (state.ben2Open = true));
+    on(sec.querySelector("[data-ben2-open]"), "click", () => {
+      state.ben2Open = true;
+      // DEF-WEB-06: el reproductor de YouTube se carga al abrir su panel, no con la portada.
+      const yt = sec.querySelector("iframe[data-src]") as HTMLIFrameElement | null;
+      if (yt && !yt.getAttribute("src")) yt.src = yt.dataset.src ?? "";
+    });
     on(sec.querySelector("[data-ben2-close]"), "click", () => (state.ben2Open = false));
 
     cardOverlay = sec.querySelector("[data-card-overlay]");

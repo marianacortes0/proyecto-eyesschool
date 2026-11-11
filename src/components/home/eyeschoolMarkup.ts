@@ -607,7 +607,7 @@ export const LANDING_MARKUP = `<div data-ref="wrap" style="width:100%;height:100
 
       <!-- responsive 16:9 video frame -->
       <div style="position:relative;z-index:2;width:min(760px,90%);aspect-ratio:16/9;border-radius:18px;overflow:hidden;border:1.5px solid rgba(56,232,255,.35);box-shadow:0 24px 70px rgba(0,0,0,.55),0 0 44px rgba(56,232,255,.2);">
-        <iframe data-ben2-video="1" loading="lazy" width="560" height="315" src="https://www.youtube.com/embed/Ow75gjvJDvE?si=iCTryr4iq182K8ID" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
+        <iframe data-ben2-video="1" loading="lazy" width="560" height="315" data-src="https://www.youtube.com/embed/Ow75gjvJDvE?si=iCTryr4iq182K8ID" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
       </div>
     </div>
   </section>

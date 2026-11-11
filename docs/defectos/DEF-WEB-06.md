@@ -1,38 +1,49 @@
-# DEF-WEB-06 · La portada descarga 34–41 MB de vídeo y abre el reproductor de YouTube en cada visita
+# DEF-WEB-06 · La portada precarga los vídeos y carga el reproductor de YouTube de un panel cerrado
 
 | Campo | Valor |
 |---|---|
-| Componente | **Web** (`src/components/home/eyeschoolMarkup.ts`) |
+| Componente | **Web** (`src/components/home/eyeschoolMarkup.ts`, `src/components/home/EyeSchoolLanding.tsx`) |
 | Severidad | **Baja** · prioridad propuesta P4 (rendimiento) |
-| Estado | **Corregido** (11/11/2026) · en verificación |
+| Estado | **Corregido** (11/11/2026, commits `6d56838` y el de esta ficha) · **Verificado** en local con el build de producción |
 | Detectado el | 11/11/2026, al analizar los casos INESTABLE de las corridas E2E (E3 a E8) |
 | Caso relacionado | CP-NF-005 (rendimiento de la página de inicio de sesión). Afecta a todos los E2E: el inicio de sesión es un modal sobre la portada |
 | Origen | Pruebas de sistema |
-| Evidencia | Medición con Chromium y Firefox contra el deploy preview del PR #34 (11/11/2026, 2 visitas por navegador, sección «Resultado obtenido») |
-| Issue en GitHub | NO DISPONIBLE (acción externa 11) |
+| Evidencia | Mediciones del 11/11/2026 con Chromium (protocolo de depuración: bytes transferidos de verdad) contra `next start` local, antes y después, más la prueba funcional de «VER VIDEO» en Chromium y Firefox |
+| Issue en GitHub | NO DISPONIBLE (se registra con `docs/defectos/registro.json`) |
 
 ## Pasos para reproducir
 
-1. Abrir `https://deploy-preview-34--qaeyesschool.netlify.app/?login=1` con la caché vacía.
-2. Mirar en la pestaña Red las descargas de `galaxy.mp4`, `loopi.mp4` y de `youtube.com`.
+1. Abrir `/?login=1` con la caché vacía.
+2. Mirar en la pestaña Red las descargas de `galaxy.mp4`, `loopi.mp4` y `youtube.com/embed`.
 
 ## Resultado esperado
 
-La página de inicio de sesión no descarga vídeos que no se ven ni abre un reproductor oculto.
+La página de inicio de sesión no precarga vídeos que no se ven ni abre un reproductor que nadie pidió.
 
-## Resultado obtenido
+## Resultado obtenido (antes)
 
-| Navegador | `domcontentloaded` | `load` | Vídeo descargado (suma de `content-length`) | Peticiones a YouTube |
-|---|---|---|---|---|
-| Chromium #1 | 1,3 s | 3,9 s | 40,8 MB | 5 |
-| Chromium #2 | 0,7 s | 3,1 s | 40,7 MB | 1 |
-| Firefox #1 | 1,5 s | 3,5 s | 34,2 MB | 1 |
-| Firefox #2 | 1,4 s | 3,9 s | 33,8 MB | 1 |
+Los dos `<video>` tenían `preload="auto"` y el iframe de YouTube del panel «VER VIDEO» se cargaba con la portada aunque el panel estuviera cerrado. Bytes transferidos en 10 s (Chromium, `next start` local, build de `1697c7c`):
 
-Los dos vídeos (`galaxy.mp4` 10,7 MB y `loopi.mp4` 8,3 MB) tienen `preload="auto"`, y el iframe de YouTube del panel «VER VIDEO» se carga aunque esté cerrado. El 10/11 la misma página tardó ~20 s en disparar `load` (D-WEB-16): con una red lenta este peso es lo que más pesa, y es el origen de casi todos los casos INESTABLE de Firefox.
+| Medición | Vídeo | YouTube | Peticiones al embed |
+|---|---|---|---|
+| Antes #1 | 3,09 MB | 1,31 MB | 1 |
+| Antes #2 | 3,69 MB | 1,31 MB | 1 |
+
+> Una primera medición contra el deploy preview sumó el `content-length` de cada respuesta parcial de vídeo y dio 34–41 MB. **Esa cifra no es válida**: cada petición parcial informa el resto del archivo y se cuenta varias veces. Se reemplazó por los bytes reales de arriba.
 
 ## Corrección
 
-- Los dos `<video>` pasan a `preload="metadata"`. `EyeSchoolLanding` ya los reproduce solo cuando su sección está a la vista, y al reproducirse el navegador descarga lo necesario.
-- El iframe de YouTube lleva `loading="lazy"`: se carga cuando se abre su panel.
-- `tests/portada.test.ts` exige las dos cosas. Fallaba antes y pasa ahora.
+1. `6d56838`: los dos `<video>` pasan a `preload="metadata"` (`EyeSchoolLanding` ya los reproduce solo cuando su sección se ve) y el iframe lleva `loading="lazy"`.
+2. Con solo `loading="lazy"` Chromium seguía cargando el reproductor, porque el panel entra deslizándose desde el borde y el navegador lo considera cercano. Por eso el iframe pasa a llevar `data-src`, y el botón «VER VIDEO» le asigna el `src` al abrir el panel.
+3. `tests/portada.test.ts` exige las dos cosas. Fallaba antes y pasa ahora.
+
+## Verificación (después)
+
+| Medición | Vídeo | YouTube | Peticiones al embed |
+|---|---|---|---|
+| Después #1 | 0,02 MB | 0,09 MB | **0** |
+| Después #2 | 1,20 MB | 0,09 MB | **0** |
+
+Prueba funcional: al activar «VER VIDEO», el iframe recibe `https://www.youtube.com/embed/Ow75gjvJDvE` y el reproductor se carga, en Chromium (1 petición) y en Firefox (2). Antes de activarlo, 0 peticiones en los dos.
+
+**Observación aparte:** Playwright no pudo pulsar «VER VIDEO» con un clic normal en 10 s, porque la sección está animada y el botón se mueve o queda cubierto. Se verificó con `dispatchEvent`. Es el mismo tipo de interferencia que en una corrida tapó el botón ENTRAR en Firefox. Queda para la prueba manual de la portada.
