@@ -43,9 +43,18 @@ describe('arquitectura (reglas 1 a 4)', () => {
     expect(fuentes.filter((r) => /services\/supabase|@supabase\//.test(leer(r))).map(norm)).toEqual([])
   })
 
-  it('WEB-01: el guardia de rutas es proxy.ts y usa sessionMiddleware', () => {
-    expect(existsSync('middleware.ts')).toBe(false)
-    expect(leer('proxy.ts')).toContain("@/lib/auth/sessionMiddleware")
+  // DEF-WEB-04: Next 16 solo carga el proxy si está al mismo nivel que `app`
+  // (node_modules/next/dist/docs/01-app/01-getting-started/16-proxy.md). Con la
+  // app en src/app, uno en la raíz se ignora sin aviso y el guardia no corre.
+  it('WEB-01 / DEF-WEB-04: el proxy está junto a src/app y usa sessionMiddleware', () => {
+    expect(existsSync('src/app'), 'la app vive en src/app').toBe(true)
+    expect(leer('src/proxy.ts')).toContain('@/lib/auth/sessionMiddleware')
+    expect(leer('src/proxy.ts')).toMatch(/export (async )?function proxy\(/)
+  })
+
+  it('DEF-WEB-04: no hay proxy ni middleware fuera de src (Next los ignoraría)', () => {
+    const ignorados = ['proxy.ts', 'proxy.js', 'middleware.ts', 'middleware.js', 'src/middleware.ts', 'src/middleware.js']
+    expect(ignorados.filter((r) => existsSync(r))).toEqual([])
   })
 
   it('WEB-INF-4: hay un solo despliegue (se eliminó el flujo de Azure)', () => {

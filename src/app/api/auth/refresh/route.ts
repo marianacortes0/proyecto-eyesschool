@@ -6,7 +6,7 @@ const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
 /**
  * Renueva el access token usando el refresh token (cookie httpOnly).
- * Lo puede llamar el cliente al recibir 401; el proxy (proxy.ts) ya renueva de forma proactiva.
+ * Lo puede llamar el cliente al recibir 401; el proxy (src/proxy.ts) ya renueva de forma proactiva.
  */
 export async function POST() {
   const store = await cookies()

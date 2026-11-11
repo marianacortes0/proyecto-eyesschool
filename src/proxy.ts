@@ -2,6 +2,8 @@ import { type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/auth/sessionMiddleware'
 
 // Next.js 16 renombra `middleware.ts` a `proxy.ts` (misma lógica, función `proxy`).
+// Va en src/, junto a src/app: Next solo carga el proxy al mismo nivel que `app`
+// y uno en la raíz se ignora sin aviso (DEF-WEB-04).
 export async function proxy(request: NextRequest) {
   return await updateSession(request)
 }
