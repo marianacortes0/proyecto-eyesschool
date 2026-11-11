@@ -18,7 +18,10 @@ test.describe('sesión (WEB-01)', () => {
     await context.addCookies([{ name: 'eys_last', value: String(Date.now() - 31 * MIN), url: baseURL!, httpOnly: true }])
     await page.goto('/notas')
 
-    await expect(page).toHaveURL(/\/\?login=1$/)
+    // El proxy borra la sesión; en Netlify su 307 no llega al navegador y la
+    // redirección la hace la página, por el cliente y en varios segundos (igual
+    // que en el guardia de rutas de abajo). La comprobación es la misma (DEF-WEB-04).
+    await expect(page).toHaveURL(/\/\?login=1$/, { timeout: 20_000 })
     const cookies = await context.cookies()
     expect(cookies.map((c) => c.name)).not.toContain('eys_access')
   })
@@ -71,7 +74,7 @@ test.describe('sesión (WEB-01)', () => {
       await page.waitForTimeout(70_000)
       await page.goto('/notas')
 
-      await expect(page).toHaveURL(/\/\?login=1$/)
+      await expect(page).toHaveURL(/\/\?login=1$/, { timeout: 20_000 })
       expect((await context.cookies()).map((c) => c.name)).not.toContain('eys_access')
     })
   })
