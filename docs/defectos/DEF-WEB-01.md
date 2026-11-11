@@ -4,11 +4,12 @@
 |---|---|
 | Componente | **Backend** (API `apieyeschool-q`), no el frontend |
 | Severidad | **Alta** — bloquea las pruebas de integración (PR-05) y los E2E (PR-06) |
-| Estado | Abierto · **bloquea** los niveles 6 y 7 de la planeación de cierre |
+| Estado | **Cerrado el 10/11/2026** · resuelto en el entorno (causa raíz: **Entorno**). Ya no bloquea los niveles 6 y 7 |
 | Detectado el | 03/11/2026, en el preflight del entorno de QA |
 | Vuelto a comprobar | **05/11/2026: sigue igual.** La Web App volvió a estar encendida (`/docs` 200) pero `/cursos` y el login del admin siguen en 500 (a veces 502), y un cuerpo inválido sigue respondiendo 422 (`evidencias/PR-05/web/I1_preflight-qa.txt`) |
 | Caso relacionado | Preflight de la sección 2.3; indirectamente CP-INT y CP-SIS que entran a horarios, usuarios y asistencia |
-| Evidencia | `evidencias/PR-05/web/I1_preflight-qa.txt` |
+| Evidencia | `evidencias/PR-05/web/I1_preflight-qa.txt` (abierto) · `evidencias/PR-05/web/I3_preflight-qa.txt` (cerrado) |
+| Issue en GitHub | NO DISPONIBLE: se registra con la plantilla **Defecto** al fusionar el PR #34 (acción externa 11, D-WEB-15) |
 
 ## Pasos para reproducir
 
@@ -68,3 +69,19 @@ El 502 aislado apunta a que el proceso de la API se cae al intentar la conexión
 Backend: abrir el *Log stream* de `apieyeschool-q` en Azure y leer la excepción del login; revisar `DATABASE_URL` (host, puerto, base, usuario, `sslmode`) y que la base de Render acepte conexiones desde la IP de salida de la Web App. Si la contraseña de Postgres se rotó (acción externa 3), hay que actualizar `DATABASE_URL` y reiniciar.
 
 En cuanto el login devuelva 200, no falta nada más del lado del frontend: `.env.test.local` ya está completo (salvo `E2E_ESTUDIANTE_VINCULADO_ID`, que lo imprime `npm run qa:datos`) y los navegadores de Playwright están instalados, así que los niveles 6 y 7 se corren de una pasada.
+
+## Comprobación del 10/11/2026 · cerrado
+
+Según Mariana (10/11), la base de QA está en pie y las cuentas del seed ya tienen `QA_PASSWORD`. Se repitió el preflight (`evidencias/PR-05/web/I3_preflight-qa.txt`, 23:36 UTC):
+
+| Petición | 05/11 | 10/11 |
+|---|---|---|
+| `GET /api/v1/cursos` sin token | 500 | **200**, con los 10 cursos del seed |
+| `POST /auth/login` correo inexistente | 500 | **401** (lo esperado) |
+| `POST /auth/login` cuerpo inválido | 422 | **422** |
+| `POST /auth/login` admin, docente, estudiante, padre de 1 hijo y padre de 2 hijos | 500 | **200** los cinco |
+| `GET /api/v1/auth/me` sin token | 401 | **401** |
+
+Verificación con el caso que lo detectó y su regresión: el contrato de rutas encuentra **44 de 44** rutas en el `openapi.json` (`I3_contrato_rutas.json`) y la integración pasa **9 de 9** (`evidencias/PR-05/web/I3_integracion.xml`).
+
+**Causa raíz:** Entorno. La API no podía consultar su base de datos de QA. El frontend no cambió para cerrarlo.

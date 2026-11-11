@@ -67,6 +67,7 @@ Cada decisión toma la opción por defecto (A) del documento de cierre del front
 - Fecha: 03/11/2026
 - Opción aplicada: la rama condicional («si no, restaurarlo»). Se restauró con `git restore` porque nadie confirmó que sus 455 líneas estén en Azure Boards y no son defectos con id: son requisitos funcionales sueltos (mensajes de confirmación, historial de asistencia) que no se repiten en `planeacion/tests/GestionDefectos/` (DEF-020 a DEF-028).
 - Para borrarlo hay que confirmar antes que esos requisitos estén en Azure Boards (acción externa 10).
+- Actualización del 10/11/2026 (D-WEB-15): el registro pasa a GitHub Issues. La condición para borrarlo es ahora que esos requisitos estén como issues del repositorio.
 
 ## D-WEB-11 · Horario del estudiante asociado con error y reintento
 - Fecha: 03/11/2026
@@ -100,6 +101,35 @@ Cada decisión toma la opción por defecto (A) del documento de cierre del front
   - Proxy: la regex `/\/+$/` (backtracking super-lineal) se reemplazó por `quitarBarrasFinales`, que recorre desde el final. Y `process.env.NEXT_PUBLIC_API_URL ?? …` dejaba pasar la cadena vacía, con lo que `new URL('')` rompía el build en Netlify: ahora `apiBase()` trata vacío y espacios como no definido y un valor sin protocolo lanza un error que nombra la variable. Las dos funciones viven en `src/lib/utils/apiBase.ts` porque un `route.ts` solo debe exportar métodos HTTP. Pruebas: `tests/apiBase.test.ts`, incluida una con 50 000 barras que debe tardar menos de 100 ms.
   - Promesas sin esperar (`useNotas`, `useUsuarios`, `useReportes`, `useAsistencia`, `useHorarios` y las dos de `EscanearClient`): las cinco funciones de carga y `fetchToday` ya atrapan sus propios errores y los dejan en `error`, así que llevan `void`. **No se usó `void` para esconder un rechazo**: lo prueban los casos «si la carga falla, el mensaje queda en error y loading se apaga» de `tests/hooks/cargaInicial.test.tsx`.
 - Ningún issue se marcó como *falso positivo* ni *won't fix*, y ningún umbral bajó.
+
+## D-WEB-15 · Gestión de defectos en GitHub Issues + Actions (reemplaza Azure Boards)
+- Fecha: 10/11/2026 · Decisión del equipo (Mariana Cortés).
+- Qué cambia: los defectos del PR-07 se registran como **issues** del repositorio con la plantilla **Defecto** (`.github/ISSUE_TEMPLATE/defecto.yml`) y se enlazan con **`Corrige #<n>`** en el PR (`.github/pull_request_template.md`), en vez de Azure Boards y `AB#<id>`. La planeación `planeacion/tests/GestionDefectos/planeacion-gestion-defectos-frontend-web.md` se reescribió y las demás planeaciones (unitarias, integración, sistema, UAT, análisis estático, especificaciones) apuntan a GitHub Issues.
+- Qué no cambia: los estados del proceso Scrum, la severidad (la define QA), la prioridad (la confirma el PO), los tiempos objetivo y la regla de que **solo QA cierra un defecto tras verificarlo en QA**.
+- Automatización (workflow `.github/workflows/defectos.yml` → `scripts/defectos/gestion.mjs`, sin acciones de terceros, solo `GITHUB_TOKEN` con `issues: write`):
+  - Al crear el issue: `estado:nuevo` + severidad, prioridad (propuesta según la severidad si se deja vacía), componente y origen, leídos del formulario.
+  - PR hacia `develop` con `Corrige #<n>` → `estado:en-curso`; al fusionarse → `estado:en-verificacion`, con un comentario que trae el commit y la lista de comprobación de la planeación §6.
+  - Como `develop` es la rama por defecto, un `Closes #<n>` cerraría el defecto al fusionar sin verificación: el workflow lo **reabre** y lo deja en verificación.
+  - Reabrir → `estado:en-curso` + etiqueta `reabierto` (métrica del PR-07).
+  - Manual: crear las etiquetas y exportar el registro a CSV (artefacto `defectos-web-<n>`) para los cortes del 21 y el 28 de noviembre.
+- Pruebas: `tests/defectos.test.ts` (25 casos), que incluyen que los títulos y opciones de la plantilla coincidan con lo que el workflow lee. Antes de versionarlo se probó `gestion.mjs` contra una API de GitHub simulada en local, con 9 escenarios: abrir, editar sin cambiar el cuerpo, issue sin etiqueta `defecto`, PR fusionado con `Closes`, PR cerrado sin fusionar, PR hacia `main`, reabrir, crear etiquetas y exportar.
+- Límite: los eventos `issues` ejecutan el workflow que está en `develop`, así que **la automatización empieza a funcionar al fusionar el PR #34**. Hasta entonces los issues se pueden crear con la plantilla, pero las etiquetas se ponen a mano (acción externa 14).
+
+## D-WEB-16 · Tiempos de espera de los E2E contra el deploy preview
+- Fecha: 10/11/2026
+- Situación: con la API y la base de QA ya en pie (5 de 5 logins por API en 200), la primera corrida E2E falló en los 16 primeros casos a los ~31 s, todos en `iniciarSesion`, con el botón en «ENTRANDO…». Medido con Chromium contra `deploy-preview-34`: la portada tarda ~20 s en cargar y la Server Action de login llega al inicio **14,4 s** (admin) y **17,1 s** (docente) después del clic. Juntos superan los 30 s que Playwright da por defecto a cada prueba. El login **sí** funciona.
+- Opción aplicada: subir los tiempos de espera de las pruebas, no tocar la app. `playwright.config.ts`: `timeout: 90_000`; `e2e/utils.ts`: la espera del inicio tras el login pasa de 20 s a 45 s. Las comprobaciones son las mismas.
+- Lo que queda anotado: 14–17 s para iniciar sesión es lento para un usuario, aunque no hay un umbral de rendimiento del login en la planeación de sistema que permita llamarlo defecto. Se reporta como observación de rendimiento en el informe.
+
+## D-WEB-17 · Defectos de las pruebas E2E hallados en la corrida E3
+- Fecha: 10/11/2026 · Commits `360b599` y `c3e491f`. Corrida que los mostró: `evidencias/PR-06/web/E3_e2e-consola.txt`.
+- Criterio: una prueba se corrige solo si su **oráculo o su dato** contradicen la planeación o la API. Nunca para esconder un defecto de la app. Cada cambio tiene detrás una causa comprobada:
+  1. **Menú del admin (CP-SIS-006).** La prueba prohibía `/notas` al admin. El oráculo de la planeación es «solo aparecen los módulos del rol (mapa routeRoles)», y en `src/lib/auth/routeRoles.ts` `/notas` es de TODOS (`permissions.ts`: el admin lee notas y descarga boletines, desde `2aa32c0`). Ahora el admin no tiene lista de prohibidos y, para todos los roles, se exige además que **ningún enlace del menú lleve a una ruta que `puedeEntrar` niegue**: la prueba quedó más estricta, no más laxa.
+  2. **Registro del padre (CP-SIS-014).** Usaba `e2e+<n>@eyeschool.test`. `.test` es un dominio reservado y la API lo rechaza con 422, comprobado con `POST /auth/register` directo. Con `@example.com` la API responde 201; la cuenta de esa comprobación (id 116) se borró. Ahora usa `padre.e2e.<n>@example.com`, como `usuarios.spec.ts`. El mensaje genérico que mostró la web es un defecto aparte (DEF-WEB-05).
+  3. **Esperas de 5 s para Server Actions.** El login propio de «un padre con un solo hijo» (medido: **11,8 s**), la vuelta tras el registro y los avisos de crear, editar y eliminar usuario pasan a 45 s o 30 s. En la corrida E3, las cuentas de docente 114 y 115 **sí se crearon** (y la 115 se editó) aunque la prueba no vio el aviso a tiempo: la acción funcionó y el límite era corto.
+  4. **Registro del padre, segunda parte** (commit `c3e491f`). Con el correo válido, la prueba seguía terminando en `/`: la portada muestra el aviso «Usuario registrado exitosamente como Padre / Acudiente» al volver con `?registered=true` y **borra el parámetro en el acto** (`history.replaceState`, `src/components/home/EyeSchoolLanding.tsx:780`), así que `toHaveURL` no alcanzaba a verlo. Medido con un script que escucha cada navegación: `/?login=1&registered=true…` a los **36,0 s**, cuenta 121 creada y borrada. El oráculo pasa a ser el aviso (60 s). En E6 el registro y el login pasan y el caso cae después por DEF-WEB-03.
+- **No se tocaron**, porque fallan por defectos reales de la app: el `locator('main')` de CP-SIS-001 (DEF-WEB-02), los nombres del selector de hijos de CP-SIS-060 (DEF-WEB-03) y el cierre por inactividad de CP-SIS-004 (DEF-WEB-04).
+- Datos de QA: las cuentas 114 y 115 que dejaron las pruebas interrumpidas se borraron por la API después de comprobar que su correo era de E2E (`docente.e2e.<n>@example.com`).
 
 ## Otras decisiones menores (02/11/2026)
 - **Mapeo de trazabilidad:** se usó `tests/trazabilidad.json` (alternativa de 6.1) en vez de prefijar cada `describe`, para no renombrar los archivos de prueba. El script `npm run trazabilidad` regenera `docs/trazabilidad-ut-web.md`.
