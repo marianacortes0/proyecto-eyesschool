@@ -5,6 +5,7 @@
 //   node scripts/defectos/gestion.mjs etiquetas          crea o actualiza las etiquetas del proceso
 //   node scripts/defectos/gestion.mjs evento             aplica el ciclo de vida al evento actual
 //   node scripts/defectos/gestion.mjs exportar <csv>     registro de defectos para el corte del PR-07
+//   node scripts/defectos/gestion.mjs registrar          crea los issues de docs/defectos/registro.json que falten
 //
 // Nunca imprime el token.
 import { readFileSync, writeFileSync } from 'node:fs'
@@ -15,7 +16,9 @@ import {
   cambiosDeEtiquetas,
   etiquetasTrasEvento,
   filaCsv,
+  idsRegistrados,
   issuesReferidos,
+  planDeRegistro,
 } from './reglas.mjs'
 
 const { GITHUB_TOKEN, GITHUB_REPOSITORY, GITHUB_EVENT_NAME, GITHUB_EVENT_PATH } = process.env
@@ -57,7 +60,13 @@ async function etiquetas() {
     const ruta = `/labels/${encodeURIComponent(name)}`
     const existe = await gh('GET', ruta, null, { permitir404: true })
     if (existe) await gh('PATCH', ruta, { new_name: name, color, description })
-    else await gh('POST', '/labels', { name, color, description })
+    else {
+      // Si otro proceso la creó entre la consulta y el POST, GitHub responde 422.
+      try { await gh('POST', '/labels', { name, color, description }) } catch (e) {
+        if (!String(e.message).includes('→ 422')) throw e
+        await gh('PATCH', ruta, { new_name: name, color, description })
+      }
+    }
     console.log(`${existe ? 'actualizada' : 'creada'}: ${name}`)
   }
 }
@@ -132,10 +141,40 @@ async function exportar(archivo) {
   console.log(`${filas.length} defectos exportados a ${archivo}.`)
 }
 
+async function todosLosDefectos() {
+  const issues = []
+  for (let pagina = 1; ; pagina++) {
+    const lote = await gh('GET', `/issues?labels=defecto&state=all&per_page=100&page=${pagina}`)
+    issues.push(...lote.filter((i) => !i.pull_request))
+    if (lote.length < 100) return issues
+  }
+}
+
+// Registro inicial: crea cada defecto del archivo una sola vez (por «ID del
+// registro»), con sus etiquetas y, si ya lo verificó QA, cerrado como completado
+// con la evidencia. Las acciones del GITHUB_TOKEN no disparan otros workflows, así
+// que aquí se ponen todas las etiquetas.
+async function registrar(ruta = 'docs/defectos/registro.json') {
+  const registro = JSON.parse(readFileSync(ruta, 'utf8'))
+  const planes = registro.map(planDeRegistro) // valida todo antes de crear nada
+  await etiquetas()
+  const existentes = idsRegistrados(await todosLosDefectos())
+  for (const [i, plan] of planes.entries()) {
+    const id = registro[i].id
+    if (existentes.has(id)) { console.log(`${id}: ya existe, sin cambios.`); continue }
+    const issue = await gh('POST', '/issues', { title: plan.titulo, body: plan.cuerpo, labels: plan.etiquetas })
+    if (plan.cerrar) {
+      await gh('POST', `/issues/${issue.number}/comments`, { body: plan.comentarioDeCierre })
+      await gh('PATCH', `/issues/${issue.number}`, { state: 'closed', state_reason: 'completed' })
+    }
+    console.log(`${id}: creado #${issue.number}${plan.cerrar ? ' y cerrado como completado' : ''}.`)
+  }
+}
+
 const [modo, archivo = 'defectos.csv'] = process.argv.slice(2)
-const acciones = { etiquetas, evento, exportar: () => exportar(archivo) }
+const acciones = { etiquetas, evento, exportar: () => exportar(archivo), registrar: () => registrar() }
 if (!acciones[modo]) {
-  console.error(`Modo desconocido «${modo ?? ''}». Usa: etiquetas | evento | exportar <archivo.csv>`)
+  console.error(`Modo desconocido «${modo ?? ''}». Usa: etiquetas | evento | exportar <archivo.csv> | registrar`)
   process.exit(1)
 }
 await acciones[modo]()

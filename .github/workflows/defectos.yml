@@ -5,7 +5,9 @@ name: Defectos
 #   - Issue nuevo con la plantilla «Defecto» → Nuevo + severidad, prioridad, componente y origen.
 #   - PR hacia develop que dice «Corrige #N» → En curso; al fusionarse → En verificación.
 #   - QA cierra el issue tras verificar en QA; si lo reabre, se marca como reabierto.
-#   - Manual (Run workflow): crear las etiquetas o exportar el registro a CSV para el corte.
+#   - Manual (Run workflow): crear las etiquetas, exportar el registro a CSV para el corte
+#     o registrar los defectos de docs/defectos/registro.json que aún no tengan issue.
+#   - Al cambiar docs/defectos/registro.json en develop se registran solos (una vez cada uno).
 # Los eventos `issues` ejecutan la versión de este archivo que está en develop.
 on:
   issues:
@@ -15,13 +17,13 @@ on:
     branches: [develop]
   push:
     branches: [develop]
-    paths: [scripts/defectos/reglas.mjs]
+    paths: [scripts/defectos/reglas.mjs, docs/defectos/registro.json]
   workflow_dispatch:
     inputs:
       accion:
         description: Qué hacer
         type: choice
-        options: [exportar, etiquetas]
+        options: [exportar, etiquetas, registrar]
         default: exportar
 
 permissions:
@@ -36,7 +38,7 @@ concurrency:
 jobs:
   etiquetas:
     name: Etiquetas del proceso
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.accion == 'etiquetas')
+    if: github.event_name == 'workflow_dispatch' && inputs.accion == 'etiquetas'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -44,6 +46,20 @@ jobs:
         with:
           node-version: '24.x'
       - run: node scripts/defectos/gestion.mjs etiquetas
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  registrar:
+    name: Etiquetas y registro de los defectos conocidos
+    # También crea o actualiza las etiquetas: en un push a develop es el único job.
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.accion == 'registrar')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+      - run: node scripts/defectos/gestion.mjs registrar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

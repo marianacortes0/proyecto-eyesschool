@@ -10,9 +10,12 @@ import {
   estadoDe,
   etiquetasDelFormulario,
   etiquetasTrasEvento,
+  cuerpoDeRegistro,
   filaCsv,
+  idsRegistrados,
   issuesReferidos,
   leerFormulario,
+  planDeRegistro,
 } from '../scripts/defectos/reglas.mjs'
 
 // PR-07 · D-WEB-15: gestión de defectos en GitHub Issues.
@@ -212,5 +215,64 @@ describe('Defectos · registro para el PR-07', () => {
 
   it('escapa comillas y comas en el título', () => {
     expect(filaCsv({ ...base, title: 'Dice "hola", y falla', state: 'open' })).toContain('"Dice ""hola"", y falla"')
+  })
+})
+
+describe('Defectos · registro inicial (docs/defectos/registro.json)', () => {
+  const base = {
+    id: 'DEF-WEB-99',
+    titulo: 'Algo falla en algún lado',
+    componente: 'Web',
+    origen: 'Pruebas de sistema',
+    severidad: 'Media',
+    prioridad: 'P3',
+    caso: 'CP-SIS-001',
+    correccion: 'WEB-01',
+    pasos: '1. Abrir\n2. Mirar',
+    esperado: 'Bien',
+    obtenido: 'Mal',
+    identificado: '11/11/2026',
+    estado: 'en-verificacion',
+  }
+
+  it('el cuerpo se lee igual que uno escrito con la plantilla', () => {
+    const campos = leerFormulario(cuerpoDeRegistro(base))
+    expect(campos[CAMPOS.id]).toBe('DEF-WEB-99')
+    expect(campos[CAMPOS.caso]).toBe('CP-SIS-001')
+    expect(campos['Pasos para reproducir']).toBe('1. Abrir\n2. Mirar')
+    expect(campos['Evidencia']).toBe('')
+  })
+
+  it('un defecto abierto lleva sus etiquetas y el estado, y no se cierra', () => {
+    const plan = planDeRegistro(base)
+    expect(plan.titulo).toBe('[DEF-WEB-99] Algo falla en algún lado')
+    expect(plan.etiquetas).toEqual(['defecto', 'web', 'pruebas-sistema', 'severidad:media', 'P3', 'estado:en-verificacion'])
+    expect(plan.cerrar).toBe(false)
+    expect(plan.comentarioDeCierre).toBeNull()
+  })
+
+  it('un defecto verificado se cierra con causa raíz, commit y verificación', () => {
+    const plan = planDeRegistro({ ...base, estado: 'cerrado', cierre: { causa: 'Codificación', commit: '`abc1234`', verificacion: 'E7' } })
+    expect(plan.cerrar).toBe(true)
+    expect(plan.etiquetas).not.toContain('estado:en-verificacion')
+    expect(plan.comentarioDeCierre).toContain('Causa raíz: **Codificación**')
+  })
+
+  it('rechaza registros que crearían un issue sin clasificar o un cierre sin evidencia', () => {
+    expect(() => planDeRegistro({ ...base, severidad: 'Gravísima' })).toThrow(/severidad/)
+    expect(() => planDeRegistro({ ...base, estado: 'perdido' })).toThrow(/estado/)
+    expect(() => planDeRegistro({ ...base, estado: 'cerrado' })).toThrow(/causa raíz/)
+  })
+
+  it('reconoce los ya registrados por su «ID del registro»', () => {
+    const ids = idsRegistrados([{ body: cuerpoDeRegistro(base) }, { body: 'sin plantilla' }, { body: null }])
+    expect([...ids]).toEqual(['DEF-WEB-99'])
+  })
+
+  it('el registro del repositorio es válido completo y no repite IDs', () => {
+    const registro = JSON.parse(readFileSync('docs/defectos/registro.json', 'utf8')) as Parameters<typeof planDeRegistro>[0][]
+    expect(registro.length).toBeGreaterThan(0)
+    expect(new Set(registro.map((r) => r.id)).size).toBe(registro.length)
+    for (const r of registro) expect(() => planDeRegistro(r), r.id).not.toThrow()
   })
 })

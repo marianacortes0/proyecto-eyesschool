@@ -253,3 +253,75 @@ export function filaCsv(issue) {
     .map(celda)
     .join(',')
 }
+
+// ── Registro inicial de los defectos ya conocidos (docs/defectos/registro.json) ──
+
+/** Estados del registro → etiqueta de estado y si el issue queda cerrado. */
+export const ESTADOS_DEL_REGISTRO = {
+  nuevo: { etiqueta: 'estado:nuevo', cerrado: false },
+  aprobado: { etiqueta: 'estado:aprobado', cerrado: false },
+  'en-curso': { etiqueta: 'estado:en-curso', cerrado: false },
+  'en-verificacion': { etiqueta: 'estado:en-verificacion', cerrado: false },
+  cerrado: { etiqueta: null, cerrado: true },
+}
+
+/**
+ * @typedef {{ id: string, titulo: string, componente: string, origen: string, severidad: string,
+ *   prioridad: string, caso: string, correccion?: string, pasos: string, esperado: string,
+ *   obtenido: string, evidencia?: string, identificado: string, estado: string,
+ *   cierre?: { causa: string, commit: string, verificacion: string } }} Registro
+ */
+
+/**
+ * Cuerpo del issue con los mismos títulos que la plantilla «Defecto», para que
+ * `leerFormulario`, `etiquetasDelFormulario` y el CSV del PR-07 lo lean igual.
+ * @param {Registro} r
+ */
+export function cuerpoDeRegistro(r) {
+  const campo = (titulo, valor) => `### ${titulo}\n\n${valor && String(valor).trim() ? String(valor).trim() : '_No response_'}`
+  return [
+    `> Registrado desde \`docs/defectos/registro.json\` (D-WEB-15). Identificado el ${r.identificado}.`,
+    campo(CAMPOS.id, r.id),
+    campo(CAMPOS.componente, r.componente),
+    campo(CAMPOS.origen, r.origen),
+    campo(CAMPOS.severidad, r.severidad),
+    campo(CAMPOS.prioridad, r.prioridad),
+    campo(CAMPOS.caso, r.caso),
+    campo(CAMPOS.correccion, r.correccion),
+    campo('Pasos para reproducir', r.pasos),
+    campo('Resultado esperado', r.esperado),
+    campo('Resultado obtenido', r.obtenido),
+    campo('Evidencia', r.evidencia),
+  ].join('\n\n')
+}
+
+/**
+ * Etiquetas, estado y comentario de cierre de un defecto del registro. Lanza si
+ * algún campo no es una opción válida de la plantilla: un registro mal escrito no
+ * debe crear un issue sin clasificar.
+ * @param {Registro} r
+ */
+export function planDeRegistro(r) {
+  const campos = leerFormulario(cuerpoDeRegistro(r))
+  const etiquetas = etiquetasDelFormulario(campos)
+  for (const grupo of ['componente', 'origen', 'severidad', 'prioridad']) {
+    if (!etiquetas.some((e) => grupoDe(e) === grupo)) throw new Error(`${r.id}: «${grupo}» no es una opción de la plantilla`)
+  }
+  const estado = ESTADOS_DEL_REGISTRO[/** @type {keyof typeof ESTADOS_DEL_REGISTRO} */ (r.estado)]
+  if (!estado) throw new Error(`${r.id}: estado «${r.estado}» desconocido`)
+  if (estado.cerrado && !r.cierre) throw new Error(`${r.id}: un defecto cerrado necesita causa raíz, commit y verificación`)
+  return {
+    titulo: `[${r.id}] ${r.titulo}`,
+    cuerpo: cuerpoDeRegistro(r),
+    etiquetas: ['defecto', ...etiquetas, ...(estado.etiqueta ? [estado.etiqueta] : [])],
+    cerrar: estado.cerrado,
+    comentarioDeCierre: r.cierre
+      ? `**Verificado por QA y cerrado** (planeación del PR-07, §6).\n\n- Verificación: ${r.cierre.verificacion}\n- Causa raíz: **${r.cierre.causa}**\n- Commit de la corrección: ${r.cierre.commit}`
+      : null,
+  }
+}
+
+/** IDs del registro que ya existen como issue (por el campo «ID del registro»). */
+export function idsRegistrados(issues) {
+  return new Set(issues.map((i) => leerFormulario(i.body)[CAMPOS.id]).filter(Boolean))
+}
