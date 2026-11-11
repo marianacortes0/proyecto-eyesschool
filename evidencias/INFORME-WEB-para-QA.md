@@ -18,7 +18,7 @@
 | Rama | `feat/web-calidad-pruebas` | [`git branch --show-current`] |
 | Commit de las pruebas | **`c3e491f`** para los niveles locales (U5) y el E2E del registro (E6); `360b599` para la corrida E2E completa (E4) y su reintento (E5); `8bdc307` para la integración (I3). Detalle en la 1.1 | [`evidencias/commit.txt`] |
 | Pull request | **#34**, `feat/web-calidad-pruebas` → `develop`, abierto, no fusionado | [API de GitHub `/pulls/34`] |
-| Commits de la rama por delante de `develop` | **41** (incluido el de este informe) | [`git rev-list --count origin/develop..HEAD`] |
+| Commits de la rama por delante de `develop` | **42** hasta `e84bf03`, más el que corrige este conteo | [`git rev-list --count origin/develop..HEAD`] |
 | Árbol de trabajo limpio | **No.** Sigue modificado `.vscode/settings.json` (agrega `"python.terminal.useEnvFile": true`), un cambio tuyo que no afecta a código ni a pruebas y que no se versiona | [`git status --porcelain`] |
 
 ### 1.1 ¿Todas las evidencias salen del mismo commit?
@@ -1007,7 +1007,7 @@ Marcadas como hechas: **4 de 19** (3, 5b, 6 y 7), más la parte BE-07 de la 9. N
 |---|---|---|
 | Dirección | `feat/web-calidad-pruebas` → **`develop`** | [API `/pulls/34`] |
 | Estado | **Abierto, no fusionado** | ídem |
-| Commits | **41** | [`git rev-list --count origin/develop..HEAD`] |
+| Commits | **42** hasta `e84bf03`, más el que corrige este conteo | [`git rev-list --count origin/develop..HEAD`] |
 | Archivos cambiados | 205 (+22 886 / −1 065 líneas) al subir `6b378e3` | [API `/pulls/34`, 11/11 16:51 UTC] |
 | Creado | 03/11/2026 01:41 UTC | ídem |
 | **Aprobaciones** | **Ninguna** (0 revisiones) | [API `/pulls/34/reviews`] |
@@ -1039,11 +1039,12 @@ Fuente: [API de GitHub `/commits/6b378e3/check-runs` y `/status`]. **Vercel fall
 
 ### 13.4 Los commits de la rama
 
-Del más reciente al más antiguo [`git log --oneline origin/develop..HEAD`], más el commit que agrega este informe:
+Del más reciente al más antiguo [`git log --oneline origin/develop..HEAD`], hasta `e84bf03`. Falta solo el commit que corrige este conteo:
 
 | # | Hash | Mensaje |
 |---|---|---|
-| 41 | (este commit) | docs: informe del 11/11 con la integración, los E2E completos y los defectos nuevos |
+| 42 | `e84bf03` | docs: informe del 11/11 con la integración, los E2E completos y los defectos nuevos |
+| 41 | `fade226` | test(trazabilidad): las pruebas de gestión de defectos tienen su motivo |
 | 40 | `6b378e3` | docs(defectos): DEF-WEB-01 cerrado; DEF-WEB-02 a 05 de la corrida E2E |
 | 39 | `f699c63` | test(evidencias): corridas del 10 y 11/11 con la base de QA en pie |
 | 38 | `c3e491f` | test(e2e): el registro del padre se comprueba por el aviso, no por la URL |
