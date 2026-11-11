@@ -32,12 +32,15 @@ export type AsociadoInfo = {
   codigo: string
 }
 
+// GET /padres/me/hijos (BE-07, `HijoOut`) envía `nombre_estudiante` y
+// `documento_estudiante`, igual que /padres/me. Se aceptan también `nombre` y
+// `documento` sin sufijo (DEF-WEB-03).
 function aHijo(r: Raw): Hijo {
   const c = toCamel(r) as Raw
   return {
     idEstudiante: c.idEstudiante as number,
-    nombre: (c.nombre as string) || `Estudiante #${c.idEstudiante}`,
-    documento: (c.documento as string) ?? '',
+    nombre: ((c.nombreEstudiante ?? c.nombre) as string | undefined) || `Estudiante #${c.idEstudiante}`,
+    documento: ((c.documentoEstudiante ?? c.documento) as string | undefined) ?? '',
     parentesco: (c.parentesco as string) ?? '',
     idCursoActual: (c.idCursoActual as number | null) ?? null,
     codigoEstudiante: (c.codigoEstudiante as string | undefined) ?? undefined,

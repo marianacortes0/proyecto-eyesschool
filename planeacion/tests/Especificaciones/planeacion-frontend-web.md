@@ -148,7 +148,7 @@ npx eslint .
 - `dashboardService.ts` (líneas 199 y 258) hace lo mismo para el inicio.
 
 **Diseño:**
-- `getHijosAction()` en `asociadoActions.ts` → `GET /padres/me/hijos` (BE-07). Devuelve `Hijo[]` con `idEstudiante`, `nombre`, `documento`, `parentesco` e `idCursoActual`.
+- `getHijosAction()` en `asociadoActions.ts` → `GET /padres/me/hijos` (BE-07). La API responde `HijoOut` con `id_estudiante`, `nombre_estudiante`, `documento_estudiante`, `parentesco` e `id_curso_actual` (planeación del backend, BE-07), y la acción lo devuelve como `Hijo[]` con `idEstudiante`, `nombre`, `documento`, `parentesco` e `idCursoActual`. Corregido el 11/11/2026 (DEF-WEB-03): antes esta línea daba `nombre` y `documento` como nombres de la API.
 - Función pura `elegirHijoActivo(hijos, idSolicitado)` en `src/lib/utils/hijoActivo.ts`: devuelve el hijo pedido, o el primero, o `null` si no hay.
 - `resolveAsociado` y `resolveAsociadoConCurso` reciben `idEstudiante?` y usan las dos anteriores. Las páginas leen `?hijo=<id>` de la URL.
 - `dashboardService` envía `?id_estudiante=` a `/dashboard/padre`.

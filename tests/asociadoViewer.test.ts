@@ -18,8 +18,8 @@ import {
 
 const HIJO = {
   id_estudiante: 10,
-  nombre: 'Ana Pérez',
-  documento: '1001',
+  nombre_estudiante: 'Ana Pérez',
+  documento_estudiante: '1001',
   parentesco: 'Madre',
   id_curso_actual: 5,
   codigo_estudiante: 'EST010',

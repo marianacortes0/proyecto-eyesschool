@@ -115,6 +115,18 @@ describe.skipIf(!hay)('IT-WEB-03 · contrato de lectura por rol', () => {
       if (horario.horarios[0]) exigirCampos('horario', horario.horarios[0], ['idHorario', 'dia', 'horaInicio', 'horaFin'])
     })
   }
+
+  // DEF-WEB-03: exigir que el campo «esté definido» no basta, porque aHijo llena
+  // `nombre` con el respaldo «Estudiante #<id>» cuando no reconoce el campo de la API.
+  it('padre: los hijos de /padres/me/hijos llegan con su nombre real, no con el respaldo', async () => {
+    conSesion(await iniciarSesion('padre'))
+    const { getHijosAction } = await import('@/services/asociado/asociadoActions')
+
+    const hijos = await getHijosAction()
+    expect(hijos.length, 'el padre de prueba no tiene hijos vinculados').toBeGreaterThan(0)
+    expect(hijos.filter((h) => /^Estudiante #\d+$/.test(h.nombre)).map((h) => h.idEstudiante), 'hijos sin nombre').toEqual([])
+    expect(hijos.filter((h) => !h.documento).map((h) => h.idEstudiante), 'hijos sin documento').toEqual([])
+  })
 })
 
 describe.skipIf(!hay)('IT-WEB-04 · inicio del estudiante (BE-03)', () => {

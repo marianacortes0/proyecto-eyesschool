@@ -5,10 +5,12 @@ import { cookieJar } from './setup/nextMocks'
 import { getHijosAction, getHorarioAsociadoAction, getNotasAsociadoAction } from '@/services/asociado/asociadoActions'
 import { MSG_HORARIO_ERROR } from '@/services/asociado/mensajes'
 
-// Respuesta con la forma de GET /padres/me/hijos (BE-07).
+// Respuesta con la forma REAL de GET /padres/me/hijos (BE-07, `HijoOut` del backend):
+// el nombre y el documento llegan como nombre_estudiante y documento_estudiante
+// (DEF-WEB-03: antes este fixture usaba `nombre`/`documento` y escondía el defecto).
 const HIJOS_API = [
-  { id_estudiante: 10, nombre: 'Ana Pérez', documento: '1001', parentesco: 'Madre', id_curso_actual: 5 },
-  { id_estudiante: 11, nombre: 'Luis Pérez', documento: '1002', parentesco: 'Madre', id_curso_actual: 6 },
+  { id_estudiante: 10, nombre_estudiante: 'Ana Pérez', documento_estudiante: '1001', parentesco: 'Madre', id_curso_actual: 5 },
+  { id_estudiante: 11, nombre_estudiante: 'Luis Pérez', documento_estudiante: '1002', parentesco: 'Madre', id_curso_actual: 6 },
 ]
 
 let fetchMock: ReturnType<typeof vi.fn>
@@ -65,6 +67,26 @@ describe('asociadoActions (WEB-03 · IT-WEB-02)', () => {
     expect(rutas()).toEqual(['/padres/me/hijos'])
     expect(hijos.map((h) => h.idEstudiante)).toEqual([10, 11])
     expect(hijos[1].idCursoActual).toBe(6)
+  })
+
+  it('DEF-WEB-03: el nombre y el documento salen de nombre_estudiante y documento_estudiante', async () => {
+    const hijos = await getHijosAction()
+
+    expect(hijos.map((h) => h.nombre)).toEqual(['Ana Pérez', 'Luis Pérez'])
+    expect(hijos.map((h) => h.documento)).toEqual(['1001', '1002'])
+  })
+
+  it('DEF-WEB-03: también acepta nombre y documento sin sufijo, y sin nombre usa el respaldo', async () => {
+    fetchMock.mockImplementation(async () =>
+      json(200, [
+        { id_estudiante: 12, nombre: 'Eva Ruiz', documento: '1003', parentesco: 'Padre', id_curso_actual: 7 },
+        { id_estudiante: 13, parentesco: 'Padre', id_curso_actual: 7 },
+      ])
+    )
+
+    const hijos = await getHijosAction()
+
+    expect(hijos.map((h) => [h.nombre, h.documento])).toEqual([['Eva Ruiz', '1003'], ['Estudiante #13', '']])
   })
 
   it('con el hijo 11 llama /padres/me/hijos y luego /estudiantes/11/notas', async () => {
