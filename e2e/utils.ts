@@ -33,7 +33,11 @@ export async function iniciarSesion(page: Page, rol: Rol, opciones: { esperarIni
   requiere(`E2E_${rol.toUpperCase()}_EMAIL`, 'E2E_PASSWORD')
 
   await page.goto('/?login=1')
-  const vista = page.locator('[data-view="login"]')
+  // El formulario llega del servidor y se ve listo antes de que la portada
+  // conecte sus listeners: un clic antes de eso se pierde y la prueba se quedaba
+  // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+  const vista = page.locator('[data-view="login"][data-listo="true"]')
+  await expect(vista).toBeAttached({ timeout: 45_000 })
   await vista.locator('input[type="email"]').fill(correo!)
   await vista.locator('input[type="password"]').fill(password!)
   await vista.locator('button').first().click()

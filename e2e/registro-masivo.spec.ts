@@ -5,14 +5,21 @@ import { iniciarSesion, requiere } from './utils'
 // Dato de QA pendiente: un curso con estudiantes activos que no tenga registros
 // ese día → E2E_JORNADA_MASIVO y E2E_CURSO_MASIVO (nombre tal como aparece en el selector).
 
-async function enviarLote(page: import('@playwright/test').Page) {
+async function enviarLote(page: import('@playwright/test').Page, { esperarRespuesta = true } = {}) {
   await page.goto('/qr/escanear')
   await page.getByRole('button', { name: /masivo|por curso|lote/i }).first().click().catch(() => null)
 
   const [jornada, curso] = await page.getByRole('combobox').all()
   await jornada.selectOption({ label: process.env.E2E_JORNADA_MASIVO! })
   await curso.selectOption({ label: process.env.E2E_CURSO_MASIVO! })
+  // El lote es una Server Action (un POST con la cabecera Next-Action) que hace
+  // un POST a la API por estudiante. El resultado se comprueba cuando responde,
+  // no con un tiempo fijo: así la primera y la segunda vez esperan lo mismo (E13).
+  const respuesta = esperarRespuesta
+    ? page.waitForResponse((r) => r.request().method() === 'POST' && !!r.request().headers()['next-action'])
+    : null
   await page.getByRole('button', { name: /^Registrar \d+ asistencias?/ }).click()
+  await respuesta
 }
 
 test.describe('registro masivo (WEB-06)', () => {
@@ -22,9 +29,15 @@ test.describe('registro masivo (WEB-06)', () => {
     test.fail(process.env.E2E_BE08 !== 'true', 'Requiere BE-08: sin el 409 la API duplica el registro')
     await iniciarSesion(page, 'docente')
 
+    // Primer envío: «guardados» si el curso no tenía registros hoy, o «ya registrado»
+    // si otra corrida del mismo día ya los guardó (con BE-08 las dos son correctas).
+    // La prueba no exigía la precondición «sin registros hoy» (D-WEB-17).
     await enviarLote(page)
-    await expect(page.getByText(/asistencias? .*guardad|guardado/i).first()).toBeVisible()
+    const guardados = page.getByText(/de asistencia guardados?/i)
+    const yaExistian = page.getByRole('region', { name: /ya existentes/i })
+    await expect(guardados.or(yaExistian).first()).toBeVisible()
 
+    // Segundo envío del mismo curso: todos «ya registrado» y ninguno «no guardado».
     await enviarLote(page)
     const ya = page.getByRole('region', { name: /ya existentes/i })
     await expect(ya).toBeVisible()
@@ -38,7 +51,8 @@ test.describe('registro masivo (WEB-06)', () => {
     await page.goto('/qr/escanear')
 
     await context.setOffline(true)
-    await enviarLote(page).catch(() => null)
+    // Sin red no hay respuesta que esperar.
+    await enviarLote(page, { esperarRespuesta: false }).catch(() => null)
     await context.setOffline(false)
 
     const fallidos = page.getByRole('region', { name: /no guardados/i })

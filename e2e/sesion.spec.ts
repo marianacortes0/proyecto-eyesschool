@@ -14,13 +14,19 @@ function jwtVencido() {
 test.describe('sesión (WEB-01)', () => {
   test('con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión', async ({ page, context, baseURL }) => {
     await iniciarSesion(page, 'docente')
+    // El proxy renueva `eys_last` en cada respuesta con sesión: una petición del
+    // inicio que siga en curso pisaría la inactividad simulada con «ahora» (E12).
+    // `networkidle` no sirve porque el inicio nunca queda quieto (E13). Salir a
+    // about:blank cancela todo lo pendiente, y la única petición con la cookie
+    // vieja es la de /notas (D-WEB-17).
+    await page.goto('about:blank')
 
     await context.addCookies([{ name: 'eys_last', value: String(Date.now() - 31 * MIN), url: baseURL!, httpOnly: true }])
     await page.goto('/notas')
 
-    // El proxy borra la sesión; en Netlify su 307 no llega al navegador y la
-    // redirección la hace la página, por el cliente y en varios segundos (igual
-    // que en el guardia de rutas de abajo). La comprobación es la misma (DEF-WEB-04).
+    // El proxy borra la sesión (DEF-WEB-04). Según el adaptador de Netlify, el 307
+    // llega directo o la redirección la hace la página por el cliente; la
+    // comprobación es la misma.
     await expect(page).toHaveURL(/\/\?login=1$/, { timeout: 20_000 })
     const cookies = await context.cookies()
     expect(cookies.map((c) => c.name)).not.toContain('eys_access')

@@ -485,6 +485,11 @@ function createEngine(root: HTMLElement, handlers: LandingHandlers) {
     };
     if (emailInput) on(emailInput, "keydown", onEnter);
     if (passInput) on(passInput, "keydown", onEnter);
+
+    // El formulario ya responde: antes de esto el HTML del servidor se ve listo,
+    // pero un clic en «ENTRAR» no hace nada. Las pruebas E2E esperan esta marca.
+    loginView.dataset.listo = "true";
+    cleanups.push(() => delete loginView.dataset.listo);
   };
 
   // ---- floating dust motes ---------------------------------------------

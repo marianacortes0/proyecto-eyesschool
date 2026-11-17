@@ -26,4 +26,14 @@ describe('Portada · carga (DEF-WEB-06)', () => {
     expect(iframes.filter((f) => !/data-src="https:\/\/www\.youtube\.com\//.test(f))).toEqual([])
     expect(landing).toMatch(/data-ben2-open[\s\S]{0,400}dataset\.src/)
   })
+
+  // WC-04 · el login E2E de Firefox se quedaba en /?login=1: el clic llegaba
+  // antes de que el motor conectara sus listeners. La marca se pone después de
+  // conectar el clic y el Enter del formulario, y se quita al desmontar.
+  it('marca el formulario como listo solo después de conectar el envío', () => {
+    const marca = landing.indexOf('loginView.dataset.listo = "true"')
+    expect(marca).toBeGreaterThan(landing.indexOf('on(submitBtn, "click", submit)'))
+    expect(marca).toBeGreaterThan(landing.indexOf('on(passInput, "keydown", onEnter)'))
+    expect(landing).toMatch(/cleanups\.push\(\(\) => delete loginView\.dataset\.listo\)/)
+  })
 })
