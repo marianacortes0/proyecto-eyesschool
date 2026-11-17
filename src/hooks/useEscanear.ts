@@ -12,6 +12,7 @@ import {
 } from '@/services/qr/qrActions'
 import { normalizeTipo } from '@/services/asistencia/asistenciaService'
 import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
+import { getErrorMessage } from '@/lib/errors'
 
 export type ScanEstado = 'Presente' | 'Ausente' | 'Tarde'
 
@@ -86,8 +87,8 @@ export function useEscanear(idUsuarioRegistrador: number) {
         setPending({ qrData, detectedAt: new Date() })
         setStatus('pending')
       } catch (err) {
-        setErrorMsg(err instanceof Error ? err.message : 'Error al procesar el escaneo')
-        notifyError(err instanceof Error ? err.message : 'Error al procesar el escaneo')
+        setErrorMsg(getErrorMessage(err, 'Error al procesar el escaneo'))
+        notifyError(getErrorMessage(err, 'Error al procesar el escaneo'))
         setStatus('error')
       }
     },
@@ -151,8 +152,8 @@ export function useEscanear(idUsuarioRegistrador: number) {
 
         setTimeout(() => setStatus('idle'), 3_000)
       } catch (err) {
-        setErrorMsg(err instanceof Error ? err.message : 'Error al registrar la asistencia, intente nuevamente')
-        notifyError(err instanceof Error ? err.message : 'Error al registrar la asistencia, intente nuevamente')
+        setErrorMsg(getErrorMessage(err, 'Error al registrar la asistencia, intente nuevamente'))
+        notifyError(getErrorMessage(err, 'Error al registrar la asistencia, intente nuevamente'))
         setStatus('error')
       }
     },

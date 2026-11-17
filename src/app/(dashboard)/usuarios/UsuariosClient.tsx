@@ -43,6 +43,7 @@ export default function UsuariosClient({ initialData }: { initialData?: Usuarios
     // acciones pendientes
     handleValidar,
     handleRechazar,
+    reintentar,
   } = useUsuarios(initialData)
 
   const { page, setPage, totalPages, pageItems, total, from, to } = usePagination(usuarios)
@@ -53,7 +54,10 @@ export default function UsuariosClient({ initialData }: { initialData?: Usuarios
       <UsuariosPendientes
         pendingUsuarios={pendingUsuarios}
         loading={pendingLoading}
-        error={pendingError}
+        // Con la lista caída, el aviso de abajo basta: no se dice «Sin pendientes»
+        // sin saberlo (DEF-WEB-10).
+        error={error ? null : pendingError}
+        sinDatos={!!error}
         onValidar={handleValidar}
         onRechazar={handleRechazar}
       />
@@ -62,19 +66,29 @@ export default function UsuariosClient({ initialData }: { initialData?: Usuarios
       <UsuariosFilters
         searchQuery={searchQuery}
         filterRol={filterRol}
-        totalCount={totalCount}
+        totalCount={error ? null : totalCount}
         onSearchChange={setSearchQuery}
         onFilterRolChange={setFilterRol}
         onNuevoUsuario={openCreateModal}
       />
 
       {error && (
-        <div className="px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 text-sm">
-          {error}
+        <div
+          role="alert"
+          className="px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 text-sm flex flex-wrap items-center justify-between gap-3"
+        >
+          <span>{error}</span>
+          <button
+            type="button"
+            onClick={reintentar}
+            className="px-4 py-1.5 rounded-xl bg-red-500 text-white text-xs font-semibold hover:bg-red-600"
+          >
+            Reintentar
+          </button>
         </div>
       )}
 
-      {loading ? (
+      {error ? null : loading ? (
         <div className="space-y-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="h-14 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse" />

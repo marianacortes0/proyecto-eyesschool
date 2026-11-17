@@ -197,5 +197,27 @@
     "obtenido": "El inicio se ve normal con todas las cifras en 0 («0 estudiantes a tu cargo»), sin aviso ni reintento.",
     "evidencia": "docs/defectos/DEF-WEB-08.md",
     "identificado": "17/11/2026", "estado": "en-verificacion"
+  },
+  {
+    "id": "DEF-WEB-09",
+    "titulo": "El correo de un usuario no se puede editar, y la planeación lo pide",
+    "componente": "Web", "origen": "Pruebas de sistema", "severidad": "Baja", "prioridad": "P4",
+    "caso": "CP-SIS-022, CP-SIS-023", "correccion": "—",
+    "pasos": "1. Entrar como admin a /usuarios.\n2. Editar un usuario.\n3. Intentar cambiar el correo.",
+    "esperado": "El admin cambia nombre, correo y rol (CP-SIS-022); con un correo repetido, aviso y no guarda (CP-SIS-023).",
+    "obtenido": "El correo está deshabilitado («El documento y el correo no se pueden modificar por seguridad»). La API sí permite cambiarlo. Necesita decisión del PO.",
+    "evidencia": "docs/defectos/DEF-WEB-09.md",
+    "identificado": "17/11/2026", "estado": "nuevo"
+  },
+  {
+    "id": "DEF-WEB-10",
+    "titulo": "Los errores de las Server Actions llegan al usuario como «Minified React error #441»",
+    "componente": "Web", "origen": "Pruebas de sistema", "severidad": "Media", "prioridad": "P2",
+    "caso": "CP-SIS-020, CP-SIS-028", "correccion": "—",
+    "pasos": "1. En un build de producción, entrar como admin a /usuarios.\n2. Crear un usuario con un correo ya registrado.",
+    "esperado": "Mensaje de error útil («El correo ya está registrado»); no se guarda.",
+    "obtenido": "No se guarda, pero el aviso dice «Minified React error #441; visit https://react.dev/errors/441…». Con la API caída, la lista decía «0 usuarios registrados» y «Sin pendientes».",
+    "evidencia": "docs/defectos/DEF-WEB-10.md",
+    "identificado": "17/11/2026", "estado": "en-verificacion"
   }
 ]

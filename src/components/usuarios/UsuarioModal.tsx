@@ -5,6 +5,7 @@ import Modal from '@/components/ui/Modal'
 import { type UsuarioConRol, type CreateUsuarioData, type UpdateUsuarioData, type CursoOpt, type EstudianteOpt, type EspecializacionOpt, PARENTESCOS, NIVELES_ACCESO } from '@/services/usuarios/usuariosService'
 import { type ModalMode } from '@/hooks/useUsuarios'
 import { notifyWarning } from '@/lib/toast'
+import { getErrorMessage } from '@/lib/errors'
 
 const HOY = new Date().toISOString().slice(0, 10)
 
@@ -263,7 +264,7 @@ export default function UsuarioModal({
         })
       }
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : 'Error al guardar')
+      setFormError(getErrorMessage(err, 'Error al guardar'))
     }
   }
 

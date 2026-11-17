@@ -14,6 +14,7 @@ import {
 } from '@/services/asistencia/asistenciaService'
 import FallidosMasivo from '@/components/asistencia/FallidosMasivo'
 import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
+import { getErrorMessage } from '@/lib/errors'
 
 type Props = {
   cursos: CursoOption[]
@@ -104,7 +105,7 @@ export default function RegistroMasivo({ cursos, estudiantes, idUsuarioRegistrad
       setFallidos(res.fallidos)
       return res
     } catch (err) {
-      notifyError(err instanceof Error ? err.message : 'Error al registrar el lote')
+      notifyError(getErrorMessage(err, 'Error al registrar el lote'))
       return null
     } finally {
       setSubmitting(false)

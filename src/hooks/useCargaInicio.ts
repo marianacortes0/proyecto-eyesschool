@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { getErrorMessage } from '@/lib/errors'
 
 /**
  * Carga de los datos del inicio con error y reintento (DEF-WEB-08). Si el
@@ -14,7 +15,7 @@ export function useCargaInicio<T>(cargar: () => Promise<T>, initialData?: T) {
   const traer = useCallback(
     () =>
       cargar()
-        .then(setData, (e: Error) => setError(e.message))
+        .then(setData, (e: unknown) => setError(getErrorMessage(e, 'No se pudo cargar la información. Intenta de nuevo.')))
         .finally(() => setLoading(false)),
     [cargar]
   )

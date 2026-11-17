@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { type CodigoQRConEstudiante, type EstudianteQR, type TipoQR } from '@/services/qr/qrService'
 import { type ModalMode } from '@/hooks/useQR'
 import { type CreateCodigoQRData, type UpdateCodigoQRData } from '@/services/qr/qrService'
+import { getErrorMessage } from '@/lib/errors'
 
 type Props = {
   mode: ModalMode
@@ -70,7 +71,7 @@ export default function QRCodigoModal({
         })
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al guardar')
+      setError(getErrorMessage(err, 'Error al guardar'))
     }
   }
 

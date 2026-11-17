@@ -7,6 +7,8 @@ interface UsuariosPendientesProps {
   pendingUsuarios: UsuarioConRol[]
   loading: boolean
   error: string | null
+  /** La lista no se pudo cargar: no se afirma «Sin pendientes» (DEF-WEB-10). */
+  sinDatos?: boolean
   onValidar: (id: number, idRol: number) => Promise<void>
   onRechazar: (id: number) => Promise<void>
 }
@@ -173,6 +175,7 @@ export default function UsuariosPendientes({
   pendingUsuarios,
   loading,
   error,
+  sinDatos = false,
   onValidar,
   onRechazar,
 }: UsuariosPendientesProps) {
@@ -201,7 +204,7 @@ export default function UsuariosPendientes({
       )}
 
       {/* Loading */}
-      {loading ? (
+      {sinDatos ? null : loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="h-48 rounded-2xl bg-slate-100 dark:bg-white/5 animate-pulse" />

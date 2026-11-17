@@ -3,7 +3,8 @@
 interface UsuariosFiltersProps {
   searchQuery: string
   filterRol: number | null
-  totalCount: number
+  /** null mientras no se sabe (error al cargar): se muestra «—», no 0. */
+  totalCount: number | null
   onSearchChange: (value: string) => void
   onFilterRolChange: (rol: number | null) => void
   onNuevoUsuario: () => void
@@ -33,7 +34,7 @@ export default function UsuariosFilters({
         <div>
           <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Usuarios</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-            {totalCount} usuario{totalCount !== 1 ? 's' : ''} registrado{totalCount !== 1 ? 's' : ''}
+            {totalCount === null ? '— usuarios registrados' : `${totalCount} usuario${totalCount !== 1 ? 's' : ''} registrado${totalCount !== 1 ? 's' : ''}`}
           </p>
         </div>
         <button

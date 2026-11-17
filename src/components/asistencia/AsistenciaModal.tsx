@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { type RegistroAsistencia, type EstudianteSelector, type EstadoAsistencia, type TipoAsistencia, normalizeTipo } from '@/services/asistencia/asistenciaService'
 import { type ModalMode, type CreateManyData } from '@/hooks/useAsistencia'
 import { type CreateRegistroData, type UpdateRegistroData } from '@/services/asistencia/asistenciaService'
+import { getErrorMessage } from '@/lib/errors'
 
 type Props = {
   mode: ModalMode
@@ -139,7 +140,7 @@ export default function AsistenciaModal({
         })
       }
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : 'Error al guardar')
+      setFormError(getErrorMessage(err, 'Error al guardar'))
     }
   }
 
