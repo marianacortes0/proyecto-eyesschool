@@ -9,6 +9,7 @@ import QRScannerView from '@/components/qr/QRScannerView'
 import RegistroMasivo from '@/components/qr/RegistroMasivo'
 import AsistenciaModal from '@/components/asistencia/AsistenciaModal'
 import { type Role } from '@/lib/utils/permissions'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 type Props = {
   role: Role
@@ -53,7 +54,7 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
 
   const fetchToday = useCallback(async () => {
     try {
-      const hoy = new Date().toISOString().split('T')[0]
+      const hoy = hoyColegio()
       const data = await getRegistrosAsistenciaAction(hoy)
       setTodayRecords(data)
     } catch {

@@ -7,6 +7,7 @@ import { isPasswordValid, passwordChecks, PASSWORD_RULE_LABELS } from '@/lib/uti
 import { ACCESS_MAX_AGE, REFRESH_MAX_AGE, cookieOptions } from '@/lib/auth/cookies'
 import { errorMessage } from '@/services/api/client'
 import { esTiempoAgotado, fetchConLimite } from '@/services/api/conLimite'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -346,7 +347,7 @@ export async function asignarQR(
     if (existing.length > 0) return { error: 'Este usuario ya tiene un código QR asignado.' }
   }
 
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
   const codigo = `EST${String(idUsuario).padStart(3, '0')}`
 
   const res = await fetch(`${API}/estudiantes`, {

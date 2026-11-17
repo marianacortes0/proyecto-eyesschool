@@ -3,6 +3,7 @@
 import { cookies } from 'next/headers'
 import { ROL_NOMBRES, type UsuarioConRol } from '@/services/usuarios/usuariosService'
 import { ApiError, errorMessage } from '@/services/api/client'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -130,7 +131,7 @@ export async function createUsuarioConAuth(data: CreateUsuarioConAuthData): Prom
   })
 
   const idUsuario = (usuario.id_usuario ?? usuario.idUsuario) as number
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
   const fechaAsignacion = data.fechaAsignacion || hoy
   const fechaFin = data.fechaFin || hoy
 
@@ -623,7 +624,7 @@ async function findProfesorIdByUsuario(idUsuario: number): Promise<number | null
 async function ensureProfesorIdByUsuario(idUsuario: number): Promise<number | null> {
   const existente = await findProfesorIdByUsuario(idUsuario)
   if (existente != null) return existente
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
   const creado = await apiFetch<Record<string, unknown>>('/profesores', {
     method: 'POST',
     body: JSON.stringify({
@@ -801,7 +802,7 @@ export async function validarUsuarioAction(id: number, idRol: number): Promise<v
   // `estado` va como query param (el backend NO lo lee del body).
   await apiFetch(`/usuarios/${id}/estado?estado=true`, { method: 'PATCH' })
 
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
 
   // OJO: ni /estudiantes ni /profesores aceptan filtro ?id_usuario (lo ignoran y
   // devuelven la primera fila), así que la existencia se comprueba escaneando la lista.

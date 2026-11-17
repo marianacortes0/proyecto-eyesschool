@@ -17,6 +17,7 @@ import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
 import { getErrorMessage } from '@/lib/errors'
 import Pagination from '@/components/ui/Pagination'
 import { usePagination } from '@/hooks/usePagination'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 const ESTADO_STYLE: Record<string, string> = {
   Pendiente:   'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-300',
@@ -300,7 +301,7 @@ interface ModalProps {
 }
 
 function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: ModalProps) {
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
 
   const [nombreReporte, setNombreReporte] = useState(reporte?.nombreReporte ?? '')
   const [tipoReporte, setTipoReporte] = useState(reporte?.tipoReporte ?? 'Academico')

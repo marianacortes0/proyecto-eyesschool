@@ -31,6 +31,7 @@ import {
 import { notifySuccess, notifyError } from '@/lib/toast'
 import { getErrorMessage } from '@/lib/errors'
 import { useConfirm } from '@/components/ui/ConfirmDialog'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 export type ModalMode = 'create' | 'edit' | null
 
@@ -169,7 +170,7 @@ export function useHorarios(initialData?: HorariosBootstrap) {
         idProfesor,
         idCurso,
         idMateria,
-        fechaAsignacion: new Date().toISOString().slice(0, 10),
+        fechaAsignacion: hoyColegio(),
         fechaFinalizacion: null,
         activo: true,
       })

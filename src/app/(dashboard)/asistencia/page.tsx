@@ -7,6 +7,7 @@ import { getAsociadoAction } from '@/services/asociado/asociadoActions'
 import SelectorHijo from '@/components/asociado/SelectorHijo'
 import type { Hijo } from '@/lib/utils/hijoActivo'
 import AsistenciaClient from './AsistenciaClient'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -54,7 +55,7 @@ export default async function AsistenciaPage({ searchParams }: { searchParams: P
 
   // Datos del día en el render del servidor (la fecha de hoy coincide con la del
   // cliente porque ambas usan la fecha UTC vía toISOString).
-  const hoy = new Date().toISOString().split('T')[0]
+  const hoy = hoyColegio()
   let initialData: AsistenciaBootstrap | undefined
   try {
     initialData = await getAsistenciaBootstrapAction({ fecha: hoy, estado: 'todos', idEstudiante: idEstudiantePropio })

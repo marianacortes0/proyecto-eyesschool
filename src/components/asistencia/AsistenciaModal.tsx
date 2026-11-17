@@ -6,6 +6,7 @@ import { type ModalMode, type CreateManyData } from '@/hooks/useAsistencia'
 import { type CreateRegistroData, type UpdateRegistroData } from '@/services/asistencia/asistenciaService'
 import { getErrorMessage } from '@/lib/errors'
 
+import { hoyColegio } from '@/lib/utils/fecha'
 type Props = {
   mode: ModalMode
   registro: RegistroAsistencia | null
@@ -100,7 +101,7 @@ export default function AsistenciaModal({
       setSelectedIds([])
       setTipo('entrada')
       setEstado('Presente')
-      setFecha(new Date().toISOString().split('T')[0])
+      setFecha(hoyColegio())
       setObservacion('')
     }
     setFormError(null)

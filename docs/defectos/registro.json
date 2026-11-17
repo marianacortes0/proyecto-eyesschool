@@ -219,5 +219,16 @@
     "obtenido": "No se guarda, pero el aviso dice «Minified React error #441; visit https://react.dev/errors/441…». Con la API caída, la lista decía «0 usuarios registrados» y «Sin pendientes».",
     "evidencia": "docs/defectos/DEF-WEB-10.md",
     "identificado": "17/11/2026", "estado": "en-verificacion"
+  },
+  {
+    "id": "DEF-WEB-11",
+    "titulo": "Después de las 19:00, la asistencia y otras fechas quedan con el día siguiente",
+    "componente": "Web", "origen": "Pruebas de sistema", "severidad": "Alta", "prioridad": "P2",
+    "caso": "CP-SIS-040, CP-SIS-032, CP-SIS-037", "correccion": "—",
+    "pasos": "1. Después de las 19:00 (hora de Colombia), registrar asistencia.\n2. Consultar el registro.",
+    "esperado": "La fecha del registro es la del día en el colegio.",
+    "obtenido": "La fecha es la del día siguiente: «hoy» salía de la fecha UTC. El registro masivo del 16/11 a las 21:52 quedó del 17/11.",
+    "evidencia": "docs/defectos/DEF-WEB-11.md",
+    "identificado": "17/11/2026", "estado": "en-verificacion"
   }
 ]

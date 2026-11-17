@@ -6,6 +6,7 @@ import { type HorariosBootstrap } from '@/services/horarios/horariosActions'
 import { DIAS_SEMANA, type Horario, type Curso, type Materia, type Especializacion, type ProfesorOpt, type Asignacion } from '@/services/horarios/horariosService'
 import { can, type Role } from '@/lib/utils/permissions'
 import { notifyWarning } from '@/lib/toast'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 const JORNADAS = ['Mañana', 'Tarde', 'Noche', 'Completa']
 
@@ -1438,7 +1439,7 @@ function AsignacionForm({ mode, asignacion, profesores, cursos, materias, saving
   const [idProfesor, setIdProfesor] = useState(String(asignacion?.idProfesor ?? ''))
   const [idCurso, setIdCurso] = useState(String(asignacion?.idCurso ?? ''))
   const [idMateria, setIdMateria] = useState(String(asignacion?.idMateria ?? ''))
-  const [fechaAsignacion, setFechaAsignacion] = useState(asignacion?.fechaAsignacion?.slice(0, 10) ?? new Date().toISOString().slice(0, 10))
+  const [fechaAsignacion, setFechaAsignacion] = useState(asignacion?.fechaAsignacion?.slice(0, 10) ?? hoyColegio())
   const [fechaFinalizacion, setFechaFinalizacion] = useState(asignacion?.fechaFinalizacion ?? '')
   const [activo, setActivo] = useState(asignacion?.activo ?? true)
   const [error, setError] = useState<string | null>(null)

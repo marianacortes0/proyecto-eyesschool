@@ -7,7 +7,8 @@ import { type ModalMode } from '@/hooks/useUsuarios'
 import { notifyWarning } from '@/lib/toast'
 import { getErrorMessage } from '@/lib/errors'
 
-const HOY = new Date().toISOString().slice(0, 10)
+import { hoyColegio } from '@/lib/utils/fecha'
+const HOY = hoyColegio()
 
 interface UsuarioModalProps {
   mode: ModalMode

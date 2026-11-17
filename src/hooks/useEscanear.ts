@@ -14,6 +14,7 @@ import { normalizeTipo } from '@/services/asistencia/asistenciaService'
 import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
 import { getErrorMessage } from '@/lib/errors'
 
+import { hoyColegio } from '@/lib/utils/fecha'
 export type ScanEstado = 'Presente' | 'Ausente' | 'Tarde'
 
 export type ScanResult = {
@@ -104,7 +105,7 @@ export function useEscanear(idUsuarioRegistrador: number) {
       setErrorMsg(null)
 
       try {
-        const hoy = new Date().toISOString().split('T')[0]
+        const hoy = hoyColegio()
         const tipoLabel = tipo === 'entrada' ? 'Entrada' : 'Salida'
 
         // Evita duplicar el mismo tipo (entrada/salida) en el día para el estudiante.

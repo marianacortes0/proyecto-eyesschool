@@ -22,6 +22,7 @@ import {
   type AsistenciaBootstrap,
 } from '@/services/asistencia/asistenciaActions'
 import { getErrorMessage } from '@/lib/errors'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 /** Datos compartidos al registrar varios estudiantes a la vez (mismo estado). */
 export type CreateManyData = {
@@ -54,7 +55,7 @@ export function useAsistencia(
 
   // Filtros
   const [fechaFiltro, setFechaFiltro] = useState(
-    () => new Date().toISOString().split('T')[0]
+    () => hoyColegio()
   )
   const [estadoFiltro, setEstadoFiltro]     = useState<EstadoAsistencia | 'todos'>('todos')
   const [cursoFiltro, setCursoFiltro]       = useState<number | 'todos'>('todos')

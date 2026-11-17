@@ -19,6 +19,7 @@ import { asignarQR } from '@/auth/actions'
 import { type Role } from '@/lib/utils/permissions'
 import { getErrorMessage } from '@/lib/errors'
 
+import { hoyColegio } from '@/lib/utils/fecha'
 export type ModalMode = 'create' | 'edit' | null
 
 export function useQR(role: Role | null, initialData?: QRBootstrap) {
@@ -37,7 +38,7 @@ export function useQR(role: Role | null, initialData?: QRBootstrap) {
   // ── Filtros admin ─────────────────────────────────────────────────────────
   const [searchQuery, setSearchQuery]   = useState('')
   const [fechaFiltro, setFechaFiltro]   = useState(
-    () => new Date().toISOString().split('T')[0]
+    () => hoyColegio()
   )
 
   // ── Fetch admin ───────────────────────────────────────────────────────────

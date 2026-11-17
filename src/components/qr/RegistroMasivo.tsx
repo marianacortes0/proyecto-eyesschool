@@ -16,6 +16,7 @@ import FallidosMasivo from '@/components/asistencia/FallidosMasivo'
 import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
 import { getErrorMessage } from '@/lib/errors'
 
+import { hoyColegio } from '@/lib/utils/fecha'
 type Props = {
   cursos: CursoOption[]
   estudiantes: EstudianteSelector[]
@@ -43,7 +44,7 @@ const SEL_CLASS =
  * solo lote. Alternativa al escaneo individual de la cámara.
  */
 export default function RegistroMasivo({ cursos, estudiantes, idUsuarioRegistrador, onRegistered }: Props) {
-  const hoy = new Date().toISOString().split('T')[0]
+  const hoy = hoyColegio()
 
   const [jornada, setJornada] = useState('')
   const [idCurso, setIdCurso] = useState('')
