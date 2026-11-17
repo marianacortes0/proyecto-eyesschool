@@ -29,6 +29,12 @@ for (const rol of ['admin', 'docente', 'estudiante', 'padre'] as Rol[]) {
     test(`el menú del ${rol} solo trae los módulos de su rol`, async ({ page }) => {
       await iniciarSesion(page, rol)
 
+      // El menú se completa después de la navegación: leerlo de una vez lo
+      // encontraba solo con /general en Firefox (E16). Se espera a que estén los
+      // obligatorios y después se revisa lo que sobra.
+      await expect
+        .poll(() => enlacesDelMenu(page), { message: 'el menú no trae todos los módulos del rol' })
+        .toEqual(expect.arrayContaining(MENU[rol].debe))
       const enlaces = await enlacesDelMenu(page)
       for (const ruta of MENU[rol].debe) expect(enlaces, `falta ${ruta}`).toContain(ruta)
       for (const ruta of MENU[rol].noDebe) expect(enlaces, `sobra ${ruta}`).not.toContain(ruta)

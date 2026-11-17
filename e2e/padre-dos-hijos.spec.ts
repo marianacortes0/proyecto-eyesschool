@@ -18,17 +18,23 @@ test('el padre de prueba cambia de hijo y cambian notas, asistencia y novedades'
     await page.goto(modulo)
     const selector = page.getByRole('combobox', { name: /estudiante/i })
 
-    // Ve solo sus dos hijos.
-    await expect(selector.locator('option')).toHaveText([new RegExp(hijo1, 'i'), new RegExp(hijo2, 'i')])
+    // Ve solo sus dos hijos, en cualquier orden: el criterio no fija uno y la API
+    // de QA los devolvió en otro orden el 17/11 (E16, D-WEB-17).
+    const opciones = selector.locator('option')
+    await expect(opciones).toHaveCount(2)
+    const etiquetas = await opciones.allTextContents()
+    expect(etiquetas.some((t) => new RegExp(hijo1, 'i').test(t)), `falta ${hijo1}`).toBe(true)
+    expect(etiquetas.some((t) => new RegExp(hijo2, 'i').test(t)), `falta ${hijo2}`).toBe(true)
 
-    // Con el primero activo, el módulo habla de él; al cambiar, habla del segundo.
+    // Con el primero activo, el módulo habla de él; al cambiar, habla del otro.
     // Solo texto visible: el primer elemento con el nombre es la <option> del
     // selector, que Playwright considera oculta (D-WEB-17).
-    await expect(page.getByText(new RegExp(hijo1, 'i')).filter({ visible: true }).first()).toBeVisible()
-    const etiquetaHijo2 = (await selector.locator('option', { hasText: new RegExp(hijo2, 'i') }).textContent()) ?? hijo2
-    await selector.selectOption({ label: etiquetaHijo2 })
+    const [activo, otro] = etiquetas.map((t) => t.trim())
+    const nombre = (etiqueta: string) => new RegExp(etiqueta.split(' ')[0], 'i')
+    await expect(page.getByText(nombre(activo)).filter({ visible: true }).first()).toBeVisible()
+    await selector.selectOption({ label: otro })
     await expect(page).toHaveURL(/[?&]hijo=\d+/)
-    await expect(page.getByText(new RegExp(hijo2, 'i')).filter({ visible: true }).first()).toBeVisible()
+    await expect(page.getByText(nombre(otro)).filter({ visible: true }).first()).toBeVisible()
   }
 })
 

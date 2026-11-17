@@ -1,0 +1,322 @@
+<testsuites id="" name="" tests="48" failures="3" skipped="0" errors="1" time="1797.366831">
+<testsuite name="boletin-padre.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="chromium" tests="2" failures="0" skipped="0" time="59.846" errors="0">
+<testcase name="boletín del padre (WEB-09) › el padre descarga un PDF" classname="boletin-padre.spec.ts" time="40.567">
+</testcase>
+<testcase name="boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación" classname="boletin-padre.spec.ts" time="19.279">
+</testcase>
+</testsuite>
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="chromium" tests="8" failures="0" skipped="0" time="104.38" errors="0">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="13.991">
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="11.215">
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="12.714">
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="12.837">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="13.54">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="11.792">
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="14.088">
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="14.203">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="chromium" tests="2" failures="1" skipped="0" time="56.758" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="27.752">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toHaveText(expected) failed" type="expect.toHaveText">
+<![CDATA[  [chromium] › padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('combobox', { name: /estudiante/i }).locator('option')
+    Timeout: 5000ms
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+    -   /Sofía/i,
+    -   /Santiago/i,
+    +   "Santiago López",
+    +   "Sofía Rodríguez",
+      ]
+
+    Call log:
+      - Expect "toHaveText" getByRole('combobox', { name: /estudiante/i }).locator('option') with timeout 5000ms
+      - waiting for getByRole('combobox', { name: /estudiante/i }).locator('option')
+        13 × locator resolved to 2 elements
+
+
+      20 |
+      21 |     // Ve solo sus dos hijos.
+    > 22 |     await expect(selector.locator('option')).toHaveText([new RegExp(hijo1, 'i'), new RegExp(hijo2, 'i')])
+         |                                              ^
+      23 |
+      24 |     // Con el primero activo, el módulo habla de él; al cambiar, habla del segundo.
+      25 |     // Solo texto visible: el primer elemento con el nombre es la <option> del
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:22:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="un padre con un solo hijo no ve el selector" classname="padre-dos-hijos.spec.ts" time="29.006">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="chromium" tests="2" failures="0" skipped="0" time="47.897" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="29.614">
+</testcase>
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="18.283">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="chromium" tests="1" failures="0" skipped="0" time="41.424" errors="0">
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="41.424">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="chromium" tests="6" failures="0" skipped="0" time="438.694" errors="0">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="22.555">
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="19.511">
+</testcase>
+<testcase name="sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript" classname="sesion.spec.ts" time="18.075">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)" classname="sesion.spec.ts" time="270.929">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)" classname="sesion.spec.ts" time="94.221">
+</testcase>
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="13.403">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="chromium" tests="3" failures="0" skipped="0" time="58.813" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="33.639">
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="13.835">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="11.339">
+</testcase>
+</testsuite>
+<testsuite name="boletin-padre.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="firefox" tests="2" failures="0" skipped="0" time="56.088" errors="0">
+<testcase name="boletín del padre (WEB-09) › el padre descarga un PDF" classname="boletin-padre.spec.ts" time="34.607">
+</testcase>
+<testcase name="boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación" classname="boletin-padre.spec.ts" time="21.481">
+</testcase>
+</testsuite>
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="firefox" tests="8" failures="1" skipped="0" time="151.472" errors="0">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="15.501">
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="16.06">
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="16.769">
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="14.63">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="20.826">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="27.928">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip]]
+]]>
+</system-out>
+<failure message="falta /notas" type="expect.toContain">
+<![CDATA[  [firefox] › login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+
+    Error: falta /notas
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: "/notas"
+    Received array: ["/general"]
+
+      31 |
+      32 |       const enlaces = await enlacesDelMenu(page)
+    > 33 |       for (const ruta of MENU[rol].debe) expect(enlaces, `falta ${ruta}`).toContain(ruta)
+         |                                                                           ^
+      34 |       for (const ruta of MENU[rol].noDebe) expect(enlaces, `sobra ${ruta}`).not.toContain(ruta)
+      35 |       for (const ruta of enlaces) expect(puedeEntrar(rol, ruta), `sobra ${ruta}: routeRoles no deja entrar al ${rol}`).toBe(true)
+      36 |     })
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:33:75
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="21.594">
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="18.164">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="firefox" tests="2" failures="1" skipped="0" time="60.03" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="35.253">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toHaveText(expected) failed" type="expect.toHaveText">
+<![CDATA[  [firefox] › padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('combobox', { name: /estudiante/i }).locator('option')
+    Timeout: 5000ms
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+    -   /Sofía/i,
+    -   /Santiago/i,
+    +   "Santiago López",
+    +   "Sofía Rodríguez",
+      ]
+
+    Call log:
+      - Expect "toHaveText" getByRole('combobox', { name: /estudiante/i }).locator('option') with timeout 5000ms
+      - waiting for getByRole('combobox', { name: /estudiante/i }).locator('option')
+        13 × locator resolved to 2 elements
+
+
+      20 |
+      21 |     // Ve solo sus dos hijos.
+    > 22 |     await expect(selector.locator('option')).toHaveText([new RegExp(hijo1, 'i'), new RegExp(hijo2, 'i')])
+         |                                              ^
+      23 |
+      24 |     // Con el primero activo, el módulo habla de él; al cambiar, habla del segundo.
+      25 |     // Solo texto visible: el primer elemento con el nombre es la <option> del
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:22:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="un padre con un solo hijo no ve el selector" classname="padre-dos-hijos.spec.ts" time="24.777">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="firefox" tests="2" failures="0" skipped="0" time="42.375" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="27.793">
+</testcase>
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="14.582">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="firefox" tests="1" failures="0" skipped="0" time="42.929" errors="0">
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="42.929">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="firefox" tests="6" failures="0" skipped="0" time="378.491" errors="1">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="16.467">
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="19.749">
+</testcase>
+<testcase name="sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript" classname="sesion.spec.ts" time="18.395">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)" classname="sesion.spec.ts" time="184.84">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\trace.zip]]
+]]>
+</system-out>
+<error message="page.goto: NS_ERROR_ABORT" type="Error">
+<![CDATA[  [firefox] › sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) 
+
+    Error: page.goto: NS_ERROR_ABORT
+    Call log:
+      - navigating to "https://deploy-preview-34--qaeyesschool.netlify.app/notas", waiting until "load"
+
+
+      65 |       const rutas = ['/notas', '/horarios', '/novedades', '/perfil']
+      66 |       for (let i = 0; Date.now() - inicio < 4 * MIN; i++) {
+    > 67 |         await page.goto(rutas[i % rutas.length])
+         |                    ^
+      68 |         await expect(page, `vuelta ${i}`).not.toHaveURL(/\/\?login=1/)
+      69 |         await page.waitForTimeout(15_000)
+      70 |       }
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:67:20
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)" classname="sesion.spec.ts" time="113.433">
+</testcase>
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="25.607">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T02:56:46.030Z" hostname="firefox" tests="3" failures="0" skipped="0" time="121.052" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="58.499">
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="32.173">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="30.38">
+</testcase>
+</testsuite>
+</testsuites>
