@@ -1,4 +1,4 @@
-import { test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 import { requiere } from './utils'
 
 // Ayudas de los E2E de WC-05 que necesitan preparar o borrar datos en QA, o
@@ -76,4 +76,9 @@ export function restaurarApiAlTerminar() {
   test.afterEach(async () => {
     if (FALLAS()) await modo('normal').catch(() => null)
   })
+}
+
+/** Ningún texto técnico o enmascarado a la vista del usuario (DEF-WEB-10). */
+export async function sinTextoTecnico(page: Page) {
+  await expect(page.getByText(/Minified React error|react\.dev\/errors|Server Components render|fetch failed/i)).toHaveCount(0)
 }
