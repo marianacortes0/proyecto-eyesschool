@@ -1,0 +1,2020 @@
+
+Running 50 tests using 1 worker
+
+  ok  1 [chromium] › e2e\boletin-padre.spec.ts:8:7 › boletín del padre (WEB-09) › el padre descarga un PDF (35.2s)
+  ok  2 [chromium] › e2e\boletin-padre.spec.ts:23:7 › boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación (1.1m)
+  x   3 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados (54.8s)
+  x   4 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol (48.7s)
+  x   5 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados (48.7s)
+  x   6 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol (48.4s)
+  x   7 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados (49.0s)
+  x   8 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (48.6s)
+  x   9 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados (49.3s)
+  x  10 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol (48.8s)
+  x  11 [chromium] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades (48.7s)
+  x  12 [chromium] › e2e\padre-dos-hijos.spec.ts:41:5 › un padre con un solo hijo no ve el selector (1.6m)
+  x  13 [chromium] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (48.2s)
+  x  14 [chromium] › e2e\registro-masivo.spec.ts:52:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar (48.0s)
+  x  15 [chromium] › e2e\registro-padre.spec.ts:30:5 › un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) (48.1s)
+  x  16 [chromium] › e2e\registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado (48.1s)
+  x  17 [chromium] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (48.2s)
+  x  18 [chromium] › e2e\sesion.spec.ts:35:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola (48.3s)
+  x  19 [chromium] › e2e\sesion.spec.ts:46:7 › sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript (48.3s)
+  x  20 [chromium] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) (48.3s)
+  x  21 [chromium] › e2e\sesion.spec.ts:84:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) (48.4s)
+  x  22 [chromium] › e2e\sesion.spec.ts:97:5 › una ruta del panel sin sesión pide iniciar sesión (22.0s)
+  x  23 [chromium] › e2e\usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba (48.2s)
+  x  24 [chromium] › e2e\usuarios.spec.ts:58:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) (48.5s)
+  x  25 [chromium] › e2e\usuarios.spec.ts:67:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) (48.6s)
+  x  26 [firefox] › e2e\boletin-padre.spec.ts:8:7 › boletín del padre (WEB-09) › el padre descarga un PDF (48.4s)
+  x  27 [firefox] › e2e\boletin-padre.spec.ts:23:7 › boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación (47.9s)
+  x  28 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados (48.0s)
+  x  29 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol (47.9s)
+  x  30 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados (48.1s)
+  x  31 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol (48.0s)
+  x  32 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados (48.1s)
+  x  33 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (49.2s)
+  x  34 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados (48.5s)
+  x  35 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol (48.5s)
+  x  36 [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades (48.5s)
+  x  37 [firefox] › e2e\padre-dos-hijos.spec.ts:41:5 › un padre con un solo hijo no ve el selector (1.5m)
+  x  38 [firefox] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (48.5s)
+  x  39 [firefox] › e2e\registro-masivo.spec.ts:52:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar (48.4s)
+  x  40 [firefox] › e2e\registro-padre.spec.ts:30:5 › un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) (48.5s)
+  x  41 [firefox] › e2e\registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado (48.5s)
+  x  42 [firefox] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (48.6s)
+  x  43 [firefox] › e2e\sesion.spec.ts:35:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola (49.0s)
+  x  44 [firefox] › e2e\sesion.spec.ts:46:7 › sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript (48.5s)
+  x  45 [firefox] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) (48.6s)
+  x  46 [firefox] › e2e\sesion.spec.ts:84:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) (48.4s)
+  x  47 [firefox] › e2e\sesion.spec.ts:97:5 › una ruta del panel sin sesión pide iniciar sesión (23.5s)
+  x  48 [firefox] › e2e\usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba (49.0s)
+  x  49 [firefox] › e2e\usuarios.spec.ts:58:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) (48.4s)
+  x  50 [firefox] › e2e\usuarios.spec.ts:67:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) (48.4s)
+
+
+  1) [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      23 |
+      24 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 25 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      26 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      27 |     })
+      28 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:25:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [chromium] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:15:3
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [chromium] › e2e\padre-dos-hijos.spec.ts:41:5 › un padre con un solo hijo no ve el selector ──
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.fill: Test timeout of 90000ms exceeded.
+    Call log:
+      - waiting for locator('[data-view="login"]').locator('input[type="email"]')
+
+
+      43 |   await page.goto('/?login=1')
+      44 |   const vista = page.locator('[data-view="login"]')
+    > 45 |   await vista.locator('input[type="email"]').fill(process.env.E2E_PADRE_UN_HIJO_EMAIL!)
+         |                                              ^
+      46 |   await vista.locator('input[type="password"]').fill(process.env.E2E_PASSWORD!)
+      47 |   await vista.locator('button').first().click()
+      48 |   // El login es una Server Action: en QA tarda 11–17 s (D-WEB-16).
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:45:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [chromium] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:34:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [chromium] › e2e\registro-masivo.spec.ts:52:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:54:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [chromium] › e2e\registro-padre.spec.ts:30:5 › un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) 
+
+    TimeoutError: locator.waitFor: Timeout 45000ms exceeded.
+    Call log:
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+      33 |
+      34 |   await page.goto('/?login=1')
+    > 35 |   await page.locator('[data-view="login"][data-listo="true"]').waitFor({ state: 'attached', timeout: 45_000 })
+         |                                                                ^
+      36 |   await page.locator('[data-go-signup]').click()
+      37 |   const modal = page.getByRole('dialog', { name: /crear cuenta/i })
+      38 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:35:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-padre-un-correo-r-f6f8a--junto-al-campo-DEF-WEB-05--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-padre-un-correo-r-f6f8a--junto-al-campo-DEF-WEB-05--chromium\error-context.md
+
+    Error Context: test-results\registro-padre-un-correo-r-f6f8a--junto-al-campo-DEF-WEB-05--chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-padre-un-correo-r-f6f8a--junto-al-campo-DEF-WEB-05--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-padre-un-correo-r-f6f8a--junto-al-campo-DEF-WEB-05--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [chromium] › e2e\registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    TimeoutError: locator.waitFor: Timeout 45000ms exceeded.
+    Call log:
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+      64 |   await page.goto('/?login=1')
+      65 |   // «Regístrate» se conecta en setupLogin, igual que «ENTRAR» (ver iniciarSesion).
+    > 66 |   await page.locator('[data-view="login"][data-listo="true"]').waitFor({ state: 'attached', timeout: 45_000 })
+         |                                                                ^
+      67 |   await page.locator('[data-go-signup]').click()
+      68 |   const modal = page.getByRole('dialog', { name: /crear cuenta/i })
+      69 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:66:64
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:17:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [chromium] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:16:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [chromium] › e2e\sesion.spec.ts:35:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:36:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [chromium] › e2e\sesion.spec.ts:46:7 › sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:47:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-el-to-16da3-puede-leer-desde-JavaScript-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-el-to-16da3-puede-leer-desde-JavaScript-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-el-to-16da3-puede-leer-desde-JavaScript-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-el-to-16da3-puede-leer-desde-JavaScript-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [chromium] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:62:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [chromium] › e2e\sesion.spec.ts:84:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:86:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [chromium] › e2e\sesion.spec.ts:97:5 › una ruta del panel sin sesión pide iniciar sesión ─────
+
+    Error: /usuarios
+
+    expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/\?login=1$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/usuarios"
+    Timeout: 20000ms
+
+    Call log:
+      - /usuarios with timeout 20000ms
+        43 × locator resolved to <html lang="en">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/usuarios"
+
+
+      109 |     // redirección llega por el cliente, y eso tarda varios segundos. Los 5 s
+      110 |     // que `expect` espera por defecto no alcanzan; la comprobación es la misma.
+    > 111 |     await expect(page, ruta).toHaveURL(/\/\?login=1$/, { timeout: 20_000 })
+          |                              ^
+      112 |   }
+      113 | })
+      114 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:111:30
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-una-ruta-del-panel-sin-sesión-pide-iniciar-sesión-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-una-ruta-del-panel-sin-sesión-pide-iniciar-sesión-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-una-ruta-del-panel-sin-sesión-pide-iniciar-sesión-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-una-ruta-del-panel-sin-sesión-pide-iniciar-sesión-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [chromium] › e2e\usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:28:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [chromium] › e2e\usuarios.spec.ts:58:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:59:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) [chromium] › e2e\usuarios.spec.ts:67:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:68:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24) [firefox] › e2e\boletin-padre.spec.ts:8:7 › boletín del padre (WEB-09) › el padre descarga un PDF 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\boletin-padre.spec.ts:9:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\boletin-padre-boletín-del--c7bcb-09-el-padre-descarga-un-PDF-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\boletin-padre-boletín-del--c7bcb-09-el-padre-descarga-un-PDF-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\boletin-padre-boletín-del--c7bcb-09-el-padre-descarga-un-PDF-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\boletin-padre-boletín-del--c7bcb-09-el-padre-descarga-un-PDF-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  25) [firefox] › e2e\boletin-padre.spec.ts:23:7 › boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\boletin-padre.spec.ts:24:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\boletin-padre-boletín-del--b7661--del-criterio-de-aceptación-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\boletin-padre-boletín-del--b7661--del-criterio-de-aceptación-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\boletin-padre-boletín-del--b7661--del-criterio-de-aceptación-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\boletin-padre-boletín-del--b7661--del-criterio-de-aceptación-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  26) [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  27) [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  28) [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  29) [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  30) [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  31) [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  32) [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  33) [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  34) [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:15:3
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  35) [firefox] › e2e\padre-dos-hijos.spec.ts:41:5 › un padre con un solo hijo no ve el selector ───
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.fill: Test timeout of 90000ms exceeded.
+    Call log:
+      - waiting for locator('[data-view="login"]').locator('input[type="email"]')
+
+
+      43 |   await page.goto('/?login=1')
+      44 |   const vista = page.locator('[data-view="login"]')
+    > 45 |   await vista.locator('input[type="email"]').fill(process.env.E2E_PADRE_UN_HIJO_EMAIL!)
+         |                                              ^
+      46 |   await vista.locator('input[type="password"]').fill(process.env.E2E_PASSWORD!)
+      47 |   await vista.locator('button').first().click()
+      48 |   // El login es una Server Action: en QA tarda 11–17 s (D-WEB-16).
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:45:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  36) [firefox] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:34:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  37) [firefox] › e2e\registro-masivo.spec.ts:52:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:54:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-masivo-registro-m-6b745--con-Reintentar-y-Descartar-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  38) [firefox] › e2e\registro-padre.spec.ts:30:5 › un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) 
+
+    TimeoutError: locator.waitFor: Timeout 45000ms exceeded.
+    Call log:
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+      33 |
+      34 |   await page.goto('/?login=1')
+    > 35 |   await page.locator('[data-view="login"][data-listo="true"]').waitFor({ state: 'attached', timeout: 45_000 })
+         |                                                                ^
+      36 |   await page.locator('[data-go-signup]').click()
+      37 |   const modal = page.getByRole('dialog', { name: /crear cuenta/i })
+      38 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:35:64
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-padre-un-correo-r-f6f8a--junto-al-campo-DEF-WEB-05--firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-padre-un-correo-r-f6f8a--junto-al-campo-DEF-WEB-05--firefox\error-context.md
+
+    Error Context: test-results\registro-padre-un-correo-r-f6f8a--junto-al-campo-DEF-WEB-05--firefox\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-padre-un-correo-r-f6f8a--junto-al-campo-DEF-WEB-05--firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-padre-un-correo-r-f6f8a--junto-al-campo-DEF-WEB-05--firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  39) [firefox] › e2e\registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    TimeoutError: locator.waitFor: Timeout 45000ms exceeded.
+    Call log:
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+      64 |   await page.goto('/?login=1')
+      65 |   // «Regístrate» se conecta en setupLogin, igual que «ENTRAR» (ver iniciarSesion).
+    > 66 |   await page.locator('[data-view="login"][data-listo="true"]').waitFor({ state: 'attached', timeout: 45_000 })
+         |                                                                ^
+      67 |   await page.locator('[data-go-signup]').click()
+      68 |   const modal = page.getByRole('dialog', { name: /crear cuenta/i })
+      69 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:66:64
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:17:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  40) [firefox] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:16:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  41) [firefox] › e2e\sesion.spec.ts:35:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:36:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  42) [firefox] › e2e\sesion.spec.ts:46:7 › sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:47:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-el-to-16da3-puede-leer-desde-JavaScript-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-el-to-16da3-puede-leer-desde-JavaScript-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-el-to-16da3-puede-leer-desde-JavaScript-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-el-to-16da3-puede-leer-desde-JavaScript-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  43) [firefox] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:62:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  44) [firefox] › e2e\sesion.spec.ts:84:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:86:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  45) [firefox] › e2e\sesion.spec.ts:97:5 › una ruta del panel sin sesión pide iniciar sesión ──────
+
+    Error: /usuarios
+
+    expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/\?login=1$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/usuarios"
+    Timeout: 20000ms
+
+    Call log:
+      - /usuarios with timeout 20000ms
+        42 × locator resolved to <html lang="en">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/usuarios"
+
+
+      109 |     // redirección llega por el cliente, y eso tarda varios segundos. Los 5 s
+      110 |     // que `expect` espera por defecto no alcanzan; la comprobación es la misma.
+    > 111 |     await expect(page, ruta).toHaveURL(/\/\?login=1$/, { timeout: 20_000 })
+          |                              ^
+      112 |   }
+      113 | })
+      114 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:111:30
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-una-ruta-del-panel-sin-sesión-pide-iniciar-sesión-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-una-ruta-del-panel-sin-sesión-pide-iniciar-sesión-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-una-ruta-del-panel-sin-sesión-pide-iniciar-sesión-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-una-ruta-del-panel-sin-sesión-pide-iniciar-sesión-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  46) [firefox] › e2e\usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:28:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  47) [firefox] › e2e\usuarios.spec.ts:58:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:59:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  48) [firefox] › e2e\usuarios.spec.ts:67:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) 
+
+    Error: expect(locator).toBeAttached() failed
+
+    Locator: locator('[data-view="login"][data-listo="true"]')
+    Expected: attached
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeAttached" locator('[data-view="login"][data-listo="true"]') with timeout 45000ms
+      - waiting for locator('[data-view="login"][data-listo="true"]')
+
+
+       at utils.ts:40
+
+      38 |   // en /?login=1 (Firefox, E12). Se espera la marca que pone `setupLogin`.
+      39 |   const vista = page.locator('[data-view="login"][data-listo="true"]')
+    > 40 |   await expect(vista).toBeAttached({ timeout: 45_000 })
+         |                       ^
+      41 |   await vista.locator('input[type="email"]').fill(correo!)
+      42 |   await vista.locator('input[type="password"]').fill(password!)
+      43 |   await vista.locator('button').first().click()
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:40:23)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:68:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\usuarios-gestión-de-usuari-4afdf-aje-informativo-CP-SIS-028--firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  48 failed
+    [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+    [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol 
+    [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+    [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol 
+    [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+    [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+    [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+    [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol 
+    [chromium] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+    [chromium] › e2e\padre-dos-hijos.spec.ts:41:5 › un padre con un solo hijo no ve el selector ────
+    [chromium] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+    [chromium] › e2e\registro-masivo.spec.ts:52:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar 
+    [chromium] › e2e\registro-padre.spec.ts:30:5 › un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) 
+    [chromium] › e2e\registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado 
+    [chromium] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+    [chromium] › e2e\sesion.spec.ts:35:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola 
+    [chromium] › e2e\sesion.spec.ts:46:7 › sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript 
+    [chromium] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) 
+    [chromium] › e2e\sesion.spec.ts:84:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) 
+    [chromium] › e2e\sesion.spec.ts:97:5 › una ruta del panel sin sesión pide iniciar sesión ───────
+    [chromium] › e2e\usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+    [chromium] › e2e\usuarios.spec.ts:58:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) 
+    [chromium] › e2e\usuarios.spec.ts:67:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) 
+    [firefox] › e2e\boletin-padre.spec.ts:8:7 › boletín del padre (WEB-09) › el padre descarga un PDF 
+    [firefox] › e2e\boletin-padre.spec.ts:23:7 › boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación 
+    [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+    [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol 
+    [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+    [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol 
+    [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+    [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+    [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+    [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol 
+    [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+    [firefox] › e2e\padre-dos-hijos.spec.ts:41:5 › un padre con un solo hijo no ve el selector ─────
+    [firefox] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+    [firefox] › e2e\registro-masivo.spec.ts:52:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar 
+    [firefox] › e2e\registro-padre.spec.ts:30:5 › un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) 
+    [firefox] › e2e\registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado 
+    [firefox] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+    [firefox] › e2e\sesion.spec.ts:35:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola 
+    [firefox] › e2e\sesion.spec.ts:46:7 › sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript 
+    [firefox] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) 
+    [firefox] › e2e\sesion.spec.ts:84:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) 
+    [firefox] › e2e\sesion.spec.ts:97:5 › una ruta del panel sin sesión pide iniciar sesión ────────
+    [firefox] › e2e\usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+    [firefox] › e2e\usuarios.spec.ts:58:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) 
+    [firefox] › e2e\usuarios.spec.ts:67:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) 
+  2 passed (44.5m)

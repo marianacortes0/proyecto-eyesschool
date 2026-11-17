@@ -1,0 +1,15 @@
+# Estado del deploy preview de QA tras la corrida E19 (comprobado con curl, sin cabeceras de navegador)
+# 17/11/2026 06:00 UTC
+
+## https://deploy-preview-34--qaeyesschool.netlify.app/
+{"error":"usage_exceeded","message":"Usage exceeded","request_id":"…"}
+HTTP 503
+
+## https://deploy-preview-34--qaeyesschool.netlify.app/?login=1
+{"error":"usage_exceeded","message":"Usage exceeded","request_id":"…"}
+HTTP 503
+
+## https://qaeyesschool.netlify.app/ (contexto develop, aún sin publicar)
+HTTP 404
+
+Desde un navegador (Playwright, Chromium) la misma URL muestra «Site not available · This site was paused as it reached its usage limits» (17/11, ~05:58 UTC).

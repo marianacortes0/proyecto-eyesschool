@@ -1,0 +1,26 @@
+<testsuites id="" name="" tests="6" failures="0" skipped="0" errors="0" time="296.23865800000004">
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T06:31:03.552Z" hostname="chromium" tests="1" failures="0" skipped="0" time="50.569" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="50.569">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T06:31:03.552Z" hostname="chromium" tests="1" failures="0" skipped="0" time="48.566" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="48.566">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T06:31:03.552Z" hostname="chromium" tests="1" failures="0" skipped="0" time="41.429" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="41.429">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T06:31:03.552Z" hostname="firefox" tests="1" failures="0" skipped="0" time="44.831" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="44.831">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T06:31:03.552Z" hostname="firefox" tests="1" failures="0" skipped="0" time="47.838" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="47.838">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T06:31:03.552Z" hostname="firefox" tests="1" failures="0" skipped="0" time="47.339" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="47.339">
+</testcase>
+</testsuite>
+</testsuites>
