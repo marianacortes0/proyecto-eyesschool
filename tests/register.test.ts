@@ -134,6 +134,30 @@ describe('register (WEB-05 · validación antes de llamar a la API)', () => {
     expect((r as { error: string }).error).toContain('value is not a valid email address: reserved name')
   })
 
+  // WC-03: además del mensaje, el formulario necesita saber qué campo lo causó
+  // para mostrarlo junto a ese campo (nombres del formulario, no de la API).
+  it.each([
+    ['correo', 'email', 'value is not a valid email address: reserved name'],
+    ['password', 'password', 'String should have at least 8 characters'],
+    ['numero_documento', 'docNumber', 'String should match pattern'],
+    ['id_estudiante_vinculado', 'idEstudianteVinculado', 'Input should be greater than 0'],
+  ])('DEF-WEB-05: un 422 en %s señala el campo %s del formulario', async (loc, campo, msg) => {
+    const detail = [{ type: 'value_error', loc: ['body', loc], msg }]
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ detail }), { status: 422 }))
+
+    const r = await register(null, form({ ...COMUNES, roleId: '3', cargo: 'Rectoría' }))
+
+    expect(r).toEqual({ error: `Error al registrar el usuario: ${msg}`, campo, motivo: msg })
+  })
+
+  it('DEF-WEB-05: un error sin loc (409 en texto) no señala ningún campo', async () => {
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ detail: 'El correo ya está registrado' }), { status: 409 }))
+
+    const r = await register(null, form({ ...COMUNES, roleId: '3', cargo: 'Rectoría' }))
+
+    expect(r).not.toHaveProperty('campo')
+  })
+
   it('DEF-WEB-05: sin cuerpo legible, indica el código HTTP en vez de un texto vacío', async () => {
     fetchMock.mockResolvedValue(new Response('Internal Server Error', { status: 500 }))
 

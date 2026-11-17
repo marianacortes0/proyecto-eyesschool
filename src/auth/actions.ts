@@ -172,6 +172,36 @@ const ROL_LABEL: Record<number, string> = {
   1: 'Profesor', 2: 'Estudiante', 3: 'Administrador', 4: 'Padre / Acudiente',
 }
 
+// Campo de la API (`loc` del 422) → `name` del campo en el formulario de registro.
+const CAMPO_FORMULARIO: Record<string, string> = {
+  correo: 'email',
+  password: 'password',
+  primer_nombre: 'firstName',
+  segundo_nombre: 'secondName',
+  primer_apellido: 'lastName',
+  segundo_apellido: 'secondLastName',
+  tipo_documento: 'docType',
+  numero_documento: 'docNumber',
+  genero: 'genero',
+  direccion: 'direccion',
+  telefono: 'telefono',
+  id_rol: 'roleId',
+  id_curso_actual: 'courseId',
+  id_estudiante_vinculado: 'idEstudianteVinculado',
+  parentesco: 'parentesco',
+  id_especializacion: 'especializacionId',
+  institucion: 'institucion',
+  cargo: 'cargo',
+}
+
+/** Campo del formulario del primer error de un 422 de FastAPI, si se puede saber. */
+function campoDelFormulario(detail: unknown): string | undefined {
+  if (!Array.isArray(detail)) return undefined
+  const loc = (detail[0] as { loc?: unknown } | null)?.loc
+  if (!Array.isArray(loc)) return undefined
+  return CAMPO_FORMULARIO[String(loc.at(-1))]
+}
+
 export async function register(prevState: unknown, formData: FormData) {
   const email = (formData.get('email') as string)?.trim().toLowerCase() ?? ''
   const password = formData.get('password') as string
@@ -246,8 +276,12 @@ export async function register(prevState: unknown, formData: FormData) {
     // Misma regla que apiFetch: `detail` puede ser texto o, en un 422, la lista de
     // errores de validación de FastAPI (DEF-WEB-05: antes se escondía el motivo).
     const body = await res.json().catch(() => ({}))
-    const motivo = errorMessage((body as Record<string, unknown>).detail, res.status)
-    return { error: `Error al registrar el usuario: ${motivo}` }
+    const detail = (body as Record<string, unknown>).detail
+    const motivo = errorMessage(detail, res.status)
+    const error = `Error al registrar el usuario: ${motivo}`
+    // En un 422, `loc` dice qué campo falló: el formulario muestra el motivo a su lado.
+    const campo = campoDelFormulario(detail)
+    return campo ? { error, campo, motivo } : { error }
   }
 
   // Admin (3) y Profesor (1) requieren aprobación; Estudiante (2) y Padre (4) no.

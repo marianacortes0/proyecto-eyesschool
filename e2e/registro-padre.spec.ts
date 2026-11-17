@@ -25,6 +25,34 @@ test.afterAll(async ({ browser }) => {
   }
 })
 
+// DEF-WEB-05 · con un correo de dominio reservado la API responde 422 y el motivo
+// se muestra junto al campo Correo. No crea nada: la API rechaza el registro.
+test('un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05)', async ({ page }) => {
+  requiere('E2E_ESTUDIANTE_VINCULADO_ID', 'E2E_PASSWORD')
+  const unico = Date.now()
+
+  await page.goto('/?login=1')
+  await page.locator('[data-view="login"][data-listo="true"]').waitFor({ state: 'attached', timeout: 45_000 })
+  await page.locator('[data-go-signup]').click()
+  const modal = page.getByRole('dialog', { name: /crear cuenta/i })
+
+  await modal.getByLabel('Nombre', { exact: true }).fill('Padre')
+  await modal.getByLabel('Apellido', { exact: true }).fill(`E2E${unico}`)
+  await modal.getByLabel('Número de documento').fill(String(unico).slice(-10))
+  await modal.getByLabel('Rol', { exact: true }).selectOption('4')
+  await modal.getByLabel('ID del estudiante').fill(process.env.E2E_ESTUDIANTE_VINCULADO_ID!)
+  await modal.getByLabel('Parentesco').selectOption({ index: 1 })
+  await modal.getByLabel('Correo').fill(`padre.e2e.${unico}@colegio.test`)
+  await modal.getByLabel('Contraseña', { exact: true }).fill(process.env.E2E_PASSWORD!)
+  await modal.getByRole('button', { name: /crear cuenta|registr/i }).click()
+
+  const correo = modal.getByLabel('Correo')
+  await expect(correo).toHaveAttribute('aria-invalid', 'true', { timeout: 60_000 })
+  const ayuda = modal.locator(`#${await correo.getAttribute('aria-describedby')}`)
+  await expect(ayuda).toContainText(/reserved|special-use|reservado/i)
+  await expect(modal.getByText(/No se pudo completar el registro/)).toHaveCount(0)
+})
+
 test('el padre que se registra ve los datos de su hijo vinculado', async ({ page }) => {
   requiere('E2E_ESTUDIANTE_VINCULADO_ID', 'E2E_ESTUDIANTE_VINCULADO_NOMBRE', 'E2E_PASSWORD')
   const unico = Date.now()
@@ -34,6 +62,8 @@ test('el padre que se registra ve los datos de su hijo vinculado', async ({ page
   correoCreado = correo
 
   await page.goto('/?login=1')
+  // «Regístrate» se conecta en setupLogin, igual que «ENTRAR» (ver iniciarSesion).
+  await page.locator('[data-view="login"][data-listo="true"]').waitFor({ state: 'attached', timeout: 45_000 })
   await page.locator('[data-go-signup]').click()
   const modal = page.getByRole('dialog', { name: /crear cuenta/i })
 

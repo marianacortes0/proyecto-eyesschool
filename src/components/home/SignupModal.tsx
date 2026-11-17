@@ -41,6 +41,19 @@ export default function SignupModal({
   const [grado, setGrado] = useState('');
   const [password, setPassword] = useState('');
 
+  // DEF-WEB-05: si la API rechazó un campo (422 con `loc`), su motivo va junto a él.
+  const campoRechazado = state && 'campo' in state ? state.campo : undefined;
+  const motivoRechazo = state && 'motivo' in state ? state.motivo : undefined;
+  const marca = (name: string) =>
+    campoRechazado === name
+      ? { 'aria-invalid': true as const, 'aria-describedby': `registro-error-${name}` }
+      : {};
+  const errorCampo = (name: string) =>
+    campoRechazado === name ? (
+      <p id={`registro-error-${name}`} role="alert" style={{ margin: '5px 0 0', fontSize: 11, color: '#ff9b9b' }}>
+        {motivoRechazo}
+      </p>
+    ) : null;
 
   useEffect(() => {
     if (!open) return;
@@ -130,66 +143,75 @@ export default function SignupModal({
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             <div>
               <label style={label}>NOMBRE</label>
-              <input name="firstName" aria-label="Nombre" required placeholder="Tu nombre" style={field} />
+              <input name="firstName" {...marca('firstName')} aria-label="Nombre" required placeholder="Tu nombre" style={field} />
+              {errorCampo('firstName')}
             </div>
             <div>
               <label style={label}>APELLIDO</label>
-              <input name="lastName" aria-label="Apellido" required placeholder="Tu apellido" style={field} />
+              <input name="lastName" {...marca('lastName')} aria-label="Apellido" required placeholder="Tu apellido" style={field} />
+              {errorCampo('lastName')}
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             <div>
               <label style={label}>SEGUNDO NOMBRE</label>
-              <input name="secondName" placeholder="Opcional" style={field} />
+              <input name="secondName" {...marca('secondName')} placeholder="Opcional" style={field} />
+              {errorCampo('secondName')}
             </div>
             <div>
               <label style={label}>SEGUNDO APELLIDO</label>
-              <input name="secondLastName" placeholder="Opcional" style={field} />
+              <input name="secondLastName" {...marca('secondLastName')} placeholder="Opcional" style={field} />
+              {errorCampo('secondLastName')}
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: 10 }}>
             <div>
               <label style={label}>DOC.</label>
-              <select name="docType" aria-label="Tipo de documento" required defaultValue="CC" style={{ ...field, cursor: 'pointer' }}>
+              <select name="docType" {...marca('docType')} aria-label="Tipo de documento" required defaultValue="CC" style={{ ...field, cursor: 'pointer' }}>
                 <option value="CC">CC</option>
                 <option value="TI">TI</option>
                 <option value="CE">CE</option>
                 <option value="PP">PP</option>
               </select>
+              {errorCampo('docType')}
             </div>
             <div>
               <label style={label}>N° DOCUMENTO</label>
-              <input name="docNumber" aria-label="Número de documento" required placeholder="Número" style={field} />
+              <input name="docNumber" {...marca('docNumber')} aria-label="Número de documento" required placeholder="Número" style={field} />
+              {errorCampo('docNumber')}
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: 10 }}>
             <div>
               <label style={label}>GÉNERO</label>
-              <select name="genero" defaultValue="" style={{ ...field, cursor: 'pointer' }}>
+              <select name="genero" {...marca('genero')} defaultValue="" style={{ ...field, cursor: 'pointer' }}>
                 <option value="">—</option>
                 <option value="M">M</option>
                 <option value="F">F</option>
                 <option value="Otro">Otro</option>
               </select>
+              {errorCampo('genero')}
             </div>
             <div>
               <label style={label}>TELÉFONO</label>
-              <input name="telefono" placeholder="Opcional" style={field} />
+              <input name="telefono" {...marca('telefono')} placeholder="Opcional" style={field} />
+              {errorCampo('telefono')}
             </div>
           </div>
 
           <div>
             <label style={label}>DIRECCIÓN</label>
-            <input name="direccion" placeholder="Opcional" style={field} />
+            <input name="direccion" {...marca('direccion')} placeholder="Opcional" style={field} />
+              {errorCampo('direccion')}
           </div>
 
           <div>
             <label style={label}>¿QUIÉN ERES?</label>
             <select
-              name="roleId" aria-label="Rol" required value={roleId}
+              name="roleId" {...marca('roleId')} aria-label="Rol" required value={roleId}
               onChange={e => handleRole(e.target.value)}
               style={{ ...field, cursor: 'pointer' }}
             >
@@ -199,6 +221,7 @@ export default function SignupModal({
               <option value="1">Profesor</option>
               <option value="3">Administrador</option>
             </select>
+              {errorCampo('roleId')}
           </div>
 
           {roleId === '2' && (
@@ -217,22 +240,25 @@ export default function SignupModal({
                   {grados.map(g => <option key={g} value={g}>{g}</option>)}
                 </select>
               </div>
-              <select name="courseId" required disabled={!grado} defaultValue=""
+              <select name="courseId" {...marca('courseId')} required disabled={!grado} defaultValue=""
                 style={{ ...field, cursor: 'pointer', opacity: grado ? 1 : .4 }}>
                 <option value="" disabled>{!grado ? 'Selecciona jornada y grado' : 'Selecciona tu curso'}</option>
                 {cursosFiltrados.map(c => <option key={c.idCurso} value={c.idCurso}>{c.nombreCurso}</option>)}
               </select>
+              {errorCampo('courseId')}
             </>
           )}
 
           {roleId === '1' && (
             <>
-              <select name="especializacionId" required disabled={loadingOpts} defaultValue=""
+              <select name="especializacionId" {...marca('especializacionId')} required disabled={loadingOpts} defaultValue=""
                 style={{ ...field, cursor: 'pointer' }}>
                 <option value="" disabled>{loadingOpts ? 'Cargando…' : 'Selecciona tu especialización'}</option>
                 {especializaciones.map(e => <option key={e.idEspecializacion} value={e.idEspecializacion}>{e.nombreEspecializacion}</option>)}
               </select>
-              <input name="institucion" placeholder="Institución (opcional)" style={field} />
+              {errorCampo('especializacionId')}
+              <input name="institucion" {...marca('institucion')} placeholder="Institución (opcional)" style={field} />
+              {errorCampo('institucion')}
             </>
           )}
 
@@ -240,33 +266,39 @@ export default function SignupModal({
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <div>
                 <label style={label}>ID ESTUDIANTE</label>
-                <input name="idEstudianteVinculado" aria-label="ID del estudiante" required type="number" placeholder="N° de estudiante" style={field} />
+                <input name="idEstudianteVinculado" {...marca('idEstudianteVinculado')} aria-label="ID del estudiante" required type="number" placeholder="N° de estudiante" style={field} />
+              {errorCampo('idEstudianteVinculado')}
               </div>
               <div>
                 <label style={label}>PARENTESCO</label>
-                <select name="parentesco" aria-label="Parentesco" required defaultValue="" style={{ ...field, cursor: 'pointer' }}>
+                <select name="parentesco" {...marca('parentesco')} aria-label="Parentesco" required defaultValue="" style={{ ...field, cursor: 'pointer' }}>
                   <option value="" disabled>Selecciona</option>
                   {PARENTESCOS.map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
+              {errorCampo('parentesco')}
               </div>
             </div>
           )}
 
           {roleId === '3' && (
-            <select name="cargo" required defaultValue="" style={{ ...field, cursor: 'pointer' }}>
-              <option value="" disabled>Selecciona tu cargo</option>
-              {CARGOS_ADMIN.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
+            <>
+              <select name="cargo" {...marca('cargo')} required defaultValue="" style={{ ...field, cursor: 'pointer' }}>
+                <option value="" disabled>Selecciona tu cargo</option>
+                {CARGOS_ADMIN.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+              {errorCampo('cargo')}
+            </>
           )}
 
           <div>
             <label style={label}>CORREO</label>
-            <input name="email" aria-label="Correo" type="email" required placeholder="tu@institucion.edu" style={field} />
+            <input name="email" {...marca('email')} aria-label="Correo" type="email" required placeholder="tu@institucion.edu" style={field} />
+              {errorCampo('email')}
           </div>
           <div>
             <label style={label}>CONTRASEÑA</label>
             <input
-              name="password" aria-label="Contraseña"
+              name="password" {...marca('password')} aria-label="Contraseña"
               type="password"
               required
               placeholder="••••••••"
@@ -274,6 +306,7 @@ export default function SignupModal({
               onChange={e => setPassword(e.target.value)}
               style={field}
             />
+            {errorCampo('password')}
             <PasswordChecklist password={password} ocultarSiVacio colorCumplida={NEON} colorPendiente="#a99bd0" />
           </div>
 
