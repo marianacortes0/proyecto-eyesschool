@@ -1,0 +1,181 @@
+
+Running 50 tests using 1 worker
+
+  ok  1 [chromium] › e2e\boletin-padre.spec.ts:8:7 › boletín del padre (WEB-09) › el padre descarga un PDF (35.0s)
+  ok  2 [chromium] › e2e\boletin-padre.spec.ts:23:7 › boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación (22.7s)
+  ok  3 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados (15.0s)
+  ok  4 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol (15.4s)
+  ok  5 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados (23.6s)
+  x   6 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol (1.2m)
+  x   7 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados (1.4m)
+  ok  8 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (33.7s)
+  ok  9 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados (18.8s)
+  ok 10 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol (20.1s)
+  ok 11 [chromium] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades (48.6s)
+  ok 12 [chromium] › e2e\padre-dos-hijos.spec.ts:41:5 › un padre con un solo hijo no ve el selector (17.1s)
+  ok 13 [chromium] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (33.8s)
+  ok 14 [chromium] › e2e\registro-masivo.spec.ts:52:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar (14.3s)
+  ok 15 [chromium] › e2e\registro-padre.spec.ts:30:5 › un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) (8.1s)
+  ok 16 [chromium] › e2e\registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado (34.6s)
+  ok 17 [chromium] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (19.5s)
+  ok 18 [chromium] › e2e\sesion.spec.ts:35:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola (20.6s)
+  ok 19 [chromium] › e2e\sesion.spec.ts:46:7 › sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript (17.5s)
+  ok 20 [chromium] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) (4.4m)
+  ok 21 [chromium] › e2e\sesion.spec.ts:81:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) (1.6m)
+  ok 22 [chromium] › e2e\sesion.spec.ts:94:5 › una ruta del panel sin sesión pide iniciar sesión (13.2s)
+  ok 23 [chromium] › e2e\usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba (37.1s)
+  ok 24 [chromium] › e2e\usuarios.spec.ts:58:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) (20.1s)
+  ok 25 [chromium] › e2e\usuarios.spec.ts:67:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) (17.8s)
+  ok 26 [firefox] › e2e\boletin-padre.spec.ts:8:7 › boletín del padre (WEB-09) › el padre descarga un PDF (36.0s)
+  ok 27 [firefox] › e2e\boletin-padre.spec.ts:23:7 › boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación (25.9s)
+  ok 28 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados (15.2s)
+  ok 29 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol (14.5s)
+  ok 30 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados (17.4s)
+  ok 31 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol (16.6s)
+  ok 32 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados (17.7s)
+  ok 33 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (23.2s)
+  ok 34 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados (24.5s)
+  ok 35 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol (23.4s)
+  ok 36 [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades (42.1s)
+  ok 37 [firefox] › e2e\padre-dos-hijos.spec.ts:41:5 › un padre con un solo hijo no ve el selector (25.2s)
+  ok 38 [firefox] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (34.5s)
+  ok 39 [firefox] › e2e\registro-masivo.spec.ts:52:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar (16.1s)
+  ok 40 [firefox] › e2e\registro-padre.spec.ts:30:5 › un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) (14.0s)
+  ok 41 [firefox] › e2e\registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado (47.4s)
+  ok 42 [firefox] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (25.7s)
+  ok 43 [firefox] › e2e\sesion.spec.ts:35:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola (20.0s)
+  ok 44 [firefox] › e2e\sesion.spec.ts:46:7 › sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript (13.7s)
+  x  45 [firefox] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) (22.0s)
+  ok 46 [firefox] › e2e\sesion.spec.ts:81:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) (1.6m)
+  ok 47 [firefox] › e2e\sesion.spec.ts:94:5 › una ruta del panel sin sesión pide iniciar sesión (43.2s)
+  ok 48 [firefox] › e2e\usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba (53.7s)
+  ok 49 [firefox] › e2e\usuarios.spec.ts:58:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) (26.7s)
+  ok 50 [firefox] › e2e\usuarios.spec.ts:67:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) (26.0s)
+
+
+  1) [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        84 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        67 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [firefox] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) 
+
+    Error: vuelta 0
+
+    expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/notas$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/general"
+    Timeout: 5000ms
+
+    Call log:
+      - vuelta 0 with timeout 5000ms
+        12 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/general"
+
+
+      71 |         const ruta = rutas[i % rutas.length]
+      72 |         await page.locator(`aside a[href="${ruta}"]`).first().click()
+    > 73 |         await expect(page, `vuelta ${i}`).toHaveURL(new RegExp(`${ruta}$`))
+         |                                           ^
+      74 |         await page.waitForTimeout(15_000)
+      75 |       }
+      76 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:73:43
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Slow test file: [chromium] › e2e\sesion.spec.ts (7.1m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  3 failed
+    [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol 
+    [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+    [firefox] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) 
+  47 passed (30.6m)
