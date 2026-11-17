@@ -1,0 +1,218 @@
+<testsuites id="" name="" tests="12" failures="1" skipped="0" errors="3" time="550.679179">
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-11T22:46:48.854Z" hostname="chromium" tests="1" failures="1" skipped="0" time="34.079" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="34.079">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › registro-masivo.spec.ts:19:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('region', { name: /ya existentes/i })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('region', { name: /ya existentes/i }) with timeout 5000ms
+      - waiting for getByRole('region', { name: /ya existentes/i })
+
+
+      34 |     await enviarLote(page)
+      35 |     const ya = page.getByRole('region', { name: /ya existentes/i })
+    > 36 |     await expect(ya).toBeVisible()
+         |                      ^
+      37 |     await expect(ya.getByText(/ya registrado/i).first()).toBeVisible()
+      38 |     await expect(page.getByRole('region', { name: /no guardados/i })).toHaveCount(0)
+      39 |   })
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:36:22
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-11T22:46:48.854Z" hostname="chromium" tests="1" failures="0" skipped="0" time="30.081" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="30.081">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-11T22:46:48.854Z" hostname="chromium" tests="1" failures="0" skipped="0" time="27.354" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="27.354">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-11T22:46:48.854Z" hostname="chromium" tests="1" failures="0" skipped="0" time="98.67" errors="1">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="98.67">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [chromium] › sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 90000ms exceeded.
+
+      18 |     // sesión, así que una precarga del inicio que termine después de simular la
+      19 |     // inactividad la pisaría con «ahora» y la prueba no probaría nada (D-WEB-17).
+    > 20 |     await page.waitForLoadState('networkidle')
+         |                ^
+      21 |
+      22 |     await context.addCookies([{ name: 'eys_last', value: String(Date.now() - 31 * MIN), url: baseURL!, httpOnly: true }])
+      23 |     await page.goto('/notas')
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:20:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-11T22:46:48.854Z" hostname="chromium" tests="1" failures="0" skipped="0" time="94.6" errors="1">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="94.6">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat1\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat1\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat1\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [chromium] › sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 90000ms exceeded.
+
+      18 |     // sesión, así que una precarga del inicio que termine después de simular la
+      19 |     // inactividad la pisaría con «ahora» y la prueba no probaría nada (D-WEB-17).
+    > 20 |     await page.waitForLoadState('networkidle')
+         |                ^
+      21 |
+      22 |     await context.addCookies([{ name: 'eys_last', value: String(Date.now() - 31 * MIN), url: baseURL!, httpOnly: true }])
+      23 |     await page.goto('/notas')
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:20:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-11T22:46:48.854Z" hostname="chromium" tests="1" failures="0" skipped="0" time="94.305" errors="1">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="94.305">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat2\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat2\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat2\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [chromium] › sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 90000ms exceeded.
+
+      18 |     // sesión, así que una precarga del inicio que termine después de simular la
+      19 |     // inactividad la pisaría con «ahora» y la prueba no probaría nada (D-WEB-17).
+    > 20 |     await page.waitForLoadState('networkidle')
+         |                ^
+      21 |
+      22 |     await context.addCookies([{ name: 'eys_last', value: String(Date.now() - 31 * MIN), url: baseURL!, httpOnly: true }])
+      23 |     await page.goto('/notas')
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:20:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat2\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium-repeat2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-11T22:46:48.854Z" hostname="firefox" tests="1" failures="0" skipped="0" time="31.062" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="31.062">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-11T22:46:48.854Z" hostname="firefox" tests="1" failures="0" skipped="0" time="34.577" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="34.577">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-11T22:46:48.854Z" hostname="firefox" tests="1" failures="0" skipped="0" time="30.785" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="30.785">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-11T22:46:48.854Z" hostname="firefox" tests="1" failures="0" skipped="0" time="18.034" errors="0">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="18.034">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-11T22:46:48.854Z" hostname="firefox" tests="1" failures="0" skipped="0" time="19.107" errors="0">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="19.107">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-11T22:46:48.854Z" hostname="firefox" tests="1" failures="0" skipped="0" time="16.613" errors="0">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="16.613">
+</testcase>
+</testsuite>
+</testsuites>
