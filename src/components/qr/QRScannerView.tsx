@@ -381,7 +381,7 @@ export default function QRScannerView({
           <h2 className="font-bold text-slate-800 dark:text-white">
             Registro del día
           </h2>
-          <span className="text-xs text-slate-400 bg-slate-100 dark:bg-white/5 px-2.5 py-1 rounded-full">
+          <span className="text-xs text-slate-600 bg-slate-100 dark:bg-white/5 px-2.5 py-1 rounded-full">
             {(todayRecords?.length ?? 0)} registrado{(todayRecords?.length ?? 0) !== 1 ? 's' : ''}
           </span>
         </div>
@@ -392,7 +392,7 @@ export default function QRScannerView({
             <p>No hay registros de asistencia hoy.</p>
           </div>
         ) : (
-          <div className="space-y-2 max-h-[calc(100vh-280px)] overflow-y-auto pr-1">
+          <div className="space-y-2 max-h-[calc(100vh-280px)] overflow-y-auto pr-1" tabIndex={0} role="region" aria-label="Registro del día">
             {todayRecords.map((r) => {
               const estadoVal = r.estado as ScanEstado
               const inf = ESTADOS.find(s => s.value === estadoVal)
@@ -408,9 +408,9 @@ export default function QRScannerView({
                     <p className="font-semibold text-slate-800 dark:text-white text-sm truncate">
                       {r.nombreEstudiante}
                     </p>
-                    <p className="text-xs text-slate-400 font-mono">{r.codigoEstudiante}</p>
+                    <p className="text-xs text-slate-500 font-mono">{r.codigoEstudiante}</p>
                     {r.observacion && (
-                      <p className="text-xs text-slate-400 mt-0.5 truncate" title={r.observacion}>
+                      <p className="text-xs text-slate-500 mt-0.5 truncate" title={r.observacion}>
                         {r.observacion}
                       </p>
                     )}
@@ -419,7 +419,7 @@ export default function QRScannerView({
                     <span className={`inline-block text-xs font-semibold px-2 py-0.5 rounded-full ${badge}`}>
                       {r.estado}
                     </span>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-slate-500">
                       {new Date(r.fechaRegistro).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>

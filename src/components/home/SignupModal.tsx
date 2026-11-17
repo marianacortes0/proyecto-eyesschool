@@ -193,7 +193,7 @@ export default function SignupModal({
           <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: 10 }}>
             <div>
               <label style={label}>GÉNERO</label>
-              <select name="genero" {...marca('genero')} defaultValue="" style={{ ...field, cursor: 'pointer' }}>
+              <select name="genero" aria-label="Género" {...marca('genero')} defaultValue="" style={{ ...field, cursor: 'pointer' }}>
                 <option value="">—</option>
                 <option value="M">M</option>
                 <option value="F">F</option>

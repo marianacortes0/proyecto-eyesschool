@@ -1,35 +1,22 @@
 {
   "objetivo": "http://localhost:3100",
-  "fecha": "2026-11-17T15:46:42.543Z",
+  "fecha": "2026-11-17T18:45:11.164Z",
   "reglasPorRiesgo": {
     "High": 0,
-    "Medium": 5,
-    "Low": 1,
+    "Medium": 4,
+    "Low": 0,
     "Informational": 2
   },
   "alertas": [
-    {
-      "regla": "CSP: Wildcard Directive",
-      "pluginId": "10055",
-      "riesgo": "Medium",
-      "confianza": "High",
-      "urls": [
-        "http://localhost:3100",
-        "http://localhost:3100/sitemap.xml",
-        "http://localhost:3100/robots.txt"
-      ],
-      "solucion": "Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.",
-      "total": 3
-    },
     {
       "regla": "CSP: script-src unsafe-inline",
       "pluginId": "10055",
       "riesgo": "Medium",
       "confianza": "High",
       "urls": [
-        "http://localhost:3100",
+        "http://localhost:3100/robots.txt",
         "http://localhost:3100/sitemap.xml",
-        "http://localhost:3100/robots.txt"
+        "http://localhost:3100"
       ],
       "solucion": "Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.",
       "total": 3
@@ -40,11 +27,24 @@
       "riesgo": "Medium",
       "confianza": "High",
       "urls": [
-        "http://localhost:3100",
+        "http://localhost:3100/robots.txt",
         "http://localhost:3100/sitemap.xml",
-        "http://localhost:3100/robots.txt"
+        "http://localhost:3100"
       ],
       "solucion": "Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.",
+      "total": 3
+    },
+    {
+      "regla": "Sub Resource Integrity Attribute Missing",
+      "pluginId": "90003",
+      "riesgo": "Medium",
+      "confianza": "High",
+      "urls": [
+        "http://localhost:3100/robots.txt",
+        "http://localhost:3100/sitemap.xml",
+        "http://localhost:3100"
+      ],
+      "solucion": "Provide a valid integrity attribute to the tag.",
       "total": 3
     },
     {
@@ -59,57 +59,31 @@
       "total": 1
     },
     {
-      "regla": "Sub Resource Integrity Attribute Missing",
-      "pluginId": "90003",
-      "riesgo": "Medium",
-      "confianza": "High",
-      "urls": [
-        "http://localhost:3100",
-        "http://localhost:3100/sitemap.xml",
-        "http://localhost:3100/robots.txt"
-      ],
-      "solucion": "Provide a valid integrity attribute to the tag.",
-      "total": 3
-    },
-    {
-      "regla": "Server Leaks Information via \"X-Powered-By\" HTTP Response Header Field(s)",
-      "pluginId": "10037",
-      "riesgo": "Low",
-      "confianza": "Medium",
-      "urls": [
-        "http://localhost:3100",
-        "http://localhost:3100/sitemap.xml",
-        "http://localhost:3100/robots.txt"
-      ],
-      "solucion": "Ensure that your web server, application server, load balancer, etc. is configured to suppress \"X-Powered-By\" headers.",
-      "total": 3
-    },
-    {
-      "regla": "Information Disclosure - Suspicious Comments",
-      "pluginId": "10027",
-      "riesgo": "Informational",
-      "confianza": "Medium",
-      "urls": [
-        "http://localhost:3100",
-        "http://localhost:3100/_next/static/chunks/turbopack-2u1d16houkiyo.js",
-        "http://localhost:3100/_next/static/chunks/3t6i_3lvi_934.js",
-        "http://localhost:3100/_next/static/chunks/0cz1d0mv5g_q7.js",
-        "http://localhost:3100/_next/static/chunks/13i2xgg3qn7nt.js"
-      ],
-      "solucion": "Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.",
-      "total": 6
-    },
-    {
       "regla": "Modern Web Application",
       "pluginId": "10109",
       "riesgo": "Informational",
       "confianza": "Medium",
       "urls": [
-        "http://localhost:3100/sitemap.xml",
-        "http://localhost:3100/robots.txt"
+        "http://localhost:3100/robots.txt",
+        "http://localhost:3100/sitemap.xml"
       ],
       "solucion": "This is an informational alert and so no changes are required.",
       "total": 2
+    },
+    {
+      "regla": "Information Disclosure - Suspicious Comments",
+      "pluginId": "10027",
+      "riesgo": "Informational",
+      "confianza": "Low",
+      "urls": [
+        "http://localhost:3100/_next/static/chunks/turbopack-2u1d16houkiyo.js",
+        "http://localhost:3100/_next/static/chunks/3t6i_3lvi_934.js",
+        "http://localhost:3100/_next/static/chunks/13i2xgg3qn7nt.js",
+        "http://localhost:3100",
+        "http://localhost:3100/_next/static/chunks/0cz1d0mv5g_q7.js"
+      ],
+      "solucion": "Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.",
+      "total": 6
     }
   ]
 }

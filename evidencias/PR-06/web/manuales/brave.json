@@ -1,0 +1,25 @@
+{
+  "navegador": "Brave 157.0.8103.79 (escudos por defecto, perfil nuevo)",
+  "base": "http://localhost:3100",
+  "fecha": "2026-11-17T19:08:03.593Z",
+  "pasos": [
+    {
+      "paso": "Inicio de sesión del padre",
+      "resultado": "OK",
+      "segundos": 12.443,
+      "detalle": "/general"
+    },
+    {
+      "paso": "Recarga de /notas sin perder la sesión",
+      "resultado": "OK",
+      "segundos": 6.113,
+      "detalle": "/notas"
+    },
+    {
+      "paso": "Descarga del boletín (PDF)",
+      "resultado": "OK",
+      "segundos": 3.023,
+      "detalle": "boletin_Santiago_L_pez.pdf"
+    }
+  ]
+}

@@ -122,7 +122,7 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
       {mode === 'scan' ? (
         <>
           {/* Instrucciones QR */}
-          <div className="flex flex-wrap gap-2 text-xs text-slate-500 dark:text-gray-400">
+          <div className="flex flex-wrap gap-2 text-xs text-slate-700 dark:text-gray-300">
             {['1. Activa la cámara', '2. Apunta al código QR y pulsa Escanear', '3. Elige el tipo (Entrada/Salida)', '4. Confirma el registro'].map((step) => (
               <span
                 key={step}

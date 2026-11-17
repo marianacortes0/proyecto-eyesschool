@@ -285,5 +285,16 @@
     "obtenido": "Siempre «Error al contactar la API de lectura QR»: api.qrserver.com responde 400 a toda imagen subida (17/11/2026).",
     "evidencia": "docs/defectos/DEF-WEB-16.md",
     "identificado": "17/11/2026", "estado": "nuevo"
+  },
+  {
+    "id": "DEF-WEB-17",
+    "titulo": "Rendimiento bajo en Lighthouse: la fuente de iconos pesa 1–3,9 MB y retrasa el primer pintado",
+    "componente": "Web", "origen": "Pruebas no funcionales", "severidad": "Media", "prioridad": "P3",
+    "caso": "CP-NF-005", "correccion": "—",
+    "pasos": "1. Correr Lighthouse en /, /admin y /general (móvil).\n2. Mirar el informe de red.",
+    "esperado": "Rendimiento ≥ 90 (CP-NF-005).",
+    "obtenido": "Rendimiento 33–96; en móvil, FCP ~22,5 s en el panel. La fuente Material Symbols pesa 3.934 KiB.",
+    "evidencia": "docs/defectos/DEF-WEB-17.md",
+    "identificado": "17/11/2026", "estado": "nuevo"
   }
 ]

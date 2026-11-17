@@ -113,7 +113,7 @@ export default function NotasViewerClient({ info, notas, materias }: NotasAsocia
 
           {/* Filtros */}
           <div className="flex flex-wrap gap-3">
-            <select
+            <select aria-label="Materia"
               value={filterMateria}
               onChange={e => setFilterMateria(e.target.value)}
               className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -123,7 +123,7 @@ export default function NotasViewerClient({ info, notas, materias }: NotasAsocia
                 <option key={m.idMateria} value={String(m.idMateria)}>{m.nombreMateria}</option>
               ))}
             </select>
-            <select
+            <select aria-label="Periodo"
               value={filterPeriodo}
               onChange={e => setFilterPeriodo(e.target.value)}
               className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"

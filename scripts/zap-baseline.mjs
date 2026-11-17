@@ -18,6 +18,8 @@ const api = async (ruta) => {
 const esperar = (ms) => new Promise((r) => setTimeout(r, ms))
 
 console.log('ZAP', (await api('/JSON/core/view/version/')).version, '→', objetivo)
+// Sesión nueva: que no se mezclen las alertas de una corrida anterior.
+await api('/JSON/core/action/newSession/?overwrite=true')
 // Pasivo de verdad: la araña no envía formularios (el registro escribiría en QA).
 await api('/JSON/spider/action/setOptionProcessForm/?Boolean=false')
 await api('/JSON/spider/action/setOptionPostForm/?Boolean=false')
