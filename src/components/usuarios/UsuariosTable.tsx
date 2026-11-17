@@ -77,7 +77,7 @@ export default function UsuariosTable({
 
                 {/* Documento */}
                 <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
-                  <span className="text-slate-400 dark:text-slate-500 text-xs mr-1">
+                  <span className="text-slate-500 dark:text-slate-400 text-xs mr-1">
                     {TIPO_DOC[u.tipoDocumento] ?? u.tipoDocumento}
                   </span>
                   {u.numeroDocumento}

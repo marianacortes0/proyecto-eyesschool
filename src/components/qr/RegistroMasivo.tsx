@@ -147,14 +147,14 @@ export default function RegistroMasivo({ cursos, estudiantes, idUsuarioRegistrad
     <div className="space-y-5">
       {/* Selección de curso + parámetros del lote */}
       <div className="flex flex-wrap gap-3">
-        <select value={jornada} onChange={(e) => handleJornada(e.target.value)} className={`${SEL_CLASS} capitalize`}>
+        <select aria-label="Jornada" value={jornada} onChange={(e) => handleJornada(e.target.value)} className={`${SEL_CLASS} capitalize`}>
           <option value="">Jornada…</option>
           {jornadas.map((j) => (
             <option key={j} value={j}>{j}</option>
           ))}
         </select>
 
-        <select
+        <select aria-label="Curso"
           value={idCurso}
           onChange={(e) => handleCurso(e.target.value)}
           disabled={!jornada}

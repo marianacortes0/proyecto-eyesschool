@@ -211,7 +211,7 @@ export default function UsuariosPendientes({
           ))}
         </div>
       ) : pendingUsuarios.length === 0 ? (
-        <div className="flex items-center gap-3 px-4 py-5 rounded-2xl border border-dashed border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500">
+        <div className="flex items-center gap-3 px-4 py-5 rounded-2xl border border-dashed border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300">
           <span className="material-symbols-outlined !text-2xl text-emerald-500">check_circle</span>
           <div>
             <p className="font-semibold text-sm">Sin pendientes</p>

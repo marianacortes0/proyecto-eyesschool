@@ -26,7 +26,9 @@ export default function CookieBanner() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[9999] flex justify-center px-4 pb-6 pointer-events-none">
+    // Debajo de los diálogos (login z-50, registro z-60): antes, con z-[9999], tapaba
+    // «CREAR CUENTA» a 1280×720 y en el móvil (WC-06, responsive).
+    <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-4 pb-6 pointer-events-none">
       
       {/* Contenedor */}
       <div className="pointer-events-auto w-full max-w-2xl bg-white dark:bg-[#141414] text-gray-800 dark:text-gray-200 backdrop-blur-md shadow-2xl rounded-2xl p-5 border border-gray-200 dark:border-gray-700 animate-slideUp">

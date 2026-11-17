@@ -173,7 +173,7 @@ export default function HorariosClient({ role, initialData }: Props) {
         {/* Filtro contextual */}
         {vista === 'estudiantes' ? (
           <>
-            <select
+            <select aria-label="Jornada"
               value={filterJornada}
               onChange={e => { setFilterJornada(e.target.value); setFilterCurso('') }}
               className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -183,7 +183,7 @@ export default function HorariosClient({ role, initialData }: Props) {
                 <option key={j} value={j}>{j}</option>
               ))}
             </select>
-            <select
+            <select aria-label="Curso"
               value={filterCurso}
               onChange={e => setFilterCurso(e.target.value)}
               className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -197,7 +197,7 @@ export default function HorariosClient({ role, initialData }: Props) {
             </select>
           </>
         ) : (
-          <select
+          <select aria-label="Profesor"
             value={filterProfesor}
             onChange={e => setFilterProfesor(e.target.value)}
             className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -209,7 +209,7 @@ export default function HorariosClient({ role, initialData }: Props) {
           </select>
         )}
 
-        <select
+        <select aria-label="Estado"
           value={filterActivo}
           onChange={e => setFilterActivo(e.target.value as 'todos' | 'activo' | 'inactivo')}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -733,7 +733,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Día</label>
-            <select required value={dia} onChange={e => setDia(e.target.value)}
+            <select aria-label="Día" required value={dia} onChange={e => setDia(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
               {DIAS_SEMANA.map(d => <option key={d} value={d}>{d}</option>)}
             </select>
@@ -754,7 +754,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
 
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Jornada</label>
-            <select required value={jornada} onChange={e => { setJornada(e.target.value); setIdCurso('') }}
+            <select aria-label="Jornada" required value={jornada} onChange={e => { setJornada(e.target.value); setIdCurso('') }}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
               <option value="">Seleccionar jornada...</option>
               {jornadas.map(j => <option key={j} value={j}>{j}</option>)}
@@ -763,7 +763,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
 
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Curso</label>
-            <select required value={idCurso} onChange={e => setIdCurso(e.target.value)}
+            <select aria-label="Curso" required value={idCurso} onChange={e => setIdCurso(e.target.value)}
               disabled={!jornada}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50">
               <option value="">{jornada ? 'Seleccionar curso...' : 'Primero selecciona una jornada'}</option>
@@ -775,7 +775,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
 
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Materia</label>
-            <select required value={idMateria} onChange={e => setIdMateria(e.target.value)}
+            <select aria-label="Materia" required value={idMateria} onChange={e => setIdMateria(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
               <option value="">Seleccionar materia</option>
               {materias.map(m => (
@@ -792,7 +792,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
 
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Profesor</label>
-            <select value={idProfesor} onChange={e => setIdProfesor(e.target.value)}
+            <select aria-label="Profesor" value={idProfesor} onChange={e => setIdProfesor(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
               <option value="">Sin asignar</option>
               {profesores.map(p => (
@@ -1011,7 +1011,7 @@ function CursoForm({ mode, curso, saving, onClose, onCreate, onUpdate }: CursoFo
         </div>
         <div>
           <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Jornada</label>
-          <select required value={jornada} onChange={e => setJornada(e.target.value)} className={SEL}>
+          <select aria-label="Jornada" required value={jornada} onChange={e => setJornada(e.target.value)} className={SEL}>
             <option value="">Seleccionar...</option>
             {JORNADAS.map(j => <option key={j} value={j}>{j}</option>)}
           </select>
@@ -1474,7 +1474,7 @@ function AsignacionForm({ mode, asignacion, profesores, cursos, materias, saving
 
       <div>
         <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Profesor</label>
-        <select required value={idProfesor} onChange={e => setIdProfesor(e.target.value)} className={SEL}>
+        <select aria-label="Profesor" required value={idProfesor} onChange={e => setIdProfesor(e.target.value)} className={SEL}>
           <option value="">Seleccionar profesor...</option>
           {profesores.map(p => <option key={p.idProfesor} value={p.idProfesor}>{p.nombre}</option>)}
         </select>
@@ -1483,14 +1483,14 @@ function AsignacionForm({ mode, asignacion, profesores, cursos, materias, saving
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Curso</label>
-          <select required value={idCurso} onChange={e => setIdCurso(e.target.value)} className={SEL}>
+          <select aria-label="Curso" required value={idCurso} onChange={e => setIdCurso(e.target.value)} className={SEL}>
             <option value="">Seleccionar curso...</option>
             {cursos.map(c => <option key={c.idCurso} value={c.idCurso}>{c.nombreCurso} — {c.grado}</option>)}
           </select>
         </div>
         <div>
           <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Materia</label>
-          <select required value={idMateria} onChange={e => setIdMateria(e.target.value)} className={SEL}>
+          <select aria-label="Materia" required value={idMateria} onChange={e => setIdMateria(e.target.value)} className={SEL}>
             <option value="">Seleccionar materia...</option>
             {materias.map(m => <option key={m.idMateria} value={m.idMateria}>{m.nombreMateria}</option>)}
           </select>

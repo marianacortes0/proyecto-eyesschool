@@ -1,7 +1,7 @@
 // Genera docs/trazabilidad-ut-web.md a partir de lo que Vitest ejecuta de verdad:
 // archivo → ID de la planeación → prueba → estado. Uso: node scripts/trazabilidad.mjs
 import { execFileSync } from 'node:child_process'
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, relative, sep } from 'node:path'
 
@@ -55,6 +55,33 @@ for (const ruta of archivosExtra) {
   }
 }
 
+// ── Casos de sistema (PR-06): JUnit de Playwright ─────────────────────────────
+// WC-08: el ID sale del nombre del test («CP-SIS-058 y 059 · …») o, en los specs
+// anteriores a WC-05, del mapa casosSistema. Archivo: TRAZA_E2E o el último JUnit.
+const junit = process.env.TRAZA_E2E ?? 'evidencias/PR-06/web/e2e.xml'
+const sistema = []
+if (existsSync(junit)) {
+  const xml = readFileSync(junit, 'utf-8')
+  const attr = (tag, nombre) => (tag.match(new RegExp(nombre + '="([^"]*)"')) ?? [])[1] ?? ''
+  const des = (t) => t.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+  for (const suite of xml.split('<testsuite ').slice(1)) {
+    const cab = suite.slice(0, suite.indexOf('>'))
+    const spec = attr(cab, 'name')
+    const navegador = attr(cab, 'hostname')
+    for (const caso of suite.split('<testcase ').slice(1)) {
+      const nombre = des(attr(caso.slice(0, caso.indexOf('>')), 'name'))
+      const fin = caso.indexOf('</testcase>')
+      const cuerpo = fin >= 0 ? caso.slice(0, fin) : caso
+      const resultado = /<skipped/.test(cuerpo) ? 'Omitida' : /<(failure|error)/.test(cuerpo) ? 'No' : 'Sí'
+      const m = nombre.match(/CP-SIS-(\d{3})((?:\s*(?:,|y|a)\s*\d{3})*)/)
+      const ids = m
+        ? [m[1], ...(m[2].match(/\d{3}/g) ?? [])].map((n) => 'CP-SIS-' + n).join(', ')
+        : mapa.casosSistema?.[spec] ?? nombre.match(/DEF-WEB-\d+|WC-06|CP-NF-\d+/)?.[0] ?? '—'
+      sistema.push({ ids, spec, navegador, nombre, resultado })
+    }
+  }
+}
+
 const cuenta = (lista) => `${lista.filter((f) => f.estado === 'Sí').length} de ${lista.length} pasan`
 const unit = planeadas('UT-WEB')
 const it = planeadas('IT-WEB')
@@ -71,6 +98,7 @@ const md = `# Trazabilidad de pruebas — Frontend web
 | UT-WEB-01 a 08 (planeadas, PR-04) | ${cuenta(unit)} |
 | UT-WEB-EXTRA (no planeadas) | ${cuenta(extras)} |
 | IT-WEB-01 a 05 (contrato, PR-05) | ${cuenta(it)} · «Omitida» = necesita \`QA_API_URL\` |
+| Casos de sistema E2E (PR-06) | ${sistema.length ? cuenta(sistema.map((f) => ({ estado: f.resultado }))) + ' · JUnit: \`' + junit + '\`' : 'sin JUnit de Playwright'} |
 
 ## Pruebas unitarias y de componentes (PR-04)
 
@@ -89,8 +117,16 @@ ${filasExtra.join('\n')}
 | ID | Corrección | Archivo | Caso | Pasa |
 |---|---|---|---|---|
 ${tabla(it)}
+
+## Casos de sistema E2E (PR-06)
+
+${sistema.length ? 'Del JUnit de Playwright `' + junit + '`.' : 'No había JUnit de Playwright al generar este archivo.'}
+
+| CP-SIS | Spec | Navegador | Caso | Pasa |
+|---|---|---|---|---|
+${sistema.map((f) => '| ' + f.ids + ' | `e2e/' + f.spec + '` | ' + f.navegador + ' | ' + celda(f.nombre) + ' | ' + f.resultado + ' |').join('\n')}
 `
 
 mkdirSync('docs', { recursive: true })
 writeFileSync('docs/trazabilidad-ut-web.md', md, 'utf-8')
-console.log(`docs/trazabilidad-ut-web.md: ${filas.length} pruebas (${unit.length} UT, ${extras.length} extra, ${it.length} IT)`)
+console.log(`docs/trazabilidad-ut-web.md: ${filas.length} pruebas (${unit.length} UT, ${extras.length} extra, ${it.length} IT) y ${sistema.length} E2E`)

@@ -79,6 +79,24 @@ describe('arquitectura (reglas 1 a 4)', () => {
     expect(Object.entries(cuenta).filter(([, n]) => n !== 1)).toEqual([])
   })
 
+  it('WEB-INF-2: la cobertura exige sus umbrales y el CI la corre', () => {
+    const config = leer('vitest.config.mts')
+    expect(config).toMatch(/'src\/lib\/\*\*': \{ lines: 80 \}/)
+    expect(config).toMatch(/'src\/services\/\*\*': \{ lines: 60 \}/)
+    expect(leer('.github/workflows/ci.yml')).toContain('npm run test:cov')
+  })
+
+  it('WEB-INF-3: los E2E corren en Chromium y Firefox y cada spec nuevo nombra su CP-SIS', () => {
+    const config = leer('playwright.config.ts')
+    expect(config).toMatch(/name: 'chromium'/)
+    expect(config).toMatch(/name: 'firefox'/)
+    const specs = readdirSync('e2e').filter((f) => f.endsWith('.spec.ts') && !f.startsWith('wc06-'))
+    // Los specs de la planeación de cierre (WC-05) llevan el ID en el nombre del test.
+    const wc05 = ['login-errores', 'perfil', 'registro', 'recuperacion', 'asistencia', 'qr', 'notas', 'novedades', 'padre', 'reportes', 'horario']
+    for (const nombre of wc05) expect(leer(join('e2e', `${nombre}.spec.ts`)), nombre).toMatch(/CP-SIS-\d{3}/)
+    expect(specs.length).toBeGreaterThanOrEqual(wc05.length)
+  })
+
   it('WEB-INF-4: hay un solo despliegue (se eliminó el flujo de Azure)', () => {
     expect(existsSync('.github/workflows/main_eyesschool.yml')).toBe(false)
   })

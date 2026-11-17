@@ -156,7 +156,7 @@ export default function MinimalDashboard({ greetingName, subtitle, primary, kpis
       {!loading && extra}
 
       <footer className="mt-24 lg:mt-32 py-10 text-center">
-        <p className="text-[10px] font-bold text-on-surface-variant/30 uppercase tracking-[0.4em]">
+        <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.4em]">
           © 2026 EyeSchool
         </p>
       </footer>

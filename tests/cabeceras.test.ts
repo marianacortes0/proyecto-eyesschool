@@ -19,6 +19,8 @@ describe('cabeceras de seguridad (WC-06)', () => {
   it('la CSP no deja incrustar la web ni cargar plugins, y limita formularios y base', () => {
     for (const d of ["frame-ancestors 'none'", "object-src 'none'", "form-action 'self'", "base-uri 'self'", "default-src 'self'"]) expect(CSP).toContain(d)
     expect(CSP).not.toMatch(/unsafe-eval/)
+    // Sin comodín en img-src (alerta «CSP: Wildcard Directive» de ZAP).
+    expect(CSP).not.toMatch(/img-src[^;]* https:(;|\s|$)/)
   })
 
   it('en desarrollo no hay CSP (Fast Refresh necesita eval)', () => {

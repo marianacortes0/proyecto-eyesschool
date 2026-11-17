@@ -84,13 +84,14 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
         {/* Fecha */}
         <input
           type="date"
+          aria-label="Fecha"
           value={fechaFiltro}
           onChange={(e) => setFechaFiltro(e.target.value)}
           className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
 
         {/* Estado */}
-        <select
+        <select aria-label="Estado"
           value={estadoFiltro}
           onChange={(e) => {
             setEstadoFiltro(e.target.value as EstadoAsistencia | 'todos')
@@ -107,7 +108,7 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
 
         {/* Jornada — oculta para estudiantes (solo ven sus propios registros) */}
         {!esEstudiante && (
-          <select
+          <select aria-label="Jornada"
             value={jornadaFiltro}
             onChange={(e) => setJornadaFiltro(e.target.value)}
             className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary capitalize"
@@ -123,7 +124,7 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
 
         {/* Curso — oculto para estudiantes (solo ven sus propios registros) */}
         {!esEstudiante && (
-          <select
+          <select aria-label="Curso"
             value={cursoFiltro}
             onChange={(e) => setCursoFiltro(e.target.value === 'todos' ? 'todos' : Number(e.target.value))}
             className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary"

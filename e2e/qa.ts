@@ -7,33 +7,40 @@ import { requiere } from './utils'
 
 const API = () => (process.env.QA_API_URL ?? '').replace(/\/$/, '')
 
-let tokenAdmin: string | null = null
+type Cuenta = 'admin' | 'docente'
+const tokens: Partial<Record<Cuenta, string>> = {}
 
-async function token(): Promise<string> {
-  if (tokenAdmin) return tokenAdmin
+async function token(cuenta: Cuenta): Promise<string> {
+  const guardado = tokens[cuenta]
+  if (guardado) return guardado
+  const correo = cuenta === 'admin' ? process.env.E2E_ADMIN_EMAIL : process.env.E2E_DOCENTE_EMAIL
   const r = await fetch(`${API()}/auth/login`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ correo: process.env.E2E_ADMIN_EMAIL, password: process.env.QA_PASSWORD ?? process.env.E2E_PASSWORD }),
+    body: JSON.stringify({ correo, password: process.env.QA_PASSWORD ?? process.env.E2E_PASSWORD }),
   })
-  if (!r.ok) throw new Error(`login de admin en QA → ${r.status}`)
-  tokenAdmin = ((await r.json()) as { access_token: string }).access_token
-  return tokenAdmin
+  if (!r.ok) throw new Error(`login de ${cuenta} en QA → ${r.status}`)
+  const t = ((await r.json()) as { access_token: string }).access_token
+  tokens[cuenta] = t
+  return t
 }
 
-/** Llamada a la API de QA como admin. Devuelve el JSON (o null en un 204). */
-export async function apiQA<T = unknown>(ruta: string, init: RequestInit = {}): Promise<T> {
+/**
+ * Llamada a la API de QA (por defecto como admin). Devuelve el JSON (o null en
+ * un 204). Las notas solo las borra el docente que las registró: `cuenta: 'docente'`.
+ */
+export async function apiQA<T = unknown>(ruta: string, init: RequestInit = {}, cuenta: Cuenta = 'admin'): Promise<T> {
   const r = await fetch(`${API()}${ruta}`, {
     ...init,
-    headers: { 'content-type': 'application/json', authorization: `Bearer ${await token()}`, ...(init.headers ?? {}) },
+    headers: { 'content-type': 'application/json', authorization: `Bearer ${await token(cuenta)}`, ...(init.headers ?? {}) },
   })
   if (!r.ok) throw new Error(`${init.method ?? 'GET'} ${ruta} → ${r.status} ${(await r.text()).slice(0, 200)}`)
   return (r.status === 204 ? null : await r.json()) as T
 }
 
 /** Borra sin fallar si ya no existe (limpieza al final de un spec). */
-export async function borrarQA(ruta: string): Promise<void> {
-  await apiQA(ruta, { method: 'DELETE' }).catch((e: Error) => {
+export async function borrarQA(ruta: string, cuenta: Cuenta = 'admin'): Promise<void> {
+  await apiQA(ruta, { method: 'DELETE' }, cuenta).catch((e: Error) => {
     if (!/→ 404/.test(e.message)) throw e
   })
 }

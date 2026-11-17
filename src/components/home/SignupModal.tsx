@@ -1,6 +1,7 @@
 'use client';
 
-import { useActionState, useEffect, useMemo, useState, type CSSProperties } from 'react';
+import { useActionState, useEffect, useMemo, useState, useSyncExternalStore, type CSSProperties } from 'react';
+import { createPortal } from 'react-dom';
 import { register, getCursos, getEspecializaciones } from '@/auth/actions';
 import PasswordChecklist from '@/components/auth/PasswordChecklist';
 
@@ -32,6 +33,9 @@ export default function SignupModal({
   onClose: () => void;
   onSwitchToLogin: () => void;
 }) {
+  // Sin diferencias de hidratación: el servidor lo pinta en su sitio y el
+  // navegador, ya hidratado, lo pasa al portal.
+  const enCliente = useSyncExternalStore(() => () => {}, () => true, () => false);
   const [state, formAction, pending] = useActionState(register, null);
   const [roleId, setRoleId] = useState('');
   const [cursos, setCursos] = useState<Curso[]>([]);
@@ -88,7 +92,9 @@ export default function SignupModal({
     [jornada, grado, cursos],
   );
 
-  return (
+  // El modal va en document.body: dentro del contenedor de la portada su z-index
+  // no competía con el aviso de cookies, que tapaba «CREAR CUENTA» (WC-06).
+  const contenido = (
     <div
       aria-hidden={!open}
       style={{
@@ -338,4 +344,5 @@ export default function SignupModal({
       </div>
     </div>
   );
+  return enCliente ? createPortal(contenido, document.body) : contenido;
 }

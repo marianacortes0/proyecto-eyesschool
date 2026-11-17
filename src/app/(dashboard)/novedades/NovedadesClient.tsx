@@ -75,7 +75,7 @@ export default function NovedadesClient({ role, registradoPor, initialData }: Pr
           onChange={e => setSearchQuery(e.target.value)}
           className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
-        <select
+        <select aria-label="Estado"
           value={filterEstado}
           onChange={e => setFilterEstado(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -83,7 +83,7 @@ export default function NovedadesClient({ role, registradoPor, initialData }: Pr
           <option value="">Todos los estados</option>
           {ESTADOS_NOVEDAD.map(e => <option key={e} value={e}>{e}</option>)}
         </select>
-        <select
+        <select aria-label="Tipo"
           value={filterTipo}
           onChange={e => setFilterTipo(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -291,7 +291,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Jornada</label>
-                  <select
+                  <select aria-label="Jornada"
                     required
                     value={jornada}
                     onChange={e => handleJornadaChange(e.target.value)}
@@ -303,7 +303,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Grado</label>
-                  <select
+                  <select aria-label="Grado"
                     required
                     disabled={!jornada}
                     value={grado}
@@ -319,7 +319,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
               {/* Curso */}
               <div>
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Curso</label>
-                <select
+                <select aria-label="Curso"
                   required
                   disabled={!grado}
                   value={idCurso}
@@ -336,7 +336,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
               {/* Estudiante */}
               <div>
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Estudiante</label>
-                <select
+                <select aria-label="Estudiante"
                   required
                   disabled={!idCurso}
                   value={idEstudiante}
@@ -357,7 +357,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
           {/* Tipo */}
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Tipo de novedad</label>
-            <select
+            <select aria-label="Tipo de novedad"
               required
               value={idTipoNovedad}
               onChange={e => setIdTipoNovedad(e.target.value)}
@@ -385,7 +385,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
           {/* Estado */}
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Estado</label>
-            <select
+            <select aria-label="Estado"
               value={estado}
               onChange={e => handleEstadoChange(e.target.value)}
               className={SEL_CLASS}

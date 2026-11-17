@@ -4,6 +4,8 @@ import { cabecerasDeSeguridad } from "./src/lib/seguridad/cabeceras";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  // WC-06 · ZAP: no anunciar «X-Powered-By: Next.js».
+  poweredByHeader: false,
   // Fija la raíz del workspace a esta carpeta. Sin esto, Next detecta un
   // package-lock.json suelto en C:\Users\maria y toma TODO el directorio de
   // usuario como raíz, vigilando miles de archivos → dev/HMR lentísimos.

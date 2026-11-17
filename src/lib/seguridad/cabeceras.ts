@@ -7,12 +7,22 @@
 // y style-src; sin nonces es lo que se puede exigir sin romper la hidratación.
 // En desarrollo (`next dev`) no se aplica: Fast Refresh necesita 'unsafe-eval'.
 
+/** Origen de la API (las imágenes de perfil y los archivos salen de ahí). */
+function origenApi(): string {
+  try {
+    return new URL(process.env.NEXT_PUBLIC_API_URL ?? '').origin
+  } catch {
+    return ''
+  }
+}
+
 export const CSP = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' data: https://fonts.gstatic.com",
-  "img-src 'self' data: blob: https:",
+  // Sin comodín «https:» (alerta de ZAP): solo la API y el generador de QR.
+  `img-src 'self' data: blob: https://api.qrserver.com ${origenApi()}`.trim(),
   "media-src 'self' blob:",
   "connect-src 'self' https://api.qrserver.com",
   'frame-src https://www.youtube.com https://www.youtube-nocookie.com',

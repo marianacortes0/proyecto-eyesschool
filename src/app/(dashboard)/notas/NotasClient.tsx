@@ -136,7 +136,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
       {/* Orden: jornada → curso → estudiante (del curso) → materia → periodo */}
       <div className="flex flex-wrap gap-3">
         {/* 1 · Jornada */}
-        <select
+        <select aria-label="Jornada"
           value={filterJornada}
           onChange={e => handleJornadaFilter(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm capitalize focus:outline-none focus:ring-2 focus:ring-primary"
@@ -147,7 +147,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
           ))}
         </select>
         {/* 2 · Curso */}
-        <select
+        <select aria-label="Curso"
           value={filterCurso}
           onChange={e => handleCursoFilter(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -158,7 +158,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
           ))}
         </select>
         {/* 3 · Estudiante (del curso seleccionado) */}
-        <select
+        <select aria-label="Estudiante"
           value={filterEstudiante}
           onChange={e => setFilterEstudiante(e.target.value)}
           disabled={!filterCurso}
@@ -172,7 +172,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
           ))}
         </select>
         {/* 4 · Materia */}
-        <select
+        <select aria-label="Materia"
           value={filterMateria}
           onChange={e => setFilterMateria(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -183,7 +183,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
           ))}
         </select>
         {/* 5 · Periodo */}
-        <select
+        <select aria-label="Periodo"
           value={filterPeriodo}
           onChange={e => setFilterPeriodo(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -492,7 +492,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Jornada</label>
-                  <select
+                  <select aria-label="Jornada"
                     required
                     value={jornada}
                     onChange={e => handleJornadaChange(e.target.value)}
@@ -506,7 +506,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Grado</label>
-                  <select
+                  <select aria-label="Grado"
                     required
                     disabled={!jornada}
                     value={grado}
@@ -523,7 +523,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
 
               <div>
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Estudiante</label>
-                <select
+                <select aria-label="Estudiante"
                   required
                   disabled={!grado}
                   value={idEstudiante}
@@ -551,7 +551,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Periodo</label>
-              <select
+              <select aria-label="Periodo"
                 value={idPeriodo}
                 onChange={e => setIdPeriodo(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -565,7 +565,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
 
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Materia</label>
-            <select
+            <select aria-label="Materia"
               required
               disabled={mode === 'create' && !idEstudiante}
               value={idMateria}

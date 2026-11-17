@@ -117,7 +117,7 @@ export default function ReportesClient({ role, idAdministrador, initialReportes 
           onChange={e => setSearchQuery(e.target.value)}
           className="flex-1 min-w-[200px] px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
-        <select
+        <select aria-label="Tipo"
           value={filterTipo}
           onChange={e => setFilterTipo(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -125,7 +125,7 @@ export default function ReportesClient({ role, idAdministrador, initialReportes 
           <option value="">Todos los tipos</option>
           {TIPOS_REPORTE.map(t => <option key={t} value={t}>{t}</option>)}
         </select>
-        <select
+        <select aria-label="Estado"
           value={filterEstado}
           onChange={e => setFilterEstado(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -391,7 +391,7 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Tipo</label>
-              <select
+              <select aria-label="Tipo"
                 value={tipoReporte}
                 onChange={e => setTipoReporte(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -402,7 +402,7 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
             {mode === 'edit' && (
               <div>
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Estado</label>
-                <select
+                <select aria-label="Estado"
                   value={estado}
                   onChange={e => setEstado(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"

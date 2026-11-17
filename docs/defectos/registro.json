@@ -274,5 +274,16 @@
     "obtenido": "Notas, novedades y horario decían «No encontramos un estudiante asociado a tu cuenta.»; /asistencia mostraba «No se pudo cargar la asistencia», como si fallara la API.",
     "evidencia": "docs/defectos/DEF-WEB-15.md",
     "identificado": "17/11/2026", "estado": "en-verificacion"
+  },
+  {
+    "id": "DEF-WEB-16",
+    "titulo": "El escaneo de QR de la web no funciona: el servicio externo de lectura rechaza las imágenes",
+    "componente": "Web", "origen": "Pruebas de sistema", "severidad": "Alta", "prioridad": "P1",
+    "caso": "CP-SIS-032, CP-SIS-033, CP-SIS-034, CP-SIS-035, CP-SIS-036", "correccion": "—",
+    "pasos": "1. Como docente, abrir /qr/escanear y activar la cámara.\n2. Apuntar a un QR de estudiante y pulsar Escanear.",
+    "esperado": "Se reconoce al estudiante y se registra la entrada; un QR ajeno da «Código QR inválido».",
+    "obtenido": "Siempre «Error al contactar la API de lectura QR»: api.qrserver.com responde 400 a toda imagen subida (17/11/2026).",
+    "evidencia": "docs/defectos/DEF-WEB-16.md",
+    "identificado": "17/11/2026", "estado": "nuevo"
   }
 ]

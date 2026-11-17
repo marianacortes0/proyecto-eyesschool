@@ -80,7 +80,7 @@ export default function AsistenciaTable({ registros, role, onEdit, onDelete }: P
               {/* Observación */}
               <td className="px-4 py-3 text-xs text-slate-500 dark:text-gray-400 max-w-48">
                 <span className="line-clamp-2" title={r.observacion ?? undefined}>
-                  {r.observacion ?? <span className="text-slate-300 dark:text-gray-600 italic">Sin observación</span>}
+                  {r.observacion ?? <span className="text-slate-500 dark:text-gray-400 italic">Sin observación</span>}
                 </span>
               </td>
 
