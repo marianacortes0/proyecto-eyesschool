@@ -18,6 +18,7 @@ import { getErrorMessage } from '@/lib/errors'
 import Pagination from '@/components/ui/Pagination'
 import { usePagination } from '@/hooks/usePagination'
 import { hoyColegio } from '@/lib/utils/fecha'
+import ErrorCarga from '@/components/ui/ErrorCarga'
 
 const ESTADO_STYLE: Record<string, string> = {
   Pendiente:   'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-300',
@@ -46,7 +47,7 @@ interface Props { role: Role; idAdministrador: number; initialReportes?: Reporte
 
 export default function ReportesClient({ role, idAdministrador, initialReportes }: Props) {
   const {
-    reportes, allReportes, totalCount, loading, saving, error,
+    reportes, allReportes, totalCount, loading, saving, error, reintentar,
     filterTipo, setFilterTipo,
     filterEstado, setFilterEstado,
     searchQuery, setSearchQuery,
@@ -74,7 +75,7 @@ export default function ReportesClient({ role, idAdministrador, initialReportes 
         <div>
           <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Reportes</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            {totalCount} reporte{totalCount !== 1 ? 's' : ''} en total
+            {error ? '— reportes en total' : `${totalCount} reporte${totalCount !== 1 ? 's' : ''} en total`}
           </p>
         </div>
         {canCreate && (
@@ -134,14 +135,10 @@ export default function ReportesClient({ role, idAdministrador, initialReportes 
         </select>
       </div>
 
-      {error && (
-        <div className="px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 text-sm">
-          {error}
-        </div>
-      )}
+      {error && <ErrorCarga mensaje={error} onReintentar={reintentar} />}
 
       {/* ── Lista de reportes ────────────────────────────────────────────────── */}
-      {loading ? (
+      {error ? null : loading ? (
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="h-20 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse" />

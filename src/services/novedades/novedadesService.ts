@@ -109,3 +109,12 @@ export async function updateNovedad(
 export async function deleteNovedad(idNovedad: number): Promise<void> {
   await apiFetch(`/novedades/${idNovedad}`, { method: 'DELETE' })
 }
+
+/**
+ * DEF-WEB-13 · CP-SIS-049: historial ordenado por fecha, de la más reciente a la
+ * más antigua; en el mismo día, la última registrada (id mayor) primero.
+ */
+export function porFechaReciente(a: { fecha: string; idNovedad: number }, b: { fecha: string; idNovedad: number }): number {
+  const dia = b.fecha.slice(0, 10).localeCompare(a.fecha.slice(0, 10))
+  return dia !== 0 ? dia : b.idNovedad - a.idNovedad
+}

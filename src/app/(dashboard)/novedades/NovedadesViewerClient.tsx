@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from 'react'
 import { type NovedadesAsociadoBootstrap } from '@/services/asociado/asociadoActions'
+import { porFechaReciente } from '@/services/novedades/novedadesService'
+import { MSG_SIN_HIJOS } from '@/lib/utils/hijoActivo'
 
 // El backend usa Bajo/Medio/Alto/Crítico; se mapean también las variantes
 // Alta/Media/Baja por compatibilidad.
@@ -29,7 +31,7 @@ export default function NovedadesViewerClient({ info, novedades }: NovedadesAsoc
   const [filterEstado, setFilterEstado] = useState('')
 
   const filtradas = useMemo(
-    () => novedades.filter(n => !filterEstado || n.estado === filterEstado),
+    () => novedades.filter(n => !filterEstado || n.estado === filterEstado).sort(porFechaReciente),
     [novedades, filterEstado]
   )
 
@@ -45,7 +47,8 @@ export default function NovedadesViewerClient({ info, novedades }: NovedadesAsoc
 
       {!info ? (
         <div className="px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-300 text-sm">
-          No encontramos un estudiante asociado a tu cuenta.
+          {/* CP-SIS-061: el texto de la planeación (DEF-WEB-15). */}
+          <strong>{MSG_SIN_HIJOS}.</strong> No encontramos un estudiante asociado a tu cuenta.
         </div>
       ) : (
         <>

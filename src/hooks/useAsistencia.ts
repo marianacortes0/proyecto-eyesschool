@@ -75,7 +75,7 @@ export function useAsistencia(
       setEstudiantes(data.estudiantes)
       setCursos(data.cursos)
     } catch (err) {
-      setError(getErrorMessage(err, 'Error al cargar asistencia'))
+      setError(getErrorMessage(err, 'No se pudo cargar la asistencia. Revisa tu conexión e intenta de nuevo.'))
     } finally {
       setLoading(false)
     }
@@ -87,7 +87,7 @@ export function useAsistencia(
       const regs = await getRegistrosAction({ fecha: fechaFiltro, estado: estadoFiltro, idEstudiante: idEstudiantePropio })
       setRegistros(regs)
     } catch (err) {
-      setError(getErrorMessage(err, 'Error al cargar registros'))
+      setError(getErrorMessage(err, 'No se pudo cargar la asistencia. Revisa tu conexión e intenta de nuevo.'))
     }
   }, [fechaFiltro, estadoFiltro, idEstudiantePropio])
 
@@ -268,6 +268,8 @@ export function useAsistencia(
   const closeModal = () => { setModalMode(null); setSelectedRecord(null) }
 
   return {
+    // vuelve a pedir los datos tras un error de carga (DEF-WEB-12)
+    reintentar: () => void fetchAll(),
     registros: registrosVisibles,
     estudiantes: estudiantesConCurso,
     cursos: cursosOrdenados,

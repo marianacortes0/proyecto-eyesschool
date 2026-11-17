@@ -8,6 +8,7 @@ import { type Role } from '@/lib/utils/permissions'
 import { can } from '@/lib/utils/permissions'
 import Pagination from '@/components/ui/Pagination'
 import { usePagination } from '@/hooks/usePagination'
+import ErrorCarga from '@/components/ui/ErrorCarga'
 
 // El backend usa Bajo/Medio/Alto/Crítico; se mapean también las variantes
 // Alta/Media/Baja por compatibilidad.
@@ -31,7 +32,7 @@ interface Props { role: Role; registradoPor: number; initialData?: NovedadesBoot
 export default function NovedadesClient({ role, registradoPor, initialData }: Props) {
   const {
     novedades, tiposNovedad, cursos, estudiantes,
-    loading, saving, error,
+    loading, saving, error, reintentar,
     filterEstado, filterTipo, searchQuery,
     setFilterEstado, setFilterTipo, setSearchQuery,
     modalMode, selected,
@@ -94,14 +95,10 @@ export default function NovedadesClient({ role, registradoPor, initialData }: Pr
         </select>
       </div>
 
-      {error && (
-        <div className="px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 text-sm">
-          {error}
-        </div>
-      )}
+      {error && <ErrorCarga mensaje={error} onReintentar={reintentar} />}
 
       {/* Tabla */}
-      {loading ? (
+      {error ? null : loading ? (
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="h-14 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse" />

@@ -5,6 +5,7 @@ import { type NotasAsociadoBootstrap } from '@/services/asociado/asociadoActions
 import { PERIODOS, notaColor, NOTA_APROBACION, MSG_SIN_NOTAS_PERIODO, downloadBoletinPdf } from '@/services/notas/notasService'
 import { notifyError } from '@/lib/toast'
 import { getErrorMessage } from '@/lib/errors'
+import { MSG_SIN_HIJOS } from '@/lib/utils/hijoActivo'
 
 /**
  * Vista de notas en SOLO LECTURA para el estudiante asociado (rol padre = su hijo,
@@ -68,7 +69,8 @@ export default function NotasViewerClient({ info, notas, materias }: NotasAsocia
 
       {!info ? (
         <div className="px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-300 text-sm">
-          No encontramos un estudiante asociado a tu cuenta.
+          {/* CP-SIS-061: el texto de la planeación (DEF-WEB-15). */}
+          <strong>{MSG_SIN_HIJOS}.</strong> No encontramos un estudiante asociado a tu cuenta.
         </div>
       ) : (
         <>

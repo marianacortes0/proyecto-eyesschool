@@ -64,7 +64,7 @@ export function useNotas(idUsuarioRegistrador: number, initialData?: NotasBootst
       setMaterias(data.materias)
       setCursos(data.cursos)
     } catch (err) {
-      setError(getErrorMessage(err, 'Error al cargar notas'))
+      setError(getErrorMessage(err, 'No se pudo cargar las notas. Revisa tu conexión e intenta de nuevo.'))
     } finally {
       if (!opts?.silent) setLoading(false)
     }
@@ -136,12 +136,16 @@ export function useNotas(idUsuarioRegistrador: number, initialData?: NotasBootst
     if (!idUsuarioRegistrador) return
     setSaving(true)
     try {
-      await createNotaAction({ ...payload, registradoPor: idUsuarioRegistrador })
+      const r = await createNotaAction({ ...payload, registradoPor: idUsuarioRegistrador })
+      if (r?.error) {
+        notifyError(r.error)
+        return
+      }
       await fetchAll({ silent: true })
       closeModal()
       notifySuccess('Nota creada exitosamente')
     } catch (e) {
-      notifyError(getErrorMessage(e, 'Error al guardar la nota'))
+      notifyError(getErrorMessage(e, 'No se pudo guardar la nota. Revisa tu conexión e intenta de nuevo.'))
     } finally {
       setSaving(false)
     }
@@ -158,7 +162,7 @@ export function useNotas(idUsuarioRegistrador: number, initialData?: NotasBootst
       closeModal()
       notifySuccess('Nota editada exitosamente')
     } catch (e) {
-      notifyError(getErrorMessage(e, 'Error al guardar la nota'))
+      notifyError(getErrorMessage(e, 'No se pudo guardar la nota. Revisa tu conexión e intenta de nuevo.'))
     } finally {
       setSaving(false)
     }
@@ -180,6 +184,8 @@ export function useNotas(idUsuarioRegistrador: number, initialData?: NotasBootst
   }
 
   return {
+    // vuelve a pedir los datos tras un error de carga (DEF-WEB-12)
+    reintentar: () => void fetchAll(),
     notas: filtered,
     totalNotas: notas.length,
     estudiantes,

@@ -7,6 +7,7 @@ import { DIAS_SEMANA, type Horario, type Curso, type Materia, type Especializaci
 import { can, type Role } from '@/lib/utils/permissions'
 import { notifyWarning } from '@/lib/toast'
 import { hoyColegio } from '@/lib/utils/fecha'
+import ErrorCarga from '@/components/ui/ErrorCarga'
 
 const JORNADAS = ['Mañana', 'Tarde', 'Noche', 'Completa']
 
@@ -37,7 +38,7 @@ interface Props { role: Role; initialData?: HorariosBootstrap }
 export default function HorariosClient({ role, initialData }: Props) {
   const {
     horarios, cursos, allCursos, materias, allMaterias, especializaciones, profesores,
-    loading, saving, savingCurso, savingMateria, savingEspecializacion, error,
+    loading, saving, savingCurso, savingMateria, savingEspecializacion, error, reintentar,
     vista, setVista,
     filterCurso, setFilterCurso,
     filterProfesor, setFilterProfesor,
@@ -104,7 +105,7 @@ export default function HorariosClient({ role, initialData }: Props) {
         <div>
           <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Horarios</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            {horarios.length} bloque{horarios.length !== 1 ? 's' : ''} registrado{horarios.length !== 1 ? 's' : ''}
+            {error ? '— bloques registrados' : `${horarios.length} bloque${horarios.length !== 1 ? 's' : ''} registrado${horarios.length !== 1 ? 's' : ''}`}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -219,14 +220,15 @@ export default function HorariosClient({ role, initialData }: Props) {
         </select>
       </div>
 
-      {error && (
-        <div className="px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 text-sm">
-          {error}
-        </div>
-      )}
+      {error && <ErrorCarga mensaje={error} onReintentar={reintentar} />}
 
       {/* ── Grilla de horarios ───────────────────────────────────────────────── */}
-      {vista === 'estudiantes' && !filterJornada ? (
+      {/* DEF-WEB-14 · el docente recibe solo sus clases; sin asignaciones, lo dice. */}
+      {role === 'docente' && !loading && !error && horarios.length === 0 ? (
+        <p className="px-4 py-6 rounded-2xl border border-dashed border-slate-200 dark:border-white/10 text-center text-sm text-slate-500 dark:text-slate-400">
+          No tienes clases asignadas.
+        </p>
+      ) : vista === 'estudiantes' && !filterJornada ? (
         <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
           <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
             <svg className="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -246,7 +248,7 @@ export default function HorariosClient({ role, initialData }: Props) {
           <p className="text-slate-600 dark:text-slate-300 font-semibold">Selecciona un curso</p>
           <p className="text-sm text-slate-400 dark:text-slate-500">Elige el curso para ver su horario</p>
         </div>
-      ) : loading ? (
+      ) : error ? null : loading ? (
         <div className="grid grid-cols-5 gap-3">
           {Array.from({ length: 25 }).map((_, i) => (
             <div key={i} className="h-24 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse" />

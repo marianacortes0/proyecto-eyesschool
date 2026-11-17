@@ -307,3 +307,17 @@ export async function updateAsignacion(id: number, payload: Partial<Omit<Asignac
 export async function deleteAsignacion(id: number): Promise<void> {
   await apiFetch(`/asignaciones/${id}`, { method: 'PUT', body: JSON.stringify({ activo: false }) })
 }
+
+/**
+ * DEF-WEB-14 · CP-SIS-059: las clases de un docente son los bloques cuyo curso y
+ * materia están entre sus asignaciones activas. Sin registro de profesor
+ * (`idProfesor` null) o sin asignaciones, no ve ningún bloque.
+ */
+export function horariosDelDocente<T extends { horarios: Horario[]; asignaciones: Asignacion[] }>(
+  data: T,
+  idProfesor: number | null
+): T {
+  const suyas = data.asignaciones.filter((a) => a.activo && idProfesor !== null && a.idProfesor === idProfesor)
+  const claves = new Set(suyas.map((a) => `${a.idCurso}-${a.idMateria}`))
+  return { ...data, asignaciones: suyas, horarios: data.horarios.filter((h) => claves.has(`${h.idCurso}-${h.idMateria}`)) }
+}

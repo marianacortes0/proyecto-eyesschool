@@ -3,6 +3,7 @@
 import { cookies } from 'next/headers'
 import { ROL_NOMBRES, type UsuarioConRol } from '@/services/usuarios/usuariosService'
 import { ApiError, errorMessage } from '@/services/api/client'
+import { conMotivo } from '@/services/api/conMotivo'
 import { hoyColegio } from '@/lib/utils/fecha'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
@@ -94,21 +95,6 @@ const ID_ROL_ESTUDIANTE = 2
 const ID_ROL_PROFESOR   = 1
 const ID_ROL_PADRE      = 4
 const ID_ROL_ADMIN      = 3
-
-/**
- * DEF-WEB-10 · En producción, el mensaje de un error lanzado aquí no llega al
- * navegador. Un rechazo de la API por los datos (4xx) se devuelve como valor para
- * que el admin lea el motivo («El correo ya está registrado»); un 5xx se lanza.
- */
-async function conMotivo(fn: () => Promise<void>): Promise<{ error?: string }> {
-  try {
-    await fn()
-    return {}
-  } catch (e) {
-    if (e instanceof ApiError && e.status >= 400 && e.status < 500) return { error: e.message }
-    throw e
-  }
-}
 
 export async function createUsuarioConAuth(data: CreateUsuarioConAuthData): Promise<{ error?: string }> {
   return conMotivo(async () => {

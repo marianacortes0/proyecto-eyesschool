@@ -36,7 +36,7 @@ export function useReportes(idAdministrador: number, initialReportes?: Reporte[]
     try {
       setReportes(await getReportesAction())
     } catch (e) {
-      setError(getErrorMessage(e, 'Error al cargar reportes'))
+      setError(getErrorMessage(e, 'No se pudo cargar los reportes. Revisa tu conexión e intenta de nuevo.'))
     } finally {
       setLoading(false)
     }
@@ -109,6 +109,8 @@ export function useReportes(idAdministrador: number, initialReportes?: Reporte[]
   }
 
   return {
+    // vuelve a pedir los datos tras un error de carga (DEF-WEB-12)
+    reintentar: () => void fetchAll(),
     reportes: filtered,
     allReportes: reportes,
     totalCount: reportes.length,

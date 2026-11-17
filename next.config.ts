@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { cabecerasDeSeguridad } from "./src/lib/seguridad/cabeceras";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -8,6 +9,10 @@ const nextConfig: NextConfig = {
   // usuario como raíz, vigilando miles de archivos → dev/HMR lentísimos.
   turbopack: {
     root: __dirname,
+  },
+  // WC-06 · cabeceras de seguridad en todas las respuestas (src/lib/seguridad/cabeceras.ts).
+  async headers() {
+    return [{ source: "/:path*", headers: cabecerasDeSeguridad() }];
   },
 };
 

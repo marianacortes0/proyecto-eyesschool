@@ -100,7 +100,7 @@ export function useHorarios(initialData?: HorariosBootstrap) {
       setEspecializaciones(data.especializaciones)
       setAsignacionesList(data.asignaciones)
     } catch (e) {
-      setError(getErrorMessage(e, 'Error al cargar horarios'))
+      setError(getErrorMessage(e, 'No se pudo cargar los horarios. Revisa tu conexión e intenta de nuevo.'))
     } finally {
       setLoading(false)
     }
@@ -455,6 +455,8 @@ export function useHorarios(initialData?: HorariosBootstrap) {
   }
 
   return {
+    // vuelve a pedir los datos tras un error de carga (DEF-WEB-12)
+    reintentar: () => void fetchAll(),
     horarios: filtered,
     cursos,
     allCursos,

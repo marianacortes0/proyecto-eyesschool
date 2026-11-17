@@ -8,6 +8,7 @@ import SelectorHijo from '@/components/asociado/SelectorHijo'
 import type { Hijo } from '@/lib/utils/hijoActivo'
 import AsistenciaClient from './AsistenciaClient'
 import { hoyColegio } from '@/lib/utils/fecha'
+import { MSG_SIN_HIJOS } from '@/lib/utils/hijoActivo'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -41,20 +42,33 @@ export default async function AsistenciaPage({ searchParams }: { searchParams: P
   }
 
   // Padre: ve la asistencia del hijo activo (`?hijo=`, o el primero) entre los que tiene vinculados.
+  let sinHijos = false
   if (role === 'padre') {
     try {
       const { hijo } = await searchParams
       const asociado = await getAsociadoAction(hijo)
       hijos = asociado.hijos
+      sinHijos = asociado.hijos.length === 0 && !asociado.info
       idEstudiantePropio = asociado.info?.idEstudiante
       nombreEstudiantePropio = asociado.info?.nombre
     } catch {
       // leave idEstudiantePropio undefined
     }
+    // CP-SIS-061 (DEF-WEB-15): sin hijos vinculados no hay asistencia que pedir;
+    // antes la pantalla mostraba «No se pudo cargar la asistencia».
+    if (sinHijos) {
+      return (
+        <div className="p-6">
+          <div className="px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-300 text-sm">
+            <strong>{MSG_SIN_HIJOS}.</strong> No encontramos un estudiante asociado a tu cuenta.
+          </div>
+        </div>
+      )
+    }
   }
 
   // Datos del día en el render del servidor (la fecha de hoy coincide con la del
-  // cliente porque ambas usan la fecha UTC vía toISOString).
+  // cliente porque ambas usan hoyColegio(): DEF-WEB-11).
   const hoy = hoyColegio()
   let initialData: AsistenciaBootstrap | undefined
   try {

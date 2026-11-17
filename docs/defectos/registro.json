@@ -230,5 +230,49 @@
     "obtenido": "La fecha es la del día siguiente: «hoy» salía de la fecha UTC. El registro masivo del 16/11 a las 21:52 quedó del 17/11.",
     "evidencia": "docs/defectos/DEF-WEB-11.md",
     "identificado": "17/11/2026", "estado": "en-verificacion"
+  },
+  {
+    "id": "DEF-WEB-12",
+    "titulo": "Con la API caída, las pantallas del panel no dejan reintentar y afirman «0 registros», o la página se rompe",
+    "componente": "Web", "origen": "Pruebas de sistema", "severidad": "Media", "prioridad": "P3",
+    "caso": "CP-SIS-040, CP-SIS-046, CP-SIS-052, CP-SIS-057, CP-SIS-058, CP-SIS-059", "correccion": "—",
+    "pasos": "1. Iniciar sesión.\n2. Dejar la API sin responder.\n3. Abrir /asistencia, /notas, /novedades, /reportes o /horarios.",
+    "esperado": "Mensaje de error y opción de reintentar (CP-SIS-040, 052, 057, 058, 059); al guardar, mensaje con pasos para solucionarlo (CP-SIS-046).",
+    "obtenido": "El mensaje de error salía sin «Reintentar» y junto a «0 registros encontrados» o «No hay registros…». El horario del estudiante mostraba la página genérica de Next «This page couldn’t load». Al guardar una nota: «Error al guardar la nota», sin pasos.",
+    "evidencia": "docs/defectos/DEF-WEB-12.md",
+    "identificado": "17/11/2026", "estado": "en-verificacion"
+  },
+  {
+    "id": "DEF-WEB-13",
+    "titulo": "El historial de novedades no está ordenado por fecha",
+    "componente": "Web", "origen": "Pruebas de sistema", "severidad": "Baja", "prioridad": "P4",
+    "caso": "CP-SIS-049", "correccion": "—",
+    "pasos": "1. Como docente, abrir /novedades.\n2. Buscar un estudiante con varias novedades.",
+    "esperado": "Historial del estudiante ordenado por fecha (CP-SIS-049).",
+    "obtenido": "Las novedades salían en el orden de la API: 14/6, 16/6, 12/6…",
+    "evidencia": "docs/defectos/DEF-WEB-13.md",
+    "identificado": "17/11/2026", "estado": "en-verificacion"
+  },
+  {
+    "id": "DEF-WEB-14",
+    "titulo": "El docente ve en /horarios los bloques de todos los profesores, no solo sus clases",
+    "componente": "Web", "origen": "Pruebas de sistema", "severidad": "Media", "prioridad": "P3",
+    "caso": "CP-SIS-059", "correccion": "—",
+    "pasos": "1. Iniciar sesión como docente.\n2. Abrir /horarios.",
+    "esperado": "Solo sus cursos y materias; si no tiene asignaciones, un mensaje (CP-SIS-059).",
+    "obtenido": "«10 bloques registrados»: la misma vista del admin, con los horarios de todos los profesores. Sin asignaciones, no había mensaje.",
+    "evidencia": "docs/defectos/DEF-WEB-14.md",
+    "identificado": "17/11/2026", "estado": "en-verificacion"
+  },
+  {
+    "id": "DEF-WEB-15",
+    "titulo": "El padre sin hijos vinculados no ve «No hay estudiantes vinculados»; en /asistencia ve un error",
+    "componente": "Web", "origen": "Pruebas de sistema", "severidad": "Baja", "prioridad": "P4",
+    "caso": "CP-SIS-061", "correccion": "—",
+    "pasos": "1. Iniciar sesión con un padre sin estudiantes vinculados.\n2. Abrir /notas, /asistencia y /novedades.",
+    "esperado": "Mensaje «No hay estudiantes vinculados» (CP-SIS-061).",
+    "obtenido": "Notas, novedades y horario decían «No encontramos un estudiante asociado a tu cuenta.»; /asistencia mostraba «No se pudo cargar la asistencia», como si fallara la API.",
+    "evidencia": "docs/defectos/DEF-WEB-15.md",
+    "identificado": "17/11/2026", "estado": "en-verificacion"
   }
 ]

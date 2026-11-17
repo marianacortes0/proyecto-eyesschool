@@ -70,10 +70,12 @@ describe('Servicios · notasActions', () => {
     expect(llamadas()).toHaveLength(4)
   })
 
-  it('un error de la API lanza con su detail', async () => {
+  // DEF-WEB-10: un rechazo de la API vuelve como valor (lanzado, en producción
+  // el navegador solo vería «Minified React error #441»).
+  it('un rechazo de la API devuelve su detail como error', async () => {
     stub(() => json(422, { detail: 'Nota fuera de rango' }))
 
-    await expect(notas.createNotaAction({ idEstudiante: 1, idMateria: 2, idPeriodo: 3, nota: 9, observacion: null, registradoPor: 9 })).rejects.toThrow('Nota fuera de rango')
+    await expect(notas.createNotaAction({ idEstudiante: 1, idMateria: 2, idPeriodo: 3, nota: 9, observacion: null, registradoPor: 9 })).resolves.toEqual({ error: 'Nota fuera de rango' })
   })
 
   it('un 500 sin cuerpo lanza HTTP 500', async () => {
