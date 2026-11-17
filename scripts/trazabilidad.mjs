@@ -95,7 +95,7 @@ const md = `# Trazabilidad de pruebas — Frontend web
 
 | Grupo | Resultado |
 |---|---|
-| UT-WEB-01 a 08 (planeadas, PR-04) | ${cuenta(unit)} |
+| UT-WEB-01 a 12 (planeadas, PR-04; 09 a 12 desde WC-08) | ${cuenta(unit)} |
 | UT-WEB-EXTRA (no planeadas) | ${cuenta(extras)} |
 | IT-WEB-01 a 05 (contrato, PR-05) | ${cuenta(it)} · «Omitida» = necesita \`QA_API_URL\` |
 | Casos de sistema E2E (PR-06) | ${sistema.length ? cuenta(sistema.map((f) => ({ estado: f.resultado }))) + ' · JUnit: \`' + junit + '\`' : 'sin JUnit de Playwright'} |

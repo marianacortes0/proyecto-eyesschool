@@ -115,11 +115,13 @@ async function crearDocenteDePrueba(page: Page): Promise<string> {
 test.describe('gestión de usuarios · errores (WC-05)', () => {
   restaurarApiAlTerminar()
 
+  // Por patrón y no por la lista `creados`: si un caso falla, Playwright reinicia
+  // el proceso y esa lista se pierde (en E25 quedaron 3 cuentas). Toda cuenta
+  // docente.e2e.<n>@example.com es de estas pruebas.
   test.afterAll(async () => {
-    for (const correo of creados) {
-      if (!/^docente\.e2e\.\d+@example\.com$/.test(correo)) continue
-      for (const u of await usuariosConCorreo(correo)) await borrarQA(`/usuarios/${u.id_usuario}`)
-    }
+    const todos: Usuario[] = []
+    for (const estado of ['true', 'false']) todos.push(...(await apiQA<Usuario[]>(`/usuarios?estado=${estado}&limit=500`)))
+    for (const u of todos.filter((u) => /^docente\.e2e\.\d+@example\.com$/.test(u.correo))) await borrarQA(`/usuarios/${u.id_usuario}`)
   })
 
   test('CP-SIS-020 · crear con un correo ya registrado no guarda', async ({ page }) => {

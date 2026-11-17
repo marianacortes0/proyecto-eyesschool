@@ -24,6 +24,9 @@
 | `E20_e2e-local.xml` · `E20_e2e-local-consola.txt` | 17/11 06:00–06:28 UTC · completa sobre `2cb81d2` contra **`next start` local** (build de producción con la API de QA y `SESSION_IDLE_MINUTES=1`): 49/50; el fallo, una carrera de la prueba de usuarios |
 | `E21_usuarios-local.xml` · `E21_usuarios-local-consola.txt` | 17/11 · CRUD de usuarios ×3 en los dos navegadores con la espera de la recarga: 6/6 |
 | `E22_e2e-local.xml` · `E22_e2e-local-consola.txt` | 17/11 · **corrida de cierre** completa, local, sobre `5c7dc8b` (la app igual que `2cb81d2`; solo cambia `e2e/usuarios.spec.ts`): **50/50**, sin reintentos |
+| `E23_e2e-local.xml` · `E23_e2e-local-consola.txt` | 17/11 19:11–20:31 UTC · completa con los casos de sistema nuevos (WC-05) y WC-06, local: 159 pasan, 19 fallan (keep-alive del proxy de fallas, cámara por DEF-WEB-16 y un contraste) |
+| `E25_e2e-local.xml` · `E25_e2e-local-consola.txt` | 17/11 20:34–21:40 UTC · **corrida de cierre de WC-05 a WC-11**, local: **178 pasan, 3 fallan** (2 de cámara por DEF-WEB-16; CP-SIS-028 en Firefox, por la limpieza), 34 omitidas, 1 no corrió |
+| `E26_usuarios-firefox.xml` · `E26_usuarios-firefox-consola.txt` | 17/11 · usuarios en Firefox tras renovar el token de la limpieza: **9/9** |
 | `reporte-html/` | Reporte HTML de la última corrida. **No se versiona** (`.gitignore`) porque sus trazas guardan lo que se escribe en el campo de contraseña |
 
 ## Resultado vigente (E22, 17/11/2026)

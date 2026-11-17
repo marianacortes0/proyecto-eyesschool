@@ -30,10 +30,18 @@ async function token(cuenta: Cuenta): Promise<string> {
  * un 204). Las notas solo las borra el docente que las registró: `cuenta: 'docente'`.
  */
 export async function apiQA<T = unknown>(ruta: string, init: RequestInit = {}, cuenta: Cuenta = 'admin'): Promise<T> {
-  const r = await fetch(`${API()}${ruta}`, {
-    ...init,
-    headers: { 'content-type': 'application/json', authorization: `Bearer ${await token(cuenta)}`, ...(init.headers ?? {}) },
-  })
+  const pedir = async () =>
+    fetch(`${API()}${ruta}`, {
+      ...init,
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${await token(cuenta)}`, ...(init.headers ?? {}) },
+    })
+  let r = await pedir()
+  // El token de acceso dura 30 min y una corrida completa dura más (E25): se
+  // vuelve a iniciar sesión una vez.
+  if (r.status === 401) {
+    delete tokens[cuenta]
+    r = await pedir()
+  }
   if (!r.ok) throw new Error(`${init.method ?? 'GET'} ${ruta} → ${r.status} ${(await r.text()).slice(0, 200)}`)
   return (r.status === 204 ? null : await r.json()) as T
 }

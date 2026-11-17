@@ -5,7 +5,7 @@ Cada decisión toma la opción por defecto (A) del documento de cierre del front
 ## D-WEB-01 · Acceso a /qr/escanear
 - Fecha: 02/11/2026
 - Opción aplicada: A (rutas separadas: `/qr` admin+estudiante; `/qr/escanear` admin+docente). La separación ya existía en `src/lib/auth/routeRoles.ts`; faltaban las pruebas que la vigilen.
-- Por qué: los casos CP-SIS-096 y CP-SIS-098 y US005/US006 piden al docente escanear en la web.
+- Por qué: US005/US006 piden al docente escanear en la web. (Corrección del 17/11, WC-08: esta decisión citaba CP-SIS-096 y 098, pero en la planeación de sistema CP-SIS-096 es «entrada desde dos equipos» y CP-SIS-098 no existe para la web.)
 - Pruebas que la vigilan: `tests/routeRoles.test.ts` («docente puede entrar a /qr/escanear», «docente no puede entrar a /qr (Mi QR)», «estudiante no puede entrar a /qr/escanear», «el enlace de escanear aparece en el riel del docente…») y el contrato `PERMISSIONS ↔ apiRoles` de `tests/permissions.test.ts` (sin diferencias).
 
 ## D-WEB-02 · Respaldo de hijos mientras no exista BE-07
@@ -158,6 +158,20 @@ Cada decisión toma la opción por defecto (A) del documento de cierre del front
   8. **CRUD de usuarios filtraba antes de la recarga** (E20, Chromium). Tras «Usuario creado exitosamente» la app recarga la tabla en segundo plano con otra Server Action; la prueba espera esa segunda respuesta antes de filtrar (commit `5c7dc8b`). La cuenta 181 que quedó se borró por la API (204).
 - **Entorno de la corrida de cierre:** el 17/11 hacia las 05:12 UTC, en mitad de E19, **Netlify pausó el sitio de QA por límite de uso** (503 `usage_exceeded`). La corrida de cierre se hizo contra un **build de producción local** (`next build` + `next start`) con la API de QA y `SESSION_IDLE_MINUTES=1`. Mide el mismo código, pero **no** el adaptador de Netlify (allí el 307 del proxy no llega al navegador, D-WEB-18): falta repetirla en Netlify cuando se reactive el sitio.
 - **Lo que no se tocó:** los dos fallos de login de E17 (un error de la Server Action y una espera de más de 45 s) no son de la prueba: se registraron como **DEF-WEB-07**, con mediciones.
+
+## D-WEB-20 · Casos de sistema y pruebas manuales automatizados contra el build local (17/11/2026)
+- Fecha: 17/11/2026 · Planeación de cierre, WC-05 a WC-11 · Pedido de Mariana: «sigue con las pruebas de sistemas, todos están autorizados, y WC-06 a WC-11».
+- **Entorno:** el sitio de QA en Netlify estaba pausado por límite de uso, así que todo corrió contra un build de producción local (`next build` + `next start`) con la API de QA. Hay que repetirlo en QA cuando se reactive.
+- **API caída:** `page.route` no ve las llamadas a la API, porque salen del servidor de Next. Para CP-SIS-005, 008, 026, 028, 040, 046, 052, 057, 058 y 059, la web local se construye contra `scripts/api-fallas.mjs`, un proxy que reenvía a la API de QA y que la prueba pone en «caída». En QA esos casos se omiten con su motivo. El proxy responde con `Connection: close`: con keep-alive, el fetch de Next reutilizaba conexiones cerradas y E23 falló por eso, no por la app.
+- **Cámara:** CP-SIS-032 a 036 usan la cámara falsa de Chromium con un MJPEG del QR (Firefox no tiene esa opción).
+- **Datos:** «todos están autorizados» se tomó como permiso para escribir en QA. Cada spec borra lo que crea; las notas, con la cuenta del docente (el admin recibe 403). Se verificó al final: 110 usuarios y 10 notas, igual que al empezar.
+- **Oráculos adaptados**, con causa comprobada (mismo criterio de D-WEB-17):
+  1. CP-SIS-044: el periodo siempre trae uno elegido; se prueba sin materia.
+  2. CP-SIS-045: la API admite una nota por estudiante, materia y periodo (409); las dos notas van en los periodos 3 y 4.
+  3. CP-SIS-023: el correo no es editable (DEF-WEB-09); se comprueba que esté bloqueado.
+  4. CP-SIS-027: el estado se ve por secciones, no hay un filtro aparte.
+  5. Una prueba propia aceptaba `/…|error/i` como «mensaje de error» y dejó pasar «Minified React error #441» (DEF-WEB-10): los oráculos de error exigen el texto concreto y `sinTextoTecnico()`.
+- **Lo que no se hizo por permisos:** instalar `jsqr` (DEF-WEB-16) quedó bloqueado por la política del entorno; se dejó la corrección propuesta.
 
 ## Otras decisiones menores (02/11/2026)
 - **Mapeo de trazabilidad:** se usó `tests/trazabilidad.json` (alternativa de 6.1) en vez de prefijar cada `describe`, para no renombrar los archivos de prueba. El script `npm run trazabilidad` regenera `docs/trazabilidad-ut-web.md`.

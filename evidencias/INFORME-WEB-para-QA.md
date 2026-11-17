@@ -6,9 +6,298 @@
 >
 > Las rutas de evidencia son relativas a la raíz del repositorio. Se abrevian: `U6_*` = `evidencias/PR-04/web/`, `I4_*` = `evidencias/PR-05/web/`, `E3_*` a `E9_*` = `evidencias/PR-06/web/`.
 >
-> **Actualizado el 17/11/2026** con la planeación de cierre (tareas WC-03 y WC-04): ver la **sección 0**, que manda sobre las cifras E2E de las secciones 3, 5.3, 9 y 10 donde no coincidan.
+> **Actualizado el 17/11/2026 por la tarde** con WC-05 a WC-11: ver la **sección 0A** (casos de sistema, defectos DEF-WEB-08 a 17, pruebas manuales, estático, trazabilidad, UAT, producción y cierre). La **sección 0** cubre WC-03 y WC-04 de la mañana. Donde no coincidan, mandan 0A y luego 0 sobre las secciones 3, 5, 9 y 10.
 >
 > **Versión anterior, 11/11/2026 por la tarde.** La base de QA volvió el 10/11 (DEF-WEB-01 cerrado) y se corrieron por primera vez la integración y los 48 E2E. Salieron **14 fallos E2E causados por tres defectos de la web** (DEF-WEB-02, 03 y 04). **Los tres se corrigieron en esta rama y están verificados en QA**: en la corrida E7 y sus repeticiones (E8, E9) hay **0 FALLA**. Queda abierto DEF-WEB-05 (Baja), que no causaba ningún fallo E2E.
+
+---
+
+## 0A. ACTUALIZACIÓN DEL 17/11/2026 (tarde) · WC-05 a WC-11
+
+Continuación de la planeación de cierre: casos de sistema que faltaban (WC-05), pruebas manuales y no funcionales (WC-06), análisis estático (WC-07), trazabilidad (WC-08), UAT (WC-09), producción (WC-10) y cierre (WC-11).
+
+**Entorno de todo lo de esta sección:** el sitio de QA en Netlify siguió pausado por límite de uso, así que todo corrió contra un **build de producción local** (`next build` + `next start`, `SESSION_IDLE_MINUTES=1`) con la **API de QA**. Para los casos de «API caída», ese build apunta a `scripts/api-fallas.mjs`, un proxy que reenvía a la API de QA y que la prueba puede «tirar». No mide el adaptador de Netlify: **todo hay que repetirlo en QA cuando se reactive el sitio**.
+
+### 0A.1 Resultado
+
+**E2E de cierre E25** (17/11, 20:34 → 21:40 UTC, 1,1 h; build local con todos los cambios de esta sección, `8b2e335`): **216 ejecuciones → 178 pasan · 3 fallan · 34 omitidas · 1 no corrió**.
+
+- **2 fallas reales: DEF-WEB-16** (CP-SIS-032/034 y 033, cámara). CP-SIS-035/036 no llegaron a correr: el spec de cámara es en serie y se corta tras la primera falla.
+- **1 falla de la limpieza, no del caso:** CP-SIS-028 en Firefox. Su `afterAll` usó un token de admin vencido (30 min). En **E26** (usuarios, Firefox, tras renovar el token ante un 401): **9/9**.
+- **34 omitidas**, todas con motivo escrito en el spec:
+  - Firefox no corre los casos de cámara, axe, *responsive* ni cookies (son solo de Chromium).
+  - CP-SIS-016 y 018 esperan el buzón de QA (BC-12).
+  - Los «a escala» corren una vez por navegador.
+- **Antes:** E23 (19:11 → 20:31 UTC) dio 159 pasan y 19 fallan. Casi todos los fallos venían de una carrera de *keep-alive* entre el `fetch` de Next y `scripts/api-fallas.mjs` («other side closed»), un problema del arnés y no de la app; el proxy ahora responde con `Connection: close`. El resto: 2 de cámara (DEF-WEB-16) y un contraste que dependía de los datos (corregido).
+
+**Defectos:** 10 nuevos (DEF-WEB-08 a 17). **8 corregidos** con pruebas que fallaban antes y verificados en local; 2 esperan una decisión (DEF-WEB-09 del PO, DEF-WEB-16 la dependencia `jsqr`), y DEF-WEB-17 tiene la corrección propuesta.
+
+**Unitarias U7:** 385/385. **Integración I5:** 10/10. **gitleaks:** 0 hallazgos nuevos. **npm audit:** 0.
+
+### 0A.2 Defectos nuevos (DEF-WEB-08 a 17)
+
+Diez defectos nuevos, todos encontrados al automatizar los casos de sistema o al correr las pruebas no funcionales. **Ocho están corregidos**, cada uno con pruebas que fallaban antes; dos esperan una decisión.
+
+| ID | Defecto | Sev. | Caso | Estado | Corrección |
+|---|---|---|---|---|---|
+| DEF-WEB-08 | Con la API caída, el inicio mostraba **ceros** («0 estudiantes a tu cargo») en vez de un error | Media | CP-SIS-008 | Corregido (local) | Error con «Reintentar»; «—» sin datos |
+| DEF-WEB-09 | El correo de un usuario **no se puede editar**, y la planeación lo pide | Baja | CP-SIS-022, 023 | **Nuevo · decide el PO** | Bloqueo deliberado («por seguridad»); la API sí lo permite |
+| DEF-WEB-10 | En producción, **todo error** de una Server Action llegaba como «Minified React error #441» | Media | CP-SIS-020, 028 | Corregido (local) | `getErrorMessage` sin textos técnicos; crear/editar usuario y registrar nota devuelven el motivo de la API |
+| DEF-WEB-11 | Después de las 19:00, la asistencia y otras fechas quedaban con **el día siguiente** (fecha UTC) | **Alta** | CP-SIS-040 | Corregido (local) | `hoyColegio()` (America/Bogota) en los 24 sitios |
+| DEF-WEB-12 | Con la API caída, las pantallas no dejaban reintentar y decían «0 registros»; el horario del estudiante **rompía la página** | Media | CP-SIS-040, 046, 052, 057–059 | Corregido (local) | `ErrorCarga` en 5 pantallas y `(dashboard)/error.tsx` |
+| DEF-WEB-13 | El historial de novedades **no estaba ordenado** por fecha | Baja | CP-SIS-049 | Corregido (local) | `porFechaReciente` |
+| DEF-WEB-14 | El docente veía en `/horarios` los bloques de **todos** los profesores | Media | CP-SIS-059 | Corregido (local) | Filtro por sus asignaciones, en el servidor |
+| DEF-WEB-15 | El padre sin hijos no veía «No hay estudiantes vinculados»; en `/asistencia`, un **error falso** | Baja | CP-SIS-061 | Corregido (local) | `MSG_SIN_HIJOS` en las vistas |
+| DEF-WEB-16 | **El escaneo QR de la web no funciona**: el servicio externo de lectura rechaza las imágenes (400) | **Alta** | CP-SIS-032–036 | **Nuevo · falta autorizar `jsqr`** | Decodificar en el navegador con `jsqr` (propuesta lista) |
+| DEF-WEB-17 | Rendimiento Lighthouse 33–96: la fuente de iconos pesa **1–3,9 MB** | Media | CP-NF-005 | Nuevo | Subconjunto de iconos (`icon_names=`); exige revisión visual |
+
+«Corregido (local)»: verificado con su E2E contra el build local; queda **En verificación** hasta repetirlo en QA. Fichas en `docs/defectos/DEF-WEB-08.md` a `DEF-WEB-17.md`; todos en `docs/defectos/registro.json`, que crea los issues al fusionar.
+
+**Otras correcciones de esta etapa (sin ficha propia):**
+
+- **Dependencias:** `next` 16.4.3 → **16.4.6** por GHSA-mfr8-8qww-v76h (moderada). `next build` se negaba a compilar; la app no usa `'use cache'`. `npm audit --omit=dev`: 0.
+- **Cabeceras de seguridad:** CSP, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy y HSTS (`src/lib/seguridad/cabeceras.ts`). Además, sin `X-Powered-By` y sin comodín en `img-src`.
+- **Accesibilidad:** nombre accesible en ~50 selects y campos de fecha; contrastes; lista del escáner enfocable.
+- **Aviso de cookies:** baja a `z-40` y el registro va en un portal (antes tapaba «CREAR CUENTA» a 1280×720 y en móvil; era la observación de DEF-WEB-05).
+
+### 0A.3 WC-05 · Casos de sistema
+
+Resultado de **E25** caso por caso, generado desde `evidencias/PR-06/web/E25_e2e-local.xml`. «ok» = pasó; «omitido» = el spec no corre en ese navegador o le falta un dato, con su motivo en el código.
+
+| CP-SIS | Caso | Spec | Chromium | Firefox | Resultado |
+|---|---|---|---|---|---|
+| CP-SIS-040 | CP-SIS-040 · el registro del día filtra por jornada y curso, y avisa si no hay datos | `asistencia.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-040 | CP-SIS-040 · con la API caída el registro del día avisa y deja reintentar | `asistencia.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-064 | CP-SIS-064 · el docente no ve la acción de borrar asistencia; el admin sí | `asistencia.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-051, 054 | boletín del padre (WEB-09) › el padre descarga un PDF | `boletin-padre.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-051, 054 | boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación | `boletin-padre.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-058 | CP-SIS-058 · el estudiante ve las clases de su curso por día y franja | `horario.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-058 | CP-SIS-058 · un estudiante de un curso sin horario ve un aviso | `horario.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-059 | CP-SIS-059 · el docente ve solo sus clases | `horario.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-059 | CP-SIS-059 · un docente sin asignaciones ve un aviso | `horario.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-058, CP-SIS-059 | CP-SIS-058 y 059 · con la API caída el horario avisa y deja reintentar | `horario.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-002 | CP-SIS-002 · contraseña errada y correo inexistente dan el mismo mensaje genérico | `login-errores.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-003 | CP-SIS-003 · con el correo o la contraseña vacíos no se envía y lo indica | `login-errores.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-005 | CP-SIS-005 · con la API caída el login avisa y deja reintentar | `login-errores.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-007 | CP-SIS-007 · el padre no entra por URL a módulos de otros roles | `login-errores.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-008 | CP-SIS-008 · con la API caída el inicio muestra un error y deja reintentar | `login-errores.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-010 | CP-SIS-010 · al cerrar sesión, «atrás» no devuelve al panel | `login-errores.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-001, 006 | inicio de sesión · admin › el admin llega a su inicio con los datos cargados | `login-roles.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-001, 006 | inicio de sesión · admin › el menú del admin solo trae los módulos de su rol | `login-roles.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-001, 006 | inicio de sesión · docente › el docente llega a su inicio con los datos cargados | `login-roles.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-001, 006 | inicio de sesión · docente › el menú del docente solo trae los módulos de su rol | `login-roles.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-001, 006 | inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados | `login-roles.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-001, 006 | inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol | `login-roles.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-001, 006 | inicio de sesión · padre › el padre llega a su inicio con los datos cargados | `login-roles.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-001, 006 | inicio de sesión · padre › el menú del padre solo trae los módulos de su rol | `login-roles.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-042 | CP-SIS-042 · el docente registra 4.5 y se guarda por estudiante, materia y periodo | `notas.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-043 | CP-SIS-043 · una nota fuera de rango no se guarda | `notas.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-044 | CP-SIS-044 · sin materia no se guarda (el periodo siempre trae uno elegido) | `notas.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-045 | CP-SIS-045 · el promedio se recalcula al registrar y al editar, sin recargar | `notas.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-046 | CP-SIS-046 · con la API caída, guardar avisa y deja reintentar | `notas.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-050 | CP-SIS-050 · el estudiante consulta sus notas por periodo y ve un aviso en un periodo sin notas | `notas.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-047 | CP-SIS-047 · el docente registra una novedad y su gravedad corresponde al tipo | `novedades.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-048 | CP-SIS-048 · sin descripción no se guarda | `novedades.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-049 | CP-SIS-049 · el historial de un estudiante sale solo con sus novedades y ordenado por fecha | `novedades.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-060 | el padre de prueba cambia de hijo y cambian notas, asistencia y novedades | `padre-dos-hijos.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-060 | un padre con un solo hijo no ve el selector | `padre-dos-hijos.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-052 | CP-SIS-052 · el padre ve la asistencia de su hijo por fecha y tipo | `padre.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-052 | CP-SIS-052 · con la API caída la asistencia del hijo avisa y deja reintentar | `padre.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-053 | CP-SIS-053 · el padre ve las novedades de su hijo, o un aviso si no tiene | `padre.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-061 | CP-SIS-061 · un padre sin hijos vinculados ve «No hay estudiantes vinculados» | `padre.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-009 | CP-SIS-009 · el perfil del admin muestra sus datos y su rol | `perfil.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-009 | CP-SIS-009 · el perfil del docente muestra sus datos y su rol | `perfil.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-009 | CP-SIS-009 · el perfil del estudiante muestra sus datos y su rol | `perfil.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-009 | CP-SIS-009 · el perfil del padre muestra sus datos y su rol | `perfil.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-033 | CP-SIS-033 · un QR inválido muestra un error claro y no registra | `qr-camara-invalido.spec.ts` | FALLA | omitido | **FALLA** |
+| CP-SIS-032, CP-SIS-034 | con un QR de estudiante › CP-SIS-032 y 034 · registra la entrada y bloquea una segunda entrada | `qr-camara.spec.ts` | FALLA | omitido | **FALLA** |
+| CP-SIS-035, CP-SIS-036 | con un QR de estudiante › CP-SIS-035 y 036 · registra la salida y bloquea una segunda salida | `qr-camara.spec.ts` | omitido | omitido | **OMITIDO** |
+| CP-SIS-029 | CP-SIS-029 · el estudiante ve el QR de su código con su nombre | `qr.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-031 | CP-SIS-031 · el padre no puede ver el QR de un estudiante | `qr.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-031 | CP-SIS-031 · el docente no puede ver el QR de un estudiante | `qr.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-015 | CP-SIS-015 · pedir recuperación con un correo registrado y con uno no registrado da el mismo mensaje | `recuperacion.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-016 | CP-SIS-016 · restablecer con el enlace del correo | `recuperacion.spec.ts` | omitido | omitido | **OMITIDO** |
+| CP-SIS-017 | CP-SIS-017 · una contraseña débil se rechaza antes de enviar y dice qué regla falta | `recuperacion.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-018 | CP-SIS-018 · un enlace de recuperación ya usado | `recuperacion.spec.ts` | omitido | omitido | **OMITIDO** |
+| CP-SIS-037, 038, 039, 041 | registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» | `registro-masivo.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-037, 038, 039, 041 | registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar | `registro-masivo.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-014 | un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) | `registro-padre.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-014 | el padre que se registra ve los datos de su hijo vinculado | `registro-padre.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-011 | CP-SIS-011 · un estudiante se registra con todos los datos y puede iniciar sesión | `registro.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-012 | CP-SIS-012 · un correo ya registrado, también en mayúsculas, no crea otra cuenta | `registro.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-013 | CP-SIS-013 · con un campo obligatorio vacío no se registra e indica el campo | `registro.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-056 | CP-SIS-056 · el admin crea un reporte de asistencia con un PDF y lo descarga | `reportes.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-057 | CP-SIS-057 · un filtro sin datos muestra un aviso | `reportes.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-057 | CP-SIS-057 · con la API caída los reportes avisan y dejan reintentar | `reportes.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-004, 065 | sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión | `sesion.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-004, 065 | sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola | `sesion.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-004, 065 | sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript | `sesion.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-065 | sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) | `sesion.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-004, 065 | sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) | `sesion.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-004, 065 | una ruta del panel sin sesión pide iniciar sesión | `sesion.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-019, 021, 022, 025, 027, 028 | gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba | `usuarios.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-021 | gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) | `usuarios.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-028 | gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) | `usuarios.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-020 | gestión de usuarios · errores (WC-05) › CP-SIS-020 · crear con un correo ya registrado no guarda | `usuarios.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-023 | gestión de usuarios · errores (WC-05) › CP-SIS-023 · al editar, el correo está bloqueado y no se puede poner el de otro usuario | `usuarios.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-024 | gestión de usuarios · errores (WC-05) › CP-SIS-024 · editar dejando el nombre vacío no guarda | `usuarios.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-026 | gestión de usuarios · errores (WC-05) › CP-SIS-026 · eliminar con la API caída avisa que no se pudo y no elimina | `usuarios.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-027 | gestión de usuarios · errores (WC-05) › CP-SIS-027 · filtrar por rol y por nombre; el estado se ve por secciones | `usuarios.spec.ts` | ok | ok | **APROBADO** |
+| CP-SIS-028 | gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar | `usuarios.spec.ts` | ok | FALLA | **FALLA** |
+| WC-06 | WC-06 axe · login-y-registro sin violaciones serias ni críticas | `wc06-accesibilidad.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 axe · registro-modal sin violaciones serias ni críticas | `wc06-accesibilidad.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 axe · usuarios-y-modal sin violaciones serias ni críticas | `wc06-accesibilidad.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 axe · qr-escanear-docente sin violaciones serias ni críticas | `wc06-accesibilidad.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 axe · notas-padre sin violaciones serias ni críticas | `wc06-accesibilidad.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 axe · reset-password sin violaciones serias ni críticas | `wc06-accesibilidad.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 bloque 5 · con la API caída, descargar el boletín avisa y no baja un archivo dañado | `wc06-manuales.spec.ts` | ok | ok | **APROBADO** |
+| WC-06 | cámara sin permiso › WC-06 bloque 4 · si se niega la cámara, el escáner lo dice con claridad | `wc06-manuales.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · portada a 375px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · portada a 768px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · portada a 1920px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · inicio-docente a 375px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · inicio-docente a 768px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · inicio-docente a 1920px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · notas-docente a 375px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · notas-docente a 768px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · notas-docente a 1920px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · usuarios-admin a 375px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · usuarios-admin a 768px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · usuarios-admin a 1920px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · asistencia-padre a 375px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · asistencia-padre a 768px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · asistencia-padre a 1920px sin desborde | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 375×812 | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1280×720 | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1920×1080 | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 375×812 | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| WC-06 | WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 1280×720 | `wc06-responsive.spec.ts` | ok | omitido | **APROBADO** |
+| CP-NF-013 | CP-NF-013 · eys_access y eys_refresh son HttpOnly y Secure; eys_user no lleva el token | `wc06-seguridad.spec.ts` | ok | ok | **APROBADO** |
+| WC-06 | WC-06 · las respuestas traen CSP, anti-clickjacking, nosniff, Referrer-Policy, Permissions-Policy y HSTS | `wc06-seguridad.spec.ts` | ok | ok | **APROBADO** |
+
+**Conteo de casos** (un caso = un `test()`; puede cubrir varios CP-SIS): **102 APROBADO · 3 FALLA · 3 OMITIDO** de 108. Las 3 fallas: dos de cámara (DEF-WEB-16) y CP-SIS-028 en Firefox (la limpieza, aprobado en E26).
+
+**Lo que no se automatizó, con su motivo:**
+
+| CP-SIS | Motivo | Qué falta |
+|---|---|---|
+| 016, 018 | Necesitan abrir el enlace que llega al correo | Buzón de QA (planeación del backend, BC-12) |
+| 030 | QR de la web leído desde la app | Planeación móvil (MC-05) |
+| 032 a 036 | Automatizados con la cámara falsa de Chromium, pero **FALLAN por DEF-WEB-16** | Autorizar `jsqr` y repetir |
+
+**Oráculos adaptados (D-WEB-17), con su causa:**
+
+- **CP-SIS-044:** el periodo siempre trae uno elegido, así que se prueba sin materia.
+- **CP-SIS-045:** la API admite una sola nota por estudiante, materia y periodo (409), así que las dos notas van en los periodos 3 y 4. La pantalla muestra el promedio con un decimal («3.5», no «3.50»).
+- **CP-SIS-023:** el correo no se edita (DEF-WEB-09), así que se comprueba que esté bloqueado.
+- **CP-SIS-027:** el estado se ve por secciones (tabla de activos y «Validación Pendiente»); no hay un filtro aparte.
+
+**Datos de QA:** ninguna corrida dejó cuentas, notas, novedades ni reportes. Al cierre hay **110 usuarios**, 0 cuentas `*.e2e.*` y 10 notas, igual que al empezar. Durante el trabajo quedaron, y se borraron:
+
+- 3 notas del periodo 4 (ids 19 a 21): el admin no puede borrar notas (403), así que se borraron con la cuenta del docente.
+- 1 nota de la comprobación del 409 (id 22).
+- 1 cuenta de docente (id 181).
+
+### 0A.4 WC-06 · Pruebas manuales y no funcionales
+
+Todas automatizadas y reproducibles con un comando; evidencias en `evidencias/PR-06/web/manuales/`.
+
+| Bloque | Resultado | Evidencia |
+|---|---|---|
+| 1 · Lighthouse, 7 páginas × escritorio y móvil | Accesibilidad **93–100**, buenas prácticas **96–100**, SEO **100**: cumplen. Rendimiento **33–96**: no cumple (DEF-WEB-17) | `lighthouse/*.report.html`, `lighthouse/resumen.json`; `scripts/lighthouse.mjs` |
+| 2 · axe, las 6 pantallas del documento | **0 serias y 0 críticas**, después de corregir nombres y contrastes | `axe-*.json`; `e2e/wc06-accesibilidad.spec.ts` |
+| 3 · ZAP (araña + pasivo, sin escaneo activo ni envío de formularios) | **0 altas**, 0 bajas y 4 medias documentadas: `unsafe-inline` en script-src y style-src (Next lo necesita sin nonces), SRI en Google Fonts (su CSS es dinámico) y anti-CSRF (las Server Actions validan el `Origin`) | `zap-baseline.html`, `zap-baseline-alertas.json`; `scripts/zap-baseline.mjs` |
+| 3 · Cabeceras y cookies (CP-NF-013) | `eys_access` y `eys_refresh` **HttpOnly, Secure y SameSite=Lax**; CSP y demás cabeceras presentes | `e2e/wc06-seguridad.spec.ts` |
+| 4 · Cámara QR | Con la cámara falsa de Chromium: **FALLA** (DEF-WEB-16). Permiso negado: **Cumple**: «No se pudo acceder a la cámara. Verifica los permisos del navegador.» (E25) | `e2e/qr-camara*.spec.ts`, `e2e/wc06-manuales.spec.ts` |
+| 5 · API caída | Login (CP-SIS-005), inicio (008), `/notas` y demás pantallas con aviso y «Reintentar». Boletín con la API caída: **Cumple**: aviso y ningún archivo descargado (E25) | specs de cada módulo |
+| 6 · Brave 157 | Login, recarga y boletín: **3/3 OK**, con los escudos **por defecto** (el nivel «Agresivo» no se puede fijar por línea de comandos) | `brave.json`; `scripts/brave.mjs` |
+| 7 · Sesión de 40 min (alternativa C) | No se corrió en tiempo real: CP-SIS-065 a escala la reemplaza (E23) | — |
+| Responsive, 5 pantallas × 375/768/1920 | **Sin desborde**; «CREAR CUENTA» y «ENTRAR» ya no quedan tapados | `responsive-*.png`; `e2e/wc06-responsive.spec.ts` |
+
+**Observaciones (no son defectos):**
+
+- La descarga del boletín guarda el archivo como `boletin_Santiago_L_pez.pdf`: la «ó» se pierde en el nombre.
+- Las imágenes de QR del estudiante y del admin salen de `api.qrserver.com`: el código del estudiante viaja a un tercero, y si ese servicio falla, la imagen no carga (ver DEF-WEB-16).
+
+### 0A.5 WC-07 · Análisis estático
+
+| Medida | Resultado | Evidencia |
+|---|---|---|
+| lizard (`-C 15`, TS y TSX) | **24 de 1.339 funciones con CCN > 15**; CCN medio **2,7**. Las más altas: `tick` (51, animación de la portada), `QRScannerView` (46), `register` (38) | `evidencias/PR-03/web/lizard-ccn15.txt`, `lizard-resumen.txt` |
+| pygount (`src`) | **15.671 líneas de código** (78 TSX, 64 TS, 1 CSS) y 1.228 de comentarios: **15,7 KLOC**, que reemplazan los 20,7 KLOC estimados del MC-01 | `evidencias/PR-03/web/pygount-resumen.txt` |
+| SonarQube de la rama `develop` | **NO DISPONIBLE**: necesita fusionar el PR #34 | — |
+
+### 0A.6 WC-08 · Trazabilidad
+
+- Las **12 correcciones** tienen una prueba con ID. Se agregaron UT-WEB-09 a 12 para WEB-08, WEB-INF-2, WEB-INF-3 y WEB-INF-4: dos reglas nuevas en `tests/arquitectura.test.ts` y dos que ya existían.
+- `scripts/trazabilidad.mjs` lee el JUnit de Playwright: los CP-SIS salen en `docs/trazabilidad-ut-web.md`. El ID sale del nombre del test o, en los specs anteriores, de `casosSistema` en `tests/trazabilidad.json`.
+- **CP-INT-076:** confirmado como el contrato `PERMISSIONS ↔ roles` (IT-WEB-01) con la planeación de integración, que se basa en el PR-02 v0.2. El PR-02 no está en este repositorio.
+- **CP-SIS-096 y 098:** en la planeación de sistema, 096 es «entrada desde dos equipos» (web + app). D-WEB-01 los usaba para el acceso del docente a `/qr/escanear`: esa referencia queda corregida a US005/US006. CP-SIS-098 no existe en la planeación de sistema de la web.
+
+### 0A.7 WC-09 · UAT (ensayo de QA)
+
+Ensayo de QA de los **14 escenarios que solo existen en la web**, con las reglas de la UAT y sobre los resultados de E25 (cada escenario corresponde a uno o más CP-SIS automatizados):
+
+| CP-ACE | Escenario | Caso que lo respalda | Resultado del ensayo |
+|---|---|---|---|
+| 003 | Campos vacíos (web) | CP-SIS-003 | **Aceptado** |
+| 004 | Sesión inactiva | CP-SIS-004 y 065 (a escala) | **Aceptado** |
+| 020 | Volver a una página protegida | CP-SIS-010 | **Aceptado** |
+| 021 | Crear usuario | CP-SIS-019 | **Aceptado** |
+| 022 | Crear con correo existente | CP-SIS-020 | **Aceptado**: «El correo ya está registrado» (antes, «Minified React error #441», DEF-WEB-10) |
+| 023 | Crear con campo vacío | CP-SIS-021 | **Aceptado** |
+| 024 | Editar usuario | CP-SIS-022 | **Aceptado con observación**: nombre y rol sí; el correo no se edita (DEF-WEB-09, decide el PO) |
+| 025 | Editar dejando un campo vacío | CP-SIS-024 | **Aceptado** |
+| 026 | Editar con correo existente | CP-SIS-023 | **Aceptado con observación**: el correo está bloqueado, así que el caso no se puede dar (DEF-WEB-09) |
+| 027 | Eliminar con confirmación | CP-SIS-025 | **Aceptado** |
+| 028 | No es posible eliminar | CP-SIS-026 | **Aceptado**: «No fue posible eliminar el usuario» |
+| 029 | Consultar con filtros | CP-SIS-027 | **Aceptado con observación**: rol y nombre sí; el estado se ve por secciones, no hay un filtro aparte |
+| 035 | Otro usuario intenta ver mi QR | CP-SIS-031 | **Aceptado** |
+| 093 | Registrar un reporte de asistencia | CP-SIS-056 | **Aceptado** |
+
+**11 Aceptado y 3 Aceptado con observación; 0 Rechazado.** Ninguno queda para corregir antes de la sesión, salvo la decisión del PO sobre DEF-WEB-09. Fuera de estos 14, el escaneo QR de la web (escenarios compartidos con la app) está **Rechazado** por DEF-WEB-16.
+
+La sesión con el PO (S10), las tareas medidas por rol y el SUS con participantes reales **no se hicieron**: las convoca Samuel y las ejecuta el PO.
+
+### 0A.8 WC-10 · Producción
+
+Solo lectura; producción (`https://proyecto-eyesschool.vercel.app`) sirve el código viejo de `main`.
+
+| Comprobación | Resultado |
+|---|---|
+| Portada | **200** |
+| `/usuarios` sin sesión | Redirige a `/?login=1`, pero **por el cliente** (`meta refresh` y `NEXT_REDIRECT` en el HTML; responde 200, no 307): producción no tiene la corrección de DEF-WEB-04. No muestra datos |
+| Cabeceras | Solo HSTS (de Vercel); sin CSP ni las demás, porque `main` no las tiene |
+| Login del admin | **NO EJECUTADO**: no hay credenciales de producción en el equipo de QA |
+| Variables de Vercel, Web App de Azure, PR `develop` → `main` | De Andrés Acero; sin cambios |
+
+### 0A.9 WC-11 · Cierre
+
+| Paso | Resultado | Evidencia |
+|---|---|---|
+| U7 · unitarias y componentes con cobertura | **385/385** en 47 archivos; umbrales cumplidos | `evidencias/PR-04/web/U7_*` |
+| I5 · integración contra QA | **10/10** | `evidencias/PR-05/web/I5_*` |
+| E23 · E2E completa, dos navegadores | **178 pasan · 3 fallan · 34 omitidas · 1 no corrió** (E25); usuarios en Firefox repetido en E26: 9/9 | `evidencias/PR-06/web/E23_*`, `E25_*`, `E26_*` |
+| gitleaks 8.24.2 (124 commits) | **4 hallazgos, todos históricos de DEF-028** (`b7e20f5`); 0 nuevos. Un falso positivo de esta etapa (`requiere('E2E_PASSWORD', …)`) queda en `.gitleaksignore` con su motivo | `evidencias/PR-03/web/gitleaks-wc11.json` |
+| `npm audit --omit=dev` | **0** vulnerabilidades (tras next 16.4.6) | — |
+| `.env` con `https://` (acción 17) | **Hecho** (ya estaba) | — |
+| Ramas viejas (acción 13) | Lista para el equipo: 16 de 18 fusionadas en `develop`. No se borró nada | `docs/ramas-viejas.md` |
+| Rotar `QA_PASSWORD` (acción 7) | **NO HECHO**: es del equipo de backend | — |
+
+**Seguridad de las evidencias:** Lighthouse copia la cookie de sesión dentro de sus informes. Antes de subirlos se limpiaron de cookies y JWT, y `scripts/lighthouse.mjs` ahora pasa la cookie por un archivo temporal fuera del repositorio y limpia cada informe. Se revisó toda la carpeta `evidencias/`: **0 JWT, 0 cookies de sesión y 0 secretos** de `.env.test.local`.
+
+### 0A.10 Lo que necesita a otra persona
+
+| Qué | Quién | Por qué |
+|---|---|---|
+| Autorizar la dependencia `jsqr` (y `qrcode` para la prueba) | Mariana / equipo | Corrige DEF-WEB-16 (Alta): sin eso, el escaneo QR de la web no funciona |
+| Reactivar el sitio de QA en Netlify | Dueño de la cuenta | Repetir E23 en QA y verificar los defectos «Corregido (local)» |
+| Decidir DEF-WEB-09 (¿se edita el correo?) | PO (Sergio Gómez) | Cambia CP-SIS-022 y 023 |
+| Aprobar el PR #34 | Samuel Sierra | WC-01: issues, `develop` en QA, Sonar de la rama |
+| Revocar la clave de Supabase (DEF-028) | Andrés Acero | WC-02 |
+| Variables de producción en Vercel y paso a `main` | Andrés Acero | WC-10 |
+| Rotar `QA_PASSWORD` | Backend | WC-11 |
+| Sesión de UAT con el PO | Samuel / PO | WC-09 |
 
 ---
 

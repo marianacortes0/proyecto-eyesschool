@@ -1,0 +1,884 @@
+<testsuites id="" name="" tests="216" failures="2" skipped="35" errors="1" time="3941.728668">
+<testsuite name="asistencia.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="3" failures="0" skipped="0" time="40.63" errors="0">
+<testcase name="CP-SIS-040 · el registro del día filtra por jornada y curso, y avisa si no hay datos" classname="asistencia.spec.ts" time="20.052">
+</testcase>
+<testcase name="CP-SIS-040 · con la API caída el registro del día avisa y deja reintentar" classname="asistencia.spec.ts" time="8.696">
+</testcase>
+<testcase name="CP-SIS-064 · el docente no ve la acción de borrar asistencia; el admin sí" classname="asistencia.spec.ts" time="11.882">
+</testcase>
+</testsuite>
+<testsuite name="boletin-padre.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="2" failures="0" skipped="0" time="33.893" errors="0">
+<testcase name="boletín del padre (WEB-09) › el padre descarga un PDF" classname="boletin-padre.spec.ts" time="16.71">
+</testcase>
+<testcase name="boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación" classname="boletin-padre.spec.ts" time="17.183">
+</testcase>
+</testsuite>
+<testsuite name="horario.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="5" failures="0" skipped="0" time="101.202" errors="0">
+<testcase name="CP-SIS-058 · el estudiante ve las clases de su curso por día y franja" classname="horario.spec.ts" time="11.127">
+</testcase>
+<testcase name="CP-SIS-058 · un estudiante de un curso sin horario ve un aviso" classname="horario.spec.ts" time="25.999">
+</testcase>
+<testcase name="CP-SIS-059 · el docente ve solo sus clases" classname="horario.spec.ts" time="22.739">
+</testcase>
+<testcase name="CP-SIS-059 · un docente sin asignaciones ve un aviso" classname="horario.spec.ts" time="22.703">
+</testcase>
+<testcase name="CP-SIS-058 y 059 · con la API caída el horario avisa y deja reintentar" classname="horario.spec.ts" time="18.634">
+</testcase>
+</testsuite>
+<testsuite name="login-errores.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="6" failures="0" skipped="0" time="92.265" errors="0">
+<testcase name="CP-SIS-002 · contraseña errada y correo inexistente dan el mismo mensaje genérico" classname="login-errores.spec.ts" time="10.147">
+</testcase>
+<testcase name="CP-SIS-003 · con el correo o la contraseña vacíos no se envía y lo indica" classname="login-errores.spec.ts" time="7.162">
+</testcase>
+<testcase name="CP-SIS-005 · con la API caída el login avisa y deja reintentar" classname="login-errores.spec.ts" time="15.315">
+</testcase>
+<testcase name="CP-SIS-007 · el padre no entra por URL a módulos de otros roles" classname="login-errores.spec.ts" time="27.262">
+</testcase>
+<testcase name="CP-SIS-008 · con la API caída el inicio muestra un error y deja reintentar" classname="login-errores.spec.ts" time="14.803">
+</testcase>
+<testcase name="CP-SIS-010 · al cerrar sesión, «atrás» no devuelve al panel" classname="login-errores.spec.ts" time="17.576">
+</testcase>
+</testsuite>
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="8" failures="0" skipped="0" time="83.549" errors="0">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="9.561">
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="7.781">
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="9.876">
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="12.99">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="10.754">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="9.13">
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="10.94">
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="12.517">
+</testcase>
+</testsuite>
+<testsuite name="notas.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="6" failures="0" skipped="0" time="165.806" errors="0">
+<testcase name="CP-SIS-042 · el docente registra 4.5 y se guarda por estudiante, materia y periodo" classname="notas.spec.ts" time="47.1">
+</testcase>
+<testcase name="CP-SIS-043 · una nota fuera de rango no se guarda" classname="notas.spec.ts" time="19.755">
+</testcase>
+<testcase name="CP-SIS-044 · sin materia no se guarda (el periodo siempre trae uno elegido)" classname="notas.spec.ts" time="20.966">
+</testcase>
+<testcase name="CP-SIS-045 · el promedio se recalcula al registrar y al editar, sin recargar" classname="notas.spec.ts" time="39.428">
+</testcase>
+<testcase name="CP-SIS-046 · con la API caída, guardar avisa y deja reintentar" classname="notas.spec.ts" time="26.258">
+</testcase>
+<testcase name="CP-SIS-050 · el estudiante consulta sus notas por periodo y ve un aviso en un periodo sin notas" classname="notas.spec.ts" time="12.299">
+</testcase>
+</testsuite>
+<testsuite name="novedades.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="3" failures="0" skipped="0" time="53.247" errors="0">
+<testcase name="CP-SIS-047 · el docente registra una novedad y su gravedad corresponde al tipo" classname="novedades.spec.ts" time="22.63">
+</testcase>
+<testcase name="CP-SIS-048 · sin descripción no se guarda" classname="novedades.spec.ts" time="16.688">
+</testcase>
+<testcase name="CP-SIS-049 · el historial de un estudiante sale solo con sus novedades y ordenado por fecha" classname="novedades.spec.ts" time="13.929">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="2" failures="0" skipped="0" time="53.477" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="35.244">
+</testcase>
+<testcase name="un padre con un solo hijo no ve el selector" classname="padre-dos-hijos.spec.ts" time="18.233">
+</testcase>
+</testsuite>
+<testsuite name="padre.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="4" failures="0" skipped="0" time="70.017" errors="0">
+<testcase name="CP-SIS-052 · el padre ve la asistencia de su hijo por fecha y tipo" classname="padre.spec.ts" time="15.437">
+</testcase>
+<testcase name="CP-SIS-052 · con la API caída la asistencia del hijo avisa y deja reintentar" classname="padre.spec.ts" time="13.545">
+</testcase>
+<testcase name="CP-SIS-053 · el padre ve las novedades de su hijo, o un aviso si no tiene" classname="padre.spec.ts" time="24.009">
+</testcase>
+<testcase name="CP-SIS-061 · un padre sin hijos vinculados ve «No hay estudiantes vinculados»" classname="padre.spec.ts" time="17.026">
+</testcase>
+</testsuite>
+<testsuite name="perfil.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="4" failures="0" skipped="0" time="57.717" errors="0">
+<testcase name="CP-SIS-009 · el perfil del admin muestra sus datos y su rol" classname="perfil.spec.ts" time="16.015">
+</testcase>
+<testcase name="CP-SIS-009 · el perfil del docente muestra sus datos y su rol" classname="perfil.spec.ts" time="15.541">
+</testcase>
+<testcase name="CP-SIS-009 · el perfil del estudiante muestra sus datos y su rol" classname="perfil.spec.ts" time="11.688">
+</testcase>
+<testcase name="CP-SIS-009 · el perfil del padre muestra sus datos y su rol" classname="perfil.spec.ts" time="14.473">
+</testcase>
+</testsuite>
+<testsuite name="qr-camara-invalido.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="1" failures="1" skipped="0" time="62.881" errors="0">
+<testcase name="CP-SIS-033 · un QR inválido muestra un error claro y no registra" classname="qr-camara-invalido.spec.ts" time="62.881">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › qr-camara-invalido.spec.ts:16:5 › CP-SIS-033 · un QR inválido muestra un error claro y no registra 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Código QR inválido').first()
+    Expected: visible
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Código QR inválido').first() with timeout 45000ms
+      - waiting for getByText('Código QR inválido').first()
+
+
+      22 |   await page.getByRole('button', { name: /Escanear$/ }).click()
+      23 |
+    > 24 |   await expect(page.getByText('Código QR inválido').first()).toBeVisible({ timeout: 45_000 })
+         |                                                              ^
+      25 |   await expect(page.getByRole('button', { name: /Registrar (Entrada|Salida)/ })).toHaveCount(0)
+      26 |   expect((await apiQA<unknown[]>(`/asistencia?fecha=${hoy()}&limit=500`)).length).toBe(antes)
+      27 | })
+        at c:\Users\marig\proyecto-eyesschool\e2e\qr-camara-invalido.spec.ts:24:62
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="qr-camara.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="2" failures="1" skipped="1" time="60.247" errors="0">
+<testcase name="con un QR de estudiante › CP-SIS-032 y 034 · registra la entrada y bloquea una segunda entrada" classname="qr-camara.spec.ts" time="60.247">
+<properties>
+<property name="serial" value="">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › qr-camara.spec.ts:52:7 › con un QR de estudiante › CP-SIS-032 y 034 · registra la entrada y bloquea una segunda entrada 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('main').getByText('EST002', { exact: true })
+    Expected: visible
+    Timeout: 45000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('main').getByText('EST002', { exact: true }) with timeout 45000ms
+      - waiting for locator('main').getByText('EST002', { exact: true })
+
+
+      53 |     await abrirEscaner(page)
+      54 |     await escanear(page)
+    > 55 |     await expect(page.locator('main').getByText(CODIGO, { exact: true })).toBeVisible({ timeout: 45_000 })
+         |                                                                           ^
+      56 |     await page.getByRole('button', { name: 'Registrar Entrada' }).click()
+      57 |     await expect(page.getByText(/Entrada registrada: \d{1,2}:\d{2}/).first()).toBeVisible({ timeout: 30_000 })
+      58 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\qr-camara.spec.ts:55:75
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\error-context.md
+
+    Error Context: ..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="con un QR de estudiante › CP-SIS-035 y 036 · registra la salida y bloquea una segunda salida" classname="qr-camara.spec.ts">
+<properties>
+<property name="serial" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="qr.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="3" failures="0" skipped="0" time="45.227" errors="0">
+<testcase name="CP-SIS-029 · el estudiante ve el QR de su código con su nombre" classname="qr.spec.ts" time="17.449">
+</testcase>
+<testcase name="CP-SIS-031 · el padre no puede ver el QR de un estudiante" classname="qr.spec.ts" time="15.629">
+</testcase>
+<testcase name="CP-SIS-031 · el docente no puede ver el QR de un estudiante" classname="qr.spec.ts" time="12.149">
+</testcase>
+</testsuite>
+<testsuite name="recuperacion.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="4" failures="0" skipped="2" time="6.495" errors="0">
+<testcase name="CP-SIS-015 · pedir recuperación con un correo registrado y con uno no registrado da el mismo mensaje" classname="recuperacion.spec.ts" time="5.22">
+</testcase>
+<testcase name="CP-SIS-016 · restablecer con el enlace del correo" classname="recuperacion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente del buzón de QA (BC-12): el enlace llega por correo">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="CP-SIS-017 · una contraseña débil se rechaza antes de enviar y dice qué regla falta" classname="recuperacion.spec.ts" time="1.273">
+</testcase>
+<testcase name="CP-SIS-018 · un enlace de recuperación ya usado" classname="recuperacion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente del buzón de QA (BC-12) y de BE-13: hace falta un enlace real usado una vez">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="2" failures="0" skipped="0" time="36.553" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="25.81">
+</testcase>
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="10.743">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="2" failures="0" skipped="0" time="36.548" errors="0">
+<testcase name="un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05)" classname="registro-padre.spec.ts" time="6.699">
+</testcase>
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="29.849">
+</testcase>
+</testsuite>
+<testsuite name="registro.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="3" failures="0" skipped="0" time="48.463" errors="0">
+<testcase name="CP-SIS-011 · un estudiante se registra con todos los datos y puede iniciar sesión" classname="registro.spec.ts" time="17.63">
+</testcase>
+<testcase name="CP-SIS-012 · un correo ya registrado, también en mayúsculas, no crea otra cuenta" classname="registro.spec.ts" time="22.155">
+</testcase>
+<testcase name="CP-SIS-013 · con un campo obligatorio vacío no se registra e indica el campo" classname="registro.spec.ts" time="8.678">
+</testcase>
+</testsuite>
+<testsuite name="reportes.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="3" failures="0" skipped="0" time="36.905" errors="0">
+<testcase name="CP-SIS-056 · el admin crea un reporte de asistencia con un PDF y lo descarga" classname="reportes.spec.ts" time="18.188">
+</testcase>
+<testcase name="CP-SIS-057 · un filtro sin datos muestra un aviso" classname="reportes.spec.ts" time="10.25">
+</testcase>
+<testcase name="CP-SIS-057 · con la API caída los reportes avisan y dejan reintentar" classname="reportes.spec.ts" time="8.467">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="6" failures="0" skipped="0" time="378.945" errors="0">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="14.343">
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="14.34">
+</testcase>
+<testcase name="sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript" classname="sesion.spec.ts" time="8.447">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)" classname="sesion.spec.ts" time="254.659">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)" classname="sesion.spec.ts" time="83.551">
+</testcase>
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="3.605">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="9" failures="0" skipped="0" time="201.156" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="36.166">
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="12.27">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="14.548">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-020 · crear con un correo ya registrado no guarda" classname="usuarios.spec.ts" time="26.317">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-023 · al editar, el correo está bloqueado y no se puede poner el de otro usuario" classname="usuarios.spec.ts" time="26.903">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-024 · editar dejando el nombre vacío no guarda" classname="usuarios.spec.ts" time="29.537">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-026 · eliminar con la API caída avisa que no se pudo y no elimina" classname="usuarios.spec.ts" time="26.432">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-027 · filtrar por rol y por nombre; el estado se ve por secciones" classname="usuarios.spec.ts" time="15.396">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar" classname="usuarios.spec.ts" time="13.587">
+</testcase>
+</testsuite>
+<testsuite name="wc06-accesibilidad.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="6" failures="0" skipped="0" time="66.264" errors="0">
+<testcase name="WC-06 axe · login-y-registro sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts" time="4.655">
+</testcase>
+<testcase name="WC-06 axe · registro-modal sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts" time="6.483">
+</testcase>
+<testcase name="WC-06 axe · usuarios-y-modal sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts" time="18.605">
+</testcase>
+<testcase name="WC-06 axe · qr-escanear-docente sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts" time="16.374">
+</testcase>
+<testcase name="WC-06 axe · notas-padre sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts" time="17.479">
+</testcase>
+<testcase name="WC-06 axe · reset-password sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts" time="2.668">
+</testcase>
+</testsuite>
+<testsuite name="wc06-manuales.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="2" failures="0" skipped="0" time="25.915" errors="0">
+<testcase name="WC-06 bloque 5 · con la API caída, descargar el boletín avisa y no baja un archivo dañado" classname="wc06-manuales.spec.ts" time="14.905">
+</testcase>
+<testcase name="cámara sin permiso › WC-06 bloque 4 · si se niega la cámara, el escáner lo dice con claridad" classname="wc06-manuales.spec.ts" time="11.01">
+</testcase>
+</testsuite>
+<testsuite name="wc06-responsive.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="20" failures="0" skipped="0" time="168.914" errors="0">
+<testcase name="WC-06 responsive · portada a 375px sin desborde" classname="wc06-responsive.spec.ts" time="4.222">
+</testcase>
+<testcase name="WC-06 responsive · portada a 768px sin desborde" classname="wc06-responsive.spec.ts" time="4.114">
+</testcase>
+<testcase name="WC-06 responsive · portada a 1920px sin desborde" classname="wc06-responsive.spec.ts" time="3.216">
+</testcase>
+<testcase name="WC-06 responsive · inicio-docente a 375px sin desborde" classname="wc06-responsive.spec.ts" time="10.438">
+</testcase>
+<testcase name="WC-06 responsive · inicio-docente a 768px sin desborde" classname="wc06-responsive.spec.ts" time="9.863">
+</testcase>
+<testcase name="WC-06 responsive · inicio-docente a 1920px sin desborde" classname="wc06-responsive.spec.ts" time="12.398">
+</testcase>
+<testcase name="WC-06 responsive · notas-docente a 375px sin desborde" classname="wc06-responsive.spec.ts" time="8.604">
+</testcase>
+<testcase name="WC-06 responsive · notas-docente a 768px sin desborde" classname="wc06-responsive.spec.ts" time="10.348">
+</testcase>
+<testcase name="WC-06 responsive · notas-docente a 1920px sin desborde" classname="wc06-responsive.spec.ts" time="13.076">
+</testcase>
+<testcase name="WC-06 responsive · usuarios-admin a 375px sin desborde" classname="wc06-responsive.spec.ts" time="11.863">
+</testcase>
+<testcase name="WC-06 responsive · usuarios-admin a 768px sin desborde" classname="wc06-responsive.spec.ts" time="11.922">
+</testcase>
+<testcase name="WC-06 responsive · usuarios-admin a 1920px sin desborde" classname="wc06-responsive.spec.ts" time="13.692">
+</testcase>
+<testcase name="WC-06 responsive · asistencia-padre a 375px sin desborde" classname="wc06-responsive.spec.ts" time="11.202">
+</testcase>
+<testcase name="WC-06 responsive · asistencia-padre a 768px sin desborde" classname="wc06-responsive.spec.ts" time="12.767">
+</testcase>
+<testcase name="WC-06 responsive · asistencia-padre a 1920px sin desborde" classname="wc06-responsive.spec.ts" time="15.657">
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 375×812" classname="wc06-responsive.spec.ts" time="2.841">
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1280×720" classname="wc06-responsive.spec.ts" time="3.645">
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1920×1080" classname="wc06-responsive.spec.ts" time="4.567">
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 375×812" classname="wc06-responsive.spec.ts" time="1.757">
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 1280×720" classname="wc06-responsive.spec.ts" time="2.722">
+</testcase>
+</testsuite>
+<testsuite name="wc06-seguridad.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="chromium" tests="2" failures="0" skipped="0" time="9.225" errors="0">
+<testcase name="CP-NF-013 · eys_access y eys_refresh son HttpOnly y Secure; eys_user no lleva el token" classname="wc06-seguridad.spec.ts" time="9.114">
+</testcase>
+<testcase name="WC-06 · las respuestas traen CSP, anti-clickjacking, nosniff, Referrer-Policy, Permissions-Policy y HSTS" classname="wc06-seguridad.spec.ts" time="0.111">
+</testcase>
+</testsuite>
+<testsuite name="asistencia.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="3" failures="0" skipped="0" time="55.756" errors="0">
+<testcase name="CP-SIS-040 · el registro del día filtra por jornada y curso, y avisa si no hay datos" classname="asistencia.spec.ts" time="24.575">
+</testcase>
+<testcase name="CP-SIS-040 · con la API caída el registro del día avisa y deja reintentar" classname="asistencia.spec.ts" time="14.978">
+</testcase>
+<testcase name="CP-SIS-064 · el docente no ve la acción de borrar asistencia; el admin sí" classname="asistencia.spec.ts" time="16.203">
+</testcase>
+</testsuite>
+<testsuite name="boletin-padre.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="2" failures="0" skipped="0" time="41.503" errors="0">
+<testcase name="boletín del padre (WEB-09) › el padre descarga un PDF" classname="boletin-padre.spec.ts" time="21.31">
+</testcase>
+<testcase name="boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación" classname="boletin-padre.spec.ts" time="20.193">
+</testcase>
+</testsuite>
+<testsuite name="horario.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="5" failures="0" skipped="0" time="123.033" errors="0">
+<testcase name="CP-SIS-058 · el estudiante ve las clases de su curso por día y franja" classname="horario.spec.ts" time="16.097">
+</testcase>
+<testcase name="CP-SIS-058 · un estudiante de un curso sin horario ve un aviso" classname="horario.spec.ts" time="28.251">
+</testcase>
+<testcase name="CP-SIS-059 · el docente ve solo sus clases" classname="horario.spec.ts" time="23.216">
+</testcase>
+<testcase name="CP-SIS-059 · un docente sin asignaciones ve un aviso" classname="horario.spec.ts" time="23.103">
+</testcase>
+<testcase name="CP-SIS-058 y 059 · con la API caída el horario avisa y deja reintentar" classname="horario.spec.ts" time="32.366">
+</testcase>
+</testsuite>
+<testsuite name="login-errores.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="6" failures="0" skipped="0" time="109.954" errors="0">
+<testcase name="CP-SIS-002 · contraseña errada y correo inexistente dan el mismo mensaje genérico" classname="login-errores.spec.ts" time="14.02">
+</testcase>
+<testcase name="CP-SIS-003 · con el correo o la contraseña vacíos no se envía y lo indica" classname="login-errores.spec.ts" time="9.85">
+</testcase>
+<testcase name="CP-SIS-005 · con la API caída el login avisa y deja reintentar" classname="login-errores.spec.ts" time="16.875">
+</testcase>
+<testcase name="CP-SIS-007 · el padre no entra por URL a módulos de otros roles" classname="login-errores.spec.ts" time="27.723">
+</testcase>
+<testcase name="CP-SIS-008 · con la API caída el inicio muestra un error y deja reintentar" classname="login-errores.spec.ts" time="19.944">
+</testcase>
+<testcase name="CP-SIS-010 · al cerrar sesión, «atrás» no devuelve al panel" classname="login-errores.spec.ts" time="21.542">
+</testcase>
+</testsuite>
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="8" failures="0" skipped="0" time="107.759" errors="0">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="11.296">
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="9.821">
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="13.008">
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="17.587">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="14.408">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="13.095">
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="14.608">
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="13.936">
+</testcase>
+</testsuite>
+<testsuite name="notas.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="6" failures="0" skipped="0" time="163.51" errors="0">
+<testcase name="CP-SIS-042 · el docente registra 4.5 y se guarda por estudiante, materia y periodo" classname="notas.spec.ts" time="42.436">
+</testcase>
+<testcase name="CP-SIS-043 · una nota fuera de rango no se guarda" classname="notas.spec.ts" time="21.522">
+</testcase>
+<testcase name="CP-SIS-044 · sin materia no se guarda (el periodo siempre trae uno elegido)" classname="notas.spec.ts" time="17.948">
+</testcase>
+<testcase name="CP-SIS-045 · el promedio se recalcula al registrar y al editar, sin recargar" classname="notas.spec.ts" time="36.969">
+</testcase>
+<testcase name="CP-SIS-046 · con la API caída, guardar avisa y deja reintentar" classname="notas.spec.ts" time="26.464">
+</testcase>
+<testcase name="CP-SIS-050 · el estudiante consulta sus notas por periodo y ve un aviso en un periodo sin notas" classname="notas.spec.ts" time="18.171">
+</testcase>
+</testsuite>
+<testsuite name="novedades.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="3" failures="0" skipped="0" time="61.46" errors="0">
+<testcase name="CP-SIS-047 · el docente registra una novedad y su gravedad corresponde al tipo" classname="novedades.spec.ts" time="22.83">
+</testcase>
+<testcase name="CP-SIS-048 · sin descripción no se guarda" classname="novedades.spec.ts" time="22.048">
+</testcase>
+<testcase name="CP-SIS-049 · el historial de un estudiante sale solo con sus novedades y ordenado por fecha" classname="novedades.spec.ts" time="16.582">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="2" failures="0" skipped="0" time="54.103" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="35.826">
+</testcase>
+<testcase name="un padre con un solo hijo no ve el selector" classname="padre-dos-hijos.spec.ts" time="18.277">
+</testcase>
+</testsuite>
+<testsuite name="padre.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="4" failures="0" skipped="0" time="86.641" errors="0">
+<testcase name="CP-SIS-052 · el padre ve la asistencia de su hijo por fecha y tipo" classname="padre.spec.ts" time="21.844">
+</testcase>
+<testcase name="CP-SIS-052 · con la API caída la asistencia del hijo avisa y deja reintentar" classname="padre.spec.ts" time="14.116">
+</testcase>
+<testcase name="CP-SIS-053 · el padre ve las novedades de su hijo, o un aviso si no tiene" classname="padre.spec.ts" time="30.235">
+</testcase>
+<testcase name="CP-SIS-061 · un padre sin hijos vinculados ve «No hay estudiantes vinculados»" classname="padre.spec.ts" time="20.446">
+</testcase>
+</testsuite>
+<testsuite name="perfil.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="4" failures="0" skipped="0" time="64.107" errors="0">
+<testcase name="CP-SIS-009 · el perfil del admin muestra sus datos y su rol" classname="perfil.spec.ts" time="15.096">
+</testcase>
+<testcase name="CP-SIS-009 · el perfil del docente muestra sus datos y su rol" classname="perfil.spec.ts" time="18.132">
+</testcase>
+<testcase name="CP-SIS-009 · el perfil del estudiante muestra sus datos y su rol" classname="perfil.spec.ts" time="14.965">
+</testcase>
+<testcase name="CP-SIS-009 · el perfil del padre muestra sus datos y su rol" classname="perfil.spec.ts" time="15.914">
+</testcase>
+</testsuite>
+<testsuite name="qr-camara-invalido.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="CP-SIS-033 · un QR inválido muestra un error claro y no registra" classname="qr-camara-invalido.spec.ts">
+<properties>
+<property name="skip" value="La cámara falsa con archivo solo existe en Chromium">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="qr-camara.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="2" failures="0" skipped="2" time="0" errors="0">
+<testcase name="con un QR de estudiante › CP-SIS-032 y 034 · registra la entrada y bloquea una segunda entrada" classname="qr-camara.spec.ts">
+<properties>
+<property name="serial" value="">
+</property>
+<property name="skip" value="La cámara falsa con archivo solo existe en Chromium">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="con un QR de estudiante › CP-SIS-035 y 036 · registra la salida y bloquea una segunda salida" classname="qr-camara.spec.ts">
+<properties>
+<property name="serial" value="">
+</property>
+<property name="skip" value="La cámara falsa con archivo solo existe en Chromium">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="qr.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="3" failures="0" skipped="0" time="54.267" errors="0">
+<testcase name="CP-SIS-029 · el estudiante ve el QR de su código con su nombre" classname="qr.spec.ts" time="18.325">
+</testcase>
+<testcase name="CP-SIS-031 · el padre no puede ver el QR de un estudiante" classname="qr.spec.ts" time="19.533">
+</testcase>
+<testcase name="CP-SIS-031 · el docente no puede ver el QR de un estudiante" classname="qr.spec.ts" time="16.409">
+</testcase>
+</testsuite>
+<testsuite name="recuperacion.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="4" failures="0" skipped="2" time="8.767" errors="0">
+<testcase name="CP-SIS-015 · pedir recuperación con un correo registrado y con uno no registrado da el mismo mensaje" classname="recuperacion.spec.ts" time="7.126">
+</testcase>
+<testcase name="CP-SIS-016 · restablecer con el enlace del correo" classname="recuperacion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente del buzón de QA (BC-12): el enlace llega por correo">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="CP-SIS-017 · una contraseña débil se rechaza antes de enviar y dice qué regla falta" classname="recuperacion.spec.ts" time="1.638">
+</testcase>
+<testcase name="CP-SIS-018 · un enlace de recuperación ya usado" classname="recuperacion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente del buzón de QA (BC-12) y de BE-13: hace falta un enlace real usado una vez">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="2" failures="0" skipped="0" time="43.327" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="29.685">
+</testcase>
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="13.642">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="2" failures="0" skipped="0" time="42.111" errors="0">
+<testcase name="un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05)" classname="registro-padre.spec.ts" time="9.501">
+</testcase>
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="32.61">
+</testcase>
+</testsuite>
+<testsuite name="registro.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="3" failures="0" skipped="0" time="68.398" errors="0">
+<testcase name="CP-SIS-011 · un estudiante se registra con todos los datos y puede iniciar sesión" classname="registro.spec.ts" time="26.021">
+</testcase>
+<testcase name="CP-SIS-012 · un correo ya registrado, también en mayúsculas, no crea otra cuenta" classname="registro.spec.ts" time="29.503">
+</testcase>
+<testcase name="CP-SIS-013 · con un campo obligatorio vacío no se registra e indica el campo" classname="registro.spec.ts" time="12.874">
+</testcase>
+</testsuite>
+<testsuite name="reportes.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="3" failures="0" skipped="0" time="48.417" errors="0">
+<testcase name="CP-SIS-056 · el admin crea un reporte de asistencia con un PDF y lo descarga" classname="reportes.spec.ts" time="20.064">
+</testcase>
+<testcase name="CP-SIS-057 · un filtro sin datos muestra un aviso" classname="reportes.spec.ts" time="14.278">
+</testcase>
+<testcase name="CP-SIS-057 · con la API caída los reportes avisan y dejan reintentar" classname="reportes.spec.ts" time="14.075">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="6" failures="0" skipped="0" time="397.305" errors="0">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="15.897">
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="17.391">
+</testcase>
+<testcase name="sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript" classname="sesion.spec.ts" time="14.061">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)" classname="sesion.spec.ts" time="259.716">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)" classname="sesion.spec.ts" time="83.373">
+</testcase>
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="6.867">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="9" failures="0" skipped="0" time="237.442" errors="1">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="42.68">
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="16.161">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="21.147">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-020 · crear con un correo ya registrado no guarda" classname="usuarios.spec.ts" time="27.761">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-023 · al editar, el correo está bloqueado y no se puede poner el de otro usuario" classname="usuarios.spec.ts" time="30.731">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-024 · editar dejando el nombre vacío no guarda" classname="usuarios.spec.ts" time="31.109">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-026 · eliminar con la API caída avisa que no se pudo y no elimina" classname="usuarios.spec.ts" time="30.37">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-027 · filtrar por rol y por nombre; el estado se ve por secciones" classname="usuarios.spec.ts" time="17.012">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar" classname="usuarios.spec.ts" time="20.471">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-firefox\trace.zip]]
+]]>
+</system-out>
+<error message="GET /usuarios?estado=true&amp;limit=500 → 401 {&quot;detail&quot;:&quot;Token inválido o expirado&quot;}" type="Error">
+<![CDATA[  [firefox] › usuarios.spec.ts:207:7 › gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar 
+
+    Error: GET /usuarios?estado=true&limit=500 → 401 {"detail":"Token inválido o expirado"}
+
+       at qa.ts:37
+
+      35 |     headers: { 'content-type': 'application/json', authorization: `Bearer ${await token(cuenta)}`, ...(init.headers ?? {}) },
+      36 |   })
+    > 37 |   if (!r.ok) throw new Error(`${init.method ?? 'GET'} ${ruta} → ${r.status} ${(await r.text()).slice(0, 200)}`)
+         |                    ^
+      38 |   return (r.status === 204 ? null : await r.json()) as T
+      39 | }
+      40 |
+        at apiQA (c:\Users\marig\proyecto-eyesschool\e2e\qa.ts:37:20)
+        at usuariosConCorreo (c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:94:58)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:121:23
+
+    Error Context: ..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-firefox\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="wc06-accesibilidad.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="6" failures="0" skipped="6" time="7.498" errors="0">
+<testcase name="WC-06 axe · login-y-registro sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts">
+<properties>
+<property name="skip" value="axe se corre una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 axe · registro-modal sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts">
+<properties>
+<property name="skip" value="axe se corre una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 axe · usuarios-y-modal sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts">
+<properties>
+<property name="skip" value="axe se corre una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 axe · qr-escanear-docente sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts">
+<properties>
+<property name="skip" value="axe se corre una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 axe · notas-padre sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts">
+<properties>
+<property name="skip" value="axe se corre una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 axe · reset-password sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts">
+<properties>
+<property name="skip" value="axe se corre una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="wc06-manuales.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="2" failures="0" skipped="1" time="23.933" errors="0">
+<testcase name="WC-06 bloque 5 · con la API caída, descargar el boletín avisa y no baja un archivo dañado" classname="wc06-manuales.spec.ts" time="23.328">
+</testcase>
+<testcase name="cámara sin permiso › WC-06 bloque 4 · si se niega la cámara, el escáner lo dice con claridad" classname="wc06-manuales.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="wc06-responsive.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="20" failures="0" skipped="20" time="14.085" errors="0">
+<testcase name="WC-06 responsive · portada a 375px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · portada a 768px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · portada a 1920px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · inicio-docente a 375px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · inicio-docente a 768px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · inicio-docente a 1920px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · notas-docente a 375px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · notas-docente a 768px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · notas-docente a 1920px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · usuarios-admin a 375px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · usuarios-admin a 768px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · usuarios-admin a 1920px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · asistencia-padre a 375px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · asistencia-padre a 768px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · asistencia-padre a 1920px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 375×812" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1280×720" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1920×1080" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 375×812" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 1280×720" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="wc06-seguridad.spec.ts" timestamp="2026-11-17T20:34:54.066Z" hostname="firefox" tests="2" failures="0" skipped="0" time="14.799" errors="0">
+<testcase name="CP-NF-013 · eys_access y eys_refresh son HttpOnly y Secure; eys_user no lleva el token" classname="wc06-seguridad.spec.ts" time="14.664">
+</testcase>
+<testcase name="WC-06 · las respuestas traen CSP, anti-clickjacking, nosniff, Referrer-Policy, Permissions-Policy y HSTS" classname="wc06-seguridad.spec.ts" time="0.135">
+</testcase>
+</testsuite>
+</testsuites>
