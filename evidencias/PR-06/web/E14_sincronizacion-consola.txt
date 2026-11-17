@@ -1,0 +1,331 @@
+
+Running 12 tests using 1 worker
+
+  x   1 [chromium] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (1.8m)
+  ok  2 [chromium] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (20.1s)
+  x   3 [chromium] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (1.6m)
+  ok  4 [chromium] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (14.2s)
+  x   5 [chromium] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (1.6m)
+  ok  6 [chromium] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (15.4s)
+  x   7 [firefox] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (1.6m)
+  ok  8 [firefox] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (19.5s)
+  x   9 [firefox] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (1.6m)
+  ok 10 [firefox] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (27.2s)
+  x  11 [firefox] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (1.6m)
+  ok 12 [firefox] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (19.7s)
+
+
+  1) [chromium] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 90000ms exceeded.
+    Browser logs:
+
+    <launching> C:\Users\marig\AppData\Local\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=C:\Users\marig\AppData\Local\Temp\playwright_chromiumdev_profile-h4kakr --remote-debugging-pipe --no-startup-window
+    <launched> pid=13576
+    [pid=13576][err] [1116/213800.199:INFO:CONSOLE:628] "Unrecognized feature: 'web-share'.", source: https://deploy-preview-34--qaeyesschool.netlify.app/?login=1 (628)
+    [pid=13576] <gracefully close start>
+    Call log:
+      - waiting for getByRole('combobox').nth(1)
+        - locator resolved to <select class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-40 disabled:cursor-not-allowed">…</select>
+      - attempting select option action
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+        - waiting 20ms
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+          - waiting 100ms
+        163 × waiting for element to be visible and enabled
+            - did not find some options
+          - retrying select option action
+            - waiting 500ms
+        - waiting for element to be visible and enabled
+
+
+      12 |   const [jornada, curso] = await page.getByRole('combobox').all()
+      13 |   await jornada.selectOption({ label: process.env.E2E_JORNADA_MASIVO! })
+    > 14 |   await curso.selectOption({ label: process.env.E2E_CURSO_MASIVO! })
+         |               ^
+      15 |   // El lote es una Server Action (un POST con la cabecera Next-Action) que hace
+      16 |   // un POST a la API por estudiante. El resultado se comprueba cuando responde,
+      17 |   // no con un tiempo fijo: así la primera y la segunda vez esperan lo mismo (E13).
+        at enviarLote (c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:14:15)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:35:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 90000ms exceeded.
+    Browser logs:
+
+    <launching> C:\Users\marig\AppData\Local\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=C:\Users\marig\AppData\Local\Temp\playwright_chromiumdev_profile-ER8OiM --remote-debugging-pipe --no-startup-window
+    <launched> pid=13460
+    [pid=13460][err] [1116/214022.387:INFO:CONSOLE:628] "Unrecognized feature: 'web-share'.", source: https://deploy-preview-34--qaeyesschool.netlify.app/?login=1 (628)
+    [pid=13460] <gracefully close start>
+    Call log:
+      - waiting for getByRole('combobox').nth(1)
+        - locator resolved to <select class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-40 disabled:cursor-not-allowed">…</select>
+      - attempting select option action
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+        - waiting 20ms
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+          - waiting 100ms
+        140 × waiting for element to be visible and enabled
+            - did not find some options
+          - retrying select option action
+            - waiting 500ms
+        - waiting for element to be visible and enabled
+
+
+      12 |   const [jornada, curso] = await page.getByRole('combobox').all()
+      13 |   await jornada.selectOption({ label: process.env.E2E_JORNADA_MASIVO! })
+    > 14 |   await curso.selectOption({ label: process.env.E2E_CURSO_MASIVO! })
+         |               ^
+      15 |   // El lote es una Server Action (un POST con la cabecera Next-Action) que hace
+      16 |   // un POST a la API por estudiante. El resultado se comprueba cuando responde,
+      17 |   // no con un tiempo fijo: así la primera y la segunda vez esperan lo mismo (E13).
+        at enviarLote (c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:14:15)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:35:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium-repeat1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium-repeat1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium-repeat1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium-repeat1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 90000ms exceeded.
+    Browser logs:
+
+    <launching> C:\Users\marig\AppData\Local\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=C:\Users\marig\AppData\Local\Temp\playwright_chromiumdev_profile-SVgllj --remote-debugging-pipe --no-startup-window
+    <launched> pid=27128
+    [pid=27128][err] [1116/214216.198:INFO:CONSOLE:628] "Unrecognized feature: 'web-share'.", source: https://deploy-preview-34--qaeyesschool.netlify.app/?login=1 (628)
+    [pid=27128] <gracefully close start>
+    Call log:
+      - waiting for getByRole('combobox').nth(1)
+        - locator resolved to <select class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-40 disabled:cursor-not-allowed">…</select>
+      - attempting select option action
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+        - waiting 20ms
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+          - waiting 100ms
+        149 × waiting for element to be visible and enabled
+            - did not find some options
+          - retrying select option action
+            - waiting 500ms
+        - waiting for element to be visible and enabled
+
+
+      12 |   const [jornada, curso] = await page.getByRole('combobox').all()
+      13 |   await jornada.selectOption({ label: process.env.E2E_JORNADA_MASIVO! })
+    > 14 |   await curso.selectOption({ label: process.env.E2E_CURSO_MASIVO! })
+         |               ^
+      15 |   // El lote es una Server Action (un POST con la cabecera Next-Action) que hace
+      16 |   // un POST a la API por estudiante. El resultado se comprueba cuando responde,
+      17 |   // no con un tiempo fijo: así la primera y la segunda vez esperan lo mismo (E13).
+        at enviarLote (c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:14:15)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:35:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium-repeat2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium-repeat2\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium-repeat2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium-repeat2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [firefox] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 90000ms exceeded.
+    Call log:
+      - waiting for getByRole('combobox').nth(1)
+        - locator resolved to <select class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-40 disabled:cursor-not-allowed">…</select>
+      - attempting select option action
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+        - waiting 20ms
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+          - waiting 100ms
+        116 × waiting for element to be visible and enabled
+            - did not find some options
+          - retrying select option action
+            - waiting 500ms
+        - waiting for element to be visible and enabled
+
+
+      12 |   const [jornada, curso] = await page.getByRole('combobox').all()
+      13 |   await jornada.selectOption({ label: process.env.E2E_JORNADA_MASIVO! })
+    > 14 |   await curso.selectOption({ label: process.env.E2E_CURSO_MASIVO! })
+         |               ^
+      15 |   // El lote es una Server Action (un POST con la cabecera Next-Action) que hace
+      16 |   // un POST a la API por estudiante. El resultado se comprueba cuando responde,
+      17 |   // no con un tiempo fijo: así la primera y la segunda vez esperan lo mismo (E13).
+        at enviarLote (c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:14:15)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:35:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [firefox] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 90000ms exceeded.
+    Call log:
+      - waiting for getByRole('combobox').nth(1)
+        - locator resolved to <select class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-40 disabled:cursor-not-allowed">…</select>
+      - attempting select option action
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+        - waiting 20ms
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+          - waiting 100ms
+        133 × waiting for element to be visible and enabled
+            - did not find some options
+          - retrying select option action
+            - waiting 500ms
+        - waiting for element to be visible and enabled
+
+
+      12 |   const [jornada, curso] = await page.getByRole('combobox').all()
+      13 |   await jornada.selectOption({ label: process.env.E2E_JORNADA_MASIVO! })
+    > 14 |   await curso.selectOption({ label: process.env.E2E_CURSO_MASIVO! })
+         |               ^
+      15 |   // El lote es una Server Action (un POST con la cabecera Next-Action) que hace
+      16 |   // un POST a la API por estudiante. El resultado se comprueba cuando responde,
+      17 |   // no con un tiempo fijo: así la primera y la segunda vez esperan lo mismo (E13).
+        at enviarLote (c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:14:15)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:35:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox-repeat1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox-repeat1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox-repeat1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox-repeat1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [firefox] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 90000ms exceeded.
+    Call log:
+      - waiting for getByRole('combobox').nth(1)
+        - locator resolved to <select class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-40 disabled:cursor-not-allowed">…</select>
+      - attempting select option action
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+        - waiting 20ms
+        2 × waiting for element to be visible and enabled
+          - did not find some options
+        - retrying select option action
+          - waiting 100ms
+        131 × waiting for element to be visible and enabled
+            - did not find some options
+          - retrying select option action
+            - waiting 500ms
+        - waiting for element to be visible and enabled
+
+
+      12 |   const [jornada, curso] = await page.getByRole('combobox').all()
+      13 |   await jornada.selectOption({ label: process.env.E2E_JORNADA_MASIVO! })
+    > 14 |   await curso.selectOption({ label: process.env.E2E_CURSO_MASIVO! })
+         |               ^
+      15 |   // El lote es una Server Action (un POST con la cabecera Next-Action) que hace
+      16 |   // un POST a la API por estudiante. El resultado se comprueba cuando responde,
+      17 |   // no con un tiempo fijo: así la primera y la segunda vez esperan lo mismo (E13).
+        at enviarLote (c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:14:15)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-masivo.spec.ts:35:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox-repeat2\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox-repeat2\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox-repeat2\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox-repeat2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6 failed
+    [chromium] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+    [chromium] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+    [chromium] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+    [firefox] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+    [firefox] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+    [firefox] › e2e\registro-masivo.spec.ts:26:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» 
+  6 passed (12.7m)

@@ -11,6 +11,10 @@ async function enviarLote(page: import('@playwright/test').Page, { esperarRespue
 
   const [jornada, curso] = await page.getByRole('combobox').all()
   await jornada.selectOption({ label: process.env.E2E_JORNADA_MASIVO! })
+  // El selector solo ofrece cursos activos. Si el curso de QA se desactivó (pasó
+  // con «Sexto A» el 16/11), la prueba lo dice en vez de agotar el tiempo.
+  const opcion = curso.getByRole('option', { name: process.env.E2E_CURSO_MASIVO!, exact: true })
+  await expect(opcion, `Dato de QA: el curso ${process.env.E2E_CURSO_MASIVO} no está activo en la jornada ${process.env.E2E_JORNADA_MASIVO} (E2E_CURSO_MASIVO)`).toBeAttached()
   await curso.selectOption({ label: process.env.E2E_CURSO_MASIVO! })
   // El lote es una Server Action (un POST con la cabecera Next-Action) que hace
   // un POST a la API por estudiante. El resultado se comprueba cuando responde,
