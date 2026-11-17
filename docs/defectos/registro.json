@@ -162,7 +162,7 @@
     "obtenido": "«No se pudo completar el registro.»",
     "evidencia": "docs/defectos/DEF-WEB-05.md",
     "identificado": "10/11/2026", "estado": "cerrado",
-    "cierre": { "causa": "Codificación", "commit": "`1697c7c`", "verificacion": "En el deploy de QA (513d3c8), registrarse con un correo @colegio.test muestra «value is not a valid email address: … reserved name…»; 2 pruebas unitarias nuevas en tests/register.test.ts" }
+    "cierre": { "causa": "Codificación", "commit": "`1697c7c` (el motivo) y `52e6470` (junto al campo)", "verificacion": "E2E «un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05)» aprobado en Chromium y Firefox (E17, deploy de QA de 48d3b1c); 7 pruebas unitarias en tests/register.test.ts y 2 de componente en tests/components/SignupModal.test.tsx" }
   },
   {
     "id": "DEF-WEB-06",

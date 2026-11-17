@@ -144,6 +144,21 @@ Cada decisión toma la opción por defecto (A) del documento de cierre del front
 - **Observación de la plataforma:** en Netlify el proxy de Node se ejecuta (cookies borradas, función de borde `___netlify-edge-handler-node-middleware`), pero el 307 de `NextResponse.redirect` no llega al navegador; redirige la página. Con `next start`, como en Vercel, el 307 sí llega. Next 16 no deja cambiar el runtime del proxy, así que no se forzó *edge*.
 - Los defectos quedan **verificados en QA**, no cerrados. Cerrar el issue es de QA cuando se registren (acción externa 11).
 
+## D-WEB-19 · Cierre de los INESTABLE: sincronizar con eventos, no con tiempos (16 y 17/11/2026)
+- Fecha: 16–17/11/2026 · Planeación de cierre, WC-03 y WC-04 · Pedido de Mariana: «haz lo que necesites para que los tests pasen».
+- Regla aplicada (planeación de cierre, §0): un INESTABLE pasa a APROBADO solo con una corrida completa en verde y **sin subir tiempos de espera**. Ninguna espera se subió; dos se quitaron (los 30 s del primer envío del registro masivo y el `networkidle` de la inactividad).
+- Causas comprobadas y cambios (commits `a9383e1`, `74bcf7e`, `48d3b1c` y el de la sesión a escala con `waitForURL`):
+  1. **Clic antes de hidratar** (login en Firefox, E12). El formulario de la portada llega del servidor como HTML y se ve listo antes de que `setupLogin` conecte sus listeners. **Cambio en la app:** `setupLogin` marca el formulario con `data-listo="true"` al terminar; `iniciarSesion` y el registro del padre esperan esa marca. Prueba: `tests/portada.test.ts`.
+  2. **`eys_last` renovado por una petición pendiente** (inactividad, E12) y `networkidle` que nunca llega (E13). La prueba sale a `about:blank` antes de poner la cookie vieja: la única petición que la lleva es la de `/notas`.
+  3. **Segundo envío del registro masivo con 5 s y el primero con 30 s** (E13). Los dos esperan la respuesta de la Server Action (cabecera `Next-Action`).
+  4. **Dato de QA:** «Sexto A» quedó **inactivo** en QA (`activo: false`, visto el 16/11) y el selector ya no lo ofrece (E14). El curso de la prueba pasa a «Séptimo A» en `.env.test.local`, y la prueba avisa con un mensaje que nombra el dato si vuelve a pasar.
+  5. **Orden de los hijos** (E16). La API de QA devolvió los hijos en otro orden; el criterio es «ve solo sus dos hijos», sin orden. La prueba compara sin orden.
+  6. **Menú leído antes de completarse** (E16, Firefox). Se espera con `expect.poll` a que estén los módulos obligatorios.
+  7. **Sesión a escala con `page.goto`** (E16, Firefox, `NS_ERROR_ABORT` con la sesión viva). La actividad pasa a clics en el menú, como un usuario; cada clic pide la ruta al servidor y renueva `eys_last`. La espera de la URL es `waitForURL`, igual que la de `page.goto`.
+  8. **CRUD de usuarios filtraba antes de la recarga** (E20, Chromium). Tras «Usuario creado exitosamente» la app recarga la tabla en segundo plano con otra Server Action; la prueba espera esa segunda respuesta antes de filtrar (commit `5c7dc8b`). La cuenta 181 que quedó se borró por la API (204).
+- **Entorno de la corrida de cierre:** el 17/11 hacia las 05:12 UTC, en mitad de E19, **Netlify pausó el sitio de QA por límite de uso** (503 `usage_exceeded`). La corrida de cierre se hizo contra un **build de producción local** (`next build` + `next start`) con la API de QA y `SESSION_IDLE_MINUTES=1`. Mide el mismo código, pero **no** el adaptador de Netlify (allí el 307 del proxy no llega al navegador, D-WEB-18): falta repetirla en Netlify cuando se reactive el sitio.
+- **Lo que no se tocó:** los dos fallos de login de E17 (un error de la Server Action y una espera de más de 45 s) no son de la prueba: se registraron como **DEF-WEB-07**, con mediciones.
+
 ## Otras decisiones menores (02/11/2026)
 - **Mapeo de trazabilidad:** se usó `tests/trazabilidad.json` (alternativa de 6.1) en vez de prefijar cada `describe`, para no renombrar los archivos de prueba. El script `npm run trazabilidad` regenera `docs/trazabilidad-ut-web.md`.
 - **Specs que dependen del backend:** `padre-dos-hijos` (BE-07) y la segunda corrida de `registro-masivo` (BE-08) corren con `test.fail()` hasta que `E2E_BE07` / `E2E_BE08` valgan `true`.

@@ -6,7 +6,87 @@
 >
 > Las rutas de evidencia son relativas a la raíz del repositorio. Se abrevian: `U6_*` = `evidencias/PR-04/web/`, `I4_*` = `evidencias/PR-05/web/`, `E3_*` a `E9_*` = `evidencias/PR-06/web/`.
 >
-> **Actualizado el 11/11/2026 por la tarde.** La base de QA volvió el 10/11 (DEF-WEB-01 cerrado) y se corrieron por primera vez la integración y los 48 E2E. Salieron **14 fallos E2E causados por tres defectos de la web** (DEF-WEB-02, 03 y 04). **Los tres se corrigieron en esta rama y están verificados en QA**: en la corrida E7 y sus repeticiones (E8, E9) hay **0 FALLA**. Queda abierto DEF-WEB-05 (Baja), que no causaba ningún fallo E2E.
+> **Actualizado el 17/11/2026** con la planeación de cierre (tareas WC-03 y WC-04): ver la **sección 0**, que manda sobre las cifras E2E de las secciones 3, 5.3, 9 y 10 donde no coincidan.
+>
+> **Versión anterior, 11/11/2026 por la tarde.** La base de QA volvió el 10/11 (DEF-WEB-01 cerrado) y se corrieron por primera vez la integración y los 48 E2E. Salieron **14 fallos E2E causados por tres defectos de la web** (DEF-WEB-02, 03 y 04). **Los tres se corrigieron en esta rama y están verificados en QA**: en la corrida E7 y sus repeticiones (E8, E9) hay **0 FALLA**. Queda abierto DEF-WEB-05 (Baja), que no causaba ningún fallo E2E.
+
+---
+
+## 0. ACTUALIZACIÓN DEL 16 Y 17/11/2026 · planeación de cierre, WC-03 y WC-04
+
+Lo que pedía la planeación de cierre para la web en estas dos tareas: **corregir DEF-WEB-05** (el motivo del 422 junto al campo) y **dejar los E2E en 0 FALLA, 0 BLOQUEADO y 0 INESTABLE** en una corrida completa de los dos navegadores, **sin subir tiempos de espera** (planeación de cierre, §0).
+
+### 0.1 Resultado
+
+**E2E: 50 ejecuciones (25 casos × Chromium y Firefox) → 50 APROBADO · 0 FALLA · 0 BLOQUEADO · 0 INESTABLE** en la corrida de cierre **E22** (17/11, 06:36–07:04 UTC, commit `5c7dc8b`, sin reintentos: `retries` es 0 fuera del CI). Por primera vez corren los 2 casos de BE-08 y los 4 de CP-SIS-065 a escala, antes BLOQUEADO, y el E2E nuevo de DEF-WEB-05. Ninguna cuenta de prueba quedó en QA (110 usuarios, ninguna `*.e2e.*`).
+
+**Entorno, leer antes de copiar al PR-06:** E22 corrió contra un **build de producción local** (`next build` + `next start`) con la **API de QA** y `SESSION_IDLE_MINUTES=1`, **no contra Netlify**. El 17/11 hacia las 05:12 UTC, a mitad de E19, **Netlify pausó el sitio de QA por límite de uso del plan** (503 `usage_exceeded`, ver `E19_netlify-pausado.txt`). E22 mide el mismo código, pero no el adaptador de Netlify (allí el 307 del proxy no llega al navegador, D-WEB-18). La última corrida completa en Netlify es **E17: 47 de 50** (2 fallos por DEF-WEB-07, que se corrigió después, y 1 de la prueba). **Para cerrar WC-04 como lo pide la planeación, contra QA desplegado, hay que reactivar el sitio desde la cuenta de Netlify y repetir la corrida completa.**
+
+### 0.2 Corridas de esta etapa
+
+E10 a E19 contra el deploy preview del PR #34 (`deploy-preview-34--qaeyesschool.netlify.app`); **E20 a E22 contra un build de producción local** con la API de QA, porque Netlify pausó el sitio durante E19. Todas con `E2E_BE08=true` (sin `test.fail`). Desde E16, las corridas completas incluyen además los 4 casos de CP-SIS-065 a escala (`E2E_SESSION_IDLE_MINUTES=1`), que en E7 estaban BLOQUEADO.
+
+| Corrida | Fecha (UTC) | Commit | Qué es | Resultado | Evidencia |
+|---|---|---|---|---|---|
+| E10 | 11/11 21:58 | entre `6d56838` y `513d3c8` | CP-SIS-065 a escala | 4/4 | `E10_sesion-a-escala.xml` |
+| E11 | 11/11 22:20 | entre `513d3c8` y `0c469e3` | Completa sin los casos a escala | 41 pasan, 3 fallan, 4 omitidos | `E11_e2e.xml` |
+| E12, E13 | 11/11 22:38 y 22:46 | `0c469e3` + specs sin commitear | Repeticiones de esos 3 | Siguen fallando a veces | `E12_reintento.xml`, `E13_reintento.xml` |
+| E14 | 17/11 02:37 | `a9383e1` | Inactividad y registro masivo ×3 tras sincronizar con eventos | Inactividad **6/6**; registro masivo 0/6 por el curso «Sexto A», **inactivo en QA** | `E14_sincronizacion.xml`, `E14_sincronizacion-consola.txt` |
+| E15 | 17/11 ~02:51 | `a9383e1` + curso «Séptimo A» | Registro masivo ×3 | **6/6** | `E15_registro-masivo-consola.txt` (solo consola) |
+| E16 | 17/11 02:56 → 03:26 | `74bcf7e` | **Completa** (48) | 44 pasan, 4 fallan (ninguno de la app) | `E16_e2e.xml`, `E16_e2e-consola.txt` |
+| E17 | 17/11 03:56 → 04:27 | `48d3b1c` | **Completa** (50, con el E2E de DEF-WEB-05) | 47 pasan, 3 fallan: **2 por DEF-WEB-07** (nuevo) y 1 de la prueba | `E17_e2e.xml`, `E17_e2e-consola.txt` |
+| E18 | 17/11 | `48d3b1c` + `54ea196` | Los 3 fallos de E17, ×2 | 19/20; el fallo, otra vez DEF-WEB-07 | `E18_reintento-consola.txt` (solo consola) |
+| E19 | 17/11 05:10 → 05:54 | `2cb81d2` | Completa (50) en Netlify, con DEF-WEB-07 corregido | **2 pasan, 48 fallan: Netlify pausó el sitio por límite de uso** desde el tercer caso. No mide la app | `E19_e2e.xml`, `E19_e2e-consola.txt`, `E19_netlify-pausado.txt` |
+| E20 | 17/11 06:00 → 06:28 | `2cb81d2` | Completa (50) contra `next start` local con la API de QA | 49/50: el CRUD de usuarios filtraba antes de la recarga de la tabla (prueba) | `E20_e2e-local.xml`, `E20_e2e-local-consola.txt` |
+| E21 | 17/11 ~06:31 | `2cb81d2` + spec | CRUD de usuarios ×3, local | **6/6** | `E21_usuarios-local.xml`, `E21_usuarios-local-consola.txt` |
+| **E22** | **17/11 06:36 → 07:04** | **`5c7dc8b`** | **Corrida de cierre, completa (50), local** | **50/50** | `E22_e2e-local.xml`, `E22_e2e-local-consola.txt` |
+
+Horas del atributo `timestamp` de cada JUnit, o de la consola. El commit de E10 y E11 sale de comparar esa hora con la del commit (el deploy preview exacto contra el que corrieron no quedó anotado). E15 y E18 corrieron con `--reporter=list`, que no escribe el JUnit: queda su consola. El XML que se subió primero como `E15_registro-masivo.xml` era el de E14 y se renombró (`2cb81d2`).
+
+### 0.3 Por qué fallaban y qué se cambió
+
+Cada causa está comprobada con la corrida que la mostró (detalle en **D-WEB-19**, sección 11). Ningún tiempo de espera se subió; se **quitaron** dos (los 30 s del primer envío del registro masivo y el `networkidle` de la inactividad).
+
+| Caso | Causa | Tipo | Cambio | Commit |
+|---|---|---|---|---|
+| Login en Firefox (E12: se quedaba en `/?login=1`) | El formulario de la portada llega como HTML del servidor y se ve listo antes de que se conecten sus listeners: el clic se perdía | **Aplicación** (también le pasa a un usuario rápido) | `setupLogin` marca el formulario con `data-listo="true"`; `iniciarSesion` lo espera | `a9383e1` |
+| CP-SIS-004 «31 minutos sin actividad» (E12, E13) | Una petición pendiente del inicio pasaba por el proxy y renovaba `eys_last` después de que la prueba lo pusiera en el pasado; `networkidle` nunca llega | Prueba | La prueba sale a `about:blank` antes de poner la cookie | `a9383e1` |
+| CP-SIS-039 registro masivo, segundo envío (E13) | El primer envío esperaba 30 s y el segundo 5 s | Prueba | Los dos esperan la respuesta de la Server Action | `a9383e1` |
+| CP-SIS-039 (E14) | «Sexto A» quedó **inactivo** en QA (`activo: false`) y el selector solo ofrece cursos activos | **Dato de QA** | Curso «Séptimo A» en `.env.test.local`; la prueba nombra el dato si vuelve a faltar | `74bcf7e` |
+| CP-SIS-060 padre con dos hijos (E16) | La API de QA devolvió los hijos en otro orden y la prueba exigía uno; el criterio no fija orden | Prueba | Compara sin orden | `48d3b1c` |
+| CP-SIS-006 menú del estudiante (E16, Firefox) | Leía el menú antes de que estuviera completo | Prueba | `expect.poll` hasta que estén los módulos obligatorios | `48d3b1c` |
+| CP-SIS-065 a escala (E16 y E17, Firefox) | `page.goto` abortado por una navegación de la página con la sesión viva (`NS_ERROR_ABORT`); luego, `toHaveURL` con 5 s para la navegación del menú | Prueba | Actividad con clics en el menú y `waitForURL`, que espera como `page.goto` | `48d3b1c`, `54ea196` |
+| CP-SIS-019 a 028 CRUD de usuarios (E20, Chromium) | Tras «Usuario creado exitosamente» la app recarga la tabla en segundo plano con otra Server Action; la prueba filtraba antes de que terminara | Prueba | Espera la respuesta de esa recarga antes de filtrar. La cuenta 181 que quedó se borró por la API (204) | `5c7dc8b` |
+| CP-SIS-001 / 006 login de docente y estudiante (E17, E18) | La Server Action del login falló una vez y otra quedó en «ENTRANDO…» más de 45 s. Ninguna llamada del servidor a la API tenía tiempo máximo | **Aplicación: DEF-WEB-07** | 10 s por intento y un reintento en login, perfil y panel; tope de 60 s con mensaje en la portada | `a96ae72` |
+
+### 0.4 Defectos
+
+| ID | Estado | Verificación |
+|---|---|---|
+| **DEF-WEB-05** · el registro escondía el motivo del 422 | **Corregido y verificado en QA.** `1697c7c` muestra el motivo; `52e6470` lo pone **junto al campo** que lo causó (`aria-invalid` y `aria-describedby`), como pide WC-03 | E2E nuevo «un correo rechazado por la API muestra el motivo junto al campo» **aprobado en los dos navegadores** (E17 en Netlify; también E20 y E22, locales); 7 unitarias en `tests/register.test.ts` y 2 de componente en `tests/components/SignupModal.test.tsx`. Falta cerrar el issue (lo hace QA) |
+| **DEF-WEB-07** · el login falla o se queda en «ENTRANDO…» de forma intermitente en QA (**nuevo**, Media, P3) | **En curso.** Corrección aplicada en `a96ae72` | En E20 y E22 (unos 100 inicios de sesión) no se repitió, pero esas corridas no pasan por Netlify, que es donde ocurrió: **sin verificar en QA** hasta repetir la corrida allí. Medido el 17/11: la API responde al login en 2,0–5,0 s y la Server Action en 5,6–11,3 s. La causa de fondo (función de Netlify o latencia de la API) **no está confirmada**: falta el log de funciones de Netlify. Ficha: `docs/defectos/DEF-WEB-07.md` |
+
+### 0.5 Cambios de la aplicación en esta etapa
+
+Además de las pruebas, cambiaron **tres** cosas de la app, cada una con pruebas que fallaban antes:
+
+1. **Portada:** marca `data-listo` en el formulario de inicio de sesión (`tests/portada.test.ts`) y tope de 60 s para la espera del login.
+2. **Registro (DEF-WEB-05):** `register` devuelve `campo` y `motivo`; `SignupModal` marca el campo.
+3. **Llamadas del servidor a la API (DEF-WEB-07):** `src/services/api/conLimite.ts` en el login, `/auth/me` y el panel de inicio (`tests/loginLimite.test.ts`, 5 casos).
+
+Unitarias y de componentes: **355 en 38 archivos, todas pasan** (corrida local del 17/11 sobre los cambios de `a96ae72`; antes 342 en 36). No hay evidencia U7 versionada todavía: la corrida U7 completa es de la tarea WC-11.
+
+### 0.6 Lo que sigue pendiente de la planeación de cierre (web)
+
+| Tarea | Estado |
+|---|---|
+| WC-01 · fusionar el PR #34 y registrar los issues | **Sin aprobación** (0 revisiones). Al fusionar, el registro crea también DEF-WEB-07 |
+| WC-02 · revocar la clave de Supabase (DEF-028) | De Andrés Acero; sin cambios |
+| WC-03 · DEF-WEB-05 | **Hecho**. Queda aparte la observación del aviso de cookies que tapa «CREAR CUENTA» a 1280×720, para el bloque de *responsive* (WC-06) |
+| WC-04 · E2E sin INESTABLE | **Hecho en local; falta en Netlify.** E22: 50/50 contra el build de producción local. En Netlify, la última completa es E17 (47/50) y E19 la cortó la pausa del sitio. Reactivar el sitio (cuenta de Netlify) y repetir |
+| WC-05 · los 41 CP-SIS sin E2E | No empezado. CP-SIS-012 y 013 siguen sin spec (el E2E de DEF-WEB-05 no los reemplaza) |
+| WC-06 a WC-11 | No empezados |
+| Dato de QA | Alguien desactivó «Sexto A» en QA entre el 11 y el 16/11; si fue a propósito, conviene avisar al equipo de datos (DS-02) |
 
 ---
 
@@ -187,6 +267,8 @@ Una fila por nivel. Los totales salen de los XML JUnit, no de la memoria.
 | Pruebas manuales | Lighthouse, axe, ZAP, Brave, Chrome móvil | **24 casos** | 0 | 0 | 0 | **24 NO EJECUTADOS** | — | `docs/pruebas-manuales-pr06-web.md` |
 
 **Notas de lectura de la tabla**
+
+- **Las filas E2E son del 11/11 (E7).** El resultado vigente es el de la corrida de cierre **E19**, en la **sección 0.1**.
 
 - **E2E: 48 ejecuciones → 35 APROBADO, 0 FALLA, 6 BLOQUEADO y 7 INESTABLE.** Antes de las correcciones (E4) eran 22 APROBADO y 14 FALLA. Los 14 fallos venían de DEF-WEB-02 (8), DEF-WEB-03 (4) y DEF-WEB-04 (2), y **los 14 pasan ahora**. Detalle en la 5.3.
 - Los 7 INESTABLE son todos de **Firefox**: en E7 se les agotó el tiempo (carga de la portada o login) y en la repetición pasaron. Ninguno falló por una comprobación.
@@ -619,6 +701,8 @@ Fuente: `I4_integracion.xml` (11/11/2026, ~18:45 UTC, 59,4 s, commit `7d927df`).
 
 ### 5.3 E2E · 48 ejecuciones (24 casos × Chromium y Firefox)
 
+> **Histórico del 11/11.** El resultado vigente, caso por caso, es el de E19 (sección 5.6).
+
 **Corridas de esta jornada**, todas contra el deploy preview del PR #34:
 
 | Corrida | Qué es | Resultado de Playwright | Evidencia |
@@ -704,6 +788,65 @@ Fuente: `I4_integracion.xml` (11/11/2026, ~18:45 UTC, 59,4 s, commit `7d927df`).
 | CP-NF-012, CP-NF-013 | No automatizados como E2E. CP-NF-012 queda cubierto por gitleaks en el CI; CP-NF-013 por las unitarias de cookies y proxy y por el E2E «el token de acceso no se puede leer desde JavaScript» (APROBADO) | [`.github/workflows/ci.yml`, `tests/authCookies.test.ts`, `E7_e2e.xml`] |
 | CP-INT-040, 062, 076 | Sin prueba automatizada en el frontend. CP-INT-060 sí la tiene (IT-WEB-04) | [`tests/trazabilidad.json`] |
 | Pruebas manuales (24 casos) | Todas NO EJECUTADAS, ver sección 14 | [`docs/pruebas-manuales-pr06-web.md`] |
+
+### 5.6 E2E · corrida de cierre E22 (17/11/2026) · 50 ejecuciones
+
+> Contra el build de producción local con la API de QA, no contra Netlify (sección 0.1). Commit `5c7dc8b`, sin reintentos. Generada desde `evidencias/PR-06/web/E22_e2e-local.xml`.
+
+| CP-SIS | Caso | Spec (navegador) | Resultado en E19 | Duración u observación |
+|---|---|---|---|---|
+| CP-SIS-051, 054 | boletín del padre (WEB-09) › el padre descarga un PDF | `e2e/boletin-padre.spec.ts` (chromium) | **APROBADO** | 25.6 s |
+| CP-SIS-051, 054 | boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación | `e2e/boletin-padre.spec.ts` (chromium) | **APROBADO** | 20.1 s |
+| CP-SIS-001 / 006 | inicio de sesión · admin › el admin llega a su inicio con los datos cargados | `e2e/login-roles.spec.ts` (chromium) | **APROBADO** | 14.2 s |
+| CP-SIS-001 / 006 | inicio de sesión · admin › el menú del admin solo trae los módulos de su rol | `e2e/login-roles.spec.ts` (chromium) | **APROBADO** | 11.2 s |
+| CP-SIS-001 / 006 | inicio de sesión · docente › el docente llega a su inicio con los datos cargados | `e2e/login-roles.spec.ts` (chromium) | **APROBADO** | 11.9 s |
+| CP-SIS-001 / 006 | inicio de sesión · docente › el menú del docente solo trae los módulos de su rol | `e2e/login-roles.spec.ts` (chromium) | **APROBADO** | 12.7 s |
+| CP-SIS-001 / 006 | inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados | `e2e/login-roles.spec.ts` (chromium) | **APROBADO** | 12.8 s |
+| CP-SIS-001 / 006 | inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol | `e2e/login-roles.spec.ts` (chromium) | **APROBADO** | 13.1 s |
+| CP-SIS-001 / 006 | inicio de sesión · padre › el padre llega a su inicio con los datos cargados | `e2e/login-roles.spec.ts` (chromium) | **APROBADO** | 14.7 s |
+| CP-SIS-001 / 006 | inicio de sesión · padre › el menú del padre solo trae los módulos de su rol | `e2e/login-roles.spec.ts` (chromium) | **APROBADO** | 15.5 s |
+| CP-SIS-060 | el padre de prueba cambia de hijo y cambian notas, asistencia y novedades | `e2e/padre-dos-hijos.spec.ts` (chromium) | **APROBADO** | 35.9 s |
+| CP-SIS-060 | un padre con un solo hijo no ve el selector | `e2e/padre-dos-hijos.spec.ts` (chromium) | **APROBADO** | 18.1 s |
+| CP-SIS-037, 038, 039, 041 | registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» | `e2e/registro-masivo.spec.ts` (chromium) | **APROBADO** | 28.3 s |
+| CP-SIS-037, 038, 039, 041 | registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar | `e2e/registro-masivo.spec.ts` (chromium) | **APROBADO** | 19.3 s |
+| DEF-WEB-05 | un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) | `e2e/registro-padre.spec.ts` (chromium) | **APROBADO** | 10.2 s |
+| CP-SIS-014 | el padre que se registra ve los datos de su hijo vinculado | `e2e/registro-padre.spec.ts` (chromium) | **APROBADO** | 34.5 s |
+| CP-SIS-004 / 065 | sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión | `e2e/sesion.spec.ts` (chromium) | **APROBADO** | 15.5 s |
+| CP-SIS-004 / 065 | sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola | `e2e/sesion.spec.ts` (chromium) | **APROBADO** | 20.5 s |
+| CP-SIS-004 / 065 | sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript | `e2e/sesion.spec.ts` (chromium) | **APROBADO** | 13.3 s |
+| CP-SIS-004 / 065 | sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) | `e2e/sesion.spec.ts` (chromium) | **APROBADO** | 260.5 s |
+| CP-SIS-004 / 065 | sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) | `e2e/sesion.spec.ts` (chromium) | **APROBADO** | 87.9 s |
+| CP-SIS-004 / 065 | una ruta del panel sin sesión pide iniciar sesión | `e2e/sesion.spec.ts` (chromium) | **APROBADO** | 4.6 s |
+| CP-SIS-019, 021, 022, 025, 027, 028 | gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba | `e2e/usuarios.spec.ts` (chromium) | **APROBADO** | 39.1 s |
+| CP-SIS-019, 021, 022, 025, 027, 028 | gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) | `e2e/usuarios.spec.ts` (chromium) | **APROBADO** | 15.2 s |
+| CP-SIS-019, 021, 022, 025, 027, 028 | gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) | `e2e/usuarios.spec.ts` (chromium) | **APROBADO** | 15.3 s |
+| CP-SIS-051, 054 | boletín del padre (WEB-09) › el padre descarga un PDF | `e2e/boletin-padre.spec.ts` (firefox) | **APROBADO** | 27.1 s |
+| CP-SIS-051, 054 | boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación | `e2e/boletin-padre.spec.ts` (firefox) | **APROBADO** | 21.0 s |
+| CP-SIS-001 / 006 | inicio de sesión · admin › el admin llega a su inicio con los datos cargados | `e2e/login-roles.spec.ts` (firefox) | **APROBADO** | 14.4 s |
+| CP-SIS-001 / 006 | inicio de sesión · admin › el menú del admin solo trae los módulos de su rol | `e2e/login-roles.spec.ts` (firefox) | **APROBADO** | 14.8 s |
+| CP-SIS-001 / 006 | inicio de sesión · docente › el docente llega a su inicio con los datos cargados | `e2e/login-roles.spec.ts` (firefox) | **APROBADO** | 16.8 s |
+| CP-SIS-001 / 006 | inicio de sesión · docente › el menú del docente solo trae los módulos de su rol | `e2e/login-roles.spec.ts` (firefox) | **APROBADO** | 17.7 s |
+| CP-SIS-001 / 006 | inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados | `e2e/login-roles.spec.ts` (firefox) | **APROBADO** | 17.2 s |
+| CP-SIS-001 / 006 | inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol | `e2e/login-roles.spec.ts` (firefox) | **APROBADO** | 23.8 s |
+| CP-SIS-001 / 006 | inicio de sesión · padre › el padre llega a su inicio con los datos cargados | `e2e/login-roles.spec.ts` (firefox) | **APROBADO** | 19.2 s |
+| CP-SIS-001 / 006 | inicio de sesión · padre › el menú del padre solo trae los módulos de su rol | `e2e/login-roles.spec.ts` (firefox) | **APROBADO** | 20.2 s |
+| CP-SIS-060 | el padre de prueba cambia de hijo y cambian notas, asistencia y novedades | `e2e/padre-dos-hijos.spec.ts` (firefox) | **APROBADO** | 38.0 s |
+| CP-SIS-060 | un padre con un solo hijo no ve el selector | `e2e/padre-dos-hijos.spec.ts` (firefox) | **APROBADO** | 22.8 s |
+| CP-SIS-037, 038, 039, 041 | registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» | `e2e/registro-masivo.spec.ts` (firefox) | **APROBADO** | 29.8 s |
+| CP-SIS-037, 038, 039, 041 | registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar | `e2e/registro-masivo.spec.ts` (firefox) | **APROBADO** | 25.8 s |
+| DEF-WEB-05 | un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) | `e2e/registro-padre.spec.ts` (firefox) | **APROBADO** | 16.0 s |
+| CP-SIS-014 | el padre que se registra ve los datos de su hijo vinculado | `e2e/registro-padre.spec.ts` (firefox) | **APROBADO** | 42.5 s |
+| CP-SIS-004 / 065 | sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión | `e2e/sesion.spec.ts` (firefox) | **APROBADO** | 18.1 s |
+| CP-SIS-004 / 065 | sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola | `e2e/sesion.spec.ts` (firefox) | **APROBADO** | 19.8 s |
+| CP-SIS-004 / 065 | sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript | `e2e/sesion.spec.ts` (firefox) | **APROBADO** | 16.7 s |
+| CP-SIS-004 / 065 | sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) | `e2e/sesion.spec.ts` (firefox) | **APROBADO** | 277.8 s |
+| CP-SIS-004 / 065 | sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) | `e2e/sesion.spec.ts` (firefox) | **APROBADO** | 90.6 s |
+| CP-SIS-004 / 065 | una ruta del panel sin sesión pide iniciar sesión | `e2e/sesion.spec.ts` (firefox) | **APROBADO** | 7.2 s |
+| CP-SIS-019, 021, 022, 025, 027, 028 | gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba | `e2e/usuarios.spec.ts` (firefox) | **APROBADO** | 50.3 s |
+| CP-SIS-019, 021, 022, 025, 027, 028 | gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) | `e2e/usuarios.spec.ts` (firefox) | **APROBADO** | 20.3 s |
+| CP-SIS-019, 021, 022, 025, 027, 028 | gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) | `e2e/usuarios.spec.ts` (firefox) | **APROBADO** | 21.3 s |
+
+**Conteo:** Chromium 25 APROBADO · Firefox 25 APROBADO. **0 FALLA · 0 BLOQUEADO · 0 INESTABLE · 0 NO EJECUTADO.**
 
 ---
 
@@ -875,10 +1018,11 @@ Desde el 10/11 los defectos se gestionan en **GitHub Issues** con la plantilla *
 | **DEF-WEB-04** | `proxy.ts` estaba fuera de `src/` y Next no lo ejecutaba: la sesión no se cerraba por inactividad | **Alta** (P2) | Web | CP-SIS-004 | `138db97`: `src/proxy.ts` + regla de arquitectura | Build con `ƒ Proxy`; 307 en local; cookies borradas en QA; **CP-SIS-004 APROBADO en los dos navegadores** (E7, E9) | **Corregido y verificado en QA** | NO DISPONIBLE |
 | **DEF-WEB-03** | El selector de hijos mostraba «Estudiante #1» en vez del nombre: la web no leía los campos de BE-07 | **Media** (P3) | Web | CP-SIS-060 y CP-SIS-014 | `4067c18`: `aHijo` lee `nombre_estudiante`; fixtures reales; IT-WEB-03 nuevo | **IT-WEB-03 nuevo APROBADO contra QA**; CP-SIS-060 y CP-SIS-014 APROBADO en los dos navegadores (E7, E8) | **Corregido y verificado en QA** | NO DISPONIBLE |
 | **DEF-WEB-02** | Había dos elementos `<main>` anidados en todas las páginas | **Baja** (P4) | Web | CP-SIS-001 | `e886144`: el layout raíz usa `<div>`; portada y `(auth)` con su `<main>`; regla de arquitectura | HTML desplegado con un solo `<main>`; **CP-SIS-001 APROBADO en los 4 roles y los dos navegadores** (E7) | **Corregido y verificado en QA** | NO DISPONIBLE |
-| **DEF-WEB-05** | El registro esconde el motivo cuando la API rechaza los datos (422) | **Baja** (P4) | Web | CP-SIS-014, al diagnosticar | Propuesta en la ficha; **no aplicada** | — | **Abierto** | NO DISPONIBLE |
+| **DEF-WEB-05** | El registro esconde el motivo cuando la API rechaza los datos (422) | **Baja** (P4) | Web | CP-SIS-014, al diagnosticar | `1697c7c` (el motivo) y `52e6470` (junto al campo, 16/11) | E2E nuevo aprobado en los dos navegadores (E17), 7 unitarias y 2 de componente | **Corregido y verificado en QA** (17/11) | NO DISPONIBLE |
+| **DEF-WEB-07** | El inicio de sesión falla o se queda en «ENTRANDO…» de forma intermitente en QA | **Media** (P3) | Web | CP-SIS-001 / 006 (E17) | `a96ae72` (17/11): tiempo máximo y reintento en las llamadas del servidor; tope en la portada | Ver sección 0.4 | **En curso** | NO DISPONIBLE |
 | DEF-WEB-01 | La API de QA no podía consultar su base de datos | Alta | Backend | Preflight | Entorno (equipo backend) | I3 e I4 | **Cerrado el 10/11** · causa raíz: Entorno | NO DISPONIBLE |
 
-Cada corrección tiene una prueba que **fallaba antes y pasa después** (detalle en `docs/defectos/DEF-WEB-0x.md` y D-WEB-18). **No queda ningún defecto Alto ni Crítico abierto de la web**, salvo DEF-028 (historial de git, acción externa 1).
+Cada corrección tiene una prueba que **fallaba antes y pasa después** (detalle en `docs/defectos/DEF-WEB-0x.md` y D-WEB-18). **No queda ningún defecto Alto ni Crítico abierto de la web**, salvo DEF-028 (historial de git, acción externa 1). Al 17/11 queda **DEF-WEB-07 (Media) En curso** (sección 0.4).
 
 ### 9.2 Defectos de la planeación (DEF-020 a DEF-028)
 
@@ -936,9 +1080,9 @@ Las corridas E7 a E9 no dejaron cuentas: las pruebas borraron lo que crearon. Al
 
 | Casos | Cuántos | Por qué | Qué lo desbloquea |
 |---|---|---|---|
-| CP-SIS-065 a escala | 2 casos (4 ejecuciones) | Falta confirmar `SESSION_IDLE_MINUTES=1` en *Deploy Previews*. DEF-WEB-04 ya no lo impide | Acción externa 5b y `E2E_SESSION_IDLE_MINUTES=1` |
-| «La segunda vez con el mismo curso…» | 1 caso (2 ejecuciones) | BE-08 no está confirmado en QA | Desplegar BE-08 y poner `E2E_BE08=true` (acción externa 9) |
-| Casos INESTABLE | 7 ejecuciones (todas Firefox) | Tiempo agotado en el deploy preview (portada de ~20 s, login de 14–17 s, Firefox más lento) | Repetirlos cuando la portada cargue más rápido, o en un entorno con menos latencia. No se subieron más los tiempos para no esconder un problema real |
+| ~~CP-SIS-065 a escala~~ | 2 casos (4 ejecuciones) | **Desbloqueado**: el preview tiene `SESSION_IDLE_MINUTES=1` (E10) y desde E14 corre con `E2E_SESSION_IDLE_MINUTES=1` | — |
+| ~~«La segunda vez con el mismo curso…»~~ | 1 caso (2 ejecuciones) | **Desbloqueado**: BE-08 está en QA y corre con `E2E_BE08=true` (sin `test.fail`) | — |
+| Casos INESTABLE | 0 en E22 (local); falta repetirla en Netlify (sección 0.1) | Causas y cambios en la sección 0.3 | — |
 | Pruebas manuales | **24** | Nadie las ha ejecutado | `docs/pruebas-manuales-pr06-web.md` |
 | Captura del Quality Gate | 1 evidencia | No se puede generar desde el repositorio | Que Mariana la tome del panel |
 
@@ -981,6 +1125,7 @@ Resumen de [`docs/decisiones-qa.md`], con el número, la fecha, la opción aplic
 | **D-WEB-16** · Tiempos de espera de los E2E (10/11) | `timeout: 90_000` por prueba y 45 s para llegar al inicio tras el login | Portada ~20 s + login 14–17 s superaban los 30 s por defecto. Las comprobaciones no cambian | E3 → E4 |
 | **D-WEB-17** · Defectos de las pruebas E2E (10 y 11/11) | Se corrigieron solo oráculos y datos que contradecían la planeación o la API: el menú del admin (contra `routeRoles`, y ahora más estricto), el correo `.test` y el `?registered=true` del registro, las esperas de 5 s para Server Actions, el nombre del hijo buscado en la `<option>` oculta y la espera de la redirección de cliente tras el cierre por inactividad. **Nunca** se tocó una prueba para esconder un defecto: las de DEF-WEB-02, 03 y 04 siguieron fallando hasta corregir la app | Cada cambio con causa comprobada (sección 9.3) | E4 a E9 |
 | **D-WEB-18** · Corrección de DEF-WEB-02, 03 y 04 (11/11) | Se corrigieron en el PR #34, un commit por defecto (`138db97`, `4067c18`, `e886144`), cada uno con una prueba que fallaba antes y pasa después. DEF-WEB-05 queda abierto | Pedido de Mariana: «arregla todos los fallos». Observación: en Netlify el 307 del proxy no llega (redirige la página) | `tests/arquitectura.test.ts`, `tests/asociadoActions.test.ts`, IT-WEB-03 nuevo, E7 a E9 |
+| **D-WEB-19** · Cierre de los INESTABLE (16 y 17/11) | Sincronizar las pruebas con eventos reales (marca `data-listo`, respuesta de la Server Action, `waitForURL`, `expect.poll`) y corregir en la app lo que era de la app (`data-listo`, DEF-WEB-07). **No se subió ningún tiempo de espera**; se quitaron dos | Planeación de cierre §0: INESTABLE no cuenta como aprobado y no se tapan lentitudes con más espera. Pedido de Mariana: «haz lo que necesites para que los tests pasen» | `tests/portada.test.ts`, `tests/loginLimite.test.ts`, corridas E14 a E19 (sección 0) |
 
 ---
 
@@ -1148,10 +1293,10 @@ Fuente: [`docs/pruebas-manuales-pr06-web.md`], donde las columnas *Fecha*, *Ejec
 | 3 | ~~Si DEF-WEB-01 era la base~~ | **CERRADO el 10/11** | — |
 | 4 | Que el proxy entregue el **307 en Vercel** | En local con `next start` sí; en Netlify no (D-WEB-18). La vista previa de Vercel ya compila, pero tiene la protección de Vercel activada: sin cuenta responde 302 a `vercel.com/sso-api` | Abrirla con una cuenta del equipo y pedir `/usuarios` sin sesión: debe redirigir a `/?login=1` |
 | 5 | Qué componente renovaba la sesión con el acceso vencido mientras el proxy no corría | El E2E pasó también antes de corregir DEF-WEB-04 (E3, E5); no se rastreó | Revisar si hay dos mecanismos de renovación superpuestos (`/api/auth/refresh` y el proxy) |
-| 6 | Si los 7 INESTABLE de Firefox fallan por algo más que el tiempo | En E7 fallaron por tiempo agotado y al repetirlos pasaron; en Chromium pasan | Repetirlos con un entorno más rápido o con traza de red |
+| 6 | ~~Si los 7 INESTABLE de Firefox fallan por algo más que el tiempo~~ | **CERRADO el 17/11**: sí, había causas concretas (clic antes de hidratar, carreras de las pruebas y DEF-WEB-07). Sección 0.3 | — |
 | 7 | ~~Por qué falla la vista previa de Vercel~~ | **CERRADO el 11/11**: el log que compartió Mariana muestra `NEXT_PUBLIC_API_URL` inválida | Acción externa 19 |
 | 8 | Si BE-08 está en QA | El `openapi.json` no documenta el 409 | Que backend lo confirme |
-| 9 | CP-SIS-065 verificado en navegador | Falta `SESSION_IDLE_MINUTES=1` (DEF-WEB-04 ya corregido) | Acción 5b |
+| 9 | ~~CP-SIS-065 verificado en navegador~~ | **CERRADO**: a escala pasa en los dos navegadores (E10 y E18 en Netlify; E22 local) | — |
 | 10 | Los parentescos `Abuela`, `Tío`, `Tía`, `Hermano` y `Hermana` del perfil del padre | `PadreCreate` del backend solo acepta `Padre`, `Madre`, `Tutor`, `Abuelo` y `Otro`. No se probó guardar uno de esos | Un caso de integración o E2E sobre `/perfil` del padre |
 | 11 | El reparto de los 50 CP-SIS restantes entre «manual» y «sin cubrir» | La planeación de sistema no tiene columna de automatización | Revisarla caso a caso |
 | 12 | Número de issue de DEF-020 a 028 y de DEF-WEB-01 a 05 | Se registran al fusionar el PR #34 | Acciones externas 11 y 15 |
@@ -1160,3 +1305,5 @@ Fuente: [`docs/pruebas-manuales-pr06-web.md`], donde las columnas *Fecha*, *Ejec
 | 15 | Cabeceras de seguridad HTTP de la web de QA | ZAP baseline pendiente | Bloque 3 de las pruebas manuales |
 | 16 | Las 24 pruebas manuales y el *responsive* 375/768/1920 | Nadie las ha ejecutado | Ejecutarlas, y antes agregar los casos de *responsive* |
 | 17 | El JUnit de la corrida E3 | Se sobrescribió por error con la salida de un `--list`; solo queda la consola | Nada: E4 es la corrida de referencia y sí tiene JUnit |
+| 18 | La causa de fondo de DEF-WEB-07 | Con la corrección, una llamada lenta ya no cuelga el login, pero no se sabe si los fallos venían de la función de Netlify o de la API de QA | El log de funciones de Netlify del 17/11, 03:56–04:27 UTC (acceso del equipo) |
+| 19 | Quién desactivó el curso «Sexto A» en QA | Estaba activo el 11/11 y no el 16/11 | Preguntar al equipo de datos |
