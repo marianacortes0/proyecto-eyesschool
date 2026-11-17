@@ -68,9 +68,12 @@ test.describe('sesión (WEB-01)', () => {
         // la ruta al servidor y el proxy renueva `eys_last`. Con page.goto, una
         // navegación propia de la página abortaba la de la prueba (Firefox,
         // NS_ERROR_ABORT en E16) aunque la sesión seguía viva.
+        // La URL cambia cuando llega el render del servidor: se espera la
+        // navegación como la esperaba page.goto (sin un límite propio de 5 s, E17).
         const ruta = rutas[i % rutas.length]
         await page.locator(`aside a[href="${ruta}"]`).first().click()
-        await expect(page, `vuelta ${i}`).toHaveURL(new RegExp(`${ruta}$`))
+        await page.waitForURL(new RegExp(`${ruta}$`))
+        await expect(page, `vuelta ${i}`).not.toHaveURL(/\/\?login=1/)
         await page.waitForTimeout(15_000)
       }
 
