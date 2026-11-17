@@ -32,8 +32,16 @@ test.describe('gestión de usuarios (admin)', () => {
     await abrirNuevoUsuario(page)
     await page.getByRole('combobox').filter({ hasText: /docente|profesor/i }).first().selectOption({ label: 'Profesor' }).catch(() => null)
     await llenarDocente(page, correo)
+    // Tras el aviso, la app recarga la tabla en segundo plano (otra Server Action).
+    // Filtrar antes de que termine mostraba «No se encontraron usuarios» (E20):
+    // se espera esa segunda respuesta, no un tiempo fijo.
+    let acciones = 0
+    const recarga = page.waitForResponse(
+      (r) => r.request().method() === 'POST' && !!r.request().headers()['next-action'] && ++acciones === 2
+    )
     await page.getByRole('button', { name: 'Crear Usuario' }).click()
     await expect(page.getByText('Usuario creado exitosamente')).toBeVisible(AVISO)
+    await recarga
 
     // Filtrar (CP-SIS-027)
     await page.getByPlaceholder('Buscar por nombre, correo o documento...').fill(correo)
