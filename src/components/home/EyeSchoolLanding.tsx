@@ -17,6 +17,9 @@ import { notifySuccess, notifyInfo } from "@/lib/toast";
 import { LANDING_MARKUP } from "./eyeschoolMarkup";
 import SignupModal from "./SignupModal";
 
+/** Tope de espera del inicio de sesión en el navegador (DEF-WEB-07). */
+const LOGIN_TOPE_MS = 60_000;
+
 type LandingHandlers = {
   onLogin: (correo: string, password: string) => Promise<{ error?: string } | void>;
   navigate: (path: string) => void;
@@ -467,7 +470,18 @@ function createEngine(root: HTMLElement, handlers: LandingHandlers) {
       submitBtn.style.opacity = "0.7";
       submitBtn.style.pointerEvents = "none";
       try {
-        const res = await handlers.onLogin(correo, password);
+        // DEF-WEB-07: sin tope, si el servidor no respondía el botón quedaba en
+        // «ENTRANDO…» indefinidamente. Si llega después, la redirección sigue igual.
+        let tope: ReturnType<typeof setTimeout> | undefined;
+        const res = await Promise.race([
+          handlers.onLogin(correo, password),
+          new Promise<{ error: string }>((resolver) => {
+            tope = setTimeout(
+              () => resolver({ error: "El inicio de sesión está tardando demasiado. Intenta de nuevo." }),
+              LOGIN_TOPE_MS
+            );
+          }),
+        ]).finally(() => clearTimeout(tope));
         // En éxito, el server action redirige; aquí solo manejamos el error.
         if (res && res.error) errEl.textContent = res.error;
       } catch {

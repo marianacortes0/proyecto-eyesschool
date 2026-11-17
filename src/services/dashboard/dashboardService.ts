@@ -1,4 +1,5 @@
 import { PROXY_URL } from '@/services/api/client'
+import { fetchConLimite } from '@/services/api/conLimite'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -15,9 +16,11 @@ async function apiFetchClient<T>(path: string): Promise<T | null> {
   }
 }
 
+// Con tiempo máximo (DEF-WEB-07): el inicio se renderiza dentro de la respuesta
+// del login; si la API no responde, el panel sale vacío en vez de colgar la entrada.
 async function apiFetchServer<T>(path: string, token: string): Promise<T | null> {
   try {
-    const res = await fetch(`${API}${path}`, {
+    const res = await fetchConLimite(`${API}${path}`, {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       cache: 'no-store',
     })

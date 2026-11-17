@@ -30,6 +30,13 @@ describe('Portada · carga (DEF-WEB-06)', () => {
   // WC-04 · el login E2E de Firefox se quedaba en /?login=1: el clic llegaba
   // antes de que el motor conectara sus listeners. La marca se pone después de
   // conectar el clic y el Enter del formulario, y se quita al desmontar.
+  // DEF-WEB-07 · si el servidor no responde, el botón no queda en «ENTRANDO…» para siempre.
+  it('el inicio de sesión tiene un tope de espera con mensaje', () => {
+    expect(landing).toMatch(/const LOGIN_TOPE_MS = 60_000/)
+    expect(landing).toMatch(/Promise\.race\(\[\s*handlers\.onLogin\(correo, password\)/)
+    expect(landing).toMatch(/tardando demasiado/)
+  })
+
   it('marca el formulario como listo solo después de conectar el envío', () => {
     const marca = landing.indexOf('loginView.dataset.listo = "true"')
     expect(marca).toBeGreaterThan(landing.indexOf('on(submitBtn, "click", submit)'))

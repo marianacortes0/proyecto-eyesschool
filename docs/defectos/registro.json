@@ -175,5 +175,16 @@
     "evidencia": "docs/defectos/DEF-WEB-06.md",
     "identificado": "11/11/2026", "estado": "cerrado",
     "cierre": { "causa": "Diseño", "commit": "`6d56838` y `513d3c8`", "verificacion": "En el deploy de QA (513d3c8): vídeo 0,02 MB, YouTube 0,09 MB y 0 peticiones al embed en 10 s (Chromium); «VER VIDEO» carga el reproductor en Chromium y Firefox; tests/portada.test.ts" }
+  },
+  {
+    "id": "DEF-WEB-07",
+    "titulo": "El inicio de sesión falla o se queda en «ENTRANDO…» de forma intermitente en QA",
+    "componente": "Web", "origen": "Pruebas de sistema", "severidad": "Media", "prioridad": "P3",
+    "caso": "CP-SIS-001, CP-SIS-006", "correccion": "—",
+    "pasos": "1. Abrir /?login=1 en el deploy de QA.\n2. Iniciar sesión con una cuenta válida.\n3. Repetir: es intermitente (2 de unos 50 en E17).",
+    "esperado": "Se entra al inicio del rol; si la API falla, un mensaje claro en un tiempo razonable.",
+    "obtenido": "Una vez «No se pudo iniciar sesión. Intenta de nuevo.» y otra el botón en «ENTRANDO…» más de 45 s. La Server Action tarda 5,6–11,3 s cuando la API responde en 2–5 s.",
+    "evidencia": "docs/defectos/DEF-WEB-07.md, evidencias/PR-06/web/E17_e2e.xml",
+    "identificado": "17/11/2026", "estado": "en-curso"
   }
 ]

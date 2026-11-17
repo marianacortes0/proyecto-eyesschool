@@ -6,6 +6,7 @@ import { mapRolToKey } from '@/lib/utils/permissions'
 import { isPasswordValid, passwordChecks, PASSWORD_RULE_LABELS } from '@/lib/utils/password'
 import { ACCESS_MAX_AGE, REFRESH_MAX_AGE, cookieOptions } from '@/lib/auth/cookies'
 import { errorMessage } from '@/services/api/client'
+import { esTiempoAgotado, fetchConLimite } from '@/services/api/conLimite'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -17,12 +18,13 @@ async function setAuthCookies(accessToken: string, refreshToken: string) {
     Buffer.from(padded.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf-8')
   ) as Record<string, unknown>
 
-  // Fetch full user profile
-  const meRes = await fetch(`${API}/auth/me`, {
+  // Perfil completo. Si la API no responde a tiempo, la sesión sigue con los datos
+  // del token: el perfil solo sirve para mostrar el nombre (DEF-WEB-07).
+  const meRes = await fetchConLimite(`${API}/auth/me`, {
     headers: { Authorization: `Bearer ${accessToken}` },
     cache: 'no-store',
-  })
-  const me = meRes.ok ? (await meRes.json()) : {}
+  }).catch(() => null)
+  const me = meRes?.ok ? (await meRes.json().catch(() => ({}))) : {}
 
   const store = await cookies()
 
@@ -58,12 +60,20 @@ export async function login(prevState: unknown, formData: FormData) {
     return { error: 'Por favor, ingresa el correo y la contraseña' }
   }
 
-  const res = await fetch(`${API}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ correo, password }),
-    cache: 'no-store',
-  })
+  // Repetir el login no tiene efectos (solo emite otro token): si la API no
+  // responde a tiempo se reintenta una vez y después se avisa (DEF-WEB-07).
+  let res: Response
+  try {
+    res = await fetchConLimite(`${API}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ correo, password }),
+      cache: 'no-store',
+    })
+  } catch (error) {
+    if (esTiempoAgotado(error)) return { error: 'El servidor no respondió a tiempo. Intenta de nuevo.' }
+    return { error: 'No se pudo conectar con el servidor. Intenta de nuevo.' }
+  }
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
