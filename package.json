@@ -14,7 +14,8 @@
     "e2e": "playwright test",
     "trazabilidad": "node scripts/trazabilidad.mjs",
     "qa:datos": "node scripts/qa-datos.mjs",
-    "qa:contrato-rutas": "node scripts/contrato-rutas.mjs"
+    "qa:contrato-rutas": "node scripts/contrato-rutas.mjs",
+    "qa:api-fallas": "node scripts/api-fallas.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
