@@ -65,7 +65,9 @@ const servidor = http.createServer((req, res) => {
       headers: { ...req.headers, host: destino.host },
     },
     (respuesta) => {
-      res.writeHead(respuesta.statusCode ?? 502, respuesta.headers)
+      // Sin keep-alive: el fetch de Next (undici) reutilizaba conexiones que este
+      // servidor ya estaba cerrando y fallaba con «other side closed» (E23).
+      res.writeHead(respuesta.statusCode ?? 502, { ...respuesta.headers, connection: 'close' })
       respuesta.pipe(res)
     }
   )

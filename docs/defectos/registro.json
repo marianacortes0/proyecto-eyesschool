@@ -289,7 +289,7 @@
   {
     "id": "DEF-WEB-17",
     "titulo": "Rendimiento bajo en Lighthouse: la fuente de iconos pesa 1–3,9 MB y retrasa el primer pintado",
-    "componente": "Web", "origen": "Pruebas no funcionales", "severidad": "Media", "prioridad": "P3",
+    "componente": "Web", "origen": "Pruebas de sistema", "severidad": "Media", "prioridad": "P3",
     "caso": "CP-NF-005", "correccion": "—",
     "pasos": "1. Correr Lighthouse en /, /admin y /general (móvil).\n2. Mirar el informe de red.",
     "esperado": "Rendimiento ≥ 90 (CP-NF-005).",

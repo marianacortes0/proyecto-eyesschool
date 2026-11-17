@@ -7,7 +7,7 @@
 | Estado | **Nuevo** · corrección propuesta, no aplicada |
 | Detectado el | 17/11/2026, en WC-06 bloque 1 (Lighthouse en 7 páginas, escritorio y móvil) |
 | Caso que lo detectó | CP-NF-005 (rendimiento ≥ 90) |
-| Origen | Pruebas no funcionales |
+| Origen | Pruebas de sistema (no funcionales, PR-06) |
 | Evidencia | `evidencias/PR-06/web/manuales/lighthouse/` (14 informes HTML y JSON y `resumen.json`) |
 | Issue en GitHub | NO DISPONIBLE (se registra con `docs/defectos/registro.json`) |
 

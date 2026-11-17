@@ -1,0 +1,909 @@
+
+Running 212 tests using 1 worker
+
+  ok   1 [chromium] › e2e\asistencia.spec.ts:37:5 › CP-SIS-040 · el registro del día filtra por jornada y curso, y avisa si no hay datos (24.2s)
+  ok   2 [chromium] › e2e\asistencia.spec.ts:55:5 › CP-SIS-040 · con la API caída el registro del día avisa y deja reintentar (10.5s)
+  ok   3 [chromium] › e2e\asistencia.spec.ts:74:5 › CP-SIS-064 · el docente no ve la acción de borrar asistencia; el admin sí (18.2s)
+  ok   4 [chromium] › e2e\boletin-padre.spec.ts:8:7 › boletín del padre (WEB-09) › el padre descarga un PDF (19.4s)
+  ok   5 [chromium] › e2e\boletin-padre.spec.ts:23:7 › boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación (15.1s)
+  ok   6 [chromium] › e2e\horario.spec.ts:52:5 › CP-SIS-058 · el estudiante ve las clases de su curso por día y franja (13.8s)
+  ok   7 [chromium] › e2e\horario.spec.ts:61:5 › CP-SIS-058 · un estudiante de un curso sin horario ve un aviso (28.4s)
+  ok   8 [chromium] › e2e\horario.spec.ts:74:5 › CP-SIS-059 · el docente ve solo sus clases (22.4s)
+  ok   9 [chromium] › e2e\horario.spec.ts:92:5 › CP-SIS-059 · un docente sin asignaciones ve un aviso (21.5s)
+  ok  10 [chromium] › e2e\horario.spec.ts:100:5 › CP-SIS-058 y 059 · con la API caída el horario avisa y deja reintentar (24.9s)
+  ok  11 [chromium] › e2e\login-errores.spec.ts:28:5 › CP-SIS-002 · contraseña errada y correo inexistente dan el mismo mensaje genérico (8.7s)
+  ok  12 [chromium] › e2e\login-errores.spec.ts:52:5 › CP-SIS-003 · con el correo o la contraseña vacíos no se envía y lo indica (7.5s)
+  ok  13 [chromium] › e2e\login-errores.spec.ts:70:5 › CP-SIS-005 · con la API caída el login avisa y deja reintentar (13.8s)
+  ok  14 [chromium] › e2e\login-errores.spec.ts:90:5 › CP-SIS-007 · el padre no entra por URL a módulos de otros roles (25.4s)
+  ok  15 [chromium] › e2e\login-errores.spec.ts:98:5 › CP-SIS-008 · con la API caída el inicio muestra un error y deja reintentar (14.5s)
+  ok  16 [chromium] › e2e\login-errores.spec.ts:118:5 › CP-SIS-010 · al cerrar sesión, «atrás» no devuelve al panel (14.6s)
+  ok  17 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados (7.6s)
+  ok  18 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol (8.7s)
+  ok  19 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados (8.9s)
+  ok  20 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol (12.5s)
+  ok  21 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados (11.6s)
+  ok  22 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (13.8s)
+  ok  23 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados (11.0s)
+  ok  24 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol (10.8s)
+  ok  25 [chromium] › e2e\notas.spec.ts:101:5 › CP-SIS-042 · el docente registra 4.5 y se guarda por estudiante, materia y periodo (39.2s)
+  ok  26 [chromium] › e2e\notas.spec.ts:112:5 › CP-SIS-043 · una nota fuera de rango no se guarda (18.5s)
+  ok  27 [chromium] › e2e\notas.spec.ts:134:5 › CP-SIS-044 · sin materia no se guarda (el periodo siempre trae uno elegido) (16.6s)
+  ok  28 [chromium] › e2e\notas.spec.ts:148:5 › CP-SIS-045 · el promedio se recalcula al registrar y al editar, sin recargar (29.8s)
+  ok  29 [chromium] › e2e\notas.spec.ts:170:5 › CP-SIS-046 · con la API caída, guardar avisa y deja reintentar (23.1s)
+  ok  30 [chromium] › e2e\notas.spec.ts:193:5 › CP-SIS-050 · el estudiante consulta sus notas por periodo y ve un aviso en un periodo sin notas (15.2s)
+  ok  31 [chromium] › e2e\novedades.spec.ts:42:5 › CP-SIS-047 · el docente registra una novedad y su gravedad corresponde al tipo (21.6s)
+  ok  32 [chromium] › e2e\novedades.spec.ts:63:5 › CP-SIS-048 · sin descripción no se guarda (17.1s)
+  ok  33 [chromium] › e2e\novedades.spec.ts:76:5 › CP-SIS-049 · el historial de un estudiante sale solo con sus novedades y ordenado por fecha (12.8s)
+  ok  34 [chromium] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades (31.7s)
+  ok  35 [chromium] › e2e\padre-dos-hijos.spec.ts:41:5 › un padre con un solo hijo no ve el selector (15.1s)
+  ok  36 [chromium] › e2e\padre.spec.ts:20:5 › CP-SIS-052 · el padre ve la asistencia de su hijo por fecha y tipo (18.3s)
+  ok  37 [chromium] › e2e\padre.spec.ts:40:5 › CP-SIS-052 · con la API caída la asistencia del hijo avisa y deja reintentar (13.4s)
+  ok  38 [chromium] › e2e\padre.spec.ts:53:5 › CP-SIS-053 · el padre ve las novedades de su hijo, o un aviso si no tiene (21.4s)
+  ok  39 [chromium] › e2e\padre.spec.ts:71:5 › CP-SIS-061 · un padre sin hijos vinculados ve «No hay estudiantes vinculados» (17.1s)
+  ok  40 [chromium] › e2e\perfil.spec.ts:21:7 › CP-SIS-009 · el perfil del admin muestra sus datos y su rol (11.8s)
+  ok  41 [chromium] › e2e\perfil.spec.ts:21:7 › CP-SIS-009 · el perfil del docente muestra sus datos y su rol (13.6s)
+  ok  42 [chromium] › e2e\perfil.spec.ts:21:7 › CP-SIS-009 · el perfil del estudiante muestra sus datos y su rol (18.7s)
+  ok  43 [chromium] › e2e\perfil.spec.ts:21:7 › CP-SIS-009 · el perfil del padre muestra sus datos y su rol (13.8s)
+  ok  44 [chromium] › e2e\qr.spec.ts:9:5 › CP-SIS-029 · el estudiante ve el QR de su código con su nombre (15.5s)
+  ok  45 [chromium] › e2e\qr.spec.ts:32:7 › CP-SIS-031 · el padre no puede ver el QR de un estudiante (17.4s)
+  ok  46 [chromium] › e2e\qr.spec.ts:32:7 › CP-SIS-031 · el docente no puede ver el QR de un estudiante (11.1s)
+  ok  47 [chromium] › e2e\recuperacion.spec.ts:9:5 › CP-SIS-015 · pedir recuperación con un correo registrado y con uno no registrado da el mismo mensaje (5.6s)
+  -   48 [chromium] › e2e\recuperacion.spec.ts:23:5 › CP-SIS-016 · restablecer con el enlace del correo
+  ok  49 [chromium] › e2e\recuperacion.spec.ts:27:5 › CP-SIS-017 · una contraseña débil se rechaza antes de enviar y dice qué regla falta (1.7s)
+  -   50 [chromium] › e2e\recuperacion.spec.ts:46:5 › CP-SIS-018 · un enlace de recuperación ya usado
+  ok  51 [chromium] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (22.9s)
+  ok  52 [chromium] › e2e\registro-masivo.spec.ts:52:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar (12.4s)
+  ok  53 [chromium] › e2e\registro-padre.spec.ts:30:5 › un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) (6.5s)
+  ok  54 [chromium] › e2e\registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado (29.1s)
+  ok  55 [chromium] › e2e\registro.spec.ts:41:5 › CP-SIS-011 · un estudiante se registra con todos los datos y puede iniciar sesión (19.8s)
+  ok  56 [chromium] › e2e\registro.spec.ts:68:5 › CP-SIS-012 · un correo ya registrado, también en mayúsculas, no crea otra cuenta (24.9s)
+  ok  57 [chromium] › e2e\registro.spec.ts:94:5 › CP-SIS-013 · con un campo obligatorio vacío no se registra e indica el campo (11.2s)
+  ok  58 [chromium] › e2e\reportes.spec.ts:24:5 › CP-SIS-056 · el admin crea un reporte de asistencia con un PDF y lo descarga (17.1s)
+  ok  59 [chromium] › e2e\reportes.spec.ts:52:5 › CP-SIS-057 · un filtro sin datos muestra un aviso (13.2s)
+  ok  60 [chromium] › e2e\reportes.spec.ts:59:5 › CP-SIS-057 · con la API caída los reportes avisan y dejan reintentar (11.4s)
+  ok  61 [chromium] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (11.8s)
+  ok  62 [chromium] › e2e\sesion.spec.ts:35:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola (12.9s)
+  ok  63 [chromium] › e2e\sesion.spec.ts:46:7 › sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript (8.5s)
+  x   64 [chromium] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) (10.6m)
+  x   65 [chromium] › e2e\sesion.spec.ts:84:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) (1.0m)
+  ok  66 [chromium] › e2e\sesion.spec.ts:97:5 › una ruta del panel sin sesión pide iniciar sesión (5.4s)
+  x   67 [chromium] › e2e\usuarios.spec.ts:28:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba (51.8s)
+  ok  68 [chromium] › e2e\usuarios.spec.ts:67:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) (14.6s)
+  ok  69 [chromium] › e2e\usuarios.spec.ts:76:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) (17.3s)
+  ok  70 [chromium] › e2e\usuarios.spec.ts:125:7 › gestión de usuarios · errores (WC-05) › CP-SIS-020 · crear con un correo ya registrado no guarda (27.4s)
+  ok  71 [chromium] › e2e\usuarios.spec.ts:145:7 › gestión de usuarios · errores (WC-05) › CP-SIS-023 · al editar, el correo está bloqueado y no se puede poner el de otro usuario (26.0s)
+  ok  72 [chromium] › e2e\usuarios.spec.ts:155:7 › gestión de usuarios · errores (WC-05) › CP-SIS-024 · editar dejando el nombre vacío no guarda (28.4s)
+  ok  73 [chromium] › e2e\usuarios.spec.ts:173:7 › gestión de usuarios · errores (WC-05) › CP-SIS-026 · eliminar con la API caída avisa que no se pudo y no elimina (28.4s)
+  x   74 [chromium] › e2e\usuarios.spec.ts:188:7 › gestión de usuarios · errores (WC-05) › CP-SIS-027 · filtrar por rol y por nombre; el estado se ve por secciones (52.5s)
+  x   75 [chromium] › e2e\usuarios.spec.ts:207:7 › gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar (1.2m)
+  ok  76 [chromium] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · login-y-registro sin violaciones serias ni críticas (6.1s)
+  ok  77 [chromium] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · registro-modal sin violaciones serias ni críticas (7.4s)
+  x   78 [chromium] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · usuarios-y-modal sin violaciones serias ni críticas (17.3s)
+  ok  79 [chromium] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · qr-escanear-docente sin violaciones serias ni críticas (22.4s)
+  ok  80 [chromium] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · notas-padre sin violaciones serias ni críticas (19.0s)
+  ok  81 [chromium] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · reset-password sin violaciones serias ni críticas (3.2s)
+  ok  82 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · portada a 375px sin desborde (2.7s)
+  ok  83 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · portada a 768px sin desborde (3.2s)
+  ok  84 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · portada a 1920px sin desborde (3.9s)
+  ok  85 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · inicio-docente a 375px sin desborde (11.8s)
+  ok  86 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · inicio-docente a 768px sin desborde (12.1s)
+  ok  87 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · inicio-docente a 1920px sin desborde (28.5s)
+  ok  88 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · notas-docente a 375px sin desborde (11.0s)
+  ok  89 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · notas-docente a 768px sin desborde (11.3s)
+  ok  90 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · notas-docente a 1920px sin desborde (14.7s)
+  ok  91 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · usuarios-admin a 375px sin desborde (13.0s)
+  ok  92 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · usuarios-admin a 768px sin desborde (10.8s)
+  ok  93 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · usuarios-admin a 1920px sin desborde (11.5s)
+  ok  94 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · asistencia-padre a 375px sin desborde (14.8s)
+  ok  95 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · asistencia-padre a 768px sin desborde (13.6s)
+  ok  96 [chromium] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · asistencia-padre a 1920px sin desborde (15.5s)
+  ok  97 [chromium] › e2e\wc06-responsive.spec.ts:40:7 › WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 375×812 (2.9s)
+  ok  98 [chromium] › e2e\wc06-responsive.spec.ts:40:7 › WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1280×720 (3.8s)
+  ok  99 [chromium] › e2e\wc06-responsive.spec.ts:40:7 › WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1920×1080 (5.1s)
+  ok 100 [chromium] › e2e\wc06-responsive.spec.ts:59:7 › WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 375×812 (2.5s)
+  ok 101 [chromium] › e2e\wc06-responsive.spec.ts:59:7 › WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 1280×720 (3.0s)
+  ok 102 [chromium] › e2e\wc06-seguridad.spec.ts:7:5 › CP-NF-013 · eys_access y eys_refresh son HttpOnly y Secure; eys_user no lleva el token (10.7s)
+  ok 103 [chromium] › e2e\wc06-seguridad.spec.ts:19:5 › WC-06 · las respuestas traen CSP, anti-clickjacking, nosniff, Referrer-Policy, Permissions-Policy y HSTS (92ms)
+  x  104 [chromium] › e2e\qr-camara-invalido.spec.ts:16:5 › CP-SIS-033 · un QR inválido muestra un error claro y no registra (0ms)
+  x  105 [chromium] › e2e\qr-camara.spec.ts:52:7 › con un QR de estudiante › CP-SIS-032 y 034 · registra la entrada y bloquea una segunda entrada (0ms)
+  -  106 [chromium] › e2e\qr-camara.spec.ts:71:7 › con un QR de estudiante › CP-SIS-035 y 036 · registra la salida y bloquea una segunda salida
+  x  107 [firefox] › e2e\asistencia.spec.ts:37:5 › CP-SIS-040 · el registro del día filtra por jornada y curso, y avisa si no hay datos (6.5s)
+  ok 108 [firefox] › e2e\asistencia.spec.ts:55:5 › CP-SIS-040 · con la API caída el registro del día avisa y deja reintentar (1.5m)
+  ok 109 [firefox] › e2e\asistencia.spec.ts:74:5 › CP-SIS-064 · el docente no ve la acción de borrar asistencia; el admin sí (14.8s)
+  ok 110 [firefox] › e2e\boletin-padre.spec.ts:8:7 › boletín del padre (WEB-09) › el padre descarga un PDF (22.5s)
+  ok 111 [firefox] › e2e\boletin-padre.spec.ts:23:7 › boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación (20.9s)
+  ok 112 [firefox] › e2e\horario.spec.ts:52:5 › CP-SIS-058 · el estudiante ve las clases de su curso por día y franja (18.2s)
+  ok 113 [firefox] › e2e\horario.spec.ts:61:5 › CP-SIS-058 · un estudiante de un curso sin horario ve un aviso (30.5s)
+  ok 114 [firefox] › e2e\horario.spec.ts:74:5 › CP-SIS-059 · el docente ve solo sus clases (23.4s)
+  ok 115 [firefox] › e2e\horario.spec.ts:92:5 › CP-SIS-059 · un docente sin asignaciones ve un aviso (22.5s)
+  ok 116 [firefox] › e2e\horario.spec.ts:100:5 › CP-SIS-058 y 059 · con la API caída el horario avisa y deja reintentar (25.3s)
+  ok 117 [firefox] › e2e\login-errores.spec.ts:28:5 › CP-SIS-002 · contraseña errada y correo inexistente dan el mismo mensaje genérico (11.3s)
+  ok 118 [firefox] › e2e\login-errores.spec.ts:52:5 › CP-SIS-003 · con el correo o la contraseña vacíos no se envía y lo indica (6.9s)
+  ok 119 [firefox] › e2e\login-errores.spec.ts:70:5 › CP-SIS-005 · con la API caída el login avisa y deja reintentar (15.8s)
+  ok 120 [firefox] › e2e\login-errores.spec.ts:90:5 › CP-SIS-007 · el padre no entra por URL a módulos de otros roles (26.4s)
+  ok 121 [firefox] › e2e\login-errores.spec.ts:98:5 › CP-SIS-008 · con la API caída el inicio muestra un error y deja reintentar (14.6s)
+  ok 122 [firefox] › e2e\login-errores.spec.ts:118:5 › CP-SIS-010 · al cerrar sesión, «atrás» no devuelve al panel (20.9s)
+  x  123 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados (52.7s)
+  x  124 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol (1.3m)
+  x  125 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados (1.1m)
+  x  126 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol (1.3m)
+  x  127 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados (1.3m)
+  x  128 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (1.3m)
+  x  129 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados (1.3m)
+  x  130 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol (1.3m)
+  ok 131 [firefox] › e2e\notas.spec.ts:101:5 › CP-SIS-042 · el docente registra 4.5 y se guarda por estudiante, materia y periodo (1.0m)
+  ok 132 [firefox] › e2e\notas.spec.ts:112:5 › CP-SIS-043 · una nota fuera de rango no se guarda (18.1s)
+  ok 133 [firefox] › e2e\notas.spec.ts:134:5 › CP-SIS-044 · sin materia no se guarda (el periodo siempre trae uno elegido) (18.0s)
+  ok 134 [firefox] › e2e\notas.spec.ts:148:5 › CP-SIS-045 · el promedio se recalcula al registrar y al editar, sin recargar (30.2s)
+  ok 135 [firefox] › e2e\notas.spec.ts:170:5 › CP-SIS-046 · con la API caída, guardar avisa y deja reintentar (24.6s)
+  ok 136 [firefox] › e2e\notas.spec.ts:193:5 › CP-SIS-050 · el estudiante consulta sus notas por periodo y ve un aviso en un periodo sin notas (14.5s)
+  ok 137 [firefox] › e2e\novedades.spec.ts:42:5 › CP-SIS-047 · el docente registra una novedad y su gravedad corresponde al tipo (25.6s)
+  ok 138 [firefox] › e2e\novedades.spec.ts:63:5 › CP-SIS-048 · sin descripción no se guarda (24.8s)
+  ok 139 [firefox] › e2e\novedades.spec.ts:76:5 › CP-SIS-049 · el historial de un estudiante sale solo con sus novedades y ordenado por fecha (27.2s)
+  x  140 [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades (34.6s)
+  ok 141 [firefox] › e2e\padre-dos-hijos.spec.ts:41:5 › un padre con un solo hijo no ve el selector (19.5s)
+  ok 142 [firefox] › e2e\padre.spec.ts:20:5 › CP-SIS-052 · el padre ve la asistencia de su hijo por fecha y tipo (21.7s)
+  ok 143 [firefox] › e2e\padre.spec.ts:40:5 › CP-SIS-052 · con la API caída la asistencia del hijo avisa y deja reintentar (16.3s)
+  ok 144 [firefox] › e2e\padre.spec.ts:53:5 › CP-SIS-053 · el padre ve las novedades de su hijo, o un aviso si no tiene (26.0s)
+  ok 145 [firefox] › e2e\padre.spec.ts:71:5 › CP-SIS-061 · un padre sin hijos vinculados ve «No hay estudiantes vinculados» (17.1s)
+  ok 146 [firefox] › e2e\perfil.spec.ts:21:7 › CP-SIS-009 · el perfil del admin muestra sus datos y su rol (15.3s)
+  ok 147 [firefox] › e2e\perfil.spec.ts:21:7 › CP-SIS-009 · el perfil del docente muestra sus datos y su rol (17.4s)
+  ok 148 [firefox] › e2e\perfil.spec.ts:21:7 › CP-SIS-009 · el perfil del estudiante muestra sus datos y su rol (21.5s)
+  ok 149 [firefox] › e2e\perfil.spec.ts:21:7 › CP-SIS-009 · el perfil del padre muestra sus datos y su rol (17.3s)
+  ok 150 [firefox] › e2e\qr.spec.ts:9:5 › CP-SIS-029 · el estudiante ve el QR de su código con su nombre (20.3s)
+  ok 151 [firefox] › e2e\qr.spec.ts:32:7 › CP-SIS-031 · el padre no puede ver el QR de un estudiante (21.4s)
+  ok 152 [firefox] › e2e\qr.spec.ts:32:7 › CP-SIS-031 · el docente no puede ver el QR de un estudiante (17.4s)
+  ok 153 [firefox] › e2e\recuperacion.spec.ts:9:5 › CP-SIS-015 · pedir recuperación con un correo registrado y con uno no registrado da el mismo mensaje (6.3s)
+  -  154 [firefox] › e2e\recuperacion.spec.ts:23:5 › CP-SIS-016 · restablecer con el enlace del correo
+  ok 155 [firefox] › e2e\recuperacion.spec.ts:27:5 › CP-SIS-017 · una contraseña débil se rechaza antes de enviar y dice qué regla falta (1.5s)
+  -  156 [firefox] › e2e\recuperacion.spec.ts:46:5 › CP-SIS-018 · un enlace de recuperación ya usado
+  ok 157 [firefox] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (32.2s)
+  ok 158 [firefox] › e2e\registro-masivo.spec.ts:52:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar (14.2s)
+  ok 159 [firefox] › e2e\registro-padre.spec.ts:30:5 › un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05) (11.7s)
+  x  160 [firefox] › e2e\registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado (33.1s)
+  ok 161 [firefox] › e2e\registro.spec.ts:41:5 › CP-SIS-011 · un estudiante se registra con todos los datos y puede iniciar sesión (32.4s)
+  ok 162 [firefox] › e2e\registro.spec.ts:68:5 › CP-SIS-012 · un correo ya registrado, también en mayúsculas, no crea otra cuenta (31.3s)
+  ok 163 [firefox] › e2e\registro.spec.ts:94:5 › CP-SIS-013 · con un campo obligatorio vacío no se registra e indica el campo (13.0s)
+  ok 164 [firefox] › e2e\reportes.spec.ts:24:5 › CP-SIS-056 · el admin crea un reporte de asistencia con un PDF y lo descarga (18.4s)
+  ok 165 [firefox] › e2e\reportes.spec.ts:52:5 › CP-SIS-057 · un filtro sin datos muestra un aviso (13.3s)
+  ok 166 [firefox] › e2e\reportes.spec.ts:59:5 › CP-SIS-057 · con la API caída los reportes avisan y dejan reintentar (11.7s)
+  ok 167 [firefox] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (15.9s)
+  ok 168 [firefox] › e2e\sesion.spec.ts:35:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola (15.9s)
+  ok 169 [firefox] › e2e\sesion.spec.ts:46:7 › sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript (13.6s)
+  ok 170 [firefox] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) (4.4m)
+  ok 171 [firefox] › e2e\sesion.spec.ts:84:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) (1.4m)
+  ok 172 [firefox] › e2e\sesion.spec.ts:97:5 › una ruta del panel sin sesión pide iniciar sesión (6.9s)
+  ok 173 [firefox] › e2e\usuarios.spec.ts:28:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba (40.0s)
+  ok 174 [firefox] › e2e\usuarios.spec.ts:67:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) (15.6s)
+  ok 175 [firefox] › e2e\usuarios.spec.ts:76:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) (16.9s)
+  ok 176 [firefox] › e2e\usuarios.spec.ts:125:7 › gestión de usuarios · errores (WC-05) › CP-SIS-020 · crear con un correo ya registrado no guarda (24.1s)
+  ok 177 [firefox] › e2e\usuarios.spec.ts:145:7 › gestión de usuarios · errores (WC-05) › CP-SIS-023 · al editar, el correo está bloqueado y no se puede poner el de otro usuario (28.4s)
+  ok 178 [firefox] › e2e\usuarios.spec.ts:155:7 › gestión de usuarios · errores (WC-05) › CP-SIS-024 · editar dejando el nombre vacío no guarda (29.8s)
+  ok 179 [firefox] › e2e\usuarios.spec.ts:173:7 › gestión de usuarios · errores (WC-05) › CP-SIS-026 · eliminar con la API caída avisa que no se pudo y no elimina (25.3s)
+  ok 180 [firefox] › e2e\usuarios.spec.ts:188:7 › gestión de usuarios · errores (WC-05) › CP-SIS-027 · filtrar por rol y por nombre; el estado se ve por secciones (16.8s)
+  ok 181 [firefox] › e2e\usuarios.spec.ts:207:7 › gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar (16.3s)
+  -  182 [firefox] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · login-y-registro sin violaciones serias ni críticas
+  -  183 [firefox] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · registro-modal sin violaciones serias ni críticas
+  -  184 [firefox] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · usuarios-y-modal sin violaciones serias ni críticas
+  -  185 [firefox] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · qr-escanear-docente sin violaciones serias ni críticas
+  -  186 [firefox] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · notas-padre sin violaciones serias ni críticas
+  -  187 [firefox] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · reset-password sin violaciones serias ni críticas
+  -  188 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · portada a 375px sin desborde
+  -  189 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · portada a 768px sin desborde
+  -  190 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · portada a 1920px sin desborde
+  -  191 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · inicio-docente a 375px sin desborde
+  -  192 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · inicio-docente a 768px sin desborde
+  -  193 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · inicio-docente a 1920px sin desborde
+  -  194 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · notas-docente a 375px sin desborde
+  -  195 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · notas-docente a 768px sin desborde
+  -  196 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · notas-docente a 1920px sin desborde
+  -  197 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · usuarios-admin a 375px sin desborde
+  -  198 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · usuarios-admin a 768px sin desborde
+  -  199 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · usuarios-admin a 1920px sin desborde
+  -  200 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · asistencia-padre a 375px sin desborde
+  -  201 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · asistencia-padre a 768px sin desborde
+  -  202 [firefox] › e2e\wc06-responsive.spec.ts:26:9 › WC-06 responsive · asistencia-padre a 1920px sin desborde
+  -  203 [firefox] › e2e\wc06-responsive.spec.ts:40:7 › WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 375×812
+  -  204 [firefox] › e2e\wc06-responsive.spec.ts:40:7 › WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1280×720
+  -  205 [firefox] › e2e\wc06-responsive.spec.ts:40:7 › WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1920×1080
+  -  206 [firefox] › e2e\wc06-responsive.spec.ts:59:7 › WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 375×812
+  -  207 [firefox] › e2e\wc06-responsive.spec.ts:59:7 › WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 1280×720
+  ok 208 [firefox] › e2e\wc06-seguridad.spec.ts:7:5 › CP-NF-013 · eys_access y eys_refresh son HttpOnly y Secure; eys_user no lleva el token (14.0s)
+  ok 209 [firefox] › e2e\wc06-seguridad.spec.ts:19:5 › WC-06 · las respuestas traen CSP, anti-clickjacking, nosniff, Referrer-Policy, Permissions-Policy y HSTS (112ms)
+  -  210 [firefox] › e2e\qr-camara-invalido.spec.ts:16:5 › CP-SIS-033 · un QR inválido muestra un error claro y no registra
+  -  211 [firefox] › e2e\qr-camara.spec.ts:52:7 › con un QR de estudiante › CP-SIS-032 y 034 · registra la entrada y bloquea una segunda entrada
+  -  212 [firefox] › e2e\qr-camara.spec.ts:71:7 › con un QR de estudiante › CP-SIS-035 y 036 · registra la salida y bloquea una segunda salida
+
+
+  1) [chromium] › e2e\qr-camara-invalido.spec.ts:16:5 › CP-SIS-033 · un QR inválido muestra un error claro y no registra 
+
+    TypeError: fetch failed
+    [cause]: Error: Client network socket disconnected before secure TLS connection was established
+
+    Error Context: test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e\qr-camara.spec.ts:52:7 › con un QR de estudiante › CP-SIS-032 y 034 · registra la entrada y bloquea una segunda entrada 
+
+    TypeError: fetch failed
+    [cause]: Error: Client network socket disconnected before secure TLS connection was established
+
+    Error Context: test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\error-context.md
+
+    Error Context: test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) 
+
+    Test timeout of 360000ms exceeded.
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        10 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+      79 |
+      80 |       await page.goto('/general')
+    > 81 |       await expect(page).toHaveURL(/\/general$/)
+         |                          ^
+      82 |     })
+      83 |
+      84 |     test('70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)', async ({ page, context }) => {
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:81:26
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › e2e\sesion.spec.ts:84:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        87 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:86:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium] › e2e\usuarios.spec.ts:28:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Usuario creado exitosamente')
+    Expected: visible
+    Timeout: 30000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Usuario creado exitosamente') with timeout 30000ms
+      - waiting for getByText('Usuario creado exitosamente')
+
+
+      42 |     )
+      43 |     await page.getByRole('button', { name: 'Crear Usuario' }).click()
+    > 44 |     await expect(page.getByText('Usuario creado exitosamente')).toBeVisible(AVISO)
+         |                                                                 ^
+      45 |     await recarga
+      46 |
+      47 |     // Filtrar (CP-SIS-027)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:44:65
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium] › e2e\usuarios.spec.ts:188:7 › gestión de usuarios · errores (WC-05) › CP-SIS-027 · filtrar por rol y por nombre; el estado se ve por secciones 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/admin$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        88 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:189:5
+
+    TypeError: fetch failed
+    [cause]: ConnectTimeoutError: Connect Timeout Error (attempted address: apieyeschool-q-g4hfgrgvepbecacc.chilecentral-01.azurewebsites.net:443, timeout: 10000ms)
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\error-context.md
+
+    Error Context: test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [chromium] › e2e\usuarios.spec.ts:207:7 › gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/admin$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        88 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:209:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\error-context.md
+
+    Error Context: test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [chromium] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · usuarios-y-modal sin violaciones serias ni críticas 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious · color-contrast · Elements must meet minimum color contrast ratio thresholds (2) [\".dark\\\\:bg-transparent:nth-child(2) > .dark\\\\:text-slate-300.text-slate-600:nth-child(5) > .italic.text-slate-400.text-xs\"]",
+    + ]
+
+      63 |     if (p.preparar) await p.preparar(page)
+      64 |     const graves = await analizar(page, p.nombre)
+    > 65 |     expect(graves.map((v) => `${v.impact} · ${v.id} · ${v.help} (${v.nodes.length}) ${JSON.stringify(v.nodes[0]?.target)}`)).toEqual([])
+         |                                                                                                                              ^
+      66 |   })
+      67 | }
+      68 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\wc06-accesibilidad.spec.ts:65:126
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\video-1.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [firefox] › e2e\asistencia.spec.ts:37:5 › CP-SIS-040 · el registro del día filtra por jornada y curso, y avisa si no hay datos 
+
+    TypeError: fetch failed
+    [cause]: Error: read ECONNRESET
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\asistencia-CP-SIS-040-·-el-71b4b-rso-y-avisa-si-no-hay-datos-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\asistencia-CP-SIS-040-·-el-71b4b-rso-y-avisa-si-no-hay-datos-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\asistencia-CP-SIS-040-·-el-71b4b-rso-y-avisa-si-no-hay-datos-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\asistencia-CP-SIS-040-·-el-71b4b-rso-y-avisa-si-no-hay-datos-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/admin$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        75 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/admin$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        77 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        78 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        77 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        76 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        73 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        73 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        71 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /[?&]hijo=\d+/
+    Received string:  "http://localhost:3100/asistencia"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        13 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/asistencia"
+
+
+      34 |     await expect(page.getByText(nombre(activo)).filter({ visible: true }).first()).toBeVisible()
+      35 |     await selector.selectOption({ label: otro })
+    > 36 |     await expect(page).toHaveURL(/[?&]hijo=\d+/)
+         |                        ^
+      37 |     await expect(page.getByText(nombre(otro)).filter({ visible: true }).first()).toBeVisible()
+      38 |   }
+      39 | })
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:36:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [firefox] › e2e\registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Error: page.close: ENOENT: no such file or directory, open 'c:\Users\marig\proyecto-eyesschool\test-results\.playwright-artifacts-19\traces\8a09be561a37ea12a0bc-21d2155151f4a920eac4-recording36.trace'
+
+      22 |     await expect(page.getByText('Usuario eliminado exitosamente')).toBeVisible({ timeout: 30_000 })
+      23 |   } finally {
+    > 24 |     await page.close()
+         |     ^
+      25 |   }
+      26 | })
+      27 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:24:5
+
+    Error: ENOENT: no such file or directory, open 'c:\Users\marig\proyecto-eyesschool\test-results\.playwright-artifacts-19\cf12bac96c837e9e534c78608fad6c78.zip'
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+  Slow test file: [firefox] › e2e\sesion.spec.ts (6.6m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  19 failed
+    [chromium] › e2e\qr-camara-invalido.spec.ts:16:5 › CP-SIS-033 · un QR inválido muestra un error claro y no registra 
+    [chromium] › e2e\qr-camara.spec.ts:52:7 › con un QR de estudiante › CP-SIS-032 y 034 · registra la entrada y bloquea una segunda entrada 
+    [chromium] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) 
+    [chromium] › e2e\sesion.spec.ts:84:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) 
+    [chromium] › e2e\usuarios.spec.ts:28:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+    [chromium] › e2e\usuarios.spec.ts:188:7 › gestión de usuarios · errores (WC-05) › CP-SIS-027 · filtrar por rol y por nombre; el estado se ve por secciones 
+    [chromium] › e2e\usuarios.spec.ts:207:7 › gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar 
+    [chromium] › e2e\wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · usuarios-y-modal sin violaciones serias ni críticas 
+    [firefox] › e2e\asistencia.spec.ts:37:5 › CP-SIS-040 · el registro del día filtra por jornada y curso, y avisa si no hay datos 
+    [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+    [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol 
+    [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+    [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol 
+    [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+    [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+    [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+    [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol 
+    [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+    [firefox] › e2e\registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado 
+  33 skipped
+  1 did not run
+  159 passed (1.3h)

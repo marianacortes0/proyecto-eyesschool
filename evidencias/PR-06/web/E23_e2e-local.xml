@@ -1,0 +1,1550 @@
+<testsuites id="" name="" tests="212" failures="14" skipped="34" errors="5" time="4840.688562">
+<testsuite name="asistencia.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="3" failures="0" skipped="0" time="52.896" errors="0">
+<testcase name="CP-SIS-040 · el registro del día filtra por jornada y curso, y avisa si no hay datos" classname="asistencia.spec.ts" time="24.176">
+</testcase>
+<testcase name="CP-SIS-040 · con la API caída el registro del día avisa y deja reintentar" classname="asistencia.spec.ts" time="10.538">
+</testcase>
+<testcase name="CP-SIS-064 · el docente no ve la acción de borrar asistencia; el admin sí" classname="asistencia.spec.ts" time="18.182">
+</testcase>
+</testsuite>
+<testsuite name="boletin-padre.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="2" failures="0" skipped="0" time="34.555" errors="0">
+<testcase name="boletín del padre (WEB-09) › el padre descarga un PDF" classname="boletin-padre.spec.ts" time="19.436">
+</testcase>
+<testcase name="boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación" classname="boletin-padre.spec.ts" time="15.119">
+</testcase>
+</testsuite>
+<testsuite name="horario.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="5" failures="0" skipped="0" time="111.045" errors="0">
+<testcase name="CP-SIS-058 · el estudiante ve las clases de su curso por día y franja" classname="horario.spec.ts" time="13.789">
+</testcase>
+<testcase name="CP-SIS-058 · un estudiante de un curso sin horario ve un aviso" classname="horario.spec.ts" time="28.352">
+</testcase>
+<testcase name="CP-SIS-059 · el docente ve solo sus clases" classname="horario.spec.ts" time="22.416">
+</testcase>
+<testcase name="CP-SIS-059 · un docente sin asignaciones ve un aviso" classname="horario.spec.ts" time="21.545">
+</testcase>
+<testcase name="CP-SIS-058 y 059 · con la API caída el horario avisa y deja reintentar" classname="horario.spec.ts" time="24.943">
+</testcase>
+</testsuite>
+<testsuite name="login-errores.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="6" failures="0" skipped="0" time="84.572" errors="0">
+<testcase name="CP-SIS-002 · contraseña errada y correo inexistente dan el mismo mensaje genérico" classname="login-errores.spec.ts" time="8.685">
+</testcase>
+<testcase name="CP-SIS-003 · con el correo o la contraseña vacíos no se envía y lo indica" classname="login-errores.spec.ts" time="7.549">
+</testcase>
+<testcase name="CP-SIS-005 · con la API caída el login avisa y deja reintentar" classname="login-errores.spec.ts" time="13.801">
+</testcase>
+<testcase name="CP-SIS-007 · el padre no entra por URL a módulos de otros roles" classname="login-errores.spec.ts" time="25.358">
+</testcase>
+<testcase name="CP-SIS-008 · con la API caída el inicio muestra un error y deja reintentar" classname="login-errores.spec.ts" time="14.544">
+</testcase>
+<testcase name="CP-SIS-010 · al cerrar sesión, «atrás» no devuelve al panel" classname="login-errores.spec.ts" time="14.635">
+</testcase>
+</testsuite>
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="8" failures="0" skipped="0" time="84.863" errors="0">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="7.58">
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="8.724">
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="8.914">
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="12.497">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="11.592">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="13.765">
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="11.031">
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="10.76">
+</testcase>
+</testsuite>
+<testsuite name="notas.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="6" failures="0" skipped="0" time="142.417" errors="0">
+<testcase name="CP-SIS-042 · el docente registra 4.5 y se guarda por estudiante, materia y periodo" classname="notas.spec.ts" time="39.168">
+</testcase>
+<testcase name="CP-SIS-043 · una nota fuera de rango no se guarda" classname="notas.spec.ts" time="18.489">
+</testcase>
+<testcase name="CP-SIS-044 · sin materia no se guarda (el periodo siempre trae uno elegido)" classname="notas.spec.ts" time="16.65">
+</testcase>
+<testcase name="CP-SIS-045 · el promedio se recalcula al registrar y al editar, sin recargar" classname="notas.spec.ts" time="29.83">
+</testcase>
+<testcase name="CP-SIS-046 · con la API caída, guardar avisa y deja reintentar" classname="notas.spec.ts" time="23.107">
+</testcase>
+<testcase name="CP-SIS-050 · el estudiante consulta sus notas por periodo y ve un aviso en un periodo sin notas" classname="notas.spec.ts" time="15.173">
+</testcase>
+</testsuite>
+<testsuite name="novedades.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="3" failures="0" skipped="0" time="51.522" errors="0">
+<testcase name="CP-SIS-047 · el docente registra una novedad y su gravedad corresponde al tipo" classname="novedades.spec.ts" time="21.642">
+</testcase>
+<testcase name="CP-SIS-048 · sin descripción no se guarda" classname="novedades.spec.ts" time="17.079">
+</testcase>
+<testcase name="CP-SIS-049 · el historial de un estudiante sale solo con sus novedades y ordenado por fecha" classname="novedades.spec.ts" time="12.801">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="2" failures="0" skipped="0" time="46.756" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="31.655">
+</testcase>
+<testcase name="un padre con un solo hijo no ve el selector" classname="padre-dos-hijos.spec.ts" time="15.101">
+</testcase>
+</testsuite>
+<testsuite name="padre.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="4" failures="0" skipped="0" time="70.165" errors="0">
+<testcase name="CP-SIS-052 · el padre ve la asistencia de su hijo por fecha y tipo" classname="padre.spec.ts" time="18.283">
+</testcase>
+<testcase name="CP-SIS-052 · con la API caída la asistencia del hijo avisa y deja reintentar" classname="padre.spec.ts" time="13.373">
+</testcase>
+<testcase name="CP-SIS-053 · el padre ve las novedades de su hijo, o un aviso si no tiene" classname="padre.spec.ts" time="21.408">
+</testcase>
+<testcase name="CP-SIS-061 · un padre sin hijos vinculados ve «No hay estudiantes vinculados»" classname="padre.spec.ts" time="17.101">
+</testcase>
+</testsuite>
+<testsuite name="perfil.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="4" failures="0" skipped="0" time="57.797" errors="0">
+<testcase name="CP-SIS-009 · el perfil del admin muestra sus datos y su rol" classname="perfil.spec.ts" time="11.75">
+</testcase>
+<testcase name="CP-SIS-009 · el perfil del docente muestra sus datos y su rol" classname="perfil.spec.ts" time="13.611">
+</testcase>
+<testcase name="CP-SIS-009 · el perfil del estudiante muestra sus datos y su rol" classname="perfil.spec.ts" time="18.685">
+</testcase>
+<testcase name="CP-SIS-009 · el perfil del padre muestra sus datos y su rol" classname="perfil.spec.ts" time="13.751">
+</testcase>
+</testsuite>
+<testsuite name="qr-camara-invalido.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="1" failures="0" skipped="0" time="0" errors="1">
+<testcase name="CP-SIS-033 · un QR inválido muestra un error claro y no registra" classname="qr-camara-invalido.spec.ts" time="0">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\error-context.md is missing
+Warning: attachment ..\..\..\test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\trace.zip is missing]]>
+</system-err>
+<error message="fetch failed" type="TypeError">
+<![CDATA[  [chromium] › qr-camara-invalido.spec.ts:16:5 › CP-SIS-033 · un QR inválido muestra un error claro y no registra 
+
+    TypeError: fetch failed
+    [cause]: Error: Client network socket disconnected before secure TLS connection was established
+
+    Error Context: ..\test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\qr-camara-invalido-CP-SIS--6dd0c-n-error-claro-y-no-registra-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="qr-camara.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="2" failures="0" skipped="1" time="0" errors="1">
+<testcase name="con un QR de estudiante › CP-SIS-032 y 034 · registra la entrada y bloquea una segunda entrada" classname="qr-camara.spec.ts" time="0">
+<properties>
+<property name="serial" value="">
+</property>
+</properties>
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\error-context.md is missing
+Warning: attachment ..\..\..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\error-context.md is missing
+Warning: attachment ..\..\..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\trace.zip is missing]]>
+</system-err>
+<error message="fetch failed" type="TypeError">
+<![CDATA[  [chromium] › qr-camara.spec.ts:52:7 › con un QR de estudiante › CP-SIS-032 y 034 · registra la entrada y bloquea una segunda entrada 
+
+    TypeError: fetch failed
+    [cause]: Error: Client network socket disconnected before secure TLS connection was established
+
+    Error Context: ..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\error-context.md
+
+    Error Context: ..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\qr-camara-con-un-QR-de-est-fb596-bloquea-una-segunda-entrada-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="con un QR de estudiante › CP-SIS-035 y 036 · registra la salida y bloquea una segunda salida" classname="qr-camara.spec.ts">
+<properties>
+<property name="serial" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="qr.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="3" failures="0" skipped="0" time="44.056" errors="0">
+<testcase name="CP-SIS-029 · el estudiante ve el QR de su código con su nombre" classname="qr.spec.ts" time="15.498">
+</testcase>
+<testcase name="CP-SIS-031 · el padre no puede ver el QR de un estudiante" classname="qr.spec.ts" time="17.439">
+</testcase>
+<testcase name="CP-SIS-031 · el docente no puede ver el QR de un estudiante" classname="qr.spec.ts" time="11.119">
+</testcase>
+</testsuite>
+<testsuite name="recuperacion.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="4" failures="0" skipped="2" time="7.353" errors="0">
+<testcase name="CP-SIS-015 · pedir recuperación con un correo registrado y con uno no registrado da el mismo mensaje" classname="recuperacion.spec.ts" time="5.646">
+</testcase>
+<testcase name="CP-SIS-016 · restablecer con el enlace del correo" classname="recuperacion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente del buzón de QA (BC-12): el enlace llega por correo">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="CP-SIS-017 · una contraseña débil se rechaza antes de enviar y dice qué regla falta" classname="recuperacion.spec.ts" time="1.704">
+</testcase>
+<testcase name="CP-SIS-018 · un enlace de recuperación ya usado" classname="recuperacion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente del buzón de QA (BC-12) y de BE-13: hace falta un enlace real usado una vez">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="2" failures="0" skipped="0" time="35.316" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="22.878">
+</testcase>
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="12.438">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="2" failures="0" skipped="0" time="35.566" errors="0">
+<testcase name="un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05)" classname="registro-padre.spec.ts" time="6.513">
+</testcase>
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="29.053">
+</testcase>
+</testsuite>
+<testsuite name="registro.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="3" failures="0" skipped="0" time="55.848" errors="0">
+<testcase name="CP-SIS-011 · un estudiante se registra con todos los datos y puede iniciar sesión" classname="registro.spec.ts" time="19.805">
+</testcase>
+<testcase name="CP-SIS-012 · un correo ya registrado, también en mayúsculas, no crea otra cuenta" classname="registro.spec.ts" time="24.867">
+</testcase>
+<testcase name="CP-SIS-013 · con un campo obligatorio vacío no se registra e indica el campo" classname="registro.spec.ts" time="11.176">
+</testcase>
+</testsuite>
+<testsuite name="reportes.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="3" failures="0" skipped="0" time="41.786" errors="0">
+<testcase name="CP-SIS-056 · el admin crea un reporte de asistencia con un PDF y lo descarga" classname="reportes.spec.ts" time="17.146">
+</testcase>
+<testcase name="CP-SIS-057 · un filtro sin datos muestra un aviso" classname="reportes.spec.ts" time="13.222">
+</testcase>
+<testcase name="CP-SIS-057 · con la API caída los reportes avisan y dejan reintentar" classname="reportes.spec.ts" time="11.418">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="6" failures="1" skipped="0" time="736.727" errors="1">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="11.846">
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="12.944">
+</testcase>
+<testcase name="sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript" classname="sesion.spec.ts" time="8.468">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)" classname="sesion.spec.ts" time="636.859">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\video.webm is missing
+Warning: attachment ..\..\..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\error-context.md is missing
+Warning: attachment ..\..\..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\trace.zip is missing]]>
+</system-err>
+<error message="Test timeout of 360000ms exceeded." type="Error">
+<![CDATA[  [chromium] › sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) 
+
+    Test timeout of 360000ms exceeded.
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        10 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+      79 |
+      80 |       await page.goto('/general')
+    > 81 |       await expect(page).toHaveURL(/\/general$/)
+         |                          ^
+      82 |     })
+      83 |
+      84 |     test('70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)', async ({ page, context }) => {
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:81:26
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-a-esc-955b3-gue-funcionando-CP-SIS-065--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)" classname="sesion.spec.ts" time="61.251">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\video.webm is missing
+Warning: attachment ..\..\..\test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\error-context.md is missing
+Warning: attachment ..\..\..\test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\trace.zip is missing]]>
+</system-err>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › sesion.spec.ts:84:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real) 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        87 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:86:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-a-esc-52006-os-31-min-de-la-regla-real--chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="5.359">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="9" failures="3" skipped="0" time="318.349" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="51.758">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\video.webm is missing
+Warning: attachment ..\..\..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\error-context.md is missing
+Warning: attachment ..\..\..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip is missing]]>
+</system-err>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › usuarios.spec.ts:28:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Usuario creado exitosamente')
+    Expected: visible
+    Timeout: 30000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Usuario creado exitosamente') with timeout 30000ms
+      - waiting for getByText('Usuario creado exitosamente')
+
+
+      42 |     )
+      43 |     await page.getByRole('button', { name: 'Crear Usuario' }).click()
+    > 44 |     await expect(page.getByText('Usuario creado exitosamente')).toBeVisible(AVISO)
+         |                                                                 ^
+      45 |     await recarga
+      46 |
+      47 |     // Filtrar (CP-SIS-027)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:44:65
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="14.59">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="17.334">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-020 · crear con un correo ya registrado no guarda" classname="usuarios.spec.ts" time="27.425">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-023 · al editar, el correo está bloqueado y no se puede poner el de otro usuario" classname="usuarios.spec.ts" time="26.032">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-024 · editar dejando el nombre vacío no guarda" classname="usuarios.spec.ts" time="28.406">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-026 · eliminar con la API caída avisa que no se pudo y no elimina" classname="usuarios.spec.ts" time="28.435">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-027 · filtrar por rol y por nombre; el estado se ve por secciones" classname="usuarios.spec.ts" time="52.453">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\video.webm is missing
+Warning: attachment ..\..\..\test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\error-context.md is missing
+Warning: attachment ..\..\..\test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\error-context.md is missing
+Warning: attachment ..\..\..\test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\trace.zip is missing]]>
+</system-err>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › usuarios.spec.ts:188:7 › gestión de usuarios · errores (WC-05) › CP-SIS-027 · filtrar por rol y por nombre; el estado se ve por secciones 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/admin$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        88 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:189:5
+
+    TypeError: fetch failed
+    [cause]: ConnectTimeoutError: Connect Timeout Error (attempted address: apieyeschool-q-g4hfgrgvepbecacc.chilecentral-01.azurewebsites.net:443, timeout: 10000ms)
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\error-context.md
+
+    Error Context: ..\test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\usuarios-gestión-de-usuari-2f267--estado-se-ve-por-secciones-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar" classname="usuarios.spec.ts" time="71.916">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\video.webm is missing
+Warning: attachment ..\..\..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\error-context.md is missing
+Warning: attachment ..\..\..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\error-context.md is missing
+Warning: attachment ..\..\..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\trace.zip is missing]]>
+</system-err>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › usuarios.spec.ts:207:7 › gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/admin$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        88 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:209:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\error-context.md
+
+    Error Context: ..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\usuarios-gestión-de-usuari-55072-sta-avisa-y-deja-reintentar-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="wc06-accesibilidad.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="6" failures="1" skipped="0" time="75.387" errors="0">
+<testcase name="WC-06 axe · login-y-registro sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts" time="6.088">
+</testcase>
+<testcase name="WC-06 axe · registro-modal sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts" time="7.413">
+</testcase>
+<testcase name="WC-06 axe · usuarios-y-modal sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts" time="17.261">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\video.webm is missing
+Warning: attachment ..\..\..\test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\video-1.webm is missing
+Warning: attachment ..\..\..\test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\error-context.md is missing
+Warning: attachment ..\..\..\test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\trace.zip is missing]]>
+</system-err>
+<failure message="expect(received).toEqual(expected) // deep equality" type="expect.toEqual">
+<![CDATA[  [chromium] › wc06-accesibilidad.spec.ts:58:7 › WC-06 axe · usuarios-y-modal sin violaciones serias ni críticas 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious · color-contrast · Elements must meet minimum color contrast ratio thresholds (2) [\".dark\\\\:bg-transparent:nth-child(2) > .dark\\\\:text-slate-300.text-slate-600:nth-child(5) > .italic.text-slate-400.text-xs\"]",
+    + ]
+
+      63 |     if (p.preparar) await p.preparar(page)
+      64 |     const graves = await analizar(page, p.nombre)
+    > 65 |     expect(graves.map((v) => `${v.impact} · ${v.id} · ${v.help} (${v.nodes.length}) ${JSON.stringify(v.nodes[0]?.target)}`)).toEqual([])
+         |                                                                                                                              ^
+      66 |   })
+      67 | }
+      68 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\wc06-accesibilidad.spec.ts:65:126
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\video-1.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\wc06-accesibilidad-WC-06-a-140b9-laciones-serias-ni-críticas-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="WC-06 axe · qr-escanear-docente sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts" time="22.437">
+</testcase>
+<testcase name="WC-06 axe · notas-padre sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts" time="19.008">
+</testcase>
+<testcase name="WC-06 axe · reset-password sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts" time="3.18">
+</testcase>
+</testsuite>
+<testsuite name="wc06-responsive.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="20" failures="0" skipped="0" time="195.728" errors="0">
+<testcase name="WC-06 responsive · portada a 375px sin desborde" classname="wc06-responsive.spec.ts" time="2.683">
+</testcase>
+<testcase name="WC-06 responsive · portada a 768px sin desborde" classname="wc06-responsive.spec.ts" time="3.226">
+</testcase>
+<testcase name="WC-06 responsive · portada a 1920px sin desborde" classname="wc06-responsive.spec.ts" time="3.856">
+</testcase>
+<testcase name="WC-06 responsive · inicio-docente a 375px sin desborde" classname="wc06-responsive.spec.ts" time="11.802">
+</testcase>
+<testcase name="WC-06 responsive · inicio-docente a 768px sin desborde" classname="wc06-responsive.spec.ts" time="12.12">
+</testcase>
+<testcase name="WC-06 responsive · inicio-docente a 1920px sin desborde" classname="wc06-responsive.spec.ts" time="28.453">
+</testcase>
+<testcase name="WC-06 responsive · notas-docente a 375px sin desborde" classname="wc06-responsive.spec.ts" time="10.977">
+</testcase>
+<testcase name="WC-06 responsive · notas-docente a 768px sin desborde" classname="wc06-responsive.spec.ts" time="11.269">
+</testcase>
+<testcase name="WC-06 responsive · notas-docente a 1920px sin desborde" classname="wc06-responsive.spec.ts" time="14.655">
+</testcase>
+<testcase name="WC-06 responsive · usuarios-admin a 375px sin desborde" classname="wc06-responsive.spec.ts" time="13">
+</testcase>
+<testcase name="WC-06 responsive · usuarios-admin a 768px sin desborde" classname="wc06-responsive.spec.ts" time="10.789">
+</testcase>
+<testcase name="WC-06 responsive · usuarios-admin a 1920px sin desborde" classname="wc06-responsive.spec.ts" time="11.494">
+</testcase>
+<testcase name="WC-06 responsive · asistencia-padre a 375px sin desborde" classname="wc06-responsive.spec.ts" time="14.84">
+</testcase>
+<testcase name="WC-06 responsive · asistencia-padre a 768px sin desborde" classname="wc06-responsive.spec.ts" time="13.644">
+</testcase>
+<testcase name="WC-06 responsive · asistencia-padre a 1920px sin desborde" classname="wc06-responsive.spec.ts" time="15.533">
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 375×812" classname="wc06-responsive.spec.ts" time="2.945">
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1280×720" classname="wc06-responsive.spec.ts" time="3.785">
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1920×1080" classname="wc06-responsive.spec.ts" time="5.14">
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 375×812" classname="wc06-responsive.spec.ts" time="2.479">
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 1280×720" classname="wc06-responsive.spec.ts" time="3.038">
+</testcase>
+</testsuite>
+<testsuite name="wc06-seguridad.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="chromium" tests="2" failures="0" skipped="0" time="10.772" errors="0">
+<testcase name="CP-NF-013 · eys_access y eys_refresh son HttpOnly y Secure; eys_user no lleva el token" classname="wc06-seguridad.spec.ts" time="10.68">
+</testcase>
+<testcase name="WC-06 · las respuestas traen CSP, anti-clickjacking, nosniff, Referrer-Policy, Permissions-Policy y HSTS" classname="wc06-seguridad.spec.ts" time="0.092">
+</testcase>
+</testsuite>
+<testsuite name="asistencia.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="3" failures="0" skipped="0" time="109.357" errors="1">
+<testcase name="CP-SIS-040 · el registro del día filtra por jornada y curso, y avisa si no hay datos" classname="asistencia.spec.ts" time="6.523">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\asistencia-CP-SIS-040-·-el-71b4b-rso-y-avisa-si-no-hay-datos-firefox\video.webm is missing
+Warning: attachment ..\..\..\test-results\asistencia-CP-SIS-040-·-el-71b4b-rso-y-avisa-si-no-hay-datos-firefox\error-context.md is missing
+Warning: attachment ..\..\..\test-results\asistencia-CP-SIS-040-·-el-71b4b-rso-y-avisa-si-no-hay-datos-firefox\trace.zip is missing]]>
+</system-err>
+<error message="fetch failed" type="TypeError">
+<![CDATA[  [firefox] › asistencia.spec.ts:37:5 › CP-SIS-040 · el registro del día filtra por jornada y curso, y avisa si no hay datos 
+
+    TypeError: fetch failed
+    [cause]: Error: read ECONNRESET
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\asistencia-CP-SIS-040-·-el-71b4b-rso-y-avisa-si-no-hay-datos-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\asistencia-CP-SIS-040-·-el-71b4b-rso-y-avisa-si-no-hay-datos-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\asistencia-CP-SIS-040-·-el-71b4b-rso-y-avisa-si-no-hay-datos-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\asistencia-CP-SIS-040-·-el-71b4b-rso-y-avisa-si-no-hay-datos-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="CP-SIS-040 · con la API caída el registro del día avisa y deja reintentar" classname="asistencia.spec.ts" time="88.022">
+</testcase>
+<testcase name="CP-SIS-064 · el docente no ve la acción de borrar asistencia; el admin sí" classname="asistencia.spec.ts" time="14.812">
+</testcase>
+</testsuite>
+<testsuite name="boletin-padre.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="2" failures="0" skipped="0" time="43.383" errors="0">
+<testcase name="boletín del padre (WEB-09) › el padre descarga un PDF" classname="boletin-padre.spec.ts" time="22.532">
+</testcase>
+<testcase name="boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación" classname="boletin-padre.spec.ts" time="20.851">
+</testcase>
+</testsuite>
+<testsuite name="horario.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="5" failures="0" skipped="0" time="119.839" errors="0">
+<testcase name="CP-SIS-058 · el estudiante ve las clases de su curso por día y franja" classname="horario.spec.ts" time="18.189">
+</testcase>
+<testcase name="CP-SIS-058 · un estudiante de un curso sin horario ve un aviso" classname="horario.spec.ts" time="30.493">
+</testcase>
+<testcase name="CP-SIS-059 · el docente ve solo sus clases" classname="horario.spec.ts" time="23.405">
+</testcase>
+<testcase name="CP-SIS-059 · un docente sin asignaciones ve un aviso" classname="horario.spec.ts" time="22.461">
+</testcase>
+<testcase name="CP-SIS-058 y 059 · con la API caída el horario avisa y deja reintentar" classname="horario.spec.ts" time="25.291">
+</testcase>
+</testsuite>
+<testsuite name="login-errores.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="6" failures="0" skipped="0" time="95.837" errors="0">
+<testcase name="CP-SIS-002 · contraseña errada y correo inexistente dan el mismo mensaje genérico" classname="login-errores.spec.ts" time="11.293">
+</testcase>
+<testcase name="CP-SIS-003 · con el correo o la contraseña vacíos no se envía y lo indica" classname="login-errores.spec.ts" time="6.856">
+</testcase>
+<testcase name="CP-SIS-005 · con la API caída el login avisa y deja reintentar" classname="login-errores.spec.ts" time="15.802">
+</testcase>
+<testcase name="CP-SIS-007 · el padre no entra por URL a módulos de otros roles" classname="login-errores.spec.ts" time="26.361">
+</testcase>
+<testcase name="CP-SIS-008 · con la API caída el inicio muestra un error y deja reintentar" classname="login-errores.spec.ts" time="14.625">
+</testcase>
+<testcase name="CP-SIS-010 · al cerrar sesión, «atrás» no devuelve al panel" classname="login-errores.spec.ts" time="20.9">
+</testcase>
+</testsuite>
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="8" failures="8" skipped="0" time="582.661" errors="0">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="52.721">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\video.webm is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\error-context.md is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\trace.zip is missing]]>
+</system-err>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/admin$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        75 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="77.15">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\video.webm is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\error-context.md is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\trace.zip is missing]]>
+</system-err>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › login-roles.spec.ts:29:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/admin$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        77 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="64.818">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\video.webm is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\error-context.md is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\trace.zip is missing]]>
+</system-err>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        78 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="76.875">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\video.webm is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\error-context.md is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\trace.zip is missing]]>
+</system-err>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        77 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="76.605">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\video.webm is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\error-context.md is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\trace.zip is missing]]>
+</system-err>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        76 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="78.949">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\video.webm is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\error-context.md is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip is missing]]>
+</system-err>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        73 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="78.406">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\video.webm is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\error-context.md is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\trace.zip is missing]]>
+</system-err>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        73 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="77.137">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\video.webm is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\error-context.md is missing
+Warning: attachment ..\..\..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\trace.zip is missing]]>
+</system-err>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › login-roles.spec.ts:29:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "http://localhost:3100/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        71 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/?login=1"
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="notas.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="6" failures="0" skipped="0" time="167.037" errors="0">
+<testcase name="CP-SIS-042 · el docente registra 4.5 y se guarda por estudiante, materia y periodo" classname="notas.spec.ts" time="61.598">
+</testcase>
+<testcase name="CP-SIS-043 · una nota fuera de rango no se guarda" classname="notas.spec.ts" time="18.14">
+</testcase>
+<testcase name="CP-SIS-044 · sin materia no se guarda (el periodo siempre trae uno elegido)" classname="notas.spec.ts" time="18.018">
+</testcase>
+<testcase name="CP-SIS-045 · el promedio se recalcula al registrar y al editar, sin recargar" classname="notas.spec.ts" time="30.169">
+</testcase>
+<testcase name="CP-SIS-046 · con la API caída, guardar avisa y deja reintentar" classname="notas.spec.ts" time="24.594">
+</testcase>
+<testcase name="CP-SIS-050 · el estudiante consulta sus notas por periodo y ve un aviso en un periodo sin notas" classname="notas.spec.ts" time="14.518">
+</testcase>
+</testsuite>
+<testsuite name="novedades.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="3" failures="0" skipped="0" time="77.652" errors="0">
+<testcase name="CP-SIS-047 · el docente registra una novedad y su gravedad corresponde al tipo" classname="novedades.spec.ts" time="25.65">
+</testcase>
+<testcase name="CP-SIS-048 · sin descripción no se guarda" classname="novedades.spec.ts" time="24.773">
+</testcase>
+<testcase name="CP-SIS-049 · el historial de un estudiante sale solo con sus novedades y ordenado por fecha" classname="novedades.spec.ts" time="27.229">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="2" failures="1" skipped="0" time="54.099" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="34.606">
+<system-err>
+<![CDATA[
+Warning: attachment ..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\video.webm is missing
+Warning: attachment ..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\error-context.md is missing
+Warning: attachment ..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip is missing]]>
+</system-err>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /[?&]hijo=\d+/
+    Received string:  "http://localhost:3100/asistencia"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        13 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "http://localhost:3100/asistencia"
+
+
+      34 |     await expect(page.getByText(nombre(activo)).filter({ visible: true }).first()).toBeVisible()
+      35 |     await selector.selectOption({ label: otro })
+    > 36 |     await expect(page).toHaveURL(/[?&]hijo=\d+/)
+         |                        ^
+      37 |     await expect(page.getByText(nombre(otro)).filter({ visible: true }).first()).toBeVisible()
+      38 |   }
+      39 | })
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:36:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="un padre con un solo hijo no ve el selector" classname="padre-dos-hijos.spec.ts" time="19.493">
+</testcase>
+</testsuite>
+<testsuite name="padre.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="4" failures="0" skipped="0" time="81.157" errors="0">
+<testcase name="CP-SIS-052 · el padre ve la asistencia de su hijo por fecha y tipo" classname="padre.spec.ts" time="21.676">
+</testcase>
+<testcase name="CP-SIS-052 · con la API caída la asistencia del hijo avisa y deja reintentar" classname="padre.spec.ts" time="16.334">
+</testcase>
+<testcase name="CP-SIS-053 · el padre ve las novedades de su hijo, o un aviso si no tiene" classname="padre.spec.ts" time="26.047">
+</testcase>
+<testcase name="CP-SIS-061 · un padre sin hijos vinculados ve «No hay estudiantes vinculados»" classname="padre.spec.ts" time="17.1">
+</testcase>
+</testsuite>
+<testsuite name="perfil.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="4" failures="0" skipped="0" time="71.408" errors="0">
+<testcase name="CP-SIS-009 · el perfil del admin muestra sus datos y su rol" classname="perfil.spec.ts" time="15.28">
+</testcase>
+<testcase name="CP-SIS-009 · el perfil del docente muestra sus datos y su rol" classname="perfil.spec.ts" time="17.351">
+</testcase>
+<testcase name="CP-SIS-009 · el perfil del estudiante muestra sus datos y su rol" classname="perfil.spec.ts" time="21.467">
+</testcase>
+<testcase name="CP-SIS-009 · el perfil del padre muestra sus datos y su rol" classname="perfil.spec.ts" time="17.31">
+</testcase>
+</testsuite>
+<testsuite name="qr-camara-invalido.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="1" failures="0" skipped="1" time="0.001" errors="0">
+<testcase name="CP-SIS-033 · un QR inválido muestra un error claro y no registra" classname="qr-camara-invalido.spec.ts">
+<properties>
+<property name="skip" value="La cámara falsa con archivo solo existe en Chromium">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="qr-camara.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="2" failures="0" skipped="2" time="0" errors="0">
+<testcase name="con un QR de estudiante › CP-SIS-032 y 034 · registra la entrada y bloquea una segunda entrada" classname="qr-camara.spec.ts">
+<properties>
+<property name="serial" value="">
+</property>
+<property name="skip" value="La cámara falsa con archivo solo existe en Chromium">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="con un QR de estudiante › CP-SIS-035 y 036 · registra la salida y bloquea una segunda salida" classname="qr-camara.spec.ts">
+<properties>
+<property name="serial" value="">
+</property>
+<property name="skip" value="La cámara falsa con archivo solo existe en Chromium">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="qr.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="3" failures="0" skipped="0" time="59.222" errors="0">
+<testcase name="CP-SIS-029 · el estudiante ve el QR de su código con su nombre" classname="qr.spec.ts" time="20.347">
+</testcase>
+<testcase name="CP-SIS-031 · el padre no puede ver el QR de un estudiante" classname="qr.spec.ts" time="21.448">
+</testcase>
+<testcase name="CP-SIS-031 · el docente no puede ver el QR de un estudiante" classname="qr.spec.ts" time="17.427">
+</testcase>
+</testsuite>
+<testsuite name="recuperacion.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="4" failures="0" skipped="2" time="7.831" errors="0">
+<testcase name="CP-SIS-015 · pedir recuperación con un correo registrado y con uno no registrado da el mismo mensaje" classname="recuperacion.spec.ts" time="6.341">
+</testcase>
+<testcase name="CP-SIS-016 · restablecer con el enlace del correo" classname="recuperacion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente del buzón de QA (BC-12): el enlace llega por correo">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="CP-SIS-017 · una contraseña débil se rechaza antes de enviar y dice qué regla falta" classname="recuperacion.spec.ts" time="1.487">
+</testcase>
+<testcase name="CP-SIS-018 · un enlace de recuperación ya usado" classname="recuperacion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente del buzón de QA (BC-12) y de BE-13: hace falta un enlace real usado una vez">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="2" failures="0" skipped="0" time="46.452" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="32.214">
+</testcase>
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="14.238">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="2" failures="0" skipped="0" time="44.764" errors="1">
+<testcase name="un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05)" classname="registro-padre.spec.ts" time="11.664">
+</testcase>
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="33.1">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md]]
+]]>
+</system-out>
+<error message="page.close: ENOENT: no such file or directory, open &apos;c:\Users\marig\proyecto-eyesschool\test-results\.playwright-artifacts-19\traces\8a09be561a37ea12a0bc-21d2155151f4a920eac4-recording36.trace&apos;" type="Error">
+<![CDATA[  [firefox] › registro-padre.spec.ts:56:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Error: page.close: ENOENT: no such file or directory, open 'c:\Users\marig\proyecto-eyesschool\test-results\.playwright-artifacts-19\traces\8a09be561a37ea12a0bc-21d2155151f4a920eac4-recording36.trace'
+
+      22 |     await expect(page.getByText('Usuario eliminado exitosamente')).toBeVisible({ timeout: 30_000 })
+      23 |   } finally {
+    > 24 |     await page.close()
+         |     ^
+      25 |   }
+      26 | })
+      27 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:24:5
+
+    Error: ENOENT: no such file or directory, open 'c:\Users\marig\proyecto-eyesschool\test-results\.playwright-artifacts-19\cf12bac96c837e9e534c78608fad6c78.zip'
+
+    Error Context: ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="registro.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="3" failures="0" skipped="0" time="76.594" errors="0">
+<testcase name="CP-SIS-011 · un estudiante se registra con todos los datos y puede iniciar sesión" classname="registro.spec.ts" time="32.363">
+</testcase>
+<testcase name="CP-SIS-012 · un correo ya registrado, también en mayúsculas, no crea otra cuenta" classname="registro.spec.ts" time="31.269">
+</testcase>
+<testcase name="CP-SIS-013 · con un campo obligatorio vacío no se registra e indica el campo" classname="registro.spec.ts" time="12.962">
+</testcase>
+</testsuite>
+<testsuite name="reportes.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="3" failures="0" skipped="0" time="43.364" errors="0">
+<testcase name="CP-SIS-056 · el admin crea un reporte de asistencia con un PDF y lo descarga" classname="reportes.spec.ts" time="18.407">
+</testcase>
+<testcase name="CP-SIS-057 · un filtro sin datos muestra un aviso" classname="reportes.spec.ts" time="13.281">
+</testcase>
+<testcase name="CP-SIS-057 · con la API caída los reportes avisan y dejan reintentar" classname="reportes.spec.ts" time="11.676">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="6" failures="0" skipped="0" time="397.634" errors="0">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="15.875">
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="15.895">
+</testcase>
+<testcase name="sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript" classname="sesion.spec.ts" time="13.627">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)" classname="sesion.spec.ts" time="261.217">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)" classname="sesion.spec.ts" time="84.111">
+</testcase>
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="6.909">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="9" failures="0" skipped="0" time="213.16" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="40.046">
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="15.578">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="16.866">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-020 · crear con un correo ya registrado no guarda" classname="usuarios.spec.ts" time="24.089">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-023 · al editar, el correo está bloqueado y no se puede poner el de otro usuario" classname="usuarios.spec.ts" time="28.431">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-024 · editar dejando el nombre vacío no guarda" classname="usuarios.spec.ts" time="29.757">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-026 · eliminar con la API caída avisa que no se pudo y no elimina" classname="usuarios.spec.ts" time="25.258">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-027 · filtrar por rol y por nombre; el estado se ve por secciones" classname="usuarios.spec.ts" time="16.849">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar" classname="usuarios.spec.ts" time="16.286">
+</testcase>
+</testsuite>
+<testsuite name="wc06-accesibilidad.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="6" failures="0" skipped="6" time="3.443" errors="0">
+<testcase name="WC-06 axe · login-y-registro sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts">
+<properties>
+<property name="skip" value="axe se corre una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 axe · registro-modal sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts">
+<properties>
+<property name="skip" value="axe se corre una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 axe · usuarios-y-modal sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts">
+<properties>
+<property name="skip" value="axe se corre una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 axe · qr-escanear-docente sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts">
+<properties>
+<property name="skip" value="axe se corre una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 axe · notas-padre sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts">
+<properties>
+<property name="skip" value="axe se corre una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 axe · reset-password sin violaciones serias ni críticas" classname="wc06-accesibilidad.spec.ts">
+<properties>
+<property name="skip" value="axe se corre una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="wc06-responsive.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="20" failures="0" skipped="20" time="13.39" errors="0">
+<testcase name="WC-06 responsive · portada a 375px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · portada a 768px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · portada a 1920px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · inicio-docente a 375px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · inicio-docente a 768px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · inicio-docente a 1920px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · notas-docente a 375px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · notas-docente a 768px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · notas-docente a 1920px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · usuarios-admin a 375px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · usuarios-admin a 768px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · usuarios-admin a 1920px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · asistencia-padre a 375px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · asistencia-padre a 768px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · asistencia-padre a 1920px sin desborde" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 375×812" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1280×720" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «CREAR CUENTA» a 1920×1080" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 375×812" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="WC-06 responsive · el aviso de cookies no tapa «ENTRAR» a 1280×720" classname="wc06-responsive.spec.ts">
+<properties>
+<property name="skip" value="Se revisa una vez (Chromium)">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="wc06-seguridad.spec.ts" timestamp="2026-11-17T19:11:29.032Z" hostname="firefox" tests="2" failures="0" skipped="0" time="14.133" errors="0">
+<testcase name="CP-NF-013 · eys_access y eys_refresh son HttpOnly y Secure; eys_user no lleva el token" classname="wc06-seguridad.spec.ts" time="14.021">
+</testcase>
+<testcase name="WC-06 · las respuestas traen CSP, anti-clickjacking, nosniff, Referrer-Policy, Permissions-Policy y HSTS" classname="wc06-seguridad.spec.ts" time="0.112">
+</testcase>
+</testsuite>
+</testsuites>

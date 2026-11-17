@@ -343,7 +343,7 @@ export default function HorariosClient({ role, initialData }: Props) {
                     <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
                       {h.nombreCurso ?? '—'}{h.gradoCurso ? ` · ${h.gradoCurso}` : ''}
                     </td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{h.nombreProfesor ?? <span className="text-slate-400 italic text-xs">Sin profesor</span>}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{h.nombreProfesor ?? <span className="text-slate-500 italic text-xs">Sin profesor</span>}</td>
                     <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{h.salon}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-1 rounded-lg text-xs font-semibold ${h.activo ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300' : 'bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-400'}`}>
