@@ -38,13 +38,15 @@ export default async function GeneralDashboardPage({ searchParams }: { searchPar
     }
   }
 
+  // Si la API falla, el dato llega como null y el cliente vuelve a pedirlo; si
+  // también falla, muestra el error con «Reintentar» (DEF-WEB-08).
   const initial =
     token && role === 'docente'
-      ? { initialDocente: await getDashboardDocenteServer(token) }
+      ? { initialDocente: (await getDashboardDocenteServer(token)) ?? undefined }
       : token && role === 'estudiante'
-        ? { initialEstudiante: await getDashboardEstudianteServer(token) }
+        ? { initialEstudiante: (await getDashboardEstudianteServer(token)) ?? undefined }
         : token && role === 'padre'
-          ? { initialPadre: await getDashboardPadreServer(token, activoId) }
+          ? { initialPadre: (await getDashboardPadreServer(token, activoId)) ?? undefined }
           : {}
 
   return (

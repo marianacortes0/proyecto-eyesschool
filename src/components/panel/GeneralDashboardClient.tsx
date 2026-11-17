@@ -12,7 +12,7 @@ const dec = (n: number | null | undefined) => (n == null ? '—' : n.toFixed(1))
 const pct = (n: number | null | undefined) => (n == null ? '—' : `${Math.round(n)}%`)
 
 function DocenteDashboard({ name, initial }: { name: string; initial?: DocenteStats }) {
-  const { data, loading, error } = useDocenteDashboard(initial)
+  const { data, loading, error, reintentar } = useDocenteDashboard(initial)
   const kpis: DashboardKpi[] = [
     { label: 'Cursos asignados', value: num(data?.cursosAsignados), icon: 'menu_book', accent: 'primary' },
     { label: 'Notas registradas hoy', value: num(data?.notasHoy), icon: 'edit_note', accent: 'purple' },
@@ -26,12 +26,13 @@ function DocenteDashboard({ name, initial }: { name: string; initial?: DocenteSt
       kpis={kpis}
       loading={loading}
       error={error}
+      onReintentar={reintentar}
     />
   )
 }
 
 function EstudianteDashboard({ name, initial }: { name: string; initial?: EstudianteStats }) {
-  const { data, loading, error } = useEstudianteDashboard(initial)
+  const { data, loading, error, reintentar } = useEstudianteDashboard(initial)
   const kpis: DashboardKpi[] = [
     { label: 'Asistencia', value: pct(data?.porcentajeAsistencia), icon: 'fact_check', accent: 'teal', percent: data?.porcentajeAsistencia ?? undefined },
     { label: 'Novedades activas', value: num(data?.novedadesActivas), icon: 'campaign', accent: 'purple' },
@@ -45,26 +46,28 @@ function EstudianteDashboard({ name, initial }: { name: string; initial?: Estudi
       kpis={kpis}
       loading={loading}
       error={error}
+      onReintentar={reintentar}
     />
   )
 }
 
 function PadreDashboard({ name, initial }: { name: string; initial?: PadreStats }) {
-  const { data, loading, error } = usePadreDashboard(initial)
+  const { data, loading, error, reintentar } = usePadreDashboard(initial)
   const hijo = data?.hijos?.[0]
   const kpis: DashboardKpi[] = [
     { label: 'Asistencia', value: pct(hijo?.porcentajeAsistencia), icon: 'fact_check', accent: 'teal', percent: hijo?.porcentajeAsistencia ?? undefined },
     { label: 'Novedades activas', value: num(hijo?.novedadesActivas), icon: 'campaign', accent: 'purple' },
-    { label: 'Estudiante', value: hijo ? '1' : '0', caption: hijo?.nombreCompleto ?? 'Sin asociar', icon: 'face', accent: 'primary' },
+    { label: 'Estudiante', value: data ? (hijo ? '1' : '0') : '—', caption: hijo?.nombreCompleto ?? (data ? 'Sin asociar' : '—'), icon: 'face', accent: 'primary' },
   ]
   return (
     <MinimalDashboard
       greetingName={name}
-      subtitle={hijo ? `Seguimiento de ${hijo.nombreCompleto}.` : 'Aún no tienes un estudiante asociado.'}
+      subtitle={hijo ? `Seguimiento de ${hijo.nombreCompleto}.` : data ? 'Aún no tienes un estudiante asociado.' : 'Seguimiento de tu hijo/a.'}
       primary={{ label: 'Promedio de tu hijo/a', value: dec(hijo?.promedioGeneral), caption: hijo?.nombreCompleto ?? '—' }}
       kpis={kpis}
       loading={loading}
       error={error}
+      onReintentar={reintentar}
     />
   )
 }

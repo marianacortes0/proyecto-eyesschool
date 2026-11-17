@@ -31,6 +31,11 @@ async function apiFetchServer<T>(path: string, token: string): Promise<T | null>
   }
 }
 
+// DEF-WEB-08 · un fallo de la API es un error, no un inicio en ceros: el servidor
+// devuelve null (la página vuelve a pedirlo desde el navegador) y el cliente lanza
+// este mensaje, que el inicio muestra con «Reintentar».
+export const MSG_INICIO_ERROR = 'No se pudo cargar tu inicio. Revisa tu conexión e intenta de nuevo.'
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type HorarioHoy = {
@@ -142,24 +147,6 @@ type PadreAPI = {
   novedades_pendientes: number
 }
 
-// ─── Empty state helpers ──────────────────────────────────────────────────────
-
-function emptyDocenteStats(): DocenteStats {
-  return {
-    promedioNotas: 0, aprobacion: 0, estudiantesCount: 0,
-    cursosAsignados: 0, notasHoy: 0, asistenciasHoy: 0, novedadesPendientes: 0,
-    notasPorPeriodo: [], horariosHoy: [], topEstudiantes: [], distribucionNotas: [],
-  }
-}
-
-function emptyEstudianteStats(): EstudianteStats {
-  return {
-    promedioGeneral: 0, aprobacion: 0, porcentajeAsistencia: 0, totalAsistencias: 0,
-    periodoActual: 0, novedadesActivas: 0, notasPorMateria: [], notasPorPeriodo: [],
-    asistenciaEstados: [], novedadesRecientes: [],
-  }
-}
-
 /** Con varios hijos, el inicio del padre pide los datos del hijo activo (WEB-03). */
 export function rutaPadre(idEstudiante?: number): string {
   return idEstudiante ? `/dashboard/padre?id_estudiante=${idEstudiante}` : '/dashboard/padre'
@@ -169,7 +156,7 @@ export function rutaPadre(idEstudiante?: number): string {
 
 export const getDashboardDocente = async (): Promise<DocenteStats> => {
   const raw = await apiFetchClient<DocenteAPI>('/dashboard/docente')
-  if (!raw) return emptyDocenteStats()
+  if (!raw) throw new Error(MSG_INICIO_ERROR)
   return {
     promedioNotas:       0,
     aprobacion:          0,
@@ -187,7 +174,7 @@ export const getDashboardDocente = async (): Promise<DocenteStats> => {
 
 export const getDashboardEstudiante = async (): Promise<EstudianteStats> => {
   const raw = await apiFetchClient<EstudianteAPI>('/dashboard/estudiante')
-  if (!raw) return emptyEstudianteStats()
+  if (!raw) throw new Error(MSG_INICIO_ERROR)
   return {
     promedioGeneral:      raw.promedio_general ?? 0,
     aprobacion:           0,
@@ -204,7 +191,7 @@ export const getDashboardEstudiante = async (): Promise<EstudianteStats> => {
 
 export const getDashboardPadre = async (idEstudiante?: number): Promise<PadreStats> => {
   const raw = await apiFetchClient<PadreAPI>(rutaPadre(idEstudiante))
-  if (!raw) return { hijos: [] }
+  if (!raw) throw new Error(MSG_INICIO_ERROR)
   return {
     hijos: [{
       idEstudiante:        raw.id_estudiante,
@@ -226,9 +213,9 @@ export const getDashboardPadre = async (idEstudiante?: number): Promise<PadreSta
 
 // ─── Server-side functions (token-based) ─────────────────────────────────────
 
-export async function getDashboardDocenteServer(token: string): Promise<DocenteStats> {
+export async function getDashboardDocenteServer(token: string): Promise<DocenteStats | null> {
   const raw = await apiFetchServer<DocenteAPI>('/dashboard/docente', token)
-  if (!raw) return emptyDocenteStats()
+  if (!raw) return null
   return {
     promedioNotas:       0,
     aprobacion:          0,
@@ -244,9 +231,9 @@ export async function getDashboardDocenteServer(token: string): Promise<DocenteS
   }
 }
 
-export async function getDashboardEstudianteServer(token: string): Promise<EstudianteStats> {
+export async function getDashboardEstudianteServer(token: string): Promise<EstudianteStats | null> {
   const raw = await apiFetchServer<EstudianteAPI>('/dashboard/estudiante', token)
-  if (!raw) return emptyEstudianteStats()
+  if (!raw) return null
   return {
     promedioGeneral:      raw.promedio_general ?? 0,
     aprobacion:           0,
@@ -261,9 +248,9 @@ export async function getDashboardEstudianteServer(token: string): Promise<Estud
   }
 }
 
-export async function getDashboardPadreServer(token: string, idEstudiante?: number): Promise<PadreStats> {
+export async function getDashboardPadreServer(token: string, idEstudiante?: number): Promise<PadreStats | null> {
   const raw = await apiFetchServer<PadreAPI>(rutaPadre(idEstudiante), token)
-  if (!raw) return { hijos: [] }
+  if (!raw) return null
   return {
     hijos: [{
       idEstudiante:        raw.id_estudiante,

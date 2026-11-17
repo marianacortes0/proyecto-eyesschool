@@ -51,16 +51,25 @@ describe('Servicios · dashboardService', () => {
     expect(srv).toEqual(r)
   })
 
-  it('con error de la API o sin red devuelve el estado vacío, no lanza', async () => {
+  // DEF-WEB-08 · antes un error de la API se convertía en ceros («0 estudiantes a
+  // tu cargo») y el inicio no avisaba. CP-SIS-008 pide mensaje y reintento: el
+  // servidor devuelve null (la página reintenta en el navegador) y el cliente lanza.
+  it('con error de la API o sin red el servidor devuelve null, no ceros', async () => {
     stub(json(500, {}))
-    expect((await s.getDashboardDocente()).cursosAsignados).toBe(0)
-    expect((await s.getDashboardEstudianteServer('t')).promedioGeneral).toBe(0)
-    expect(await s.getDashboardPadre()).toEqual({ hijos: [] })
+    expect(await s.getDashboardEstudianteServer('t')).toBeNull()
 
     stub(new Error('red caída'))
-    expect((await s.getDashboardDocenteServer('t')).estudiantesCount).toBe(0)
-    expect((await s.getDashboardEstudiante()).porcentajeAsistencia).toBe(0)
-    expect(await s.getDashboardPadreServer('t')).toEqual({ hijos: [] })
+    expect(await s.getDashboardDocenteServer('t')).toBeNull()
+    expect(await s.getDashboardPadreServer('t')).toBeNull()
+  })
+
+  it('con error de la API o sin red el cliente lanza un mensaje para el usuario', async () => {
+    stub(json(500, {}))
+    await expect(s.getDashboardDocente()).rejects.toThrow(s.MSG_INICIO_ERROR)
+    await expect(s.getDashboardPadre()).rejects.toThrow(s.MSG_INICIO_ERROR)
+
+    stub(new Error('red caída'))
+    await expect(s.getDashboardEstudiante()).rejects.toThrow(s.MSG_INICIO_ERROR)
   })
 
   it('los helpers heredados devuelven valores neutros', async () => {

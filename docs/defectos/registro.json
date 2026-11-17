@@ -186,5 +186,16 @@
     "obtenido": "Una vez «No se pudo iniciar sesión. Intenta de nuevo.» y otra el botón en «ENTRANDO…» más de 45 s. La Server Action tarda 5,6–11,3 s cuando la API responde en 2–5 s.",
     "evidencia": "docs/defectos/DEF-WEB-07.md, evidencias/PR-06/web/E17_e2e.xml",
     "identificado": "17/11/2026", "estado": "en-curso"
+  },
+  {
+    "id": "DEF-WEB-08",
+    "titulo": "Con la API caída, el inicio muestra ceros en vez de un error",
+    "componente": "Web", "origen": "Pruebas de sistema", "severidad": "Media", "prioridad": "P3",
+    "caso": "CP-SIS-008", "correccion": "—",
+    "pasos": "1. Iniciar sesión como docente.\n2. Dejar la API sin responder.\n3. Abrir /general.",
+    "esperado": "Mensaje de error y opción de reintentar.",
+    "obtenido": "El inicio se ve normal con todas las cifras en 0 («0 estudiantes a tu cargo»), sin aviso ni reintento.",
+    "evidencia": "docs/defectos/DEF-WEB-08.md",
+    "identificado": "17/11/2026", "estado": "en-verificacion"
   }
 ]

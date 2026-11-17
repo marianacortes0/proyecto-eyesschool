@@ -21,6 +21,8 @@ export type MinimalDashboardProps = {
   error?: string | null;
   /** Contenido extra (p. ej. gráficas) que se muestra debajo de los KPIs. */
   extra?: React.ReactNode;
+  /** Vuelve a pedir los datos cuando hubo un error (DEF-WEB-08). */
+  onReintentar?: () => void;
 };
 
 const accentMap = {
@@ -60,14 +62,26 @@ function RadialGauge({ percent, stroke, size = 64 }: { percent: number; stroke: 
   );
 }
 
-export default function MinimalDashboard({ greetingName, subtitle, primary, kpis, loading, error, extra }: MinimalDashboardProps) {
+export default function MinimalDashboard({ greetingName, subtitle, primary, kpis, loading, error, extra, onReintentar }: MinimalDashboardProps) {
   return (
     <>
       <PanelHeader light="Hola," bold={greetingName} subtitle={subtitle} />
 
       {error && (
-        <div className="mb-8 px-4 py-3 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-500 text-sm">
-          {error}
+        <div
+          role="alert"
+          className="mb-8 px-4 py-3 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-500 text-sm flex flex-wrap items-center justify-between gap-3"
+        >
+          <span>{error}</span>
+          {onReintentar && (
+            <button
+              type="button"
+              onClick={onReintentar}
+              className="px-4 py-1.5 rounded-xl bg-red-500 text-white text-xs font-semibold hover:bg-red-600"
+            >
+              Reintentar
+            </button>
+          )}
         </div>
       )}
 
