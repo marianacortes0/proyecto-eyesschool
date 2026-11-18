@@ -10,6 +10,7 @@ import { getErrorMessage } from '@/lib/errors'
 import Pagination from '@/components/ui/Pagination'
 import { usePagination } from '@/hooks/usePagination'
 import ErrorCarga from '@/components/ui/ErrorCarga'
+import { porTexto } from '@/lib/utils/orden'
 
 interface Props { role: Role; idUsuarioRegistrador: number; initialData?: NotasBootstrap }
 
@@ -35,7 +36,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
 
   // Jornadas únicas y cursos disponibles según la jornada seleccionada
   const jornadas = useMemo(
-    () => [...new Set(cursos.map(c => c.jornada).filter(Boolean))].sort(),
+    () => [...new Set(cursos.map(c => c.jornada).filter(Boolean))].sort(porTexto),
     [cursos]
   )
   const cursosFiltrados = useMemo(
@@ -391,7 +392,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
       seen.add('mañana')
       seen.add('tarde')
       cursos.forEach(c => { if (c.jornada) seen.add(c.jornada.toLowerCase()) })
-      return [...seen].sort()
+      return [...seen].sort(porTexto)
     },
     [cursos]
   )
@@ -401,7 +402,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
   // si no el desplegable de Grado (y los siguientes) sale vacío.
   const grados = useMemo(
     () => jornada
-      ? [...new Set(cursos.filter(c => c.jornada?.toLowerCase() === jornada).map(c => c.grado))].sort()
+      ? [...new Set(cursos.filter(c => c.jornada?.toLowerCase() === jornada).map(c => c.grado))].sort(porTexto)
       : [],
     [jornada, cursos]
   )

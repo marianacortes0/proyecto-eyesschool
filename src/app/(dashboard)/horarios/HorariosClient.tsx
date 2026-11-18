@@ -8,6 +8,7 @@ import { can, type Role } from '@/lib/utils/permissions'
 import { notifyWarning } from '@/lib/toast'
 import { hoyColegio } from '@/lib/utils/fecha'
 import ErrorCarga from '@/components/ui/ErrorCarga'
+import { porTexto } from '@/lib/utils/orden'
 
 const JORNADAS = ['Mañana', 'Tarde', 'Noche', 'Completa']
 
@@ -72,7 +73,7 @@ export default function HorariosClient({ role, initialData }: Props) {
   const canUpdate = can(role, 'update', 'horarios')
   const canDelete = can(role, 'delete', 'horarios')
 
-  const jornadas = useMemo(() => [...new Set(cursos.map(c => c.jornada))].sort(), [cursos])
+  const jornadas = useMemo(() => [...new Set(cursos.map(c => c.jornada))].sort(porTexto), [cursos])
   const cursosDeJornada = useMemo(
     () => filterJornada ? cursos.filter(c => c.jornada === filterJornada) : cursos,
     [filterJornada, cursos]
@@ -694,7 +695,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
   const [activo, setActivo] = useState(horario?.activo ?? true)
   const [formError, setFormError] = useState<string | null>(null)
 
-  const jornadas = useMemo(() => [...new Set(cursos.map(c => c.jornada))].sort(), [cursos])
+  const jornadas = useMemo(() => [...new Set(cursos.map(c => c.jornada))].sort(porTexto), [cursos])
   const cursosDeJornada = useMemo(
     () => jornada ? cursos.filter(c => c.jornada === jornada) : [],
     [cursos, jornada]

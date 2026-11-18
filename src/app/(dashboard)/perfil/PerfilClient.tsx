@@ -172,7 +172,7 @@ export default function PerfilClient({ role, perfilServer = null, adminDataServe
 
       setLoading(false)
     }
-    load()
+    void load()
   }, [role, authUser, perfilServer, profesorServer])
 
   const handleSaveEPS = async (e: React.FormEvent) => {

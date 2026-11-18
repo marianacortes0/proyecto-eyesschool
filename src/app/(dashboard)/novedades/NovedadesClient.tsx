@@ -9,6 +9,7 @@ import { can } from '@/lib/utils/permissions'
 import Pagination from '@/components/ui/Pagination'
 import { usePagination } from '@/hooks/usePagination'
 import ErrorCarga from '@/components/ui/ErrorCarga'
+import { porTexto } from '@/lib/utils/orden'
 
 // El backend usa Bajo/Medio/Alto/Crítico; se mapean también las variantes
 // Alta/Media/Baja por compatibilidad.
@@ -236,9 +237,9 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
   const [grado, setGrado] = useState('')
   const [idCurso, setIdCurso] = useState('')
 
-  const jornadas = useMemo(() => [...new Set(cursos.map(c => c.jornada))].sort(), [cursos])
+  const jornadas = useMemo(() => [...new Set(cursos.map(c => c.jornada))].sort(porTexto), [cursos])
   const grados = useMemo(
-    () => jornada ? [...new Set(cursos.filter(c => c.jornada === jornada).map(c => c.grado))].sort() : [],
+    () => jornada ? [...new Set(cursos.filter(c => c.jornada === jornada).map(c => c.grado))].sort(porTexto) : [],
     [jornada, cursos]
   )
   const cursosDelGrado = useMemo(
@@ -264,7 +265,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
     if (mode === 'create') {
       onCreate({ descripcion, idEstudiante: Number(idEstudiante), idTipoNovedad: Number(idTipoNovedad) })
     } else if (novedad) {
-      onUpdate(novedad.idNovedad, {
+      void onUpdate(novedad.idNovedad, {
         descripcion,
         idTipoNovedad: Number(idTipoNovedad),
         estado,
