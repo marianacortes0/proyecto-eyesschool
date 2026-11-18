@@ -1,0 +1,34 @@
+<testsuites id="" name="" tests="8" failures="0" skipped="0" errors="0" time="338.782587">
+<testsuite name="qr-camara-invalido.spec.ts" timestamp="2026-11-18T01:26:16.139Z" hostname="chromium" tests="1" failures="0" skipped="0" time="50.372" errors="0">
+<testcase name="CP-SIS-033 · un QR inválido muestra un error claro y no registra" classname="qr-camara-invalido.spec.ts" time="50.372">
+</testcase>
+</testsuite>
+<testsuite name="qr-camara.spec.ts" timestamp="2026-11-18T01:26:16.139Z" hostname="chromium" tests="2" failures="0" skipped="0" time="108.211" errors="0">
+<testcase name="con un QR de estudiante › CP-SIS-032 y 034 · registra la entrada y bloquea una segunda entrada" classname="qr-camara.spec.ts" time="51.426">
+<properties>
+<property name="serial" value="">
+</property>
+</properties>
+</testcase>
+<testcase name="con un QR de estudiante › CP-SIS-035 y 036 · registra la salida y bloquea una segunda salida" classname="qr-camara.spec.ts" time="56.785">
+<properties>
+<property name="serial" value="">
+</property>
+</properties>
+</testcase>
+</testsuite>
+<testsuite name="qr.spec.ts" timestamp="2026-11-18T01:26:16.139Z" hostname="chromium" tests="3" failures="0" skipped="0" time="99.761" errors="0">
+<testcase name="CP-SIS-029 · el estudiante ve el QR de su código con su nombre" classname="qr.spec.ts" time="38.624">
+</testcase>
+<testcase name="CP-SIS-031 · el padre no puede ver el QR de un estudiante" classname="qr.spec.ts" time="36.802">
+</testcase>
+<testcase name="CP-SIS-031 · el docente no puede ver el QR de un estudiante" classname="qr.spec.ts" time="24.335">
+</testcase>
+</testsuite>
+<testsuite name="wc06-manuales.spec.ts" timestamp="2026-11-18T01:26:16.139Z" hostname="chromium" tests="2" failures="0" skipped="0" time="61.181" errors="0">
+<testcase name="WC-06 bloque 5 · con la API caída, descargar el boletín avisa y no baja un archivo dañado" classname="wc06-manuales.spec.ts" time="31.031">
+</testcase>
+<testcase name="cámara sin permiso › WC-06 bloque 4 · si se niega la cámara, el escáner lo dice con claridad" classname="wc06-manuales.spec.ts" time="30.15">
+</testcase>
+</testsuite>
+</testsuites>

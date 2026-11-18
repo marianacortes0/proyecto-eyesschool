@@ -284,7 +284,7 @@
     "esperado": "Se reconoce al estudiante y se registra la entrada; un QR ajeno da «Código QR inválido».",
     "obtenido": "Siempre «Error al contactar la API de lectura QR»: api.qrserver.com responde 400 a toda imagen subida (17/11/2026).",
     "evidencia": "docs/defectos/DEF-WEB-16.md",
-    "identificado": "17/11/2026", "estado": "nuevo"
+    "identificado": "17/11/2026", "estado": "en-verificacion"
   },
   {
     "id": "DEF-WEB-17",
@@ -296,5 +296,16 @@
     "obtenido": "Rendimiento 33–96; en móvil, FCP ~22,5 s en el panel. La fuente Material Symbols pesa 3.934 KiB.",
     "evidencia": "docs/defectos/DEF-WEB-17.md",
     "identificado": "17/11/2026", "estado": "nuevo"
+  },
+  {
+    "id": "DEF-WEB-18",
+    "titulo": "Cualquier QR registra la asistencia del mismo estudiante (EST002)",
+    "componente": "Web", "origen": "Pruebas de sistema", "severidad": "Crítica", "prioridad": "P1",
+    "caso": "CP-SIS-032, CP-SIS-033", "correccion": "—",
+    "pasos": "1. Como docente, abrir /qr/escanear y activar la cámara.\n2. Escanear un QR que no sea de un estudiante, o el de otro estudiante.",
+    "esperado": "Un QR ajeno da «Código QR inválido» y no registra; el QR de un estudiante muestra a ese estudiante.",
+    "obtenido": "Siempre aparece la confirmación de EST002: la web filtraba /estudiantes por codigo_estudiante, un parámetro que la API no tiene, y tomaba el primero.",
+    "evidencia": "docs/defectos/DEF-WEB-18.md",
+    "identificado": "17/11/2026", "estado": "en-verificacion"
   }
 ]
