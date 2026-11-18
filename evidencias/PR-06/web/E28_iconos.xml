@@ -1,0 +1,46 @@
+<testsuites id="" name="" tests="20" failures="0" skipped="0" errors="0" time="288.064615">
+<testsuite name="iconos.spec.ts" timestamp="2026-11-18T02:29:17.301Z" hostname="chromium" tests="10" failures="0" skipped="0" time="124.806" errors="0">
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › página pública /" classname="iconos.spec.ts" time="2.263">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › página pública /home/beneficios" classname="iconos.spec.ts" time="1.258">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › página pública /home/nosotros" classname="iconos.spec.ts" time="1.122">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › página pública /home/support" classname="iconos.spec.ts" time="1.069">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › página pública /forgot-password" classname="iconos.spec.ts" time="2.048">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › página pública /reset-password?token=e2e" classname="iconos.spec.ts" time="1.153">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › panel del admin" classname="iconos.spec.ts" time="32.194">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › panel del docente" classname="iconos.spec.ts" time="28.748">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › panel del estudiante" classname="iconos.spec.ts" time="24.046">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › panel del padre" classname="iconos.spec.ts" time="30.905">
+</testcase>
+</testsuite>
+<testsuite name="iconos.spec.ts" timestamp="2026-11-18T02:29:17.301Z" hostname="firefox" tests="10" failures="0" skipped="0" time="158.405" errors="0">
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › página pública /" classname="iconos.spec.ts" time="6.642">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › página pública /home/beneficios" classname="iconos.spec.ts" time="1.967">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › página pública /home/nosotros" classname="iconos.spec.ts" time="1.655">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › página pública /home/support" classname="iconos.spec.ts" time="1.686">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › página pública /forgot-password" classname="iconos.spec.ts" time="1.751">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › página pública /reset-password?token=e2e" classname="iconos.spec.ts" time="1.921">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › panel del admin" classname="iconos.spec.ts" time="37.55">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › panel del docente" classname="iconos.spec.ts" time="33.193">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › panel del estudiante" classname="iconos.spec.ts" time="30.252">
+</testcase>
+<testcase name="DEF-WEB-17 · iconos con la fuente reducida › panel del padre" classname="iconos.spec.ts" time="41.788">
+</testcase>
+</testsuite>
+</testsuites>
