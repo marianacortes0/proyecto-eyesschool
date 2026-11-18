@@ -1,4 +1,5 @@
 import { apiFetch } from '@/services/api/client'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 const API_ORIGIN = API.replace(/\/api\/v1\/?$/, '')
@@ -193,7 +194,7 @@ export async function insertAdminPerfil(
   idUsuario: number,
   payload: { cargo: string; nivelAcceso: string }
 ): Promise<AdminPerfil> {
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
   const data = await apiFetch<Record<string, unknown>>('/administradores', {
     method: 'POST',
     body: JSON.stringify({
@@ -245,7 +246,7 @@ export async function upsertMiEPS(
       id_ips:          payload.idIPS,
       nombre_ips:      payload.nombreIPS,
       tipo_afiliacion: payload.tipoAfiliacion,
-      fecha_afiliacion: new Date().toISOString().slice(0, 10),
+      fecha_afiliacion: hoyColegio(),
       activo: true,
     }),
   })

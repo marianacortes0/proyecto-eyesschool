@@ -31,6 +31,7 @@ import {
 import { notifySuccess, notifyError } from '@/lib/toast'
 import { getErrorMessage } from '@/lib/errors'
 import { useConfirm } from '@/components/ui/ConfirmDialog'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 export type ModalMode = 'create' | 'edit' | null
 
@@ -99,7 +100,7 @@ export function useHorarios(initialData?: HorariosBootstrap) {
       setEspecializaciones(data.especializaciones)
       setAsignacionesList(data.asignaciones)
     } catch (e) {
-      setError(getErrorMessage(e, 'Error al cargar horarios'))
+      setError(getErrorMessage(e, 'No se pudo cargar los horarios. Revisa tu conexión e intenta de nuevo.'))
     } finally {
       setLoading(false)
     }
@@ -108,7 +109,8 @@ export function useHorarios(initialData?: HorariosBootstrap) {
   useEffect(() => {
     // Si la página entregó los datos desde el servidor, no refetcheamos al montar.
     if (initialData) return
-    fetchAll()
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- carga inicial cuando la página no entregó los datos desde el servidor
+    void fetchAll()
   }, [initialData, fetchAll])
 
   // Enriquecer cada horario con curso (nombre + grado), materia (nombre + código)
@@ -168,7 +170,7 @@ export function useHorarios(initialData?: HorariosBootstrap) {
         idProfesor,
         idCurso,
         idMateria,
-        fechaAsignacion: new Date().toISOString().slice(0, 10),
+        fechaAsignacion: hoyColegio(),
         fechaFinalizacion: null,
         activo: true,
       })
@@ -453,6 +455,8 @@ export function useHorarios(initialData?: HorariosBootstrap) {
   }
 
   return {
+    // vuelve a pedir los datos tras un error de carga (DEF-WEB-12)
+    reintentar: () => void fetchAll(),
     horarios: filtered,
     cursos,
     allCursos,

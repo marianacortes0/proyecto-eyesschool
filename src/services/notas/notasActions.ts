@@ -3,6 +3,8 @@
 import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import type { Nota } from './notasService'
+import { ApiError, errorMessage } from '@/services/api/client'
+import { conMotivo } from '@/services/api/conMotivo'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -23,8 +25,8 @@ async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> 
     cache: 'no-store',
   })
   if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
-    throw new Error((body as Record<string, unknown>).detail as string ?? `HTTP ${res.status}`)
+    const body = (await res.json().catch(() => ({}))) as Record<string, unknown>
+    throw new ApiError(res.status, errorMessage(body.detail, res.status), body.detail)
   }
   if (res.status === 204) return null as T
   return res.json() as Promise<T>
@@ -52,19 +54,23 @@ function nombreCompleto(c: Record<string, unknown>): string {
 
 export async function createNotaAction(
   payload: Pick<Nota, 'idEstudiante' | 'idMateria' | 'idPeriodo' | 'nota' | 'observacion' | 'registradoPor'>
-) {
-  await apiFetch('/notas', {
-    method: 'POST',
-    body: JSON.stringify({
-      id_estudiante:  payload.idEstudiante,
-      id_materia:     payload.idMateria,
-      id_periodo:     payload.idPeriodo,
-      nota:           payload.nota,
-      observacion:    payload.observacion ?? null,
-      registrado_por: payload.registradoPor,
-    }),
+): Promise<{ error?: string }> {
+  // Un rechazo de la API («No tiene asignada esta materia…») vuelve como valor (DEF-WEB-10).
+  const r = await conMotivo(async () => {
+    await apiFetch('/notas', {
+      method: 'POST',
+      body: JSON.stringify({
+        id_estudiante:  payload.idEstudiante,
+        id_materia:     payload.idMateria,
+        id_periodo:     payload.idPeriodo,
+        nota:           payload.nota,
+        observacion:    payload.observacion ?? null,
+        registrado_por: payload.registradoPor,
+      }),
+    })
   })
-  revalidatePath('/notas')
+  if (!r.error) revalidatePath('/notas')
+  return r
 }
 
 export async function getNotasAction(): Promise<Nota[]> {

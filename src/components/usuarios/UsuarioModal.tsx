@@ -5,8 +5,10 @@ import Modal from '@/components/ui/Modal'
 import { type UsuarioConRol, type CreateUsuarioData, type UpdateUsuarioData, type CursoOpt, type EstudianteOpt, type EspecializacionOpt, PARENTESCOS, NIVELES_ACCESO } from '@/services/usuarios/usuariosService'
 import { type ModalMode } from '@/hooks/useUsuarios'
 import { notifyWarning } from '@/lib/toast'
+import { getErrorMessage } from '@/lib/errors'
 
-const HOY = new Date().toISOString().slice(0, 10)
+import { hoyColegio } from '@/lib/utils/fecha'
+const HOY = hoyColegio()
 
 interface UsuarioModalProps {
   mode: ModalMode
@@ -114,6 +116,7 @@ export default function UsuarioModal({
         : undefined
       // Especialización actual del profesor (tratada como única)
       const esp = usuario.especializaciones?.[0]
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- marca el montaje en cliente (portal) y bloquea el scroll del body
       setForm({
         primerNombre: usuario.primerNombre,
         segundoNombre: usuario.segundoNombre ?? '',
@@ -262,7 +265,7 @@ export default function UsuarioModal({
         })
       }
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : 'Error al guardar')
+      setFormError(getErrorMessage(err, 'Error al guardar'))
     }
   }
 
@@ -343,7 +346,7 @@ export default function UsuarioModal({
             <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
               Tipo Doc. <span className="text-red-500">*</span>
             </label>
-            <select
+            <select aria-label="Tipo de documento"
               value={form.tipoDocumento}
               onChange={set('tipoDocumento')}
               className={isEdit ? lockedSelectClass : selectClass}
@@ -441,7 +444,7 @@ export default function UsuarioModal({
             <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
               Género
             </label>
-            <select value={form.genero} onChange={set('genero')} className={selectClass}>
+            <select aria-label="Género" value={form.genero} onChange={set('genero')} className={selectClass}>
               <option value="">— Selecciona —</option>
               {GENEROS.map((g) => (
                 <option key={g.value} value={g.value}>{g.label}</option>
@@ -469,7 +472,7 @@ export default function UsuarioModal({
           <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
             Rol <span className="text-red-500">*</span>
           </label>
-          <select
+          <select aria-label="Rol"
             value={form.idRol}
             onChange={(e) => setForm((prev) => ({ ...prev, idRol: Number(e.target.value) }))}
             className={selectClass}
@@ -486,7 +489,7 @@ export default function UsuarioModal({
             <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
               Curso actual
             </label>
-            <select
+            <select aria-label="Curso actual"
               value={form.idCursoActual}
               onChange={(e) => setForm((prev) => ({ ...prev, idCursoActual: e.target.value }))}
               className={selectClass}
@@ -507,7 +510,7 @@ export default function UsuarioModal({
               <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                 Curso <span className="text-red-500">*</span>
               </label>
-              <select
+              <select aria-label="Curso"
                 value={form.cursoEstudiante}
                 onChange={(e) =>
                   // Al cambiar de curso se limpia el estudiante seleccionado
@@ -527,7 +530,7 @@ export default function UsuarioModal({
               <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                 Estudiante vinculado <span className="text-red-500">*</span>
               </label>
-              <select
+              <select aria-label="Estudiante vinculado"
                 value={form.idEstudianteRelacionado}
                 onChange={(e) => setForm((prev) => ({ ...prev, idEstudianteRelacionado: e.target.value }))}
                 className={selectClass}
@@ -547,7 +550,7 @@ export default function UsuarioModal({
               <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                 Parentesco <span className="text-red-500">*</span>
               </label>
-              <select
+              <select aria-label="Parentesco"
                 value={form.parentesco}
                 onChange={(e) => setForm((prev) => ({ ...prev, parentesco: e.target.value }))}
                 className={selectClass}
@@ -568,7 +571,7 @@ export default function UsuarioModal({
               <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                 Especialización
               </label>
-              <select
+              <select aria-label="Especialización"
                 value={form.especializacion}
                 onChange={(e) => setForm((prev) => ({ ...prev, especializacion: e.target.value }))}
                 className={selectClass}
@@ -614,7 +617,7 @@ export default function UsuarioModal({
               <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                 Nivel de acceso
               </label>
-              <select
+              <select aria-label="Nivel de acceso"
                 value={form.nivelAcceso}
                 onChange={(e) => setForm((prev) => ({ ...prev, nivelAcceso: e.target.value }))}
                 className={selectClass}
@@ -633,7 +636,7 @@ export default function UsuarioModal({
             <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
               Fecha de asignación
             </label>
-            <input
+            <input aria-label="Fecha de asignación"
               type="date"
               value={form.fechaAsignacion}
               onChange={(e) => setForm((prev) => ({ ...prev, fechaAsignacion: e.target.value }))}
@@ -644,7 +647,7 @@ export default function UsuarioModal({
             <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
               Fecha de fin
             </label>
-            <input
+            <input aria-label="Fecha de fin"
               type="date"
               value={form.fechaFin}
               onChange={(e) => setForm((prev) => ({ ...prev, fechaFin: e.target.value }))}

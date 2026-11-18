@@ -6,6 +6,8 @@ import { type HorariosBootstrap } from '@/services/horarios/horariosActions'
 import { DIAS_SEMANA, type Horario, type Curso, type Materia, type Especializacion, type ProfesorOpt, type Asignacion } from '@/services/horarios/horariosService'
 import { can, type Role } from '@/lib/utils/permissions'
 import { notifyWarning } from '@/lib/toast'
+import { hoyColegio } from '@/lib/utils/fecha'
+import ErrorCarga from '@/components/ui/ErrorCarga'
 
 const JORNADAS = ['Mañana', 'Tarde', 'Noche', 'Completa']
 
@@ -36,7 +38,7 @@ interface Props { role: Role; initialData?: HorariosBootstrap }
 export default function HorariosClient({ role, initialData }: Props) {
   const {
     horarios, cursos, allCursos, materias, allMaterias, especializaciones, profesores,
-    loading, saving, savingCurso, savingMateria, savingEspecializacion, error,
+    loading, saving, savingCurso, savingMateria, savingEspecializacion, error, reintentar,
     vista, setVista,
     filterCurso, setFilterCurso,
     filterProfesor, setFilterProfesor,
@@ -103,7 +105,7 @@ export default function HorariosClient({ role, initialData }: Props) {
         <div>
           <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Horarios</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            {horarios.length} bloque{horarios.length !== 1 ? 's' : ''} registrado{horarios.length !== 1 ? 's' : ''}
+            {error ? '— bloques registrados' : `${horarios.length} bloque${horarios.length !== 1 ? 's' : ''} registrado${horarios.length !== 1 ? 's' : ''}`}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -171,7 +173,7 @@ export default function HorariosClient({ role, initialData }: Props) {
         {/* Filtro contextual */}
         {vista === 'estudiantes' ? (
           <>
-            <select
+            <select aria-label="Jornada"
               value={filterJornada}
               onChange={e => { setFilterJornada(e.target.value); setFilterCurso('') }}
               className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -181,7 +183,7 @@ export default function HorariosClient({ role, initialData }: Props) {
                 <option key={j} value={j}>{j}</option>
               ))}
             </select>
-            <select
+            <select aria-label="Curso"
               value={filterCurso}
               onChange={e => setFilterCurso(e.target.value)}
               className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -195,7 +197,7 @@ export default function HorariosClient({ role, initialData }: Props) {
             </select>
           </>
         ) : (
-          <select
+          <select aria-label="Profesor"
             value={filterProfesor}
             onChange={e => setFilterProfesor(e.target.value)}
             className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -207,7 +209,7 @@ export default function HorariosClient({ role, initialData }: Props) {
           </select>
         )}
 
-        <select
+        <select aria-label="Estado"
           value={filterActivo}
           onChange={e => setFilterActivo(e.target.value as 'todos' | 'activo' | 'inactivo')}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -218,14 +220,15 @@ export default function HorariosClient({ role, initialData }: Props) {
         </select>
       </div>
 
-      {error && (
-        <div className="px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 text-sm">
-          {error}
-        </div>
-      )}
+      {error && <ErrorCarga mensaje={error} onReintentar={reintentar} />}
 
       {/* ── Grilla de horarios ───────────────────────────────────────────────── */}
-      {vista === 'estudiantes' && !filterJornada ? (
+      {/* DEF-WEB-14 · el docente recibe solo sus clases; sin asignaciones, lo dice. */}
+      {role === 'docente' && !loading && !error && horarios.length === 0 ? (
+        <p className="px-4 py-6 rounded-2xl border border-dashed border-slate-200 dark:border-white/10 text-center text-sm text-slate-500 dark:text-slate-400">
+          No tienes clases asignadas.
+        </p>
+      ) : vista === 'estudiantes' && !filterJornada ? (
         <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
           <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
             <svg className="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -245,7 +248,7 @@ export default function HorariosClient({ role, initialData }: Props) {
           <p className="text-slate-600 dark:text-slate-300 font-semibold">Selecciona un curso</p>
           <p className="text-sm text-slate-400 dark:text-slate-500">Elige el curso para ver su horario</p>
         </div>
-      ) : loading ? (
+      ) : error ? null : loading ? (
         <div className="grid grid-cols-5 gap-3">
           {Array.from({ length: 25 }).map((_, i) => (
             <div key={i} className="h-24 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse" />
@@ -340,7 +343,7 @@ export default function HorariosClient({ role, initialData }: Props) {
                     <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
                       {h.nombreCurso ?? '—'}{h.gradoCurso ? ` · ${h.gradoCurso}` : ''}
                     </td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{h.nombreProfesor ?? <span className="text-slate-400 italic text-xs">Sin profesor</span>}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{h.nombreProfesor ?? <span className="text-slate-500 italic text-xs">Sin profesor</span>}</td>
                     <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{h.salon}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-1 rounded-lg text-xs font-semibold ${h.activo ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300' : 'bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-400'}`}>
@@ -713,9 +716,8 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
       idMateria: Number(idMateria),
       activo,
     }
-    mode === 'create'
-      ? onCreate(payload, idProfesor ? Number(idProfesor) : undefined)
-      : onUpdate(horario!.idHorario, payload, idProfesor ? Number(idProfesor) : undefined)
+    if (mode === 'create') onCreate(payload, idProfesor ? Number(idProfesor) : undefined)
+    else onUpdate(horario!.idHorario, payload, idProfesor ? Number(idProfesor) : undefined)
   }
 
   return (
@@ -731,7 +733,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Día</label>
-            <select required value={dia} onChange={e => setDia(e.target.value)}
+            <select aria-label="Día" required value={dia} onChange={e => setDia(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
               {DIAS_SEMANA.map(d => <option key={d} value={d}>{d}</option>)}
             </select>
@@ -752,7 +754,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
 
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Jornada</label>
-            <select required value={jornada} onChange={e => { setJornada(e.target.value); setIdCurso('') }}
+            <select aria-label="Jornada" required value={jornada} onChange={e => { setJornada(e.target.value); setIdCurso('') }}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
               <option value="">Seleccionar jornada...</option>
               {jornadas.map(j => <option key={j} value={j}>{j}</option>)}
@@ -761,7 +763,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
 
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Curso</label>
-            <select required value={idCurso} onChange={e => setIdCurso(e.target.value)}
+            <select aria-label="Curso" required value={idCurso} onChange={e => setIdCurso(e.target.value)}
               disabled={!jornada}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50">
               <option value="">{jornada ? 'Seleccionar curso...' : 'Primero selecciona una jornada'}</option>
@@ -773,7 +775,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
 
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Materia</label>
-            <select required value={idMateria} onChange={e => setIdMateria(e.target.value)}
+            <select aria-label="Materia" required value={idMateria} onChange={e => setIdMateria(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
               <option value="">Seleccionar materia</option>
               {materias.map(m => (
@@ -790,7 +792,7 @@ function HorarioModal({ mode, horario, cursos, materias, profesores, saving, onC
 
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Profesor</label>
-            <select value={idProfesor} onChange={e => setIdProfesor(e.target.value)}
+            <select aria-label="Profesor" value={idProfesor} onChange={e => setIdProfesor(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
               <option value="">Sin asignar</option>
               {profesores.map(p => (
@@ -971,7 +973,8 @@ function CursoForm({ mode, curso, saving, onClose, onCreate, onUpdate }: CursoFo
       return
     }
     const payload = { nombreCurso: nombreCurso.trim(), grado: grado.trim(), jornada, ano: Number(ano), activo }
-    mode === 'create' ? onCreate(payload) : onUpdate(curso!.idCurso, payload)
+    if (mode === 'create') onCreate(payload)
+    else onUpdate(curso!.idCurso, payload)
   }
 
   const SEL = 'w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary'
@@ -1008,7 +1011,7 @@ function CursoForm({ mode, curso, saving, onClose, onCreate, onUpdate }: CursoFo
         </div>
         <div>
           <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Jornada</label>
-          <select required value={jornada} onChange={e => setJornada(e.target.value)} className={SEL}>
+          <select aria-label="Jornada" required value={jornada} onChange={e => setJornada(e.target.value)} className={SEL}>
             <option value="">Seleccionar...</option>
             {JORNADAS.map(j => <option key={j} value={j}>{j}</option>)}
           </select>
@@ -1247,7 +1250,8 @@ function MateriaForm({ mode, materia, saving, onClose, onCreate, onUpdate }: {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const payload = { nombreMateria: nombre.trim(), codigoMateria: codigo.trim(), activa }
-    mode === 'create' ? onCreate(payload) : onUpdate(materia!.idMateria, payload)
+    if (mode === 'create') onCreate(payload)
+    else onUpdate(materia!.idMateria, payload)
   }
 
   return (
@@ -1296,7 +1300,8 @@ function EspecializacionForm({ mode, especializacion, saving, onClose, onCreate,
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const payload = { nombreEspecializacion: nombre.trim(), activo }
-    mode === 'create' ? onCreate(payload) : onUpdate(especializacion!.idEspecializacion, payload)
+    if (mode === 'create') onCreate(payload)
+    else onUpdate(especializacion!.idEspecializacion, payload)
   }
 
   return (
@@ -1436,7 +1441,7 @@ function AsignacionForm({ mode, asignacion, profesores, cursos, materias, saving
   const [idProfesor, setIdProfesor] = useState(String(asignacion?.idProfesor ?? ''))
   const [idCurso, setIdCurso] = useState(String(asignacion?.idCurso ?? ''))
   const [idMateria, setIdMateria] = useState(String(asignacion?.idMateria ?? ''))
-  const [fechaAsignacion, setFechaAsignacion] = useState(asignacion?.fechaAsignacion?.slice(0, 10) ?? new Date().toISOString().slice(0, 10))
+  const [fechaAsignacion, setFechaAsignacion] = useState(asignacion?.fechaAsignacion?.slice(0, 10) ?? hoyColegio())
   const [fechaFinalizacion, setFechaFinalizacion] = useState(asignacion?.fechaFinalizacion ?? '')
   const [activo, setActivo] = useState(asignacion?.activo ?? true)
   const [error, setError] = useState<string | null>(null)
@@ -1455,7 +1460,8 @@ function AsignacionForm({ mode, asignacion, profesores, cursos, materias, saving
       fechaFinalizacion: fechaFinalizacion || null,
       activo
     }
-    mode === 'create' ? onCreate(payload) : onUpdate(asignacion!.idAsignacion, payload)
+    if (mode === 'create') onCreate(payload)
+    else onUpdate(asignacion!.idAsignacion, payload)
   }
 
   return (
@@ -1468,7 +1474,7 @@ function AsignacionForm({ mode, asignacion, profesores, cursos, materias, saving
 
       <div>
         <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Profesor</label>
-        <select required value={idProfesor} onChange={e => setIdProfesor(e.target.value)} className={SEL}>
+        <select aria-label="Profesor" required value={idProfesor} onChange={e => setIdProfesor(e.target.value)} className={SEL}>
           <option value="">Seleccionar profesor...</option>
           {profesores.map(p => <option key={p.idProfesor} value={p.idProfesor}>{p.nombre}</option>)}
         </select>
@@ -1477,14 +1483,14 @@ function AsignacionForm({ mode, asignacion, profesores, cursos, materias, saving
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Curso</label>
-          <select required value={idCurso} onChange={e => setIdCurso(e.target.value)} className={SEL}>
+          <select aria-label="Curso" required value={idCurso} onChange={e => setIdCurso(e.target.value)} className={SEL}>
             <option value="">Seleccionar curso...</option>
             {cursos.map(c => <option key={c.idCurso} value={c.idCurso}>{c.nombreCurso} — {c.grado}</option>)}
           </select>
         </div>
         <div>
           <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Materia</label>
-          <select required value={idMateria} onChange={e => setIdMateria(e.target.value)} className={SEL}>
+          <select aria-label="Materia" required value={idMateria} onChange={e => setIdMateria(e.target.value)} className={SEL}>
             <option value="">Seleccionar materia...</option>
             {materias.map(m => <option key={m.idMateria} value={m.idMateria}>{m.nombreMateria}</option>)}
           </select>

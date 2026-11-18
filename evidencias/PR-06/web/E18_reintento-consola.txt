@@ -1,0 +1,70 @@
+
+Running 20 tests using 1 worker
+
+  ok  1 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados (16.5s)
+  ok  2 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol (13.4s)
+  ok  3 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados (18.4s)
+  ok  4 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (25.4s)
+  ok  5 [chromium] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) (4.4m)
+  ok  6 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados (17.3s)
+  ok  7 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol (23.6s)
+  ok  8 [chromium] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados (32.9s)
+  ok  9 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (32.4s)
+  ok 10 [chromium] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) (5.0m)
+  ok 11 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados (19.7s)
+  ok 12 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol (1.3m)
+  ok 13 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados (35.0s)
+  ok 14 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (46.6s)
+  ok 15 [firefox] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) (4.8m)
+  x  16 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados (1.6m)
+  ok 17 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol (1.4m)
+  ok 18 [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados (24.6s)
+  ok 19 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (47.1s)
+  ok 20 [firefox] › e2e\sesion.spec.ts:60:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065) (4.9m)
+
+
+  1) [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        21 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+      - Test timeout of 90000ms exceeded.
+
+
+       at utils.ts:46
+
+      44 |
+      45 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 46 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      47 | }
+      48 |
+      49 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:46:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:22:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox-repeat1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox-repeat1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox-repeat1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox-repeat1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [firefox] › e2e\login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+  19 passed (29.5m)

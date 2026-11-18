@@ -3,23 +3,14 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { usePermissions } from '@/hooks/usePermissions';
+import { getNavItems } from '@/lib/auth/navItems';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
-
-type NavItem = {
-  label: string;
-  href: string;
-  icon: string;
-  match: string[];
-  show: boolean;
-};
 
 /** Slim glassmorphic icon rail — Luminous Ed-Tech style. */
 export default function PanelSidebar() {
   const pathname = usePathname();
-  const { can } = usePermissions();
-  const { user, signOut } = useAuth();
+  const { user, role, signOut } = useAuth();
   const confirm = useConfirm();
 
   const handleSignOut = async () => {
@@ -32,20 +23,9 @@ export default function PanelSidebar() {
     if (ok) signOut();
   };
 
-  const isAdmin = can('read', 'usuarios');
-  const dashboardHref = isAdmin ? '/admin' : '/general';
-
-  const items: NavItem[] = [
-    { label: 'Dashboard', href: dashboardHref, icon: 'grid_view', match: ['/admin', '/general'], show: true },
-    { label: 'Usuarios', href: '/usuarios', icon: 'group', match: ['/usuarios'], show: can('read', 'usuarios') },
-    { label: 'Asistencia', href: '/asistencia', icon: 'fact_check', match: ['/asistencia'], show: can('read', 'asistencia') || can('read', 'asistencia:propia') || can('read', 'asistencia:hijos') },
-    { label: 'Notas', href: '/notas', icon: 'school', match: ['/notas'], show: can('read', 'notas') || can('read', 'notas:propias') },
-    { label: 'Horarios', href: '/horarios', icon: 'calendar_month', match: ['/horarios'], show: can('read', 'horarios') },
-    { label: 'Novedades', href: '/novedades', icon: 'campaign', match: ['/novedades'], show: can('read', 'novedades') },
-    { label: 'Códigos QR', href: '/qr', icon: 'qr_code_2', match: ['/qr'], show: can('read', 'qr') },
-    { label: 'Escanear', href: '/qr/escanear', icon: 'qr_code_scanner', match: ['/qr/escanear'], show: can('create', 'qr:escanear') },
-    { label: 'Reportes', href: '/reportes', icon: 'analytics', match: ['/reportes'], show: can('read', 'reportes') },
-  ].filter((i) => i.show);
+  // Los enlaces salen de la misma tabla que usa el proxy para proteger las rutas.
+  const items = getNavItems(role);
+  const dashboardHref = items[0].href;
 
   const initials =
     `${user?.primerNombre?.[0] ?? ''}${user?.primerApellido?.[0] ?? ''}`.toUpperCase() || 'ES';

@@ -1,0 +1,178 @@
+<testsuites id="" name="" tests="50" failures="1" skipped="0" errors="0" time="1713.734874">
+<testsuite name="boletin-padre.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="chromium" tests="2" failures="0" skipped="0" time="63.668" errors="0">
+<testcase name="boletín del padre (WEB-09) › el padre descarga un PDF" classname="boletin-padre.spec.ts" time="37.044">
+</testcase>
+<testcase name="boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación" classname="boletin-padre.spec.ts" time="26.624">
+</testcase>
+</testsuite>
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="chromium" tests="8" failures="0" skipped="0" time="119.165" errors="0">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="12.389">
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="10.663">
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="12.593">
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="16.619">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="26.485">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="11.591">
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="15.856">
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="12.969">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="chromium" tests="2" failures="0" skipped="0" time="55.726" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="37.741">
+</testcase>
+<testcase name="un padre con un solo hijo no ve el selector" classname="padre-dos-hijos.spec.ts" time="17.985">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="chromium" tests="2" failures="0" skipped="0" time="54.891" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="31.154">
+</testcase>
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="23.737">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="chromium" tests="2" failures="0" skipped="0" time="52.505" errors="0">
+<testcase name="un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05)" classname="registro-padre.spec.ts" time="10.122">
+</testcase>
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="42.383">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="chromium" tests="6" failures="0" skipped="0" time="393.211" errors="0">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="11.834">
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="18.864">
+</testcase>
+<testcase name="sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript" classname="sesion.spec.ts" time="11.584">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)" classname="sesion.spec.ts" time="260.166">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)" classname="sesion.spec.ts" time="86.486">
+</testcase>
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="4.277">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="chromium" tests="3" failures="1" skipped="0" time="69.744" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="26.743">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('docente.e2e.1794895981297@example.com')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('docente.e2e.1794895981297@example.com') with timeout 5000ms
+      - waiting for getByText('docente.e2e.1794895981297@example.com')
+
+
+      38 |     // Filtrar (CP-SIS-027)
+      39 |     await page.getByPlaceholder('Buscar por nombre, correo o documento...').fill(correo)
+    > 40 |     await expect(page.getByText(correo)).toBeVisible()
+         |                                          ^
+      41 |
+      42 |     // Editar (CP-SIS-022)
+      43 |     await page.getByTitle('Editar').first().click()
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:40:42
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="21.504">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="21.497">
+</testcase>
+</testsuite>
+<testsuite name="boletin-padre.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="firefox" tests="2" failures="0" skipped="0" time="51.342" errors="0">
+<testcase name="boletín del padre (WEB-09) › el padre descarga un PDF" classname="boletin-padre.spec.ts" time="26.805">
+</testcase>
+<testcase name="boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación" classname="boletin-padre.spec.ts" time="24.537">
+</testcase>
+</testsuite>
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="firefox" tests="8" failures="0" skipped="0" time="128.28" errors="0">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="14.811">
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="14.006">
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="16.808">
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="14.457">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="15.597">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="15.395">
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="17.808">
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="19.398">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="firefox" tests="2" failures="0" skipped="0" time="66.945" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="44.775">
+</testcase>
+<testcase name="un padre con un solo hijo no ve el selector" classname="padre-dos-hijos.spec.ts" time="22.17">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="firefox" tests="2" failures="0" skipped="0" time="49.703" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="32.401">
+</testcase>
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="17.302">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="firefox" tests="2" failures="0" skipped="0" time="58.752" errors="0">
+<testcase name="un correo rechazado por la API muestra el motivo junto al campo (DEF-WEB-05)" classname="registro-padre.spec.ts" time="17.103">
+</testcase>
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="41.649">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="firefox" tests="6" failures="0" skipped="0" time="411.347" errors="0">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="16.345">
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="22.52">
+</testcase>
+<testcase name="sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript" classname="sesion.spec.ts" time="16.276">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)" classname="sesion.spec.ts" time="261.511">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)" classname="sesion.spec.ts" time="86.102">
+</testcase>
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="8.593">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T06:00:10.268Z" hostname="firefox" tests="3" failures="0" skipped="0" time="85.337" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="46.24">
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="20.141">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="18.956">
+</testcase>
+</testsuite>
+</testsuites>

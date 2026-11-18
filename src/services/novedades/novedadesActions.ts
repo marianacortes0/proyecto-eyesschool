@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers'
 import type { CursoOpt, EstudianteOpt, Novedad, TipoNovedad } from './novedadesService'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -134,7 +135,7 @@ export async function createNovedadAction(
       id_estudiante:   payload.idEstudiante,
       id_tipo_novedad: payload.idTipoNovedad,
       registrado_por:  payload.registradoPor,
-      fecha:           new Date().toISOString().slice(0, 10),
+      fecha:           hoyColegio(),
     }),
   })
 }

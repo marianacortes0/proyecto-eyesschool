@@ -17,7 +17,9 @@ import {
 } from '@/services/qr/qrActions'
 import { asignarQR } from '@/auth/actions'
 import { type Role } from '@/lib/utils/permissions'
+import { getErrorMessage } from '@/lib/errors'
 
+import { hoyColegio } from '@/lib/utils/fecha'
 export type ModalMode = 'create' | 'edit' | null
 
 export function useQR(role: Role | null, initialData?: QRBootstrap) {
@@ -36,7 +38,7 @@ export function useQR(role: Role | null, initialData?: QRBootstrap) {
   // ── Filtros admin ─────────────────────────────────────────────────────────
   const [searchQuery, setSearchQuery]   = useState('')
   const [fechaFiltro, setFechaFiltro]   = useState(
-    () => new Date().toISOString().split('T')[0]
+    () => hoyColegio()
   )
 
   // ── Fetch admin ───────────────────────────────────────────────────────────
@@ -50,7 +52,7 @@ export function useQR(role: Role | null, initialData?: QRBootstrap) {
       setSinAsignar(data.sinAsignar)
       setCursos(data.cursos)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al cargar datos')
+      setError(getErrorMessage(err, 'Error al cargar datos'))
     } finally {
       setLoading(false)
     }
@@ -61,7 +63,7 @@ export function useQR(role: Role | null, initialData?: QRBootstrap) {
       const data = await getRegistrosAsistenciaAction(fechaFiltro)
       setAsistencia(data)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al cargar asistencia')
+      setError(getErrorMessage(err, 'Error al cargar asistencia'))
     }
   }, [fechaFiltro])
 
@@ -74,7 +76,7 @@ export function useQR(role: Role | null, initialData?: QRBootstrap) {
       seededRef.current = false
       return
     }
-    fetchAdmin()
+    void fetchAdmin()
   }, [role, fetchAdmin])
 
   // ── Asignar QR ────────────────────────────────────────────────────────────

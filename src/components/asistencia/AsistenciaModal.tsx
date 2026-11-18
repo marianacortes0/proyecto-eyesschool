@@ -4,7 +4,9 @@ import { useState, useEffect, useMemo } from 'react'
 import { type RegistroAsistencia, type EstudianteSelector, type EstadoAsistencia, type TipoAsistencia, normalizeTipo } from '@/services/asistencia/asistenciaService'
 import { type ModalMode, type CreateManyData } from '@/hooks/useAsistencia'
 import { type CreateRegistroData, type UpdateRegistroData } from '@/services/asistencia/asistenciaService'
+import { getErrorMessage } from '@/lib/errors'
 
+import { hoyColegio } from '@/lib/utils/fecha'
 type Props = {
   mode: ModalMode
   registro: RegistroAsistencia | null
@@ -87,6 +89,7 @@ export default function AsistenciaModal({
 
   useEffect(() => {
     if (mode === 'edit' && registro) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sincroniza el formulario con el registro que se abre en el modal
       setSelectedIds([registro.idEstudiante])
       setTipo(normalizeTipo(registro.tipo) ?? 'entrada')
       setEstado(registro.estado)
@@ -98,7 +101,7 @@ export default function AsistenciaModal({
       setSelectedIds([])
       setTipo('entrada')
       setEstado('Presente')
-      setFecha(new Date().toISOString().split('T')[0])
+      setFecha(hoyColegio())
       setObservacion('')
     }
     setFormError(null)
@@ -138,7 +141,7 @@ export default function AsistenciaModal({
         })
       }
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : 'Error al guardar')
+      setFormError(getErrorMessage(err, 'Error al guardar'))
     }
   }
 

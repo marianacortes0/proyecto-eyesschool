@@ -12,7 +12,9 @@ import {
 } from '@/services/qr/qrActions'
 import { normalizeTipo } from '@/services/asistencia/asistenciaService'
 import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
+import { getErrorMessage } from '@/lib/errors'
 
+import { hoyColegio } from '@/lib/utils/fecha'
 export type ScanEstado = 'Presente' | 'Ausente' | 'Tarde'
 
 export type ScanResult = {
@@ -53,7 +55,7 @@ export function useEscanear(idUsuarioRegistrador: number) {
       setErrorMsg(null)
 
       try {
-        // Decodificar QR con goqr.me
+        // Decodificar el QR en el navegador (jsQR, DEF-WEB-16)
         const codigoTexto = await readQRFromImage(imageBlob)
         if (!codigoTexto) {
           setErrorMsg('No se pudo leer el código QR, intente nuevamente')
@@ -86,8 +88,8 @@ export function useEscanear(idUsuarioRegistrador: number) {
         setPending({ qrData, detectedAt: new Date() })
         setStatus('pending')
       } catch (err) {
-        setErrorMsg(err instanceof Error ? err.message : 'Error al procesar el escaneo')
-        notifyError(err instanceof Error ? err.message : 'Error al procesar el escaneo')
+        setErrorMsg(getErrorMessage(err, 'Error al procesar el escaneo'))
+        notifyError(getErrorMessage(err, 'Error al procesar el escaneo'))
         setStatus('error')
       }
     },
@@ -103,7 +105,7 @@ export function useEscanear(idUsuarioRegistrador: number) {
       setErrorMsg(null)
 
       try {
-        const hoy = new Date().toISOString().split('T')[0]
+        const hoy = hoyColegio()
         const tipoLabel = tipo === 'entrada' ? 'Entrada' : 'Salida'
 
         // Evita duplicar el mismo tipo (entrada/salida) en el día para el estudiante.
@@ -151,8 +153,8 @@ export function useEscanear(idUsuarioRegistrador: number) {
 
         setTimeout(() => setStatus('idle'), 3_000)
       } catch (err) {
-        setErrorMsg(err instanceof Error ? err.message : 'Error al registrar la asistencia, intente nuevamente')
-        notifyError(err instanceof Error ? err.message : 'Error al registrar la asistencia, intente nuevamente')
+        setErrorMsg(getErrorMessage(err, 'Error al registrar la asistencia, intente nuevamente'))
+        notifyError(getErrorMessage(err, 'Error al registrar la asistencia, intente nuevamente'))
         setStatus('error')
       }
     },

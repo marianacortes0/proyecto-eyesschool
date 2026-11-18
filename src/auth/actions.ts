@@ -3,7 +3,11 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { mapRolToKey } from '@/lib/utils/permissions'
-import { isPasswordValid } from '@/lib/utils/password'
+import { isPasswordValid, passwordChecks, PASSWORD_RULE_LABELS } from '@/lib/utils/password'
+import { ACCESS_MAX_AGE, REFRESH_MAX_AGE, cookieOptions } from '@/lib/auth/cookies'
+import { errorMessage } from '@/services/api/client'
+import { esTiempoAgotado, fetchConLimite } from '@/services/api/conLimite'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -15,27 +19,21 @@ async function setAuthCookies(accessToken: string, refreshToken: string) {
     Buffer.from(padded.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf-8')
   ) as Record<string, unknown>
 
-  // Fetch full user profile
-  const meRes = await fetch(`${API}/auth/me`, {
+  // Perfil completo. Si la API no responde a tiempo, la sesión sigue con los datos
+  // del token: el perfil solo sirve para mostrar el nombre (DEF-WEB-07).
+  const meRes = await fetchConLimite(`${API}/auth/me`, {
     headers: { Authorization: `Bearer ${accessToken}` },
     cache: 'no-store',
-  })
-  const me = meRes.ok ? (await meRes.json()) : {}
+  }).catch(() => null)
+  const me = meRes?.ok ? (await meRes.json().catch(() => ({}))) : {}
 
   const store = await cookies()
 
-  store.set('eys_access', accessToken, {
-    path: '/',
-    maxAge: 30 * 60,
-    sameSite: 'lax',
-    httpOnly: false,
-  })
-  store.set('eys_refresh', refreshToken, {
-    path: '/',
-    maxAge: 7 * 24 * 60 * 60,
-    sameSite: 'lax',
-    httpOnly: true,
-  })
+  // eys_access y eys_refresh no se pueden leer desde JavaScript (WEB-02): las
+  // llamadas del navegador pasan por /api/proxy, que agrega el token en el servidor.
+  store.set('eys_access', accessToken, cookieOptions(true, ACCESS_MAX_AGE))
+  store.set('eys_refresh', refreshToken, cookieOptions(true, REFRESH_MAX_AGE))
+  // eys_user solo sirve para mostrar el nombre; el rol sale del token.
   store.set(
     'eys_user',
     JSON.stringify({
@@ -45,8 +43,10 @@ async function setAuthCookies(accessToken: string, refreshToken: string) {
       primerNombre: me.primer_nombre ?? '',
       primerApellido: me.primer_apellido ?? '',
     }),
-    { path: '/', maxAge: 7 * 24 * 60 * 60, sameSite: 'lax', httpOnly: false }
+    cookieOptions(false, REFRESH_MAX_AGE)
   )
+  // Hora de la última actividad: el proxy cierra la sesión tras 30 min sin ella.
+  store.set('eys_last', String(Date.now()), cookieOptions(true, REFRESH_MAX_AGE))
 
   return me
 }
@@ -61,12 +61,20 @@ export async function login(prevState: unknown, formData: FormData) {
     return { error: 'Por favor, ingresa el correo y la contraseña' }
   }
 
-  const res = await fetch(`${API}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ correo, password }),
-    cache: 'no-store',
-  })
+  // Repetir el login no tiene efectos (solo emite otro token): si la API no
+  // responde a tiempo se reintenta una vez y después se avisa (DEF-WEB-07).
+  let res: Response
+  try {
+    res = await fetchConLimite(`${API}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ correo, password }),
+      cache: 'no-store',
+    })
+  } catch (error) {
+    if (esTiempoAgotado(error)) return { error: 'El servidor no respondió a tiempo. Intenta de nuevo.' }
+    return { error: 'No se pudo conectar con el servidor. Intenta de nuevo.' }
+  }
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
@@ -110,6 +118,7 @@ export async function logout() {
   store.delete('eys_access')
   store.delete('eys_refresh')
   store.delete('eys_user')
+  store.delete('eys_last')
   redirect('/')
 }
 
@@ -144,7 +153,10 @@ export async function resetPassword(prevState: unknown, formData: FormData) {
 
   if (!token) return { error: 'Enlace inválido o incompleto. Solicita uno nuevo.' }
   if (!password || !confirmPassword) return { error: 'Por favor completa todos los campos.' }
-  if (password.length < 8) return { error: 'La contraseña debe tener al menos 8 caracteres.' }
+  if (!isPasswordValid(password)) {
+    const faltan = PASSWORD_RULE_LABELS.filter(({ key }) => !passwordChecks(password)[key]).map(({ label }) => label.toLowerCase())
+    return { error: `La contraseña no cumple la política: falta ${faltan.join(', ')}.` }
+  }
   if (password !== confirmPassword) return { error: 'Las contraseñas no coinciden.' }
 
   const res = await fetch(`${API}/auth/reset-password`, {
@@ -171,6 +183,36 @@ const ROL_LABEL: Record<number, string> = {
   1: 'Profesor', 2: 'Estudiante', 3: 'Administrador', 4: 'Padre / Acudiente',
 }
 
+// Campo de la API (`loc` del 422) → `name` del campo en el formulario de registro.
+const CAMPO_FORMULARIO: Record<string, string> = {
+  correo: 'email',
+  password: 'password',
+  primer_nombre: 'firstName',
+  segundo_nombre: 'secondName',
+  primer_apellido: 'lastName',
+  segundo_apellido: 'secondLastName',
+  tipo_documento: 'docType',
+  numero_documento: 'docNumber',
+  genero: 'genero',
+  direccion: 'direccion',
+  telefono: 'telefono',
+  id_rol: 'roleId',
+  id_curso_actual: 'courseId',
+  id_estudiante_vinculado: 'idEstudianteVinculado',
+  parentesco: 'parentesco',
+  id_especializacion: 'especializacionId',
+  institucion: 'institucion',
+  cargo: 'cargo',
+}
+
+/** Campo del formulario del primer error de un 422 de FastAPI, si se puede saber. */
+function campoDelFormulario(detail: unknown): string | undefined {
+  if (!Array.isArray(detail)) return undefined
+  const loc = (detail[0] as { loc?: unknown } | null)?.loc
+  if (!Array.isArray(loc)) return undefined
+  return CAMPO_FORMULARIO[String(loc.at(-1))]
+}
+
 export async function register(prevState: unknown, formData: FormData) {
   const email = (formData.get('email') as string)?.trim().toLowerCase() ?? ''
   const password = formData.get('password') as string
@@ -183,7 +225,7 @@ export async function register(prevState: unknown, formData: FormData) {
   const genero = (formData.get('genero') as string) || null
   const direccion = (formData.get('direccion') as string)?.trim() || null
   const telefono = (formData.get('telefono') as string)?.trim() || null
-  const roleId = parseInt(formData.get('roleId') as string)
+  const roleId = Number.parseInt(formData.get('roleId') as string, 10)
   const courseId = formData.get('courseId') as string | null
   const especializacionId = formData.get('especializacionId') as string | null
   const institucion = (formData.get('institucion') as string)?.trim() || null
@@ -192,7 +234,7 @@ export async function register(prevState: unknown, formData: FormData) {
   const cargo = (formData.get('cargo') as string) || null
 
   // Validaciones comunes
-  if (!email || !password || !firstName || !lastName || !docType || !docNumber || isNaN(roleId)) {
+  if (!email || !password || !firstName || !lastName || !docType || !docNumber || Number.isNaN(roleId)) {
     return { error: 'Por favor, completa todos los campos' }
   }
   if (!isPasswordValid(password)) {
@@ -203,15 +245,15 @@ export async function register(prevState: unknown, formData: FormData) {
   const especifico: Record<string, unknown> = {}
   if (roleId === 2) {
     if (!courseId) return { error: 'Selecciona el curso al que perteneces' }
-    especifico.id_curso_actual = parseInt(courseId)
+    especifico.id_curso_actual = Number.parseInt(courseId, 10)
   } else if (roleId === 4) {
     if (!idEstudianteVinculado) return { error: 'Ingresa el ID del estudiante vinculado' }
     if (!parentesco) return { error: 'Selecciona el parentesco' }
-    especifico.id_estudiante_vinculado = parseInt(idEstudianteVinculado)
+    especifico.id_estudiante_vinculado = Number.parseInt(idEstudianteVinculado, 10)
     especifico.parentesco = parentesco
   } else if (roleId === 1) {
     if (!especializacionId) return { error: 'Selecciona tu especialización' }
-    especifico.id_especializacion = parseInt(especializacionId)
+    especifico.id_especializacion = Number.parseInt(especializacionId, 10)
     if (institucion) especifico.institucion = institucion
   } else if (roleId === 3) {
     if (!cargo) return { error: 'Selecciona tu cargo' }
@@ -242,10 +284,15 @@ export async function register(prevState: unknown, formData: FormData) {
   })
 
   if (!res.ok) {
+    // Misma regla que apiFetch: `detail` puede ser texto o, en un 422, la lista de
+    // errores de validación de FastAPI (DEF-WEB-05: antes se escondía el motivo).
     const body = await res.json().catch(() => ({}))
     const detail = (body as Record<string, unknown>).detail
-    const motivo = typeof detail === 'string' ? detail : 'No se pudo completar el registro.'
-    return { error: `Error al registrar el usuario: ${motivo}` }
+    const motivo = errorMessage(detail, res.status)
+    const error = `Error al registrar el usuario: ${motivo}`
+    // En un 422, `loc` dice qué campo falló: el formulario muestra el motivo a su lado.
+    const campo = campoDelFormulario(detail)
+    return campo ? { error, campo, motivo } : { error }
   }
 
   // Admin (3) y Profesor (1) requieren aprobación; Estudiante (2) y Padre (4) no.
@@ -300,7 +347,7 @@ export async function asignarQR(
     if (existing.length > 0) return { error: 'Este usuario ya tiene un código QR asignado.' }
   }
 
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
   const codigo = `EST${String(idUsuario).padStart(3, '0')}`
 
   const res = await fetch(`${API}/estudiantes`, {

@@ -9,6 +9,7 @@ import QRScannerView from '@/components/qr/QRScannerView'
 import RegistroMasivo from '@/components/qr/RegistroMasivo'
 import AsistenciaModal from '@/components/asistencia/AsistenciaModal'
 import { type Role } from '@/lib/utils/permissions'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 type Props = {
   role: Role
@@ -53,7 +54,7 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
 
   const fetchToday = useCallback(async () => {
     try {
-      const hoy = new Date().toISOString().split('T')[0]
+      const hoy = hoyColegio()
       const data = await getRegistrosAsistenciaAction(hoy)
       setTodayRecords(data)
     } catch {
@@ -62,11 +63,13 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
   }, [])
 
   // Cargar al montar
-  useEffect(() => { fetchToday() }, [fetchToday])
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- carga inicial y recarga de los registros del día desde el servidor
+  useEffect(() => { void fetchToday() }, [fetchToday])
 
   // Recargar cuando se completa un escaneo exitoso
   useEffect(() => {
-    if (status === 'success') fetchToday()
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- carga inicial y recarga de los registros del día desde el servidor
+    if (status === 'success') void fetchToday()
   }, [status, fetchToday])
 
   const info = ROLE_LABEL[role] ?? ROLE_LABEL.admin!
@@ -119,7 +122,7 @@ export default function EscanearClient({ role, idUsuarioRegistrador }: Props) {
       {mode === 'scan' ? (
         <>
           {/* Instrucciones QR */}
-          <div className="flex flex-wrap gap-2 text-xs text-slate-500 dark:text-gray-400">
+          <div className="flex flex-wrap gap-2 text-xs text-slate-700 dark:text-gray-300">
             {['1. Activa la cámara', '2. Apunta al código QR y pulsa Escanear', '3. Elige el tipo (Entrada/Salida)', '4. Confirma el registro'].map((step) => (
               <span
                 key={step}

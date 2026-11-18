@@ -9,13 +9,14 @@ import { notifySuccess, notifyWarning, notifyError } from '@/lib/toast'
 import { getErrorMessage } from '@/lib/errors'
 import Pagination from '@/components/ui/Pagination'
 import { usePagination } from '@/hooks/usePagination'
+import ErrorCarga from '@/components/ui/ErrorCarga'
 
 interface Props { role: Role; idUsuarioRegistrador: number; initialData?: NotasBootstrap }
 
 export default function NotasClient({ role, idUsuarioRegistrador, initialData }: Props) {
   const {
     notas, totalNotas, estudiantes, materias, cursos,
-    loading, saving, error, stats,
+    loading, saving, error, reintentar, stats,
     filterEstudiante, setFilterEstudiante,
     filterMateria, setFilterMateria,
     filterPeriodo, setFilterPeriodo,
@@ -98,7 +99,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
         <div>
           <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Notas</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            {totalNotas} registro{totalNotas !== 1 ? 's' : ''} en total
+            {error ? '— registros en total' : `${totalNotas} registro${totalNotas !== 1 ? 's' : ''} en total`}
           </p>
         </div>
         {canCreate && (
@@ -135,7 +136,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
       {/* Orden: jornada → curso → estudiante (del curso) → materia → periodo */}
       <div className="flex flex-wrap gap-3">
         {/* 1 · Jornada */}
-        <select
+        <select aria-label="Jornada"
           value={filterJornada}
           onChange={e => handleJornadaFilter(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm capitalize focus:outline-none focus:ring-2 focus:ring-primary"
@@ -146,7 +147,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
           ))}
         </select>
         {/* 2 · Curso */}
-        <select
+        <select aria-label="Curso"
           value={filterCurso}
           onChange={e => handleCursoFilter(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -157,7 +158,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
           ))}
         </select>
         {/* 3 · Estudiante (del curso seleccionado) */}
-        <select
+        <select aria-label="Estudiante"
           value={filterEstudiante}
           onChange={e => setFilterEstudiante(e.target.value)}
           disabled={!filterCurso}
@@ -171,7 +172,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
           ))}
         </select>
         {/* 4 · Materia */}
-        <select
+        <select aria-label="Materia"
           value={filterMateria}
           onChange={e => setFilterMateria(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -182,7 +183,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
           ))}
         </select>
         {/* 5 · Periodo */}
-        <select
+        <select aria-label="Periodo"
           value={filterPeriodo}
           onChange={e => setFilterPeriodo(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -194,11 +195,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
         </select>
       </div>
 
-      {error && (
-        <div className="px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 text-sm">
-          {error}
-        </div>
-      )}
+      {error && <ErrorCarga mensaje={error} onReintentar={reintentar} />}
 
       {/* ── Resultados ─────────────────────────────────────────────────────────
           Las notas solo aparecen cuando hay un estudiante seleccionado. */}
@@ -232,7 +229,7 @@ export default function NotasClient({ role, idUsuarioRegistrador, initialData }:
             </button>
           </div>
 
-          {loading ? (
+          {error ? null : loading ? (
         <div className="space-y-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="h-14 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse" />
@@ -439,8 +436,8 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
     e.preventDefault()
     setFormError(null)
 
-    const n = parseFloat(notaVal)
-    if (isNaN(n) || n < 0 || n > 5) {
+    const n = Number.parseFloat(notaVal)
+    if (Number.isNaN(n) || n < 0 || n > 5) {
       setFormError('La nota debe estar entre 0.0 y 5.0')
       notifyWarning('La nota debe estar entre 0.0 y 5.0')
       return
@@ -474,8 +471,8 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
     }
   }
 
-  const preview = parseFloat(notaVal)
-  const hasPreview = !isNaN(preview) && preview >= 0 && preview <= 5
+  const preview = Number.parseFloat(notaVal)
+  const hasPreview = !Number.isNaN(preview) && preview >= 0 && preview <= 5
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
@@ -495,7 +492,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Jornada</label>
-                  <select
+                  <select aria-label="Jornada"
                     required
                     value={jornada}
                     onChange={e => handleJornadaChange(e.target.value)}
@@ -509,7 +506,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Grado</label>
-                  <select
+                  <select aria-label="Grado"
                     required
                     disabled={!jornada}
                     value={grado}
@@ -526,7 +523,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
 
               <div>
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Estudiante</label>
-                <select
+                <select aria-label="Estudiante"
                   required
                   disabled={!grado}
                   value={idEstudiante}
@@ -554,7 +551,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Periodo</label>
-              <select
+              <select aria-label="Periodo"
                 value={idPeriodo}
                 onChange={e => setIdPeriodo(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -568,7 +565,7 @@ function NotaModal({ mode, nota, estudiantes, materias, cursos, saving, onClose,
 
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Materia</label>
-            <select
+            <select aria-label="Materia"
               required
               disabled={mode === 'create' && !idEstudiante}
               value={idMateria}

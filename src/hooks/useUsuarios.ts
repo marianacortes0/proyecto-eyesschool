@@ -26,6 +26,7 @@ import {
 } from '@/app/(dashboard)/usuarios/actions'
 import { notifySuccess, notifyError } from '@/lib/toast'
 import { useConfirm } from '@/components/ui/ConfirmDialog'
+import { getErrorMessage } from '@/lib/errors'
 
 export type ModalMode = 'create' | 'edit' | null
 
@@ -82,7 +83,7 @@ export function useUsuarios(initialData?: UsuariosBootstrap) {
       setEstudiantes(data.estudiantes)
       setEspecializaciones(data.especializaciones)
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Error al cargar usuarios'
+      const msg = getErrorMessage(err, 'No se pudo cargar la lista de usuarios. Revisa tu conexión e intenta de nuevo.')
       setError(msg)
       setPendingError(msg)
     } finally {
@@ -96,16 +97,23 @@ export function useUsuarios(initialData?: UsuariosBootstrap) {
   useEffect(() => {
     // Si la página ya entregó los datos desde el servidor, no refetcheamos al montar.
     if (initialData) return
-    fetchBootstrap()
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- carga inicial cuando la página no entregó los datos desde el servidor
+    void fetchBootstrap()
   }, [initialData, fetchBootstrap])
 
   // ── CRUD validados ───────────────────────────────────────────────────────
   const handleCreate = async (data: CreateUsuarioData): Promise<void> => {
     setSaving(true)
     try {
-      await createUsuarioConAuth(data)
+      // Un rechazo de la API llega como valor con su motivo (DEF-WEB-10).
+      const r = await createUsuarioConAuth(data)
+      if (r?.error) {
+        notifyError(r.error)
+        setSaving(false)
+        return
+      }
     } catch (err) {
-      notifyError(err instanceof Error ? err.message : 'Error al crear el usuario')
+      notifyError(getErrorMessage(err, 'No fue posible crear el usuario. Intenta de nuevo.'))
       setSaving(false)
       return
     }
@@ -120,7 +128,12 @@ export function useUsuarios(initialData?: UsuariosBootstrap) {
     if (!selectedUsuario) return
     setSaving(true)
     try {
-      await updateUsuarioAction(selectedUsuario.idUsuario, data)
+      const r = await updateUsuarioAction(selectedUsuario.idUsuario, data)
+      if (r?.error) {
+        notifyError(r.error)
+        setSaving(false)
+        return
+      }
       // Si es estudiante, persistir el curso actual y la vigencia
       if (data.idRol === ID_ROL_ESTUDIANTE && data.idCursoActual !== undefined) {
         await updateEstudianteCursoAction(
@@ -160,7 +173,7 @@ export function useUsuarios(initialData?: UsuariosBootstrap) {
         )
       }
     } catch (err) {
-      notifyError(err instanceof Error ? err.message : 'Error al editar el usuario')
+      notifyError(getErrorMessage(err, 'No fue posible guardar los cambios. Intenta de nuevo.'))
       setSaving(false)
       return
     }
@@ -184,7 +197,7 @@ export function useUsuarios(initialData?: UsuariosBootstrap) {
       await fetchBootstrap({ silent: true })
       notifySuccess('Usuario eliminado exitosamente')
     } catch (err) {
-      notifyError(err instanceof Error ? err.message : 'Error al eliminar el usuario')
+      notifyError(getErrorMessage(err, 'No fue posible eliminar el usuario. Intenta de nuevo.'))
     }
   }
 
@@ -194,7 +207,7 @@ export function useUsuarios(initialData?: UsuariosBootstrap) {
       await fetchBootstrap({ silent: true })
       notifySuccess('Cambios guardados correctamente')
     } catch (err) {
-      notifyError(err instanceof Error ? err.message : 'Error al cambiar el estado del usuario')
+      notifyError(getErrorMessage(err, 'Error al cambiar el estado del usuario'))
     }
   }
 
@@ -205,7 +218,7 @@ export function useUsuarios(initialData?: UsuariosBootstrap) {
       await fetchBootstrap({ silent: true })
       notifySuccess('Su cuenta ha sido aprobada. Ya puede iniciar sesión.')
     } catch (err) {
-      notifyError(err instanceof Error ? err.message : 'Error al aprobar el usuario')
+      notifyError(getErrorMessage(err, 'Error al aprobar el usuario'))
     }
   }
 
@@ -215,7 +228,7 @@ export function useUsuarios(initialData?: UsuariosBootstrap) {
       await fetchBootstrap({ silent: true })
       notifySuccess('Solicitud rechazada correctamente')
     } catch (err) {
-      notifyError(err instanceof Error ? err.message : 'Error al rechazar el usuario')
+      notifyError(getErrorMessage(err, 'Error al rechazar el usuario'))
     }
   }
 
@@ -281,5 +294,7 @@ export function useUsuarios(initialData?: UsuariosBootstrap) {
     // acciones pendientes
     handleValidar,
     handleRechazar,
+    // vuelve a pedir la lista tras un error de carga (DEF-WEB-10)
+    reintentar: () => void fetchBootstrap(),
   }
 }

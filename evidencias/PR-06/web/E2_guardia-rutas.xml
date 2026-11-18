@@ -1,0 +1,10 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="107.55215799999999">
+<testsuite name="sesion.spec.ts" timestamp="2026-11-05T20:49:10.505Z" hostname="chromium" tests="1" failures="0" skipped="0" time="49.632" errors="0">
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="49.632">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-05T20:49:10.505Z" hostname="firefox" tests="1" failures="0" skipped="0" time="53.119" errors="0">
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="53.119">
+</testcase>
+</testsuite>
+</testsuites>

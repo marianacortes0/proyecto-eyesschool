@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react'
 import { type CodigoQRConEstudiante, type EstudianteQR, type TipoQR } from '@/services/qr/qrService'
 import { type ModalMode } from '@/hooks/useQR'
 import { type CreateCodigoQRData, type UpdateCodigoQRData } from '@/services/qr/qrService'
+import { getErrorMessage } from '@/lib/errors'
 
+import { hoyColegio } from '@/lib/utils/fecha'
 type Props = {
   mode: ModalMode
   codigo: CodigoQRConEstudiante | null
@@ -37,6 +39,7 @@ export default function QRCodigoModal({
 
   useEffect(() => {
     if (mode === 'edit' && codigo) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sincroniza el formulario con el código que se abre en el modal
       setIdEstudiante(codigo.idEstudiante)
       setTipo(codigo.tipo)
       setFechaVencimiento(codigo.fechaVencimiento ?? '')
@@ -69,7 +72,7 @@ export default function QRCodigoModal({
         })
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al guardar')
+      setError(getErrorMessage(err, 'Error al guardar'))
     }
   }
 
@@ -152,7 +155,7 @@ export default function QRCodigoModal({
               type="date"
               value={fechaVencimiento}
               onChange={(e) => setFechaVencimiento(e.target.value)}
-              min={new Date().toISOString().split('T')[0]}
+              min={hoyColegio()}
               className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
             {fechaVencimiento && (

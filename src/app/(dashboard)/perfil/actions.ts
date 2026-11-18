@@ -1,6 +1,7 @@
 'use server'
 
 import { cookies } from 'next/headers'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -55,7 +56,7 @@ export async function serverEnsureEstudiante(idUsuario: number): Promise<number>
     /* sin fila de estudiante todavía → se crea a continuación */
   }
 
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
   const codigo = `EST${String(idUsuario).padStart(3, '0')}`
   const created = await apiFetch<Record<string, unknown>>('/estudiantes', {
     method: 'POST',
@@ -86,7 +87,7 @@ export async function serverUpsertEPS(
       id_ips:          payload.idIPS,
       nombre_ips:      payload.nombreIPS,
       tipo_afiliacion: payload.tipoAfiliacion,
-      fecha_afiliacion: new Date().toISOString().slice(0, 10),
+      fecha_afiliacion: hoyColegio(),
       activo: true,
     }),
   })
@@ -136,7 +137,7 @@ export async function serverInsertAdministrador(
   idUsuario: number,
   payload: { cargo: string; nivelAcceso: string }
 ): Promise<{ idAdministrador: number; cargo: string; nivelAcceso: string; estado: string; fechaAsignacion: string }> {
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
   const data = await apiFetch<Record<string, unknown>>('/administradores', {
     method: 'POST',
     body: JSON.stringify({
@@ -172,7 +173,7 @@ export async function serverEnsureProfesor(idUsuario: number): Promise<number> {
   const existing = lista.find(p => p.idUsuario === idUsuario)
   if (existing) return existing.idProfesor as number
 
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
   const codigo = `PROF${String(idUsuario).padStart(3, '0')}`
   const created = await apiFetch<Record<string, unknown>>('/profesores', {
     method: 'POST',

@@ -1,0 +1,7 @@
+# Hallazgos de gitleaks revisados y descartados (uno por línea: commit:archivo:regla:línea).
+# Cada uno lleva su motivo. Los de DEF-028 (clave service_role de Supabase en
+# b7e20f5) NO van aquí hasta que la clave se revoque (planeación de cierre, WC-02).
+
+# 17/11/2026 · falso positivo: `requiere('E2E_PASSWORD', 'E2E_JORNADA_MASIVO', ...)`
+# solo nombra variables de entorno; no hay ningún secreto en la línea.
+ca95561179c424bf50b5af5d4d3f7dd7e4dfa4dd:e2e/registro.spec.ts:generic-api-key:42

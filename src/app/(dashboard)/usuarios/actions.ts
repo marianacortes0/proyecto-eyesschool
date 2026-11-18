@@ -2,6 +2,9 @@
 
 import { cookies } from 'next/headers'
 import { ROL_NOMBRES, type UsuarioConRol } from '@/services/usuarios/usuariosService'
+import { ApiError, errorMessage } from '@/services/api/client'
+import { conMotivo } from '@/services/api/conMotivo'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
@@ -26,15 +29,16 @@ async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> 
     // error de Azure / traceback), así que leemos texto y extraemos `detail` si
     // lo hay. Incluimos método + path para saber QUÉ llamada falló.
     const raw = await res.text().catch(() => '')
-    let detail = raw
+    let detail: unknown
     try {
-      const parsed = JSON.parse(raw) as Record<string, unknown>
-      if (typeof parsed.detail === 'string') detail = parsed.detail
+      detail = (JSON.parse(raw) as Record<string, unknown>).detail
     } catch {
-      /* no era JSON: usamos el texto crudo */
+      detail = undefined // no era JSON (página de error de Azure, traceback): queda «HTTP <código>»
     }
-    const snippet = detail ? ` — ${detail.slice(0, 300)}` : ''
-    throw new Error(`HTTP ${res.status}${snippet} (${options.method ?? 'GET'} ${path})`)
+    // Método y ruta quedan en el log del servidor; al usuario solo le llega el
+    // motivo de la API (DEF-WEB-10). Un 5xx sin JSON queda como «HTTP 500».
+    console.error(`API ${res.status} (${options.method ?? 'GET'} ${path})`, raw.slice(0, 300))
+    throw new ApiError(res.status, errorMessage(detail, res.status), detail)
   }
   if (res.status === 204) return null as T
   return res.json() as Promise<T>
@@ -92,7 +96,8 @@ const ID_ROL_PROFESOR   = 1
 const ID_ROL_PADRE      = 4
 const ID_ROL_ADMIN      = 3
 
-export async function createUsuarioConAuth(data: CreateUsuarioConAuthData): Promise<void> {
+export async function createUsuarioConAuth(data: CreateUsuarioConAuthData): Promise<{ error?: string }> {
+  return conMotivo(async () => {
   const usuario = await apiFetch<Record<string, unknown>>('/usuarios', {
     method: 'POST',
     body: JSON.stringify({
@@ -112,7 +117,7 @@ export async function createUsuarioConAuth(data: CreateUsuarioConAuthData): Prom
   })
 
   const idUsuario = (usuario.id_usuario ?? usuario.idUsuario) as number
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
   const fechaAsignacion = data.fechaAsignacion || hoy
   const fechaFin = data.fechaFin || hoy
 
@@ -187,6 +192,7 @@ export async function createUsuarioConAuth(data: CreateUsuarioConAuthData): Prom
       }),
     }).catch(() => null)
   }
+  })
 }
 
 function cursoLabel(c: Record<string, unknown>): string {
@@ -604,7 +610,7 @@ async function findProfesorIdByUsuario(idUsuario: number): Promise<number | null
 async function ensureProfesorIdByUsuario(idUsuario: number): Promise<number | null> {
   const existente = await findProfesorIdByUsuario(idUsuario)
   if (existente != null) return existente
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
   const creado = await apiFetch<Record<string, unknown>>('/profesores', {
     method: 'POST',
     body: JSON.stringify({
@@ -747,7 +753,7 @@ export async function updateUsuarioAction(
     telefono: string | null; genero: string | null; direccion: string | null
     idRol: number
   }>
-): Promise<void> {
+): Promise<{ error?: string }> {
   const body: Record<string, unknown> = {}
   if (data.primerNombre    !== undefined) body.primer_nombre    = data.primerNombre
   if (data.primerApellido  !== undefined) body.primer_apellido  = data.primerApellido
@@ -759,7 +765,9 @@ export async function updateUsuarioAction(
   if (data.genero          !== undefined) body.genero           = data.genero
   if (data.direccion       !== undefined) body.direccion        = data.direccion
   if (data.idRol           !== undefined) body.id_rol           = data.idRol
-  await apiFetch(`/usuarios/${id}`, { method: 'PUT', body: JSON.stringify(body) })
+  return conMotivo(async () => {
+    await apiFetch(`/usuarios/${id}`, { method: 'PUT', body: JSON.stringify(body) })
+  })
 }
 
 export async function toggleUsuarioEstadoAction(id: number, nuevoEstado: boolean): Promise<void> {
@@ -780,7 +788,7 @@ export async function validarUsuarioAction(id: number, idRol: number): Promise<v
   // `estado` va como query param (el backend NO lo lee del body).
   await apiFetch(`/usuarios/${id}/estado?estado=true`, { method: 'PATCH' })
 
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
 
   // OJO: ni /estudiantes ni /profesores aceptan filtro ?id_usuario (lo ignoran y
   // devuelven la primera fila), así que la existencia se comprueba escaneando la lista.

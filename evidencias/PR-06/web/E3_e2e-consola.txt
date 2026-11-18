@@ -1,0 +1,1190 @@
+Corrida E3 · E2E completa (Chromium y Firefox) contra el deploy preview del PR #34
+Salida de consola de Playwright 1.64.1 (reporter list). El JUnit de esta corrida se sobrescribió por error con un --list; esta salida es la evidencia.
+Archivos de prueba iguales a los del commit 73bf2b2. Revisada: no contiene la clave, tokens ni llamadas fill().
+
+inicio 2026-11-10T23:53:30Z
+
+Running 48 tests using 1 worker
+
+  ok  1 [chromium] › e2e\boletin-padre.spec.ts:8:7 › boletín del padre (WEB-09) › el padre descarga un PDF (1.2m)
+  ok  2 [chromium] › e2e\boletin-padre.spec.ts:23:7 › boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación (1.2m)
+  x   3 [chromium] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados (46.8s)
+  x   4 [chromium] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol (47.3s)
+  x   5 [chromium] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados (47.1s)
+  ok  6 [chromium] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol (48.2s)
+  x   7 [chromium] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados (44.0s)
+  ok  8 [chromium] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (1.2m)
+  x   9 [chromium] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados (57.5s)
+  ok 10 [chromium] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol (51.8s)
+  x  11 [chromium] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades (1.3m)
+  x  12 [chromium] › e2e\padre-dos-hijos.spec.ts:33:5 › un padre con un solo hijo no ve el selector (38.1s)
+  x  13 [chromium] › e2e\registro-masivo.spec.ts:19:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (1.4m)
+  ok 14 [chromium] › e2e\registro-masivo.spec.ts:35:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar (1.3m)
+  x  15 [chromium] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado (38.2s)
+  x  16 [chromium] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (1.2m)
+  ok 17 [chromium] › e2e\sesion.spec.ts:26:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola (1.0m)
+  ok 18 [chromium] › e2e\sesion.spec.ts:37:7 › sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript (45.7s)
+  -  19 [chromium] › e2e\sesion.spec.ts:51:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)
+  -  20 [chromium] › e2e\sesion.spec.ts:67:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)
+  ok 21 [chromium] › e2e\sesion.spec.ts:80:5 › una ruta del panel sin sesión pide iniciar sesión (56.3s)
+  x  22 [chromium] › e2e\usuarios.spec.ts:23:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba (1.3m)
+  ok 23 [chromium] › e2e\usuarios.spec.ts:54:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) (1.1m)
+  ok 24 [chromium] › e2e\usuarios.spec.ts:63:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) (1.2m)
+  x  25 [firefox] › e2e\boletin-padre.spec.ts:8:7 › boletín del padre (WEB-09) › el padre descarga un PDF (1.5m)
+  ok 26 [firefox] › e2e\boletin-padre.spec.ts:23:7 › boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación (1.2m)
+  x  27 [firefox] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados (46.6s)
+  x  28 [firefox] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol (1.2m)
+  x  29 [firefox] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados (56.9s)
+  ok 30 [firefox] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol (1.3m)
+  x  31 [firefox] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados (57.5s)
+  x  32 [firefox] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (1.5m)
+  x  33 [firefox] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados (1.5m)
+  x  34 [firefox] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol (5.0m)
+  x  35 [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades (42.9s)
+  x  36 [firefox] › e2e\padre-dos-hijos.spec.ts:33:5 › un padre con un solo hijo no ve el selector (23.5s)
+  x  37 [firefox] › e2e\registro-masivo.spec.ts:19:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (30.1s)
+  ok 38 [firefox] › e2e\registro-masivo.spec.ts:35:7 › registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar (16.6s)
+  x  39 [firefox] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado (19.5s)
+  x  40 [firefox] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión (36.1s)
+  ok 41 [firefox] › e2e\sesion.spec.ts:26:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola (29.2s)
+  ok 42 [firefox] › e2e\sesion.spec.ts:37:7 › sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript (19.0s)
+  -  43 [firefox] › e2e\sesion.spec.ts:51:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)
+  -  44 [firefox] › e2e\sesion.spec.ts:67:9 › sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)
+  ok 45 [firefox] › e2e\sesion.spec.ts:80:5 › una ruta del panel sin sesión pide iniciar sesión (35.6s)
+  x  46 [firefox] › e2e\usuarios.spec.ts:23:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba (37.2s)
+  ok 47 [firefox] › e2e\usuarios.spec.ts:54:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) (27.0s)
+  ok 48 [firefox] › e2e\usuarios.spec.ts:63:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) (31.3s)
+
+
+  1) [chromium] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardgroupUsuariosfact_checkAsistenciaschoolNotascalendar' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardgroupUsuariosfact_checkAsistenciaschoolNotascalendar' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      17 |
+      18 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 19 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      20 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      21 |     })
+      22 |
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:19:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol 
+
+    Error: sobra /notas
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Expected value: not "/notas"
+    Received array:     ["/admin", "/usuarios", "/asistencia", "/notas", "/horarios", "/novedades", "/qr", "/qr/escanear", "/reportes"]
+
+      26 |       const enlaces = await enlacesDelMenu(page)
+      27 |       for (const ruta of MENU[rol].debe) expect(enlaces, `falta ${ruta}`).toContain(ruta)
+    > 28 |       for (const ruta of MENU[rol].noDebe) expect(enlaces, `sobra ${ruta}`).not.toContain(ruta)
+         |                                                                                 ^
+      29 |     })
+      30 |   })
+      31 | }
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:28:81
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      17 |
+      18 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 19 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      20 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      21 |     })
+      22 |
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:19:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      17 |
+      18 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 19 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      20 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      21 |     })
+      22 |
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:19:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      17 |
+      18 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 19 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      20 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      21 |     })
+      22 |
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:19:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('combobox', { name: /estudiante/i }).locator('option')
+    Timeout: 5000ms
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+    -   /Sofía/i,
+    -   /Santiago/i,
+    +   "Estudiante #1",
+    +   "Estudiante #3",
+      ]
+
+    Call log:
+      - Expect "toHaveText" getByRole('combobox', { name: /estudiante/i }).locator('option') with timeout 5000ms
+      - waiting for getByRole('combobox', { name: /estudiante/i }).locator('option')
+        14 × locator resolved to 2 elements
+
+
+      20 |
+      21 |     // Ve solo sus dos hijos.
+    > 22 |     await expect(selector.locator('option')).toHaveText([new RegExp(hijo1, 'i'), new RegExp(hijo2, 'i')])
+         |                                              ^
+      23 |
+      24 |     // Con el primero activo, el módulo habla de él; al cambiar, habla del segundo.
+      25 |     await expect(page.getByText(new RegExp(hijo1, 'i')).first()).toBeVisible()
+        at C:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:22:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [chromium] › e2e\padre-dos-hijos.spec.ts:33:5 › un padre con un solo hijo no ve el selector ───
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        13 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+      39 |   await vista.locator('button').first().click()
+    > 40 |   await expect(page).toHaveURL(/\/general$/)
+         |                      ^
+      41 |
+      42 |   await page.goto('/notas')
+      43 |   await expect(page.getByRole('combobox', { name: /estudiante/i })).toHaveCount(0)
+        at C:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:40:22
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [chromium] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /registered=true/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        13 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+      49 |
+      50 |   // Cuenta creada: vuelve al inicio de sesión (el padre no requiere aprobación).
+    > 51 |   await expect(page).toHaveURL(/registered=true/)
+         |                      ^
+      52 |
+      53 |   const vista = page.locator('[data-view="login"]')
+        at C:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:51:22
+
+    "afterAll" hook timeout of 90000ms exceeded.
+
+      11 | let correoCreado: string | null = null
+      12 |
+    > 13 | test.afterAll(async ({ browser }) => {
+         |      ^
+      14 |   if (!correoCreado) return
+      15 |   const page = await browser.newPage({ baseURL: process.env.E2E_BASE_URL })
+      16 |   try {
+        at C:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:13:6
+
+    Error: locator.click: Test ended.
+    Call log:
+      - waiting for getByTitle('Eliminar').first()
+
+
+      18 |     await page.goto('/usuarios')
+    > 20 |     await page.getByTitle('Eliminar').first().click()
+         |                                               ^
+      21 |     await page.getByRole('button', { name: /eliminar|confirmar/i }).last().click()
+      22 |     await expect(page.getByText('Usuario eliminado exitosamente')).toBeVisible()
+      23 |   } finally {
+        at C:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:20:47
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [chromium] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/\?login=1$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/notas"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        13 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/notas"
+
+
+      19 |     await page.goto('/notas')
+      20 |
+    > 21 |     await expect(page).toHaveURL(/\/\?login=1$/)
+         |                        ^
+      22 |     const cookies = await context.cookies()
+      23 |     expect(cookies.map((c) => c.name)).not.toContain('eys_access')
+      24 |   })
+        at C:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:21:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [chromium] › e2e\usuarios.spec.ts:23:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Usuario creado exitosamente')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Usuario creado exitosamente') with timeout 5000ms
+      - waiting for getByText('Usuario creado exitosamente')
+
+
+      30 |     await llenarDocente(page, correo)
+      31 |     await page.getByRole('button', { name: 'Crear Usuario' }).click()
+    > 32 |     await expect(page.getByText('Usuario creado exitosamente')).toBeVisible()
+         |                                                                 ^
+      33 |
+      34 |     // Filtrar (CP-SIS-027)
+        at C:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:32:65
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [firefox] › e2e\boletin-padre.spec.ts:8:7 › boletín del padre (WEB-09) › el padre descarga un PDF 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: page.goto: Test timeout of 90000ms exceeded.
+    Call log:
+      - navigating to "https://deploy-preview-34--qaeyesschool.netlify.app/notas", waiting until "load"
+
+
+       8 |   test('el padre descarga un PDF', async ({ page }) => {
+       9 |     await iniciarSesion(page, 'padre')
+    > 10 |     await page.goto('/notas')
+         |                ^
+      11 |
+      12 |     const descarga = page.waitForEvent('download')
+      13 |     await page.getByRole('button', { name: /Descargar boletín/i }).click()
+        at C:\Users\marig\proyecto-eyesschool\e2e\boletin-padre.spec.ts:10:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\boletin-padre-boletín-del--c7bcb-09-el-padre-descarga-un-PDF-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\boletin-padre-boletín-del--c7bcb-09-el-padre-descarga-un-PDF-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\boletin-padre-boletín-del--c7bcb-09-el-padre-descarga-un-PDF-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\boletin-padre-boletín-del--c7bcb-09-el-padre-descarga-un-PDF-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [firefox] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardgroupUsuariosfact_checkAsistenciaschoolNotascalendar' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardgroupUsuariosfact_checkAsistenciaschoolNotascalendar' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      17 |
+      18 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 19 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      20 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      21 |     })
+      22 |
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:19:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [firefox] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol 
+
+    Error: sobra /notas
+
+    expect(received).not.toContain(expected) // indexOf
+
+    Expected value: not "/notas"
+    Received array:     ["/admin", "/usuarios", "/asistencia", "/notas", "/horarios", "/novedades", "/qr", "/qr/escanear", "/reportes"]
+
+      26 |       const enlaces = await enlacesDelMenu(page)
+      27 |       for (const ruta of MENU[rol].debe) expect(enlaces, `falta ${ruta}`).toContain(ruta)
+    > 28 |       for (const ruta of MENU[rol].noDebe) expect(enlaces, `sobra ${ruta}`).not.toContain(ruta)
+         |                                                                                 ^
+      29 |     })
+      30 |   })
+      31 | }
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:28:81
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [firefox] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      17 |
+      18 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 19 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      20 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      21 |     })
+      22 |
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:19:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [firefox] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      17 |
+      18 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 19 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      20 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      21 |     })
+      22 |
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:19:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [firefox] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        43 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+      - Test timeout of 90000ms exceeded.
+
+
+       at utils.ts:42
+
+      40 |
+      41 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 42 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      43 | }
+      44 |
+      45 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (C:\Users\marig\proyecto-eyesschool\e2e\utils.ts:42:60)
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:24:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [firefox] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: page.goto: Test timeout of 90000ms exceeded.
+    Call log:
+      - navigating to "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1", waiting until "load"
+
+
+       at utils.ts:35
+
+      33 |   requiere(`E2E_${rol.toUpperCase()}_EMAIL`, 'E2E_PASSWORD')
+      34 |
+    > 35 |   await page.goto('/?login=1')
+         |              ^
+      36 |   const vista = page.locator('[data-view="login"]')
+        at iniciarSesion (C:\Users\marig\proyecto-eyesschool\e2e\utils.ts:35:14)
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:16:26
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [firefox] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        27 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+       at utils.ts:42
+
+      40 |
+      41 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 42 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      43 | }
+      44 |
+      45 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (C:\Users\marig\proyecto-eyesschool\e2e\utils.ts:42:60)
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:24:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('combobox', { name: /estudiante/i }).locator('option')
+    Timeout: 5000ms
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+    -   /Sofía/i,
+    -   /Santiago/i,
+    +   "Estudiante #1",
+    +   "Estudiante #3",
+      ]
+
+    Call log:
+      - Expect "toHaveText" getByRole('combobox', { name: /estudiante/i }).locator('option') with timeout 5000ms
+      - waiting for getByRole('combobox', { name: /estudiante/i }).locator('option')
+        13 × locator resolved to 2 elements
+
+
+      20 |
+      21 |     // Ve solo sus dos hijos.
+    > 22 |     await expect(selector.locator('option')).toHaveText([new RegExp(hijo1, 'i'), new RegExp(hijo2, 'i')])
+         |                                              ^
+      23 |
+      24 |     // Con el primero activo, el módulo habla de él; al cambiar, habla del segundo.
+      25 |     await expect(page.getByText(new RegExp(hijo1, 'i')).first()).toBeVisible()
+        at C:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:22:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [firefox] › e2e\padre-dos-hijos.spec.ts:33:5 › un padre con un solo hijo no ve el selector ───
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        10 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+      39 |   await vista.locator('button').first().click()
+    > 40 |   await expect(page).toHaveURL(/\/general$/)
+         |                      ^
+      41 |
+      42 |   await page.goto('/notas')
+      43 |   await expect(page.getByRole('combobox', { name: /estudiante/i })).toHaveCount(0)
+        at C:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:40:22
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\padre-dos-hijos-un-padre-con-un-solo-hijo-no-ve-el-selector-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [firefox] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /registered=true/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        9 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+          - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+      49 |
+      50 |   // Cuenta creada: vuelve al inicio de sesión (el padre no requiere aprobación).
+    > 51 |   await expect(page).toHaveURL(/registered=true/)
+         |                      ^
+      52 |
+      53 |   const vista = page.locator('[data-view="login"]')
+        at C:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:51:22
+
+    "afterAll" hook timeout of 90000ms exceeded.
+
+      11 | let correoCreado: string | null = null
+      12 |
+    > 13 | test.afterAll(async ({ browser }) => {
+         |      ^
+      14 |   if (!correoCreado) return
+      15 |   const page = await browser.newPage({ baseURL: process.env.E2E_BASE_URL })
+      16 |   try {
+        at C:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:13:6
+
+    Error: locator.click: Test ended.
+    Browser logs:
+
+    [pid=29972][err] ue@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:22796
+    [pid=29972][err] 77339/K/e/<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:18132
+    [pid=29972][err] s@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94225
+    [pid=29972][err] 34051/c/o._invoke@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94014
+    [pid=29972][err] 34051/w/</e[t]@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94648
+    [pid=29972][err] r@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:882
+    [pid=29972][err] u@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1088
+    [pid=29972][err] 60932/t.Z/</<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1147
+    [pid=29972][err] 60932/t.Z/<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1027
+    [pid=29972][err] Q@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:17866
+    [pid=29972][err] subscription@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:17390
+    [pid=29972][err] value@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:69507
+    [pid=29972][err] 76273/value/c/<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:63973
+    [pid=29972][err] s@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94225
+    [pid=29972][err] 34051/c/o._invoke@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94014
+    [pid=29972][err] 34051/w/</e[t]@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94648
+    [pid=29972][err] r@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:882
+    [pid=29972][err] u@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1088
+    [pid=29972][err] promise callback*r@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:953
+    [pid=29972][err] u@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1088
+    [pid=29972][err] promise callback*r@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:953
+    [pid=29972][err] u@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1088
+    [pid=29972][err] promise callback*r@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:953
+    [pid=29972][err] u@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1088
+    [pid=29972][err] 60932/t.Z/</<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1147
+    [pid=29972][err] 60932/t.Z/<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1027
+    [pid=29972][err] value@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:64495
+    [pid=29972][err] value@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:57954
+    [pid=29972][err] value@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:14486
+    [pid=29972][err] gu@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:86238
+    [pid=29972][err] Ri@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:103118
+    [pid=29972][err] 60053/t.unstable_runWithPriority@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:129354
+    [pid=29972][err] Ql@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:44985
+    [pid=29972][err] Oi@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:99855
+    [pid=29972][err] bi@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:95939
+    [pid=29972][err] hi@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:93062
+    [pid=29972][err] es@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:109201
+    [pid=29972][err] 64448/os/<@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:110591
+    [pid=29972][err] ki@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:96092
+    [pid=29972][err] os@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:110576
+    [pid=29972][err] 64448/t.hydrate@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:117972
+    [pid=29972][err] 77339/ue/<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:22762
+    [pid=29972][err] ue@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:22796
+    [pid=29972][err] 77339/K/e/<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:18132
+    [pid=29972][err] s@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94225
+    [pid=29972][err] 34051/c/o._invoke@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94014
+    [pid=29972][err] 34051/w/</e[t]@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94648
+    [pid=29972][err] r@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:882
+    [pid=29972][err] 
+    [pid=29972][err] JavaScript error: chrome://juggler/content/Helper.js, line 82: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIWebProgress.removeProgressListener]
+    [pid=29972][out] console.error: [Exception... "Component returned failure code: 0x80070057 (NS_ERROR_ILLEGAL_VALUE) [nsIWinTaskbar.getTaskbarProgress]"  nsresult: "0x80070057 (NS_ERROR_ILLEGAL_VALUE)"  location: "JS frame :: moz-src:///browser/components/downloads/DownloadsTaskbar.sys.mjs :: #windowsAttachIndicator :: line 181"  data: no]
+    [pid=29972][out] console.warn: LoginRecipes: "Falling back to a synchronous message for: https://deploy-preview-34--qaeyesschool.netlify.app."
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 2513: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval line 1 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval line 1 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval line 1 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval line 1 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 2513 > eval line 1 > eval line 1 > eval, line 1: WebGPU is disabled by blocklist.
+    [pid=29972][err] JavaScript error: https://www.youtube.com/s/_/ytembeds/_/js/k=ytembeds.base.en_US.T7v-nZD1bH4.2021.O/am=AAAAAAI/d=1/excm=base,root/br=1/rs=AGKMywFa2qBq0G7H7Sw-nhKLaDkuau5egQ/m=root,base, line 251: TypeError: can't access property "hostname", document.location is null
+    [pid=29972][err] JavaScript error: moz-src:///toolkit/actors/PictureInPictureChild.sys.mjs, line 432: TypeError: can't access dead object
+    [pid=29972][err] JavaScript error: chrome://juggler/content/Helper.js, line 82: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIWebProgress.removeProgressListener]
+    [pid=29972][out] console.error: [Exception... "Component returned failure code: 0x80070057 (NS_ERROR_ILLEGAL_VALUE) [nsIWinTaskbar.getTaskbarProgress]"  nsresult: "0x80070057 (NS_ERROR_ILLEGAL_VALUE)"  location: "JS frame :: moz-src:///browser/components/downloads/DownloadsTaskbar.sys.mjs :: #windowsAttachIndicator :: line 181"  data: no]
+    [pid=29972][out] console.warn: LoginRecipes: "Falling back to a synchronous message for: https://deploy-preview-34--qaeyesschool.netlify.app."
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval, line 6579: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval line 1 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval line 1 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval line 1 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval line 1 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/CFwh7IzvvkhHdbPb9f8yRhVgiBozH2mZ3cW2Yp-ozHY.js line 2 > eval line 6579 > eval line 1 > eval line 1 > eval, line 1: WebGPU is disabled by blocklist.
+    [pid=29972][err] JavaScript error: chrome://juggler/content/Helper.js, line 82: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIWebProgress.removeProgressListener]
+    [pid=29972][out] console.error: [Exception... "Component returned failure code: 0x80070057 (NS_ERROR_ILLEGAL_VALUE) [nsIWinTaskbar.getTaskbarProgress]"  nsresult: "0x80070057 (NS_ERROR_ILLEGAL_VALUE)"  location: "JS frame :: moz-src:///browser/components/downloads/DownloadsTaskbar.sys.mjs :: #windowsAttachIndicator :: line 181"  data: no]
+    [pid=29972][out] console.warn: LoginRecipes: "Falling back to a synchronous message for: https://deploy-preview-34--qaeyesschool.netlify.app."
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js, line 7295: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js, line 7295: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js, line 7295: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js, line 7295: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js line 2 > eval, line 7295: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js line 2 > eval, line 7295: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js line 2 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js line 2 > eval line 7295 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js line 2 > eval line 7295 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js line 2 > eval line 7295 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js line 2 > eval line 7295 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js line 2 > eval line 7295 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js line 2 > eval line 7295 > eval line 1 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js line 2 > eval line 7295 > eval line 1 > eval line 1 > eval, line 1: unreachable code after return statement
+    [pid=29972][err] JavaScript warning: https://www.google.com/js/th/w7YMxAaLr8cGxVACAr7wkhWP-2E0xi-vGOo1LMUnAkg.js line 2 > eval line 7295 > eval line 1 > eval line 1 > eval, line 1: WebGPU is disabled by blocklist.
+    [pid=29972][err] JavaScript error: https://www.youtube.com/s/_/ytembeds/_/js/k=ytembeds.base.en_US.T7v-nZD1bH4.2021.O/am=AAAAAAIAYw/d=1/excm=base,root/br=1/rs=AGKMywG2023yNnCySk8oz4uhoQa_0cwcAw/m=root,base, line 251: TypeError: can't access property "hostname", document.location is null
+    [pid=29972][err] JavaScript error: moz-src:///toolkit/actors/PictureInPictureChild.sys.mjs, line 432: TypeError: can't access dead object
+    [pid=29972][out] console.error: "Could not download new icon" (new ServerInfoError("Server response is invalid SyntaxError: JSON.parse: unexpected end of data at line 1 column 1 of the JSON data", "resource://services-settings/Attachments.sys.mjs", 40))
+    [pid=29972] <gracefully close start>
+    [pid=29972][err] JavaScript error: chrome://juggler/content/Helper.js, line 82: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIWebProgress.removeProgressListener]
+    Call log:
+      - waiting for getByTitle('Eliminar').first()
+
+        at [pid=29972][err] ue@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:22796
+        at [pid=29972][err] 77339/K/e/<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:18132
+        at [pid=29972][err] s@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94225
+        at [pid=29972][err] 34051/c/o._invoke@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94014
+        at [pid=29972][err] 34051/w/</e[t]@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94648
+        at [pid=29972][err] r@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:882
+        at [pid=29972][err] u@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1088
+        at [pid=29972][err] 60932/t.Z/</<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1147
+        at [pid=29972][err] 60932/t.Z/<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1027
+        at [pid=29972][err] Q@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:17866
+        at [pid=29972][err] subscription@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:17390
+        at [pid=29972][err] value@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:69507
+        at [pid=29972][err] 76273/value/c/<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:63973
+        at [pid=29972][err] s@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94225
+        at [pid=29972][err] 34051/c/o._invoke@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94014
+        at [pid=29972][err] 34051/w/</e[t]@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94648
+        at [pid=29972][err] r@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:882
+        at [pid=29972][err] u@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1088
+        at [pid=29972][err] promise callback*r@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:953
+        at [pid=29972][err] u@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1088
+        at [pid=29972][err] promise callback*r@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:953
+        at [pid=29972][err] u@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1088
+        at [pid=29972][err] promise callback*r@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:953
+        at [pid=29972][err] u@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1088
+        at [pid=29972][err] 60932/t.Z/</<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1147
+        at [pid=29972][err] 60932/t.Z/<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:1027
+        at [pid=29972][err] value@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:64495
+        at [pid=29972][err] value@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:57954
+        at [pid=29972][err] value@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:14486
+        at [pid=29972][err] gu@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:86238
+        at [pid=29972][err] Ri@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:103118
+        at [pid=29972][err] 60053/t.unstable_runWithPriority@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:129354
+        at [pid=29972][err] Ql@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:44985
+        at [pid=29972][err] Oi@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:99855
+        at [pid=29972][err] bi@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:95939
+        at [pid=29972][err] hi@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:93062
+        at [pid=29972][err] es@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:109201
+        at [pid=29972][err] 64448/os/<@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:110591
+        at [pid=29972][err] ki@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:96092
+        at [pid=29972][err] os@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:110576
+        at [pid=29972][err] 64448/t.hydrate@https://app.netlify.com/cdp/_next/static/chunks/framework-8b7974553b1447ee.js:1:117972
+        at [pid=29972][err] 77339/ue/<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:22762
+        at [pid=29972][err] ue@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:22796
+        at [pid=29972][err] 77339/K/e/<@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:18132
+        at [pid=29972][err] s@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94225
+        at [pid=29972][err] 34051/c/o._invoke@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94014
+        at [pid=29972][err] 34051/w/</e[t]@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:94648
+        at [pid=29972][err] r@https://app.netlify.com/cdp/_next/static/chunks/main-869b4757a40282e1.js:1:882
+        at C:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:20:47
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [firefox] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/\?login=1$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/notas"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        12 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/notas"
+
+
+      19 |     await page.goto('/notas')
+      20 |
+    > 21 |     await expect(page).toHaveURL(/\/\?login=1$/)
+         |                        ^
+      22 |     const cookies = await context.cookies()
+      23 |     expect(cookies.map((c) => c.name)).not.toContain('eys_access')
+      24 |   })
+        at C:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:21:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) [firefox] › e2e\usuarios.spec.ts:23:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Usuario editado exitosamente')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Usuario editado exitosamente') with timeout 5000ms
+      - waiting for getByText('Usuario editado exitosamente')
+
+
+      41 |     await page.getByRole('button', { name: 'Guardar Cambios' }).click()
+    > 42 |     await expect(page.getByText('Usuario editado exitosamente')).toBeVisible()
+         |                                                                  ^
+      43 |
+      44 |     // Eliminar: primero cancela, luego confirma (CP-SIS-025)
+      45 |     await page.getByTitle('Eliminar').first().click()
+        at C:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:42:66
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23 failed
+    [chromium] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+    [chromium] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol 
+    [chromium] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+    [chromium] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+    [chromium] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+    [chromium] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+    [chromium] › e2e\padre-dos-hijos.spec.ts:33:5 › un padre con un solo hijo no ve el selector ────
+    [chromium] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+    [chromium] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+    [chromium] › e2e\usuarios.spec.ts:23:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+    [firefox] › e2e\boletin-padre.spec.ts:8:7 › boletín del padre (WEB-09) › el padre descarga un PDF 
+    [firefox] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+    [firefox] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol 
+    [firefox] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+    [firefox] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+    [firefox] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+    [firefox] › e2e\login-roles.spec.ts:15:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+    [firefox] › e2e\login-roles.spec.ts:23:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol 
+    [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+    [firefox] › e2e\padre-dos-hijos.spec.ts:33:5 › un padre con un solo hijo no ve el selector ─────
+    [firefox] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+    [firefox] › e2e\sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+    [firefox] › e2e\usuarios.spec.ts:23:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+  4 skipped
+  21 passed (49.0m)
+salida=1
+fin 2026-11-11T00:42:37Z

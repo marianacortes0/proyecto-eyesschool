@@ -1,4 +1,4 @@
-import { apiFetch } from '@/services/api/client'
+import { ApiError, apiFetch } from '@/services/api/client'
 
 export type EstadoAsistencia = 'Presente' | 'Ausente' | 'Tarde' | 'Excusa' | 'Suspensión'
 
@@ -105,4 +105,49 @@ export const eliminarRegistro = async (id: number): Promise<void> => {
     method: 'PUT',
     body: JSON.stringify({ activo: false }),
   })
+}
+
+// ── Registro masivo (WEB-06) ──────────────────────────────────────────────────
+
+export type RegistroMasivoItem = { idEstudiante: number; estado: EstadoAsistencia }
+
+export type RegistroFallido = { idEstudiante: number; motivo: string }
+
+/** Resultado de un lote: quién se guardó, quién ya estaba registrado y quién falló. */
+export type RegistroMasivoResult = {
+  guardados: number[]
+  duplicados: number[]
+  fallidos: RegistroFallido[]
+}
+
+/**
+ * Clasifica, por estudiante, lo que respondió la API. Un 409 (BE-08: ya tiene
+ * registro ese día) va a `duplicados`; cualquier otro error, a `fallidos`.
+ * `resultados[i]` corresponde a `items[i]`.
+ */
+export function clasificarResultados(
+  items: RegistroMasivoItem[],
+  resultados: PromiseSettledResult<unknown>[]
+): RegistroMasivoResult {
+  const salida: RegistroMasivoResult = { guardados: [], duplicados: [], fallidos: [] }
+  resultados.forEach((r, i) => {
+    const idEstudiante = items[i].idEstudiante
+    if (r.status === 'fulfilled') {
+      salida.guardados.push(idEstudiante)
+    } else if (r.reason instanceof ApiError && r.reason.status === 409) {
+      salida.duplicados.push(idEstudiante)
+    } else {
+      salida.fallidos.push({
+        idEstudiante,
+        motivo: r.reason instanceof Error && r.reason.message ? r.reason.message : 'Error desconocido',
+      })
+    }
+  })
+  return salida
+}
+
+/** Deja del lote original solo a los estudiantes que fallaron (con su estado). */
+export function itemsParaReintento(items: RegistroMasivoItem[], fallidos: RegistroFallido[]): RegistroMasivoItem[] {
+  const ids = new Set(fallidos.map((f) => f.idEstudiante))
+  return items.filter((it) => ids.has(it.idEstudiante))
 }

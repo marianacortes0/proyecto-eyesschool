@@ -7,6 +7,8 @@ interface UsuariosPendientesProps {
   pendingUsuarios: UsuarioConRol[]
   loading: boolean
   error: string | null
+  /** La lista no se pudo cargar: no se afirma «Sin pendientes» (DEF-WEB-10). */
+  sinDatos?: boolean
   onValidar: (id: number, idRol: number) => Promise<void>
   onRechazar: (id: number) => Promise<void>
 }
@@ -173,6 +175,7 @@ export default function UsuariosPendientes({
   pendingUsuarios,
   loading,
   error,
+  sinDatos = false,
   onValidar,
   onRechazar,
 }: UsuariosPendientesProps) {
@@ -201,14 +204,14 @@ export default function UsuariosPendientes({
       )}
 
       {/* Loading */}
-      {loading ? (
+      {sinDatos ? null : loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="h-48 rounded-2xl bg-slate-100 dark:bg-white/5 animate-pulse" />
           ))}
         </div>
       ) : pendingUsuarios.length === 0 ? (
-        <div className="flex items-center gap-3 px-4 py-5 rounded-2xl border border-dashed border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500">
+        <div className="flex items-center gap-3 px-4 py-5 rounded-2xl border border-dashed border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300">
           <span className="material-symbols-outlined !text-2xl text-emerald-500">check_circle</span>
           <div>
             <p className="font-semibold text-sm">Sin pendientes</p>

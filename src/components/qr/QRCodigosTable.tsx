@@ -97,6 +97,7 @@ export default function QRCodigosTable({ codigos, onEdit, onToggle, onDelete, on
 
                 {/* Imagen QR (goqr.me) */}
                 <td className="px-4 py-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- imagen dinámica de origen externo (QR de goqr.me o avatar de la API); next/image exigiría configurar dominios remotos */}
                   <img
                     src={getQRImageUrl(c.codigo, 56)}
                     alt={`QR de ${c.codigoEstudiante}`}

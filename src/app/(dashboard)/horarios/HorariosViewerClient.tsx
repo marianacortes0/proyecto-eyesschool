@@ -1,8 +1,10 @@
 'use client'
 
 import { useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 import { type HorarioAsociadoBootstrap, type HorarioViewer } from '@/services/asociado/asociadoActions'
 import { DIAS_SEMANA } from '@/services/horarios/horariosService'
+import { MSG_SIN_HIJOS } from '@/lib/utils/hijoActivo'
 
 // Mismo lenguaje visual que la grilla de admin (HorariosClient): acento por
 // materia + cabecera de día con color.
@@ -46,7 +48,8 @@ const hhmm = (t: string) => (t ? t.slice(0, 5) : '—')
  * él mismo). Reutiliza el MISMO diseño de grilla semanal que la vista de admin,
  * pero acotado al curso del estudiante y sin acciones de gestión.
  */
-export default function HorariosViewerClient({ info, curso, horarios }: HorarioAsociadoBootstrap) {
+export default function HorariosViewerClient({ info, curso, horarios, error }: HorarioAsociadoBootstrap) {
+  const router = useRouter()
   // Día canónico para casar con DIAS_SEMANA / DIA_HEADER.
   const bloques = useMemo(
     () => horarios.map(h => ({ ...h, dia: normalizaDia(h.dia) })),
@@ -73,9 +76,24 @@ export default function HorariosViewerClient({ info, curso, horarios }: HorarioA
         </p>
       </div>
 
-      {!info ? (
+      {error ? (
+        <div
+          role="alert"
+          className="px-4 py-3 rounded-xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/30 text-rose-700 dark:text-rose-300 text-sm flex flex-wrap items-center justify-between gap-3"
+        >
+          <span>{error}</span>
+          <button
+            type="button"
+            onClick={() => router.refresh()}
+            className="px-3 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-semibold hover:bg-rose-700 transition-colors"
+          >
+            Reintentar
+          </button>
+        </div>
+      ) : !info ? (
         <div className="px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-300 text-sm">
-          No encontramos un estudiante asociado a tu cuenta.
+          {/* CP-SIS-061: el texto de la planeación (DEF-WEB-15). */}
+          <strong>{MSG_SIN_HIJOS}.</strong> No encontramos un estudiante asociado a tu cuenta.
         </div>
       ) : !curso ? (
         <div className="px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-300 text-sm">

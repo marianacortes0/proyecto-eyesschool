@@ -1,6 +1,8 @@
 'use server'
 
 import { cookies } from 'next/headers'
+import { getServerUser, userToRole } from '@/lib/auth/server'
+import { horariosDelDocente } from './horariosService'
 import type {
   Horario,
   Curso,
@@ -310,5 +312,18 @@ export async function getHorariosBootstrapAction(): Promise<HorariosBootstrap> {
       getEspecializacionesAction(),
       getAsignacionesAction(),
     ])
-  return { horarios, cursos, materias, allMaterias, allCursos, profesores, especializaciones, asignaciones }
+  const datos = { horarios, cursos, materias, allMaterias, allCursos, profesores, especializaciones, asignaciones }
+
+  // DEF-WEB-14 · CP-SIS-059: el docente recibe solo sus clases (aquí, en el
+  // servidor, para que tampoco le lleguen los horarios de los demás).
+  const user = await getServerUser()
+  if (user && userToRole(user) === 'docente') return horariosDelDocente(datos, await idProfesorDe(user.idUsuario))
+  return datos
+}
+
+/** id_profesor del usuario que inició sesión, o null si no tiene registro de profesor. */
+async function idProfesorDe(idUsuario: number): Promise<number | null> {
+  const profesores = await apiFetch<Record<string, unknown>[]>('/profesores?limit=500')
+  const suyo = profesores.find((p) => Number(p.id_usuario) === idUsuario)
+  return suyo ? Number(suyo.id_profesor) : null
 }

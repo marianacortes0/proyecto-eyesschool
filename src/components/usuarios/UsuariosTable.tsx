@@ -77,7 +77,7 @@ export default function UsuariosTable({
 
                 {/* Documento */}
                 <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
-                  <span className="text-slate-400 dark:text-slate-500 text-xs mr-1">
+                  <span className="text-slate-500 dark:text-slate-400 text-xs mr-1">
                     {TIPO_DOC[u.tipoDocumento] ?? u.tipoDocumento}
                   </span>
                   {u.numeroDocumento}
@@ -85,7 +85,7 @@ export default function UsuariosTable({
 
                 {/* Correo */}
                 <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
-                  {u.correo ?? <span className="text-slate-400 italic text-xs">Sin correo</span>}
+                  {u.correo ?? <span className="text-slate-500 italic text-xs">Sin correo</span>}
                 </td>
 
                 {/* Rol */}
@@ -107,7 +107,7 @@ export default function UsuariosTable({
                         {u.cursoNombre}
                       </span>
                     ) : (
-                      <span className="text-slate-400 italic text-xs">Sin asignar</span>
+                      <span className="text-slate-500 italic text-xs">Sin asignar</span>
                     )
                   ) : u.idRol === 3 ? (
                     u.cargo ? (
@@ -122,7 +122,7 @@ export default function UsuariosTable({
                         )}
                       </div>
                     ) : (
-                      <span className="text-slate-400 italic text-xs">Sin cargo</span>
+                      <span className="text-slate-500 italic text-xs">Sin cargo</span>
                     )
                   ) : u.idRol === 1 ? (
                     u.especializaciones && u.especializaciones.length > 0 ? (
@@ -137,7 +137,7 @@ export default function UsuariosTable({
                         ))}
                       </div>
                     ) : (
-                      <span className="text-slate-400 italic text-xs">Sin especialización</span>
+                      <span className="text-slate-500 italic text-xs">Sin especialización</span>
                     )
                   ) : u.idRol === 4 ? (
                     u.estudianteNombre ? (
@@ -159,7 +159,7 @@ export default function UsuariosTable({
                         </div>
                       </div>
                     ) : (
-                      <span className="text-slate-400 italic text-xs">Sin vincular</span>
+                      <span className="text-slate-500 italic text-xs">Sin vincular</span>
                     )
                   ) : (
                     <span className="text-slate-400 text-xs">—</span>

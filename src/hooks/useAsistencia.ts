@@ -12,7 +12,7 @@ import {
   type CreateRegistroData,
   type UpdateRegistroData,
 } from '@/services/asistencia/asistenciaService'
-import { notifySuccess, notifyError } from '@/lib/toast'
+import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
 import { useConfirm } from '@/components/ui/ConfirmDialog'
 import {
   crearRegistroAction,
@@ -21,6 +21,8 @@ import {
   getAsistenciaBootstrapAction,
   type AsistenciaBootstrap,
 } from '@/services/asistencia/asistenciaActions'
+import { getErrorMessage } from '@/lib/errors'
+import { hoyColegio } from '@/lib/utils/fecha'
 
 /** Datos compartidos al registrar varios estudiantes a la vez (mismo estado). */
 export type CreateManyData = {
@@ -53,7 +55,7 @@ export function useAsistencia(
 
   // Filtros
   const [fechaFiltro, setFechaFiltro] = useState(
-    () => new Date().toISOString().split('T')[0]
+    () => hoyColegio()
   )
   const [estadoFiltro, setEstadoFiltro]     = useState<EstadoAsistencia | 'todos'>('todos')
   const [cursoFiltro, setCursoFiltro]       = useState<number | 'todos'>('todos')
@@ -73,7 +75,7 @@ export function useAsistencia(
       setEstudiantes(data.estudiantes)
       setCursos(data.cursos)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al cargar asistencia')
+      setError(getErrorMessage(err, 'No se pudo cargar la asistencia. Revisa tu conexión e intenta de nuevo.'))
     } finally {
       setLoading(false)
     }
@@ -85,7 +87,7 @@ export function useAsistencia(
       const regs = await getRegistrosAction({ fecha: fechaFiltro, estado: estadoFiltro, idEstudiante: idEstudiantePropio })
       setRegistros(regs)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al cargar registros')
+      setError(getErrorMessage(err, 'No se pudo cargar la asistencia. Revisa tu conexión e intenta de nuevo.'))
     }
   }, [fechaFiltro, estadoFiltro, idEstudiantePropio])
 
@@ -97,7 +99,7 @@ export function useAsistencia(
       seededRef.current = false
       return
     }
-    fetchAll()
+    void fetchAll()
   }, [fetchAll])
 
   // ── Enriquecimiento y filtros en cliente ─────────────────────────────────────
@@ -195,7 +197,7 @@ export function useAsistencia(
       closeModal()
       notifySuccess('Registro de asistencia guardado correctamente')
     } catch (err) {
-      notifyError(err instanceof Error ? err.message : 'Error al guardar el registro de asistencia')
+      notifyError(getErrorMessage(err, 'Error al guardar el registro de asistencia'))
     } finally {
       setSaving(false)
     }
@@ -217,10 +219,12 @@ export function useAsistencia(
       })
       await fetchRegistros()
       closeModal()
-      if (res.ok > 0) notifySuccess(`${res.ok} registro${res.ok !== 1 ? 's' : ''} de asistencia guardado${res.ok !== 1 ? 's' : ''}`)
-      if (res.fail > 0) notifyError(`${res.fail} no se pudieron registrar (¿ya marcados hoy?)`)
+      const ok = res.guardados.length
+      if (ok > 0) notifySuccess(`${ok} registro${ok !== 1 ? 's' : ''} de asistencia guardado${ok !== 1 ? 's' : ''}`)
+      if (res.duplicados.length > 0) notifyWarning(`${res.duplicados.length} ya tenían registro ese día`)
+      if (res.fallidos.length > 0) notifyError(`${res.fallidos.length} no se pudieron registrar. Inténtalo de nuevo.`)
     } catch (err) {
-      notifyError(err instanceof Error ? err.message : 'Error al registrar el lote')
+      notifyError(getErrorMessage(err, 'Error al registrar el lote'))
     } finally {
       setSaving(false)
     }
@@ -236,7 +240,7 @@ export function useAsistencia(
       closeModal()
       notifySuccess('Registro de asistencia editado correctamente')
     } catch (err) {
-      notifyError(err instanceof Error ? err.message : 'Error al editar el registro de asistencia')
+      notifyError(getErrorMessage(err, 'Error al editar el registro de asistencia'))
     } finally {
       setSaving(false)
     }
@@ -253,7 +257,7 @@ export function useAsistencia(
       setRegistros((prev) => prev.filter((r) => r.idAsistencia !== id))
       notifySuccess('Registro de asistencia eliminado correctamente')
     } catch (err) {
-      notifyError(err instanceof Error ? err.message : 'Error al eliminar el registro de asistencia')
+      notifyError(getErrorMessage(err, 'Error al eliminar el registro de asistencia'))
     }
   }
 
@@ -264,6 +268,8 @@ export function useAsistencia(
   const closeModal = () => { setModalMode(null); setSelectedRecord(null) }
 
   return {
+    // vuelve a pedir los datos tras un error de carga (DEF-WEB-12)
+    reintentar: () => void fetchAll(),
     registros: registrosVisibles,
     estudiantes: estudiantesConCurso,
     cursos: cursosOrdenados,

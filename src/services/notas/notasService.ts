@@ -1,6 +1,10 @@
-import { apiFetch, getClientToken } from '@/services/api/client'
+import { apiFetch, PROXY_URL } from '@/services/api/client'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
+/** Texto del criterio CA-US011.3 cuando el periodo elegido no tiene notas. */
+export const MSG_SIN_NOTAS_PERIODO = 'No hay notas registradas para este periodo.'
+
+/** Texto cuando la API no tiene datos para armar el boletín (BE-19 responde 404). */
+export const MSG_SIN_BOLETIN = 'No hay datos disponibles para generar el boletín.'
 
 export type Nota = {
   idNota: number
@@ -118,14 +122,14 @@ export async function deleteNota(idNota: number): Promise<void> {
 
 /**
  * Descarga el boletín en PDF de un estudiante (todas sus notas agrupadas por
- * periodo). Va autenticado con el token de acceso y fuerza la descarga del archivo.
+ * periodo). La llamada pasa por el proxy del servidor, que agrega el token, y se
+ * fuerza la descarga del archivo. Si la API no responde 200 lanza un error con el
+ * `detail` (o el mensaje de «sin datos» ante un 404).
  */
 export async function downloadBoletinPdf(idEstudiante: number, nombre?: string): Promise<void> {
-  const token = getClientToken()
-  const res = await fetch(`${API_BASE}/notas/estudiantes/${idEstudiante}/boletin/pdf`, {
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-  })
+  const res = await fetch(`${PROXY_URL}/notas/estudiantes/${idEstudiante}/boletin/pdf`)
   if (!res.ok) {
+    if (res.status === 404) throw new Error(MSG_SIN_BOLETIN)
     let msg = `HTTP ${res.status}`
     try { msg = ((await res.json()) as { detail?: string }).detail ?? msg } catch {}
     throw new Error(msg)

@@ -1,0 +1,114 @@
+<testsuites id="" name="" tests="2" failures="2" skipped="0" errors="0" time="272.785927">
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-11T01:54:24.794Z" hostname="chromium" tests="1" failures="1" skipped="0" time="59.893" errors="0">
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="59.893">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('María Rodríguez').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('María Rodríguez').first() with timeout 5000ms
+      - waiting for getByText('María Rodríguez').first()
+
+
+      63 |   for (const modulo of ['/notas', '/asistencia', '/novedades']) {
+      64 |     await page.goto(modulo)
+    > 65 |     await expect(page.getByText(process.env.E2E_ESTUDIANTE_VINCULADO_NOMBRE!).first()).toBeVisible()
+         |                                                                                        ^
+      66 |   }
+      67 | })
+      68 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:65:88
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md
+
+    Error Context: ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-11T01:54:24.794Z" hostname="firefox" tests="1" failures="1" skipped="0" time="95.042" errors="0">
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="95.042">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [firefox] › registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('María Rodríguez').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('María Rodríguez').first() with timeout 5000ms
+      - waiting for getByText('María Rodríguez').first()
+
+
+      63 |   for (const modulo of ['/notas', '/asistencia', '/novedades']) {
+      64 |     await page.goto(modulo)
+    > 65 |     await expect(page.getByText(process.env.E2E_ESTUDIANTE_VINCULADO_NOMBRE!).first()).toBeVisible()
+         |                                                                                        ^
+      66 |   }
+      67 | })
+      68 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:65:88
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    Error Context: ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

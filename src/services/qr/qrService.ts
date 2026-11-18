@@ -1,3 +1,5 @@
+import jsQR from 'jsqr'
+
 export type TipoQR = 'ingreso' | 'salida' | 'ambos'
 
 export type EstudianteQR = {
@@ -58,19 +60,36 @@ export type CursoSimple = { idCurso: number; nombreCurso: string }
 export const getQRImageUrl = (codigoEstudiante: string, size = 200): string =>
   `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(codigoEstudiante)}&size=${size}x${size}&ecc=M&margin=2`
 
-// External QR reader — unchanged. El resto del acceso a datos vive en qrActions.ts
-// (server actions con toCamel); las funciones de fetch de este módulo quedaron
-// obsoletas y se eliminaron.
-export const readQRFromImage = async (imageBlob: Blob): Promise<string | null> => {
-  const formData = new FormData()
-  formData.append('file', imageBlob, 'qr.jpg')
-  const res = await fetch('https://api.qrserver.com/v1/read-qr-code/', {
-    method: 'POST',
-    body: formData,
-  })
-  if (!res.ok) throw new Error('Error al contactar la API de lectura QR')
-  const json = await res.json()
-  const symbol = json?.[0]?.symbol?.[0]
-  if (!symbol || symbol.error) return null
-  return (symbol.data as string) ?? null
+export type Pixeles = { data: Uint8ClampedArray; width: number; height: number }
+
+/** Decodifica un QR a partir de los píxeles RGBA de una imagen; null si no hay QR. */
+export const decodificarQR = (pixeles: Pixeles): string | null => {
+  const qr = jsQR(pixeles.data, pixeles.width, pixeles.height, { inversionAttempts: 'attemptBoth' })
+  return qr?.data ? qr.data : null
 }
+
+const MSG_IMAGEN = 'No se pudo procesar la imagen de la cámara. Intente nuevamente.'
+
+async function pixelesDe(imagen: Blob): Promise<Pixeles> {
+  try {
+    const bitmap = await createImageBitmap(imagen)
+    const { width, height } = bitmap
+    const canvas: OffscreenCanvas | HTMLCanvasElement =
+      typeof OffscreenCanvas === 'undefined'
+        ? Object.assign(document.createElement('canvas'), { width, height })
+        : new OffscreenCanvas(width, height)
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | null
+    if (!ctx) throw new Error('sin contexto 2d')
+    ctx.drawImage(bitmap, 0, 0)
+    bitmap.close?.()
+    return ctx.getImageData(0, 0, width, height)
+  } catch {
+    throw new Error(MSG_IMAGEN)
+  }
+}
+
+// DEF-WEB-16: el QR se lee en el navegador con jsQR. Antes cada foto de la cámara
+// se enviaba a api.qrserver.com, que dejó de aceptar imágenes (400) y además
+// recibía datos de los estudiantes. El resto del acceso a datos vive en qrActions.ts.
+export const readQRFromImage = async (imageBlob: Blob): Promise<string | null> =>
+  decodificarQR(await pixelesDe(imageBlob))

@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+!.env.test.example
 
 # vercel
 .vercel
@@ -40,3 +42,15 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env.local
+
+# playwright
+/playwright-report/
+/test-results/
+
+# E2E: el reporte HTML puede incluir trazas con cookies; solo se versiona el junit
+/evidencias/PR-06/web/reporte-html/
+e2e/.camara/
+
+# Informes JSON de Lighthouse: el HTML y resumen.json bastan como evidencia (6,6 MB menos)
+evidencias/PR-06/web/manuales/lighthouse/*.report.json
+evidencias/PR-06/web/manuales/lighthouse-def17/*.report.json

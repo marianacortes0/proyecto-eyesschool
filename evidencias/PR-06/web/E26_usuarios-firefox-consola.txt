@@ -1,0 +1,14 @@
+
+Running 9 tests using 1 worker
+
+  ok 1 [firefox] › e2e\usuarios.spec.ts:28:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba (48.2s)
+  ok 2 [firefox] › e2e\usuarios.spec.ts:67:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) (20.2s)
+  ok 3 [firefox] › e2e\usuarios.spec.ts:76:7 › gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028) (17.9s)
+  ok 4 [firefox] › e2e\usuarios.spec.ts:127:7 › gestión de usuarios · errores (WC-05) › CP-SIS-020 · crear con un correo ya registrado no guarda (28.4s)
+  ok 5 [firefox] › e2e\usuarios.spec.ts:147:7 › gestión de usuarios · errores (WC-05) › CP-SIS-023 · al editar, el correo está bloqueado y no se puede poner el de otro usuario (32.4s)
+  ok 6 [firefox] › e2e\usuarios.spec.ts:157:7 › gestión de usuarios · errores (WC-05) › CP-SIS-024 · editar dejando el nombre vacío no guarda (31.8s)
+  ok 7 [firefox] › e2e\usuarios.spec.ts:175:7 › gestión de usuarios · errores (WC-05) › CP-SIS-026 · eliminar con la API caída avisa que no se pudo y no elimina (30.4s)
+  ok 8 [firefox] › e2e\usuarios.spec.ts:190:7 › gestión de usuarios · errores (WC-05) › CP-SIS-027 · filtrar por rol y por nombre; el estado se ve por secciones (17.2s)
+  ok 9 [firefox] › e2e\usuarios.spec.ts:209:7 › gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar (20.0s)
+
+  9 passed (4.3m)

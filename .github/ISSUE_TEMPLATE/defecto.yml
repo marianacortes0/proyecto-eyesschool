@@ -1,0 +1,102 @@
+name: Defecto
+description: Registrar un defecto encontrado en revisión, análisis estático, pruebas o UAT (ficha del PR-07)
+title: "[DEF] "
+labels: ["defecto"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ficha del PR-07 · proceso en `planeacion/tests/GestionDefectos/planeacion-gestion-defectos-frontend-web.md`.
+        **Título:** verbo + qué falla + dónde. **No pegues tokens, contraseñas, cookies ni URLs con credenciales**, ni en el texto ni en las capturas.
+        Al guardar, el workflow «Defectos» pone las etiquetas de estado, severidad, prioridad, componente y origen.
+  - type: input
+    id: id
+    attributes:
+      label: ID del registro
+      description: DEF-0xx o DEF-WEB-xx si ya tiene ficha en `docs/defectos/`. Si es nuevo, déjalo vacío.
+      placeholder: DEF-WEB-02
+  - type: dropdown
+    id: componente
+    attributes:
+      label: Componente
+      options: [Web, Backend, App]
+    validations:
+      required: true
+  - type: dropdown
+    id: origen
+    attributes:
+      label: Origen
+      options: [Revisión de código, Análisis estático, Pruebas unitarias, Pruebas de integración, Pruebas de sistema, UAT]
+    validations:
+      required: true
+  - type: dropdown
+    id: severidad
+    attributes:
+      label: Severidad
+      description: La define QA. Crítica ≤ 24 h · Alta ≤ 3 días · Media en el sprint · Baja al backlog.
+      options: [Crítica, Alta, Media, Baja]
+    validations:
+      required: true
+  - type: dropdown
+    id: prioridad
+    attributes:
+      label: Prioridad propuesta
+      description: QA propone (Crítica → P1, Alta → P2, Media → P3, Baja → P4). El PO la confirma cambiando la etiqueta y añadiendo `estado:aprobado`.
+      options: [P1, P2, P3, P4]
+  - type: input
+    id: caso
+    attributes:
+      label: Caso que lo detectó
+      description: CP-INT, CP-SIS, CP-NF, CP-ACE, UT-WEB o IT-WEB.
+      placeholder: CP-SIS-060
+    validations:
+      required: true
+  - type: input
+    id: correccion
+    attributes:
+      label: Corrección planeada
+      placeholder: WEB-03 / BE-07
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Pasos para reproducir
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+  - type: textarea
+    id: obtenido
+    attributes:
+      label: Resultado obtenido
+    validations:
+      required: true
+  - type: input
+    id: navegador
+    attributes:
+      label: Navegador y versión
+      placeholder: Chromium 156.0.8078.4 · Firefox 157.0
+  - type: input
+    id: entorno
+    attributes:
+      label: URL de QA y commit probado
+      placeholder: https://… · 8bdc307
+  - type: textarea
+    id: evidencia
+    attributes:
+      label: Evidencia
+      description: Ruta en `evidencias/` o adjunto (captura, video, log).
+  - type: checkboxes
+    id: seguridad
+    attributes:
+      label: Seguridad
+      options:
+        - label: La evidencia no contiene tokens, contraseñas, cookies, la SECRET_KEY ni URLs con credenciales.
+          required: true

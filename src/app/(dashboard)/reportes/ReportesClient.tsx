@@ -17,6 +17,8 @@ import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
 import { getErrorMessage } from '@/lib/errors'
 import Pagination from '@/components/ui/Pagination'
 import { usePagination } from '@/hooks/usePagination'
+import { hoyColegio } from '@/lib/utils/fecha'
+import ErrorCarga from '@/components/ui/ErrorCarga'
 
 const ESTADO_STYLE: Record<string, string> = {
   Pendiente:   'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-300',
@@ -45,7 +47,7 @@ interface Props { role: Role; idAdministrador: number; initialReportes?: Reporte
 
 export default function ReportesClient({ role, idAdministrador, initialReportes }: Props) {
   const {
-    reportes, allReportes, totalCount, loading, saving, error,
+    reportes, allReportes, totalCount, loading, saving, error, reintentar,
     filterTipo, setFilterTipo,
     filterEstado, setFilterEstado,
     searchQuery, setSearchQuery,
@@ -73,7 +75,7 @@ export default function ReportesClient({ role, idAdministrador, initialReportes 
         <div>
           <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Reportes</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            {totalCount} reporte{totalCount !== 1 ? 's' : ''} en total
+            {error ? '— reportes en total' : `${totalCount} reporte${totalCount !== 1 ? 's' : ''} en total`}
           </p>
         </div>
         {canCreate && (
@@ -115,7 +117,7 @@ export default function ReportesClient({ role, idAdministrador, initialReportes 
           onChange={e => setSearchQuery(e.target.value)}
           className="flex-1 min-w-[200px] px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
-        <select
+        <select aria-label="Tipo"
           value={filterTipo}
           onChange={e => setFilterTipo(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -123,7 +125,7 @@ export default function ReportesClient({ role, idAdministrador, initialReportes 
           <option value="">Todos los tipos</option>
           {TIPOS_REPORTE.map(t => <option key={t} value={t}>{t}</option>)}
         </select>
-        <select
+        <select aria-label="Estado"
           value={filterEstado}
           onChange={e => setFilterEstado(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -133,14 +135,10 @@ export default function ReportesClient({ role, idAdministrador, initialReportes 
         </select>
       </div>
 
-      {error && (
-        <div className="px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 text-sm">
-          {error}
-        </div>
-      )}
+      {error && <ErrorCarga mensaje={error} onReintentar={reintentar} />}
 
       {/* ── Lista de reportes ────────────────────────────────────────────────── */}
-      {loading ? (
+      {error ? null : loading ? (
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="h-20 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse" />
@@ -300,7 +298,7 @@ interface ModalProps {
 }
 
 function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: ModalProps) {
-  const hoy = new Date().toISOString().slice(0, 10)
+  const hoy = hoyColegio()
 
   const [nombreReporte, setNombreReporte] = useState(reporte?.nombreReporte ?? '')
   const [tipoReporte, setTipoReporte] = useState(reporte?.tipoReporte ?? 'Academico')
@@ -393,7 +391,7 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Tipo</label>
-              <select
+              <select aria-label="Tipo"
                 value={tipoReporte}
                 onChange={e => setTipoReporte(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -404,7 +402,7 @@ function ReporteModal({ mode, reporte, saving, onClose, onCreate, onUpdate }: Mo
             {mode === 'edit' && (
               <div>
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Estado</label>
-                <select
+                <select aria-label="Estado"
                   value={estado}
                   onChange={e => setEstado(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"

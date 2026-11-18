@@ -1,0 +1,22 @@
+<testsuites id="" name="" tests="9" failures="0" skipped="0" errors="0" time="256.582227">
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-17T21:42:53.200Z" hostname="firefox" tests="9" failures="0" skipped="0" time="246.491" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="48.172">
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="20.206">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="17.935">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-020 · crear con un correo ya registrado no guarda" classname="usuarios.spec.ts" time="28.399">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-023 · al editar, el correo está bloqueado y no se puede poner el de otro usuario" classname="usuarios.spec.ts" time="32.426">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-024 · editar dejando el nombre vacío no guarda" classname="usuarios.spec.ts" time="31.798">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-026 · eliminar con la API caída avisa que no se pudo y no elimina" classname="usuarios.spec.ts" time="30.38">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-027 · filtrar por rol y por nombre; el estado se ve por secciones" classname="usuarios.spec.ts" time="17.198">
+</testcase>
+<testcase name="gestión de usuarios · errores (WC-05) › CP-SIS-028 · con la API caída la lista avisa y deja reintentar" classname="usuarios.spec.ts" time="19.977">
+</testcase>
+</testsuite>
+</testsuites>

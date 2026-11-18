@@ -1,0 +1,6 @@
+commit=7d927df
+fecha=2026-11-11 18:45 UTC
+niveles locales (U6) e integracion (I4): 7d927df
+e2e completa con las correcciones (E7): e886144 (difiere de 7d927df solo en e2e/padre-dos-hijos.spec.ts y e2e/sesion.spec.ts)
+e2e reintento (E8): e387ee4; inactividad (E9): e387ee4 + e2e/sesion.spec.ts de 7d927df
+historico: U5/E4/E5/E6 sobre c3e491f y 360b599; I3 sobre 8bdc307; E3 sobre el arbol de 73bf2b2

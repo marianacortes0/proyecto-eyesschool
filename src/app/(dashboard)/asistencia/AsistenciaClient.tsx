@@ -8,6 +8,7 @@ import AsistenciaModal from '@/components/asistencia/AsistenciaModal'
 import Pagination from '@/components/ui/Pagination'
 import { usePagination } from '@/hooks/usePagination'
 import { notifySuccess } from '@/lib/toast'
+import ErrorCarga from '@/components/ui/ErrorCarga'
 
 type Props = {
   role: Role
@@ -27,6 +28,7 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
     loading,
     saving,
     error,
+    reintentar,
     modalMode,
     selectedRecord,
     openEdit,
@@ -62,7 +64,7 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
           Historial de Asistencia
         </h1>
         <p className="text-sm text-slate-500 dark:text-gray-400 mt-0.5">
-          {totalCount} registro{totalCount !== 1 ? 's' : ''} encontrado{totalCount !== 1 ? 's' : ''}
+          {error ? '— registros encontrados' : `${totalCount} registro${totalCount !== 1 ? 's' : ''} encontrado${totalCount !== 1 ? 's' : ''}`}
         </p>
       </div>
 
@@ -82,13 +84,14 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
         {/* Fecha */}
         <input
           type="date"
+          aria-label="Fecha"
           value={fechaFiltro}
           onChange={(e) => setFechaFiltro(e.target.value)}
           className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
 
         {/* Estado */}
-        <select
+        <select aria-label="Estado"
           value={estadoFiltro}
           onChange={(e) => {
             setEstadoFiltro(e.target.value as EstadoAsistencia | 'todos')
@@ -105,7 +108,7 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
 
         {/* Jornada — oculta para estudiantes (solo ven sus propios registros) */}
         {!esEstudiante && (
-          <select
+          <select aria-label="Jornada"
             value={jornadaFiltro}
             onChange={(e) => setJornadaFiltro(e.target.value)}
             className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary capitalize"
@@ -121,7 +124,7 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
 
         {/* Curso — oculto para estudiantes (solo ven sus propios registros) */}
         {!esEstudiante && (
-          <select
+          <select aria-label="Curso"
             value={cursoFiltro}
             onChange={(e) => setCursoFiltro(e.target.value === 'todos' ? 'todos' : Number(e.target.value))}
             className="px-3 py-2 rounded-xl border border-white/40 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-700 dark:text-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -159,11 +162,7 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
       )}
 
       {/* Error */}
-      {error && (
-        <div className="px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 text-sm">
-          {error}
-        </div>
-      )}
+      {error && <ErrorCarga mensaje={error} onReintentar={reintentar} />}
 
       {/* Aviso: filtro Presente sin resultados */}
       {!loading && estadoFiltro === 'Presente' && registros.length === 0 && (
@@ -172,8 +171,8 @@ export default function AsistenciaClient({ role, idUsuarioRegistrador, idEstudia
         </div>
       )}
 
-      {/* Tabla o skeleton */}
-      {loading ? (
+      {/* Tabla o skeleton (con error, solo el aviso: DEF-WEB-12) */}
+      {error ? null : loading ? (
         <div className="space-y-3">
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="h-16 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse" />

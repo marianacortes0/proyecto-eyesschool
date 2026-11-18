@@ -85,6 +85,7 @@ function TablaQR({ estudiantes }: { estudiantes: EstudianteQR[] }) {
               </td>
 
               <td className="px-4 py-3">
+                {/* eslint-disable-next-line @next/next/no-img-element -- imagen dinámica de origen externo (QR de goqr.me o avatar de la API); next/image exigiría configurar dominios remotos */}
                 <img
                   src={getQRImageUrl(e.codigoEstudiante, 56)}
                   alt={`QR ${e.codigoEstudiante}`}

@@ -8,6 +8,7 @@ import { type Role } from '@/lib/utils/permissions'
 import { can } from '@/lib/utils/permissions'
 import Pagination from '@/components/ui/Pagination'
 import { usePagination } from '@/hooks/usePagination'
+import ErrorCarga from '@/components/ui/ErrorCarga'
 
 // El backend usa Bajo/Medio/Alto/Crítico; se mapean también las variantes
 // Alta/Media/Baja por compatibilidad.
@@ -31,7 +32,7 @@ interface Props { role: Role; registradoPor: number; initialData?: NovedadesBoot
 export default function NovedadesClient({ role, registradoPor, initialData }: Props) {
   const {
     novedades, tiposNovedad, cursos, estudiantes,
-    loading, saving, error,
+    loading, saving, error, reintentar,
     filterEstado, filterTipo, searchQuery,
     setFilterEstado, setFilterTipo, setSearchQuery,
     modalMode, selected,
@@ -74,7 +75,7 @@ export default function NovedadesClient({ role, registradoPor, initialData }: Pr
           onChange={e => setSearchQuery(e.target.value)}
           className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         />
-        <select
+        <select aria-label="Estado"
           value={filterEstado}
           onChange={e => setFilterEstado(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -82,7 +83,7 @@ export default function NovedadesClient({ role, registradoPor, initialData }: Pr
           <option value="">Todos los estados</option>
           {ESTADOS_NOVEDAD.map(e => <option key={e} value={e}>{e}</option>)}
         </select>
-        <select
+        <select aria-label="Tipo"
           value={filterTipo}
           onChange={e => setFilterTipo(e.target.value)}
           className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -94,14 +95,10 @@ export default function NovedadesClient({ role, registradoPor, initialData }: Pr
         </select>
       </div>
 
-      {error && (
-        <div className="px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 text-sm">
-          {error}
-        </div>
-      )}
+      {error && <ErrorCarga mensaje={error} onReintentar={reintentar} />}
 
       {/* Tabla */}
-      {loading ? (
+      {error ? null : loading ? (
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="h-14 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse" />
@@ -294,7 +291,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Jornada</label>
-                  <select
+                  <select aria-label="Jornada"
                     required
                     value={jornada}
                     onChange={e => handleJornadaChange(e.target.value)}
@@ -306,7 +303,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Grado</label>
-                  <select
+                  <select aria-label="Grado"
                     required
                     disabled={!jornada}
                     value={grado}
@@ -322,7 +319,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
               {/* Curso */}
               <div>
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Curso</label>
-                <select
+                <select aria-label="Curso"
                   required
                   disabled={!grado}
                   value={idCurso}
@@ -339,7 +336,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
               {/* Estudiante */}
               <div>
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Estudiante</label>
-                <select
+                <select aria-label="Estudiante"
                   required
                   disabled={!idCurso}
                   value={idEstudiante}
@@ -360,7 +357,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
           {/* Tipo */}
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Tipo de novedad</label>
-            <select
+            <select aria-label="Tipo de novedad"
               required
               value={idTipoNovedad}
               onChange={e => setIdTipoNovedad(e.target.value)}
@@ -388,7 +385,7 @@ function NovedadModal({ mode, novedad, tiposNovedad, cursos, estudiantes, saving
           {/* Estado */}
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Estado</label>
-            <select
+            <select aria-label="Estado"
               value={estado}
               onChange={e => handleEstadoChange(e.target.value)}
               className={SEL_CLASS}

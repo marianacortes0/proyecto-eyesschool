@@ -1,0 +1,144 @@
+<testsuites id="" name="" tests="14" failures="1" skipped="0" errors="1" time="599.6487880000001">
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-11T18:25:50.341Z" hostname="chromium" tests="1" failures="0" skipped="0" time="56.49" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="56.49">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-11T18:25:50.341Z" hostname="chromium" tests="1" failures="0" skipped="0" time="14.36" errors="0">
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="14.36">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-11T18:25:50.341Z" hostname="chromium" tests="1" failures="0" skipped="0" time="43.482" errors="0">
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="43.482">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-11T18:25:50.341Z" hostname="chromium" tests="2" failures="0" skipped="0" time="29.778" errors="0">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="15.152">
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="14.626">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-11T18:25:50.341Z" hostname="chromium" tests="2" failures="0" skipped="0" time="75.581" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="40.648">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="34.933">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-11T18:25:50.341Z" hostname="firefox" tests="1" failures="0" skipped="0" time="43.019" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="43.019">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-11T18:25:50.341Z" hostname="firefox" tests="1" failures="0" skipped="0" time="16.269" errors="0">
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="16.269">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-11T18:25:50.341Z" hostname="firefox" tests="1" failures="0" skipped="0" time="43.245" errors="0">
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="43.245">
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-11T18:25:50.341Z" hostname="firefox" tests="2" failures="1" skipped="0" time="120.685" errors="1">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="26.792">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/\?login=1$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/notas"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        12 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/notas"
+
+
+      19 |     await page.goto('/notas')
+      20 |
+    > 21 |     await expect(page).toHaveURL(/\/\?login=1$/)
+         |                        ^
+      22 |     const cookies = await context.cookies()
+      23 |     expect(cookies.map((c) => c.name)).not.toContain('eys_access')
+      24 |   })
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:21:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="93.893">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [firefox] › sesion.spec.ts:26:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: page.goto: Test timeout of 90000ms exceeded.
+    Call log:
+      - navigating to "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1", waiting until "load"
+
+
+       at utils.ts:35
+
+      33 |   requiere(`E2E_${rol.toUpperCase()}_EMAIL`, 'E2E_PASSWORD')
+      34 |
+    > 35 |   await page.goto('/?login=1')
+         |              ^
+      36 |   const vista = page.locator('[data-view="login"]')
+      37 |   await vista.locator('input[type="email"]').fill(correo!)
+      38 |   await vista.locator('input[type="password"]').fill(password!)
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:35:14)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:27:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-11T18:25:50.341Z" hostname="firefox" tests="2" failures="0" skipped="0" time="84.234" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="65.489">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="18.745">
+</testcase>
+</testsuite>
+</testsuites>

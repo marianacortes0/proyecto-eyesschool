@@ -17,6 +17,7 @@ import {
 import { notifySuccess, notifyError } from '@/lib/toast'
 import { getErrorMessage } from '@/lib/errors'
 import { useConfirm } from '@/components/ui/ConfirmDialog'
+import { porFechaReciente } from '@/services/novedades/novedadesService'
 
 export type ModalMode = 'create' | 'edit' | null
 
@@ -50,7 +51,7 @@ export function useNovedades(registradoPor: number = 0, initialData?: NovedadesB
       setCursos(data.cursos)
       setEstudiantes(data.estudiantes)
     } catch (e) {
-      setError(getErrorMessage(e, 'Error al cargar novedades'))
+      setError(getErrorMessage(e, 'No se pudo cargar las novedades. Revisa tu conexión e intenta de nuevo.'))
     } finally {
       setLoading(false)
     }
@@ -59,6 +60,7 @@ export function useNovedades(registradoPor: number = 0, initialData?: NovedadesB
   useEffect(() => {
     // Si la página entregó los datos desde el servidor, no refetcheamos al montar.
     if (initialData) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- carga inicial cuando la página no entregó los datos desde el servidor
     fetchAll()
   }, [initialData])
 
@@ -73,7 +75,7 @@ export function useNovedades(registradoPor: number = 0, initialData?: NovedadesB
       ) return false
     }
     return true
-  })
+  }).sort(porFechaReciente)
 
   const openCreate = () => { setSelected(null); setModalMode('create') }
   const openEdit = (n: Novedad) => { setSelected(n); setModalMode('edit') }
@@ -133,6 +135,8 @@ export function useNovedades(registradoPor: number = 0, initialData?: NovedadesB
   }
 
   return {
+    // vuelve a pedir los datos tras un error de carga (DEF-WEB-12)
+    reintentar: () => void fetchAll(),
     novedades: filtered,
     tiposNovedad,
     cursos,

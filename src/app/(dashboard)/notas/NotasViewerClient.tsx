@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from 'react'
 import { type NotasAsociadoBootstrap } from '@/services/asociado/asociadoActions'
-import { PERIODOS, notaColor, NOTA_APROBACION, downloadBoletinPdf } from '@/services/notas/notasService'
+import { PERIODOS, notaColor, NOTA_APROBACION, MSG_SIN_NOTAS_PERIODO, downloadBoletinPdf } from '@/services/notas/notasService'
 import { notifyError } from '@/lib/toast'
 import { getErrorMessage } from '@/lib/errors'
+import { MSG_SIN_HIJOS } from '@/lib/utils/hijoActivo'
 
 /**
  * Vista de notas en SOLO LECTURA para el estudiante asociado (rol padre = su hijo,
@@ -36,6 +37,14 @@ export default function NotasViewerClient({ info, notas, materias }: NotasAsocia
     }
   }, [filtradas])
 
+  // Texto de la tabla vacía: el periodo elegido sin notas tiene su mensaje propio (CA-US011.3).
+  const periodoSinNotas = filterPeriodo !== '' && !notas.some(n => String(n.idPeriodo) === filterPeriodo)
+  const mensajeVacio = periodoSinNotas
+    ? MSG_SIN_NOTAS_PERIODO
+    : notas.length === 0
+      ? 'Aún no hay notas registradas.'
+      : 'No hay notas con los filtros seleccionados.'
+
   const handleDownload = async () => {
     if (!info) return
     setDownloading(true)
@@ -60,7 +69,8 @@ export default function NotasViewerClient({ info, notas, materias }: NotasAsocia
 
       {!info ? (
         <div className="px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-300 text-sm">
-          No encontramos un estudiante asociado a tu cuenta.
+          {/* CP-SIS-061: el texto de la planeación (DEF-WEB-15). */}
+          <strong>{MSG_SIN_HIJOS}.</strong> No encontramos un estudiante asociado a tu cuenta.
         </div>
       ) : (
         <>
@@ -97,13 +107,13 @@ export default function NotasViewerClient({ info, notas, materias }: NotasAsocia
               disabled={downloading}
               className="px-4 py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-semibold transition-colors whitespace-nowrap"
             >
-              {downloading ? 'Generando...' : 'Descargar boletín PDF'}
+              {downloading ? 'Generando...' : 'Descargar boletín'}
             </button>
           </div>
 
           {/* Filtros */}
           <div className="flex flex-wrap gap-3">
-            <select
+            <select aria-label="Materia"
               value={filterMateria}
               onChange={e => setFilterMateria(e.target.value)}
               className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -113,7 +123,7 @@ export default function NotasViewerClient({ info, notas, materias }: NotasAsocia
                 <option key={m.idMateria} value={String(m.idMateria)}>{m.nombreMateria}</option>
               ))}
             </select>
-            <select
+            <select aria-label="Periodo"
               value={filterPeriodo}
               onChange={e => setFilterPeriodo(e.target.value)}
               className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -128,7 +138,7 @@ export default function NotasViewerClient({ info, notas, materias }: NotasAsocia
           {/* Tabla */}
           {filtradas.length === 0 ? (
             <div className="text-center py-16 text-sm rounded-2xl border border-dashed border-slate-300 dark:border-white/15 text-slate-500 dark:text-slate-400">
-              {notas.length === 0 ? 'Aún no hay notas registradas.' : 'No hay notas con los filtros seleccionados.'}
+              {mensajeVacio}
             </div>
           ) : (
             <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5">

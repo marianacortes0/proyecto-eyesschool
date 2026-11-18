@@ -1,0 +1,16 @@
+# E15 · 16/11/2026 · registro masivo con «Séptimo A», ×3 en Chromium y Firefox, sobre a9383e1 + el cambio de 74bcf7e.
+# Comando: npx playwright test registro-masivo -g "segunda vez" --repeat-each=3 --reporter=list
+# Con --reporter=list Playwright no escribe el JUnit de la configuración: esta es la salida
+# de la terminal, transcrita sin cambios. (El XML que se subió primero con este nombre era
+# el de E14; ahora se llama E14_sincronizacion.xml.)
+
+Running 6 tests using 1 worker
+
+  ok 1 [chromium] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (37.7s)
+  ok 2 [chromium] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (31.8s)
+  ok 3 [chromium] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (26.2s)
+  ok 4 [firefox] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (37.0s)
+  ok 5 [firefox] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (30.9s)
+  ok 6 [firefox] › e2e\registro-masivo.spec.ts:30:7 › registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado» (36.3s)
+
+  6 passed (3.7m)

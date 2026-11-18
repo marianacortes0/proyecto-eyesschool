@@ -1,42 +1,22 @@
 'use server'
 
-import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
+import { getServerToken } from '@/lib/auth/server'
+import { serverFetch } from '@/services/api/serverFetch'
 import type {
   CreateRegistroData,
   RegistroAsistencia,
   EstudianteSelector,
   CursoOption,
   FiltrosAsistencia,
-  EstadoAsistencia,
+  RegistroMasivoItem,
+  RegistroMasivoResult,
   TipoAsistencia,
 } from './asistenciaService'
-import { normalizeEstado, normalizeTipo } from './asistenciaService'
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
-
-async function getToken(): Promise<string | null> {
-  const store = await cookies()
-  return store.get('eys_access')?.value ?? null
-}
+import { clasificarResultados, normalizeEstado, normalizeTipo } from './asistenciaService'
 
 async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const token = await getToken()
-  const res = await fetch(`${API}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options.headers as Record<string, string> | undefined),
-    },
-    cache: 'no-store',
-  })
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
-    throw new Error((body as Record<string, unknown>).detail as string ?? `HTTP ${res.status}`)
-  }
-  if (res.status === 204) return null as T
-  return res.json() as Promise<T>
+  return serverFetch<T>(path, { ...options, token: await getServerToken() })
 }
 
 function toCamelKey(k: string): string {
@@ -69,14 +49,12 @@ export async function crearRegistroAction(data: CreateRegistroData): Promise<voi
   revalidatePath('/asistencia')
 }
 
-export type RegistroMasivoItem = { idEstudiante: number; estado: EstadoAsistencia }
-
-export type RegistroMasivoResult = { ok: number; fail: number; errores: string[] }
-
 /**
  * Registro de asistencia POR LOTES (un curso completo). Postea cada estudiante a
- * /asistencia de forma concurrente y devuelve un resumen — un fallo individual NO
- * aborta el resto del lote. Revalida una sola vez al final.
+ * /asistencia de forma concurrente y clasifica el resultado por estudiante: un
+ * fallo individual NO aborta el resto. Revalida una sola vez al final.
+ * (Los tipos y la clasificación viven en asistenciaService: un archivo
+ * 'use server' solo puede exportar funciones asíncronas.)
  */
 export async function crearRegistrosMasivoAction(params: {
   items: RegistroMasivoItem[]
@@ -103,14 +81,10 @@ export async function crearRegistrosMasivoAction(params: {
     )
   )
 
-  const errores = resultados
-    .filter((r): r is PromiseRejectedResult => r.status === 'rejected')
-    .map((r) => (r.reason instanceof Error ? r.reason.message : 'Error desconocido'))
-
   revalidatePath('/qr/escanear')
   revalidatePath('/asistencia')
 
-  return { ok: items.length - errores.length, fail: errores.length, errores }
+  return clasificarResultados(items, resultados)
 }
 
 export async function getRegistrosAction(filtros: FiltrosAsistencia = {}): Promise<RegistroAsistencia[]> {

@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="331" failures="0" errors="0" time="14.8098923">
+    <testsuite name="tests/apiBase.test.ts" timestamp="2026-11-11T18:41:02.014Z" hostname="Mariana" tests="13" failures="0" errors="0" skipped="0" time="0.0190444">
+        <testcase classname="tests/apiBase.test.ts" name="quitarBarrasFinales (sin regex) &gt; &quot;/a/&quot; → &quot;/a&quot;" time="0.0036414">
+        </testcase>
+        <testcase classname="tests/apiBase.test.ts" name="quitarBarrasFinales (sin regex) &gt; &quot;/a///&quot; → &quot;/a&quot;" time="0.0004958">
+        </testcase>
+        <testcase classname="tests/apiBase.test.ts" name="quitarBarrasFinales (sin regex) &gt; &quot;/api/v1&quot; → &quot;/api/v1&quot;" time="0.0004273">
+        </testcase>
+        <testcase classname="tests/apiBase.test.ts" name="quitarBarrasFinales (sin regex) &gt; &quot;/&quot; → &quot;&quot;" time="0.0004165">
+        </testcase>
+        <testcase classname="tests/apiBase.test.ts" name="quitarBarrasFinales (sin regex) &gt; &quot;&quot; → &quot;&quot;" time="0.0007801">
+        </testcase>
+        <testcase classname="tests/apiBase.test.ts" name="quitarBarrasFinales (sin regex) &gt; &quot;///&quot; → &quot;&quot;" time="0.0007049">
+        </testcase>
+        <testcase classname="tests/apiBase.test.ts" name="quitarBarrasFinales (sin regex) &gt; una cadena larga de barras no tarda más que una corta" time="0.0023016">
+        </testcase>
+        <testcase classname="tests/apiBase.test.ts" name="apiBase &gt; con una URL válida la devuelve" time="0.0006627">
+        </testcase>
+        <testcase classname="tests/apiBase.test.ts" name="apiBase &gt; recorta los espacios" time="0.0006308">
+        </testcase>
+        <testcase classname="tests/apiBase.test.ts" name="apiBase &gt; con undefined usa el valor por defecto y no lanza" time="0.0008057">
+        </testcase>
+        <testcase classname="tests/apiBase.test.ts" name="apiBase &gt; con &quot;&quot; usa el valor por defecto y no lanza" time="0.0005364">
+        </testcase>
+        <testcase classname="tests/apiBase.test.ts" name="apiBase &gt; con &quot;   &quot; usa el valor por defecto y no lanza" time="0.0003822">
+        </testcase>
+        <testcase classname="tests/apiBase.test.ts" name="apiBase &gt; con un valor que no es URL avisa nombrando la variable" time="0.0026982">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/apiClient.test.ts" timestamp="2026-11-11T18:41:02.046Z" hostname="Mariana" tests="14" failures="0" errors="0" skipped="0" time="0.1199361">
+        <testcase classname="tests/apiClient.test.ts" name="toCamel &gt; convierte llaves anidadas y en listas, sin tocar los valores" time="0.0053112">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="toCamel &gt; deja intactos null y primitivos" time="0.0011587">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="apiFetch &gt; envía el token como Bearer y devuelve la respuesta en camelCase" time="0.071266">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="apiFetch &gt; sin token no envía Authorization" time="0.0023963">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="apiFetch &gt; un 204 devuelve null" time="0.0047299">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="apiFetch &gt; un error usa el detail de FastAPI" time="0.0061487">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="apiFetch &gt; un 422 muestra el primer error de validación, no &quot;[object Object]&quot;" time="0.0026714">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="errorMessage &gt; cae al código HTTP cuando no hay detail utilizable" time="0.0008118">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="WEB-02 · sin token en el navegador &gt; getClientToken ya no existe" time="0.0008271">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="WEB-02 · sin token en el navegador &gt; en el navegador apiFetch llama al proxy del servidor y no manda Authorization" time="0.002867">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="WEB-02 · sin token en el navegador &gt; el error 409 de la API llega como ApiError con status" time="0.0020518">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="WEB-02 · sin token en el navegador &gt; src/services/dashboard/dashboardService.ts no lee el token desde el navegador" time="0.0069246">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="WEB-02 · sin token en el navegador &gt; src/services/notas/notasService.ts no lee el token desde el navegador" time="0.0064209">
+        </testcase>
+        <testcase classname="tests/apiClient.test.ts" name="WEB-02 · sin token en el navegador &gt; src/services/reportes/reportesService.ts no lee el token desde el navegador" time="0.001748">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/apiProxy.test.ts" timestamp="2026-11-11T18:41:02.065Z" hostname="Mariana" tests="17" failures="0" errors="0" skipped="0" time="0.080399">
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; agrega el Bearer desde la cookie httpOnly y reenvía la consulta" time="0.0220012">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; sin cookie de acceso responde 401 y no llama a la API" time="0.003296">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; reenvía el cuerpo y el tipo de contenido de un POST" time="0.0035122">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; conserva el tipo y Content-Disposition de una descarga" time="0.0027842">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; un 404 de la API llega con su detail" time="0.0030164">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; no permite salir hacia otra ruta con .." time="0.0015757">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; endurecimiento (D-WEB-03) &gt; rechaza una ruta que intenta salir de /api/v1" time="0.0043597">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; endurecimiento (D-WEB-03) &gt; rechaza %2e%2e y %2f" time="0.0021537">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; endurecimiento (D-WEB-03) &gt; OPTIONS y TRACE → 405" time="0.0019913">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; endurecimiento (D-WEB-03) &gt; cuerpo de 6 MB → 413" time="0.0108026">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; endurecimiento (D-WEB-03) &gt; ignora un Authorization, una cookie y un host enviados por el navegador" time="0.003173">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; endurecimiento (D-WEB-03) &gt; no devuelve set-cookie de la API" time="0.0049766">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; endurecimiento (D-WEB-03) &gt; POST con Origin ajeno → 403" time="0.0025833">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; endurecimiento (D-WEB-03) &gt; POST con el Origin de la web pasa" time="0.0031293">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; endurecimiento (D-WEB-03) &gt; sin cookie no llama a fetch" time="0.0026195">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; endurecimiento (D-WEB-03) &gt; API caída → 502 con detail, sin stack" time="0.0023304">
+        </testcase>
+        <testcase classname="tests/apiProxy.test.ts" name="proxy /api/proxy (WEB-02: el token nunca viaja por JavaScript) &gt; endurecimiento (D-WEB-03) &gt; el destino siempre queda bajo la API configurada" time="0.0016914">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/arquitectura.test.ts" timestamp="2026-11-11T18:41:02.082Z" hostname="Mariana" tests="9" failures="0" errors="0" skipped="0" time="1.6445889">
+        <testcase classname="tests/arquitectura.test.ts" name="arquitectura (reglas 1 a 4) &gt; regla 1: ninguna vista (*Client.tsx ni componente) llama a la API directamente" time="0.1298982">
+        </testcase>
+        <testcase classname="tests/arquitectura.test.ts" name="arquitectura (reglas 1 a 4) &gt; regla 3: ningún código lee el token de acceso desde el navegador" time="0.3013093">
+        </testcase>
+        <testcase classname="tests/arquitectura.test.ts" name="arquitectura (reglas 1 a 4) &gt; regla 4: las páginas toman el rol del token, no de la cookie eys_user" time="0.3153175">
+        </testcase>
+        <testcase classname="tests/arquitectura.test.ts" name="arquitectura (reglas 1 a 4) &gt; WEB-01/08: ya no existe src/services/supabase ni algo que lo importe" time="0.4659625">
+        </testcase>
+        <testcase classname="tests/arquitectura.test.ts" name="arquitectura (reglas 1 a 4) &gt; WEB-01 / DEF-WEB-04: el proxy está junto a src/app y usa sessionMiddleware" time="0.004993">
+        </testcase>
+        <testcase classname="tests/arquitectura.test.ts" name="arquitectura (reglas 1 a 4) &gt; DEF-WEB-04: no hay proxy ni middleware fuera de src (Next los ignoraría)" time="0.0011779">
+        </testcase>
+        <testcase classname="tests/arquitectura.test.ts" name="arquitectura (reglas 1 a 4) &gt; DEF-WEB-02: cada página queda envuelta por exactamente un &lt;main&gt;" time="0.1190824">
+        </testcase>
+        <testcase classname="tests/arquitectura.test.ts" name="arquitectura (reglas 1 a 4) &gt; WEB-INF-4: hay un solo despliegue (se eliminó el flujo de Azure)" time="0.0014387">
+        </testcase>
+        <testcase classname="tests/arquitectura.test.ts" name="arquitectura (reglas 1 a 4) &gt; los módulos &apos;use server&apos; solo exportan funciones async (si no, el build los deja sin exports)" time="0.2999759">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/asociadoActions.test.ts" timestamp="2026-11-11T18:41:02.095Z" hostname="Mariana" tests="13" failures="0" errors="0" skipped="0" time="0.1438818">
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; si /padres/me/hijos responde 404, usa /padres/me y devuelve un solo hijo" time="0.0831017">
+        </testcase>
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; si /padres/me/hijos responde 500, no usa /padres/me y propaga el error" time="0.0059541">
+        </testcase>
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; con /padres/me/hijos disponible, no llama a /padres/me" time="0.0032671">
+        </testcase>
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; getHijosAction llama GET /padres/me/hijos y devuelve los hijos en camelCase" time="0.0032114">
+        </testcase>
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; DEF-WEB-03: el nombre y el documento salen de nombre_estudiante y documento_estudiante" time="0.0072437">
+        </testcase>
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; DEF-WEB-03: también acepta nombre y documento sin sufijo, y sin nombre usa el respaldo" time="0.0026897">
+        </testcase>
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; con el hijo 11 llama /padres/me/hijos y luego /estudiantes/11/notas" time="0.0072906">
+        </testcase>
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; sin id pedido usa el primer hijo (10)" time="0.003267">
+        </testcase>
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; un padre sin hijos recibe info null y no pide notas" time="0.0037728">
+        </testcase>
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; horario del padre muestra error si /estudiantes/{id} falla" time="0.0057272">
+        </testcase>
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; horario del padre muestra error si /horarios falla" time="0.00756">
+        </testcase>
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; horario del padre sin curso asignado no es un error" time="0.0018475">
+        </testcase>
+        <testcase classname="tests/asociadoActions.test.ts" name="asociadoActions (WEB-03 · IT-WEB-02) &gt; si la API falla, el error llega con el detail para mostrarlo" time="0.0032194">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/asociadoViewer.test.ts" timestamp="2026-11-11T18:41:02.104Z" hostname="Mariana" tests="9" failures="0" errors="0" skipped="0" time="0.1329065">
+        <testcase classname="tests/asociadoViewer.test.ts" name="notas del estudiante asociado (WEB-03) &gt; resuelve el nombre de la materia y la etiqueta del periodo" time="0.0756596">
+        </testcase>
+        <testcase classname="tests/asociadoViewer.test.ts" name="novedades del estudiante asociado (WEB-03) &gt; resuelve el tipo y la gravedad desde /tipos-novedad" time="0.006292">
+        </testcase>
+        <testcase classname="tests/asociadoViewer.test.ts" name="novedades del estudiante asociado (WEB-03) &gt; un padre sin hijos no pide novedades" time="0.0029328">
+        </testcase>
+        <testcase classname="tests/asociadoViewer.test.ts" name="horario del estudiante asociado (WEB-03) &gt; ordena por día y hora, nombra la materia y trae el curso" time="0.0268642">
+        </testcase>
+        <testcase classname="tests/asociadoViewer.test.ts" name="horario del estudiante asociado (WEB-03) &gt; si /cursos/{id} falla, el horario se muestra igual sin los datos del curso" time="0.004476">
+        </testcase>
+        <testcase classname="tests/asociadoViewer.test.ts" name="estudiante que entra a su propia información (WEB-03) &gt; usa /estudiantes/me y no pide hijos" time="0.0038272">
+        </testcase>
+        <testcase classname="tests/asociadoViewer.test.ts" name="estudiante que entra a su propia información (WEB-03) &gt; si /estudiantes/me no trae id, no hay estudiante asociado" time="0.0025708">
+        </testcase>
+        <testcase classname="tests/asociadoViewer.test.ts" name="otros roles no tienen estudiante asociado &gt; un docente recibe info null sin llamar a la API" time="0.0032331">
+        </testcase>
+        <testcase classname="tests/asociadoViewer.test.ts" name="otros roles no tienen estudiante asociado &gt; sin sesión tampoco" time="0.0012463">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/authCookies.test.ts" timestamp="2026-11-11T18:41:02.111Z" hostname="Mariana" tests="5" failures="0" errors="0" skipped="0" time="0.083521">
+        <testcase classname="tests/authCookies.test.ts" name="cookies de sesión (WEB-02) &gt; eys_access y eys_refresh son httpOnly" time="0.0632571">
+        </testcase>
+        <testcase classname="tests/authCookies.test.ts" name="cookies de sesión (WEB-02) &gt; todas las cookies llevan secure en producción y sameSite lax" time="0.0042818">
+        </testcase>
+        <testcase classname="tests/authCookies.test.ts" name="cookies de sesión (WEB-02) &gt; fuera de producción no exige secure (desarrollo en http://localhost)" time="0.0034655">
+        </testcase>
+        <testcase classname="tests/authCookies.test.ts" name="cookies de sesión (WEB-02) &gt; el inicio de sesión abre la ventana de inactividad con eys_last httpOnly" time="0.004842">
+        </testcase>
+        <testcase classname="tests/authCookies.test.ts" name="cookies de sesión (WEB-02) &gt; eys_user guarda solo lo necesario para mostrar el nombre, sin token" time="0.0038093">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/decodeRol.test.ts" timestamp="2026-11-11T18:41:02.115Z" hostname="Mariana" tests="5" failures="0" errors="0" skipped="0" time="0.0166641">
+        <testcase classname="tests/decodeRol.test.ts" name="decodeRol (WEB-02: el rol sale del token, no de eys_user) &gt; un token con rol padre devuelve padre" time="0.0050685">
+        </testcase>
+        <testcase classname="tests/decodeRol.test.ts" name="decodeRol (WEB-02: el rol sale del token, no de eys_user) &gt; entiende nombre_rol e id_rol del backend" time="0.0011364">
+        </testcase>
+        <testcase classname="tests/decodeRol.test.ts" name="decodeRol (WEB-02: el rol sale del token, no de eys_user) &gt; un token ilegible o sin rol devuelve null" time="0.0016337">
+        </testcase>
+        <testcase classname="tests/decodeRol.test.ts" name="decodeRol (WEB-02: el rol sale del token, no de eys_user) &gt; getServerUser toma el rol del token aunque eys_user diga admin" time="0.0036144">
+        </testcase>
+        <testcase classname="tests/decodeRol.test.ts" name="decodeRol (WEB-02: el rol sale del token, no de eys_user) &gt; sin token de acceso no hay usuario aunque exista eys_user" time="0.0009511">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/defectos.test.ts" timestamp="2026-11-11T18:41:02.119Z" hostname="Mariana" tests="25" failures="0" errors="0" skipped="0" time="0.0333205">
+        <testcase classname="tests/defectos.test.ts" name="Defectos · plantilla del issue &gt; tiene un campo por cada título que lee el workflow" time="0.0043644">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · plantilla del issue &gt; ofrece exactamente las opciones que el workflow sabe convertir en etiquetas" time="0.0009811">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · plantilla del issue &gt; pone la etiqueta «defecto», que es la que activa el ciclo de vida" time="0.0003932">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · plantilla del issue &gt; cada etiqueta del formulario existe en la lista que crea el workflow" time="0.0071218">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · lectura del formulario &gt; separa cada campo por su título y trata «_No response_» como vacío" time="0.0012671">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · lectura del formulario &gt; acepta saltos de línea de Windows y cuerpos vacíos" time="0.0018747">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · lectura del formulario &gt; convierte componente, origen, severidad y prioridad en etiquetas" time="0.000813">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · lectura del formulario &gt; sin prioridad, propone la que corresponde a la severidad (Crítica → P1)" time="0.0008134">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · lectura del formulario &gt; al editar no toca la prioridad: después de abrir la decide el PO" time="0.0006288">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · lectura del formulario &gt; ignora valores que no son opciones de la plantilla" time="0.0004602">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · etiquetas excluyentes &gt; cambiar la severidad quita la anterior y no toca los otros grupos" time="0.0006393">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · etiquetas excluyentes &gt; no repite etiquetas que el issue ya tiene" time="0.0005369">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · etiquetas excluyentes &gt; un solo estado a la vez" time="0.0005727">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · ciclo de vida (planeación §2) &gt; al abrirse queda Nuevo y clasificado" time="0.0006483">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · ciclo de vida (planeación §2) &gt; un PR abierto lo pasa a En curso, pero no lo saca de En verificación" time="0.000531">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · ciclo de vida (planeación §2) &gt; al fusionarse la corrección pasa a En verificación, no a cerrado" time="0.0004452">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · ciclo de vida (planeación §2) &gt; reabrir lo devuelve a En curso y lo cuenta como reabierto" time="0.000464">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · ciclo de vida (planeación §2) &gt; editar un issue sin plantilla no cambia nada" time="0.0003812">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · referencias desde un PR &gt; reconoce «Corrige #N» y variantes, sin repetir" time="0.000934">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · referencias desde un PR &gt; reconoce las palabras de cierre de GitHub para poder reabrir el defecto" time="0.000439">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · referencias desde un PR &gt; no confunde menciones sueltas ni el «Corrige #» vacío de la plantilla del PR" time="0.0004582">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · registro para el PR-07 &gt; el estado sale del issue: abierto por etiqueta, cerrado según el motivo" time="0.0006899">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · registro para el PR-07 &gt; una fila por defecto, con tantas celdas como columnas" time="0.0019058">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · registro para el PR-07 &gt; un defecto abierto no tiene fecha de cierre ni días" time="0.0006397">
+        </testcase>
+        <testcase classname="tests/defectos.test.ts" name="Defectos · registro para el PR-07 &gt; escapa comillas y comas en el título" time="0.0006585">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/hijoActivo.test.ts" timestamp="2026-11-11T18:41:02.135Z" hostname="Mariana" tests="6" failures="0" errors="0" skipped="0" time="0.0113788">
+        <testcase classname="tests/hijoActivo.test.ts" name="elegirHijoActivo (WEB-03) &gt; con hijos [10, 11] y el id 11 devuelve el 11" time="0.0038103">
+        </testcase>
+        <testcase classname="tests/hijoActivo.test.ts" name="elegirHijoActivo (WEB-03) &gt; con un id ajeno devuelve el primero (10)" time="0.0010773">
+        </testcase>
+        <testcase classname="tests/hijoActivo.test.ts" name="elegirHijoActivo (WEB-03) &gt; sin id devuelve el primero (10)" time="0.0006758">
+        </testcase>
+        <testcase classname="tests/hijoActivo.test.ts" name="elegirHijoActivo (WEB-03) &gt; con el id como texto de la URL (?hijo=11) también lo encuentra" time="0.0006591">
+        </testcase>
+        <testcase classname="tests/hijoActivo.test.ts" name="elegirHijoActivo (WEB-03) &gt; sin hijos devuelve null" time="0.0006108">
+        </testcase>
+        <testcase classname="tests/hijoActivo.test.ts" name="elegirHijoActivo (WEB-03) &gt; el mensaje para un padre sin vínculos es &apos;No hay estudiantes vinculados&apos;" time="0.0004833">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/notasService.test.ts" timestamp="2026-11-11T18:41:02.141Z" hostname="Mariana" tests="4" failures="0" errors="0" skipped="0" time="0.0814372">
+        <testcase classname="tests/notasService.test.ts" name="notasService · boletín y mensajes (WEB-09) &gt; el texto del periodo sin notas es el del criterio de aceptación" time="0.0040517">
+        </testcase>
+        <testcase classname="tests/notasService.test.ts" name="notasService · boletín y mensajes (WEB-09) &gt; un 404 sin datos lanza «No hay datos disponibles para generar el boletín.»" time="0.0620091">
+        </testcase>
+        <testcase classname="tests/notasService.test.ts" name="notasService · boletín y mensajes (WEB-09) &gt; otro error lanza el detail de la API" time="0.003301">
+        </testcase>
+        <testcase classname="tests/notasService.test.ts" name="notasService · boletín y mensajes (WEB-09) &gt; pide el PDF al proxy del servidor, sin token en el navegador" time="0.0086771">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/password.test.ts" timestamp="2026-11-11T18:41:02.146Z" hostname="Mariana" tests="6" failures="0" errors="0" skipped="0" time="0.0095081">
+        <testcase classname="tests/password.test.ts" name="política de contraseñas &gt; acepta una contraseña que cumple las cinco reglas" time="0.0031673">
+        </testcase>
+        <testcase classname="tests/password.test.ts" name="política de contraseñas &gt; rechaza Ab1# por la regla length" time="0.0006916">
+        </testcase>
+        <testcase classname="tests/password.test.ts" name="política de contraseñas &gt; rechaza colegio#2026 por la regla upper" time="0.0005858">
+        </testcase>
+        <testcase classname="tests/password.test.ts" name="política de contraseñas &gt; rechaza COLEGIO#2026 por la regla lower" time="0.0005429">
+        </testcase>
+        <testcase classname="tests/password.test.ts" name="política de contraseñas &gt; rechaza Colegio#ocho por la regla number" time="0.0004932">
+        </testcase>
+        <testcase classname="tests/password.test.ts" name="política de contraseñas &gt; rechaza Colegio2026 por la regla special" time="0.0003721">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/permissions.test.ts" timestamp="2026-11-11T18:41:02.155Z" hostname="Mariana" tests="10" failures="0" errors="0" skipped="0" time="0.0182004">
+        <testcase classname="tests/permissions.test.ts" name="permisos por rol &gt; solo el administrador gestiona usuarios" time="0.0045928">
+        </testcase>
+        <testcase classname="tests/permissions.test.ts" name="permisos por rol &gt; las notas las escribe el docente; el admin solo las lee" time="0.001018">
+        </testcase>
+        <testcase classname="tests/permissions.test.ts" name="permisos por rol &gt; estudiante y padre solo leen lo propio" time="0.0008664">
+        </testcase>
+        <testcase classname="tests/permissions.test.ts" name="permisos por rol &gt; escanear QR es de docentes y administradores" time="0.0006274">
+        </testcase>
+        <testcase classname="tests/permissions.test.ts" name="mapRolToKey &gt; traduce los nombres de rol del backend" time="0.0009026">
+        </testcase>
+        <testcase classname="tests/permissions.test.ts" name="mapRolToKey &gt; traduce el id_rol de la base (1 docente, 2 estudiante, 3 admin, 4 padre)" time="0.0020062">
+        </testcase>
+        <testcase classname="tests/permissions.test.ts" name="mapRolToKey &gt; un rol desconocido no se convierte en ninguno" time="0.0012656">
+        </testcase>
+        <testcase classname="tests/permissions.test.ts" name="WEB-04 · permiso de borrar asistencia &gt; can(&apos;docente&apos;,&apos;delete&apos;,&apos;asistencia&apos;) es false: la API se lo niega con 403" time="0.000856">
+        </testcase>
+        <testcase classname="tests/permissions.test.ts" name="WEB-04 · permiso de borrar asistencia &gt; can(&apos;admin&apos;,&apos;delete&apos;,&apos;asistencia&apos;) es true" time="0.0006467">
+        </testcase>
+        <testcase classname="tests/permissions.test.ts" name="contrato PERMISSIONS ↔ roles de la API &gt; PERMISSIONS no concede nada que la API rechace (0 diferencias)" time="0.0011607">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/register.test.ts" timestamp="2026-11-11T18:41:02.160Z" hostname="Mariana" tests="19" failures="0" errors="0" skipped="0" time="0.100398">
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; sin correo pide completar los campos y no llama a la API" time="0.0498454">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; sin contraseña pide completar los campos y no llama a la API" time="0.0014136">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; sin nombre pide completar los campos y no llama a la API" time="0.0019215">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; sin apellido pide completar los campos y no llama a la API" time="0.0037282">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; sin tipo de documento pide completar los campos y no llama a la API" time="0.002918">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; sin número de documento pide completar los campos y no llama a la API" time="0.0018718">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; sin rol pide completar los campos y no llama a la API" time="0.0025267">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; un rol que no es un número tampoco pasa (Number.isNaN)" time="0.0016946">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; una contraseña sin carácter especial se rechaza con el motivo" time="0.0039753">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; un rol desconocido se rechaza" time="0.0023304">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; estudiante sin curso se rechaza con su motivo" time="0.0032738">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; padre sin id del estudiante se rechaza con su motivo" time="0.0014808">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; padre sin parentesco se rechaza con su motivo" time="0.001844">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; docente sin especialización se rechaza con su motivo" time="0.0008325">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; admin sin cargo se rechaza con su motivo" time="0.0010098">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; estudiante válido manda id_curso_actual como número y el correo en minúsculas" time="0.0033317">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; padre válido manda id_estudiante_vinculado y parentesco" time="0.0017256">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; docente válido manda id_especializacion y la institución si viene" time="0.0022204">
+        </testcase>
+        <testcase classname="tests/register.test.ts" name="register (WEB-05 · validación antes de llamar a la API) &gt; si la API responde con error, el detail llega al formulario" time="0.0071209">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/registroMasivo.test.ts" timestamp="2026-11-11T18:41:02.175Z" hostname="Mariana" tests="7" failures="0" errors="0" skipped="0" time="0.0999176">
+        <testcase classname="tests/registroMasivo.test.ts" name="clasificarResultados (WEB-06) &gt; 2 éxitos, un 409 y un 500 → 2 guardados, 1 duplicado y 1 fallido" time="0.0082196">
+        </testcase>
+        <testcase classname="tests/registroMasivo.test.ts" name="clasificarResultados (WEB-06) &gt; un error sin status (red caída) va a fallidos con un motivo legible" time="0.0009937">
+        </testcase>
+        <testcase classname="tests/registroMasivo.test.ts" name="clasificarResultados (WEB-06) &gt; con una lista vacía devuelve tres listas vacías" time="0.0008811">
+        </testcase>
+        <testcase classname="tests/registroMasivo.test.ts" name="reintento (WEB-06) &gt; itemsParaReintento deja solo los estudiantes fallidos, con su estado original" time="0.0008416">
+        </testcase>
+        <testcase classname="tests/registroMasivo.test.ts" name="reintento (WEB-06) &gt; Reintentar envía a la API solo el fallido" time="0.066464">
+        </testcase>
+        <testcase classname="tests/registroMasivo.test.ts" name="crearRegistrosMasivoAction (WEB-06) &gt; manda un POST /asistencia por estudiante y clasifica 409 y 500" time="0.0065268">
+        </testcase>
+        <testcase classname="tests/registroMasivo.test.ts" name="crearRegistrosMasivoAction (WEB-06) &gt; el segundo envío del mismo curso deja a todos como duplicados (409)" time="0.0115159">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/resetPassword.test.ts" timestamp="2026-11-11T18:41:02.178Z" hostname="Mariana" tests="5" failures="0" errors="0" skipped="0" time="0.0673627">
+        <testcase classname="tests/resetPassword.test.ts" name="resetPassword (WEB-05) &gt; no llama a la API si la contraseña no tiene carácter especial (Colegio2026)" time="0.0542589">
+        </testcase>
+        <testcase classname="tests/resetPassword.test.ts" name="resetPassword (WEB-05) &gt; con una contraseña válida y confirmación igual llama POST /auth/reset-password y devuelve success" time="0.0033887">
+        </testcase>
+        <testcase classname="tests/resetPassword.test.ts" name="resetPassword (WEB-05) &gt; con confirmación distinta devuelve &apos;Las contraseñas no coinciden.&apos;" time="0.00197">
+        </testcase>
+        <testcase classname="tests/resetPassword.test.ts" name="resetPassword (WEB-05) &gt; sin token devuelve el error de enlace inválido" time="0.0015546">
+        </testcase>
+        <testcase classname="tests/resetPassword.test.ts" name="resetPassword (WEB-05) &gt; si la API responde 401 (enlace ya usado) devuelve el mensaje de la API" time="0.0030657">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/routeGuard.test.ts" timestamp="2026-11-11T18:41:02.181Z" hostname="Mariana" tests="20" failures="0" errors="0" skipped="0" time="0.0882032">
+        <testcase classname="tests/routeGuard.test.ts" name="guardia de rutas del panel &gt; las rutas públicas pasan sin sesión" time="0.0133484">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="guardia de rutas del panel &gt; sin sesión /admin manda al login" time="0.0077399">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="guardia de rutas del panel &gt; un token ilegible manda al login" time="0.0051712">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="guardia de rutas del panel &gt; el administrador entra a /admin" time="0.0030341">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="guardia de rutas del panel &gt; un docente que intenta /admin vuelve a su panel" time="0.0026092">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="guardia de rutas del panel &gt; cualquier rol con sesión entra a /general" time="0.0020682">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="guardia de rutas del panel &gt; un token vencido y sin refresh manda al login" time="0.0021804">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · renovación de la sesión &gt; con el acceso vencido y un refresco válido pide /auth/refresh y entrega la cookie eys_access nueva" time="0.0088734">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · renovación de la sesión &gt; con el refresco inválido (401) redirige a /?login=1 y borra las tres cookies" time="0.0029128">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · renovación de la sesión &gt; sin cookies redirige a /?login=1" time="0.0019759">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · renovación de la sesión &gt; un padre que entra a /usuarios vuelve a /general" time="0.0015473">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · renovación de la sesión &gt; un docente puede entrar a /qr/escanear" time="0.0013242">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · renovación de la sesión &gt; un estudiante no entra a /qr/escanear" time="0.0013846">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · renovación de la sesión &gt; todas las rutas del panel están protegidas, no solo /admin y /general" time="0.0136272">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · renovación de la sesión &gt; con 31 minutos sin actividad no pide /auth/refresh: redirige y borra las cookies" time="0.0034223">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · renovación de la sesión &gt; con 10 minutos de actividad y el acceso vencido renueva y actualiza eys_last" time="0.0029047">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · renovación de la sesión &gt; eys_last es httpOnly para que ningún script pueda estirar la sesión" time="0.0016602">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · renovación de la sesión &gt; el refresco deja la cookie nueva también en la petición que ve la página" time="0.0046202">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · inactividad configurable (CP-SIS-065 a escala) &gt; sin variable o con un valor inválido la regla es de 30 minutos" time="0.0019311">
+        </testcase>
+        <testcase classname="tests/routeGuard.test.ts" name="WEB-01 · inactividad configurable (CP-SIS-065 a escala) &gt; SESSION_IDLE_MINUTES=1 la reduce a 1 minuto" time="0.0006085">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/routeRoles.test.ts" timestamp="2026-11-11T18:41:02.192Z" hostname="Mariana" tests="10" failures="0" errors="0" skipped="0" time="0.0190457">
+        <testcase classname="tests/routeRoles.test.ts" name="mapa único de rutas por rol (WEB-01) &gt; /admin, /usuarios y /reportes son solo del administrador" time="0.0049744">
+        </testcase>
+        <testcase classname="tests/routeRoles.test.ts" name="mapa único de rutas por rol (WEB-01) &gt; notas, asistencia, novedades, horarios, perfil y general admiten a todos los roles" time="0.0019293">
+        </testcase>
+        <testcase classname="tests/routeRoles.test.ts" name="mapa único de rutas por rol (WEB-01) &gt; /qr/escanear es de administrador y docente" time="0.0008378">
+        </testcase>
+        <testcase classname="tests/routeRoles.test.ts" name="mapa único de rutas por rol (WEB-01) &gt; docente puede entrar a /qr/escanear" time="0.0004562">
+        </testcase>
+        <testcase classname="tests/routeRoles.test.ts" name="mapa único de rutas por rol (WEB-01) &gt; docente no puede entrar a /qr (Mi QR)" time="0.0005458">
+        </testcase>
+        <testcase classname="tests/routeRoles.test.ts" name="mapa único de rutas por rol (WEB-01) &gt; estudiante no puede entrar a /qr/escanear" time="0.0004149">
+        </testcase>
+        <testcase classname="tests/routeRoles.test.ts" name="mapa único de rutas por rol (WEB-01) &gt; el enlace de escanear aparece en el riel del docente y no en el del estudiante" time="0.0027703">
+        </testcase>
+        <testcase classname="tests/routeRoles.test.ts" name="mapa único de rutas por rol (WEB-01) &gt; una subruta hereda la regla de su prefijo más largo" time="0.0007378">
+        </testcase>
+        <testcase classname="tests/routeRoles.test.ts" name="mapa único de rutas por rol (WEB-01) &gt; una ruta fuera del mapa no está protegida" time="0.0005806">
+        </testcase>
+        <testcase classname="tests/routeRoles.test.ts" name="mapa único de rutas por rol (WEB-01) &gt; ningún enlace del PanelSidebar es visible para un rol que la ruta no permite" time="0.00232">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/serverFetch.test.ts" timestamp="2026-11-11T18:41:02.199Z" hostname="Mariana" tests="4" failures="0" errors="0" skipped="0" time="0.0764258">
+        <testcase classname="tests/serverFetch.test.ts" name="serverFetch (WEB-INF-1) &gt; con datos: manda el token por parámetro y devuelve el JSON sin tocar" time="0.0635291">
+        </testcase>
+        <testcase classname="tests/serverFetch.test.ts" name="serverFetch (WEB-INF-1) &gt; con lista vacía devuelve []; con un 204 devuelve null" time="0.0035433">
+        </testcase>
+        <testcase classname="tests/serverFetch.test.ts" name="serverFetch (WEB-INF-1) &gt; con error lanza ApiError con status, mensaje legible y detail original" time="0.003034">
+        </testcase>
+        <testcase classname="tests/serverFetch.test.ts" name="serverFetch (WEB-INF-1) &gt; sin token no manda Authorization" time="0.0023126">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/services/actionsNotasNovedadesReportes.test.ts" timestamp="2026-11-11T18:41:02.203Z" hostname="Mariana" tests="16" failures="0" errors="0" skipped="0" time="0.1258277">
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · notasActions &gt; getNotasAction manda el Bearer del servidor y mapea la nota a número" time="0.0684621">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · notasActions &gt; con lista vacía devuelve []" time="0.0063874">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · notasActions &gt; getEstudiantesAction arma el nombre completo o uno provisional" time="0.0020745">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · notasActions &gt; createNotaAction manda el cuerpo en snake_case" time="0.0017299">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · notasActions &gt; getNotasBootstrapAction junta las cuatro consultas" time="0.005074">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · notasActions &gt; un error de la API lanza con su detail" time="0.0050377">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · notasActions &gt; un 500 sin cuerpo lanza HTTP 500" time="0.0017218">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · novedadesActions &gt; getNovedadesAction cruza el estudiante por id y usa uno provisional si falta" time="0.0028058">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · novedadesActions &gt; getNovedadesBootstrapAction resuelve nombre y gravedad del tipo" time="0.0037893">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · novedadesActions &gt; cursos y estudiantes con lista vacía devuelven []" time="0.0085502">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · novedadesActions &gt; crear manda la fecha de hoy; actualizar solo lo informado; borrar hace DELETE" time="0.004633">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · novedadesActions &gt; un 403 lanza con su detail" time="0.0014599">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · reportesActions &gt; getReportesAction mapea y completa parametros vacío" time="0.0046706">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · reportesActions &gt; con lista vacía devuelve []" time="0.0010911">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · reportesActions &gt; crear, actualizar estado y borrar" time="0.0024699">
+        </testcase>
+        <testcase classname="tests/services/actionsNotasNovedadesReportes.test.ts" name="Servicios · reportesActions &gt; un 404 lanza con su detail" time="0.0015764">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/services/dashboardActions.test.ts" timestamp="2026-11-11T18:41:02.213Z" hostname="Mariana" tests="6" failures="0" errors="0" skipped="0" time="0.117301">
+        <testcase classname="tests/services/dashboardActions.test.ts" name="Servicios · dashboardActions (KPI del administrador) &gt; calcula totales, promedio, aprobación, asistencia y novedades activas" time="0.085765">
+        </testcase>
+        <testcase classname="tests/services/dashboardActions.test.ts" name="Servicios · dashboardActions (KPI del administrador) &gt; arma las gráficas: estudiantes por curso, usuarios por rol y promedio por materia" time="0.0092372">
+        </testcase>
+        <testcase classname="tests/services/dashboardActions.test.ts" name="Servicios · dashboardActions (KPI del administrador) &gt; sin datos devuelve ceros y promedios nulos, no lanza" time="0.0029965">
+        </testcase>
+        <testcase classname="tests/services/dashboardActions.test.ts" name="Servicios · dashboardActions (KPI del administrador) &gt; si un endpoint falla (500 o sin red) esa lista cuenta como vacía" time="0.0060697">
+        </testcase>
+        <testcase classname="tests/services/dashboardActions.test.ts" name="Servicios · dashboardActions (KPI del administrador) &gt; los atajos devuelven el valor del KPI y 0 si no hay dato" time="0.0090741">
+        </testcase>
+        <testcase classname="tests/services/dashboardActions.test.ts" name="Servicios · dashboardActions (KPI del administrador) &gt; las series sin endpoint dedicado devuelven []" time="0.0007177">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/services/dashboardService.test.ts" timestamp="2026-11-11T18:41:02.217Z" hostname="Mariana" tests="6" failures="0" errors="0" skipped="0" time="0.0750848">
+        <testcase classname="tests/services/dashboardService.test.ts" name="Servicios · dashboardService &gt; rutaPadre agrega id_estudiante solo cuando hay un hijo activo" time="0.0042416">
+        </testcase>
+        <testcase classname="tests/services/dashboardService.test.ts" name="Servicios · dashboardService &gt; docente: mapea los contadores (cliente y servidor)" time="0.0557002">
+        </testcase>
+        <testcase classname="tests/services/dashboardService.test.ts" name="Servicios · dashboardService &gt; estudiante: promedios nulos pasan a 0" time="0.0036049">
+        </testcase>
+        <testcase classname="tests/services/dashboardService.test.ts" name="Servicios · dashboardService &gt; padre: arma un hijo con el id pedido" time="0.0034165">
+        </testcase>
+        <testcase classname="tests/services/dashboardService.test.ts" name="Servicios · dashboardService &gt; con error de la API o sin red devuelve el estado vacío, no lanza" time="0.003275">
+        </testcase>
+        <testcase classname="tests/services/dashboardService.test.ts" name="Servicios · dashboardService &gt; los helpers heredados devuelven valores neutros" time="0.00144">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/services/horariosService.test.ts" timestamp="2026-11-11T18:41:02.224Z" hostname="Mariana" tests="11" failures="0" errors="0" skipped="0" time="0.1273585">
+        <testcase classname="tests/services/horariosService.test.ts" name="Servicios · horariosService &gt; getHorarios mapea a camelCase y ordena por día y hora" time="0.0818438">
+        </testcase>
+        <testcase classname="tests/services/horariosService.test.ts" name="Servicios · horariosService &gt; con lista vacía devuelve []" time="0.0049261">
+        </testcase>
+        <testcase classname="tests/services/horariosService.test.ts" name="Servicios · horariosService &gt; cursos y materias activos/todos usan su consulta y mapean los campos" time="0.006519">
+        </testcase>
+        <testcase classname="tests/services/horariosService.test.ts" name="Servicios · horariosService &gt; crear curso, materia y especialización manda el cuerpo en snake_case" time="0.0055055">
+        </testcase>
+        <testcase classname="tests/services/horariosService.test.ts" name="Servicios · horariosService &gt; actualizar manda solo los campos informados" time="0.0053621">
+        </testcase>
+        <testcase classname="tests/services/horariosService.test.ts" name="Servicios · horariosService &gt; eliminar es una baja lógica (PUT activo=false)" time="0.0041553">
+        </testcase>
+        <testcase classname="tests/services/horariosService.test.ts" name="Servicios · horariosService &gt; crear horario devuelve el id y asignar profesor lo vincula" time="0.0028174">
+        </testcase>
+        <testcase classname="tests/services/horariosService.test.ts" name="Servicios · horariosService &gt; getProfesores arma el nombre y ordena alfabéticamente" time="0.0027923">
+        </testcase>
+        <testcase classname="tests/services/horariosService.test.ts" name="Servicios · horariosService &gt; asignaciones: lista, crea con fecha_finalizacion nula y getAsignacionesProfesores es vacío" time="0.0029028">
+        </testcase>
+        <testcase classname="tests/services/horariosService.test.ts" name="Servicios · horariosService &gt; un 422 lanza con el detail de la API" time="0.0051663">
+        </testcase>
+        <testcase classname="tests/services/horariosService.test.ts" name="Servicios · horariosService &gt; un 500 lanza HTTP 500" time="0.0015271">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/services/novedadesQrService.test.ts" timestamp="2026-11-11T18:41:02.236Z" hostname="Mariana" tests="9" failures="0" errors="0" skipped="0" time="0.1136614">
+        <testcase classname="tests/services/novedadesQrService.test.ts" name="Servicios · novedadesService &gt; getNovedades mapea y arma código y nombre provisionales del estudiante" time="0.0754171">
+        </testcase>
+        <testcase classname="tests/services/novedadesQrService.test.ts" name="Servicios · novedadesService &gt; con lista vacía devuelve [] en novedades, tipos, cursos y estudiantes" time="0.0059588">
+        </testcase>
+        <testcase classname="tests/services/novedadesQrService.test.ts" name="Servicios · novedadesService &gt; tipos, cursos y estudiantes se mapean a camelCase" time="0.004872">
+        </testcase>
+        <testcase classname="tests/services/novedadesQrService.test.ts" name="Servicios · novedadesService &gt; crear, actualizar y borrar una novedad" time="0.0074473">
+        </testcase>
+        <testcase classname="tests/services/novedadesQrService.test.ts" name="Servicios · novedadesService &gt; un 403 lanza con el detail" time="0.0036716">
+        </testcase>
+        <testcase classname="tests/services/novedadesQrService.test.ts" name="Servicios · qrService &gt; getQRImageUrl codifica el código y fija el tamaño" time="0.0015072">
+        </testcase>
+        <testcase classname="tests/services/novedadesQrService.test.ts" name="Servicios · qrService &gt; readQRFromImage devuelve el contenido leído" time="0.00519">
+        </testcase>
+        <testcase classname="tests/services/novedadesQrService.test.ts" name="Servicios · qrService &gt; readQRFromImage devuelve null si no hay símbolo o trae error" time="0.0026492">
+        </testcase>
+        <testcase classname="tests/services/novedadesQrService.test.ts" name="Servicios · qrService &gt; readQRFromImage lanza si el servicio externo falla" time="0.0032036">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/services/usuarioService.test.ts" timestamp="2026-11-11T18:41:02.242Z" hostname="Mariana" tests="14" failures="0" errors="0" skipped="0" time="0.1031054">
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; getMiPerfil mapea el perfil y resuelve la foto relativa contra el backend" time="0.0571181">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; getMiPerfil devuelve null si la API falla" time="0.0020816">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; updateMiPerfil manda solo los campos informados" time="0.0020162">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; uploadAvatar acepta un texto o un objeto con la URL" time="0.0050389">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; getAvatarUrl no inventa una URL" time="0.0006671">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; getMiPerfilProfesor busca al profesor por idUsuario en la lista y trae sus especializaciones" time="0.0056414">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; getMiPerfilProfesor devuelve null si no hay fila para ese usuario o falla la API" time="0.0037323">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; getMiPerfilAdmin busca en la lista; null si no está" time="0.0024148">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; actualizar profesor y administrador usa snake_case" time="0.0035609">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; insertAdminPerfil crea el perfil Activo con la fecha de hoy" time="0.0043901">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; getMiEPS usa /estudiantes/me y luego /ips; [] si no hay estudiante o falla" time="0.0044819">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; upsertMiEPS manda la afiliación activa con fecha de hoy" time="0.0019206">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; getMiEstudianteInfo devuelve id y curso; null si la lista viene vacía" time="0.0021912">
+        </testcase>
+        <testcase classname="tests/services/usuarioService.test.ts" name="Servicios · usuarioService (perfil) &gt; updateEstudianteCurso y getCursosParaPerfil" time="0.0039687">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/services/usuariosService.test.ts" timestamp="2026-11-11T18:41:02.250Z" hostname="Mariana" tests="9" failures="0" errors="0" skipped="0" time="0.1092417">
+        <testcase classname="tests/services/usuariosService.test.ts" name="Servicios · usuariosService &gt; getUsuarios pide los activos y agrega el nombre del rol" time="0.0613436">
+        </testcase>
+        <testcase classname="tests/services/usuariosService.test.ts" name="Servicios · usuariosService &gt; getPendingUsuarios pide los inactivos y con lista vacía devuelve []" time="0.0046856">
+        </testcase>
+        <testcase classname="tests/services/usuariosService.test.ts" name="Servicios · usuariosService &gt; getUsuarioById devuelve el usuario y null si la API falla" time="0.0033687">
+        </testcase>
+        <testcase classname="tests/services/usuariosService.test.ts" name="Servicios · usuariosService &gt; createUsuario manda el cuerpo en snake_case con nulos para lo opcional" time="0.001755">
+        </testcase>
+        <testcase classname="tests/services/usuariosService.test.ts" name="Servicios · usuariosService &gt; updateUsuario manda solo lo que cambió" time="0.0050996">
+        </testcase>
+        <testcase classname="tests/services/usuariosService.test.ts" name="Servicios · usuariosService &gt; toggleUsuarioEstado manda el estado como query param" time="0.0065807">
+        </testcase>
+        <testcase classname="tests/services/usuariosService.test.ts" name="Servicios · usuariosService &gt; validarUsuario cambia el rol y luego activa" time="0.0161947">
+        </testcase>
+        <testcase classname="tests/services/usuariosService.test.ts" name="Servicios · usuariosService &gt; deleteUsuario y rechazarUsuario hacen DELETE" time="0.0015481">
+        </testcase>
+        <testcase classname="tests/services/usuariosService.test.ts" name="Servicios · usuariosService &gt; un 409 por correo duplicado lanza con el detail" time="0.0042424">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/components/FallidosMasivo.test.tsx" timestamp="2026-11-11T18:41:02.258Z" hostname="Mariana" tests="5" failures="0" errors="0" skipped="0" time="0.9622927">
+        <testcase classname="tests/components/FallidosMasivo.test.tsx" name="FallidosMasivo (WEB-06) &gt; sin fallidos no renderiza nada" time="0.0385408">
+        </testcase>
+        <testcase classname="tests/components/FallidosMasivo.test.tsx" name="FallidosMasivo (WEB-06) &gt; lista cada estudiante por nombre con su motivo" time="0.5845396">
+        </testcase>
+        <testcase classname="tests/components/FallidosMasivo.test.tsx" name="FallidosMasivo (WEB-06) &gt; con un solo fallido el texto va en singular" time="0.0369602">
+        </testcase>
+        <testcase classname="tests/components/FallidosMasivo.test.tsx" name="FallidosMasivo (WEB-06) &gt; Reintentar y Descartar avisan al llamador" time="0.2411391">
+        </testcase>
+        <testcase classname="tests/components/FallidosMasivo.test.tsx" name="FallidosMasivo (WEB-06) &gt; mientras se reenvía, los dos botones están deshabilitados" time="0.0553376">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/components/HorariosViewerClient.test.tsx" timestamp="2026-11-11T18:41:02.263Z" hostname="Mariana" tests="4" failures="0" errors="0" skipped="0" time="0.7748132">
+        <testcase classname="tests/components/HorariosViewerClient.test.tsx" name="HorariosViewerClient (WEB-03 · horario del estudiante asociado) &gt; con error muestra el mensaje y un botón de reintentar, no una pantalla vacía" time="0.5324374">
+        </testcase>
+        <testcase classname="tests/components/HorariosViewerClient.test.tsx" name="HorariosViewerClient (WEB-03 · horario del estudiante asociado) &gt; reintentar vuelve a pedir los datos al servidor" time="0.1477404">
+        </testcase>
+        <testcase classname="tests/components/HorariosViewerClient.test.tsx" name="HorariosViewerClient (WEB-03 · horario del estudiante asociado) &gt; sin error y sin curso avisa que el estudiante no tiene curso" time="0.0221698">
+        </testcase>
+        <testcase classname="tests/components/HorariosViewerClient.test.tsx" name="HorariosViewerClient (WEB-03 · horario del estudiante asociado) &gt; con bloques muestra la grilla del curso" time="0.0624066">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/components/NotasViewerClient.test.tsx" timestamp="2026-11-11T18:41:02.265Z" hostname="Mariana" tests="5" failures="0" errors="0" skipped="0" time="1.3008265">
+        <testcase classname="tests/components/NotasViewerClient.test.tsx" name="NotasViewerClient (WEB-09) &gt; con rol padre aparece «Descargar boletín» y llama downloadBoletinPdf con el id del hijo" time="0.7951598">
+        </testcase>
+        <testcase classname="tests/components/NotasViewerClient.test.tsx" name="NotasViewerClient (WEB-09) &gt; al elegir un periodo sin notas muestra el texto exacto del criterio de aceptación" time="0.1806401">
+        </testcase>
+        <testcase classname="tests/components/NotasViewerClient.test.tsx" name="NotasViewerClient (WEB-09) &gt; un periodo con notas no muestra el mensaje de periodo vacío" time="0.1311098">
+        </testcase>
+        <testcase classname="tests/components/NotasViewerClient.test.tsx" name="NotasViewerClient (WEB-09) &gt; si el boletín no tiene datos muestra el mensaje de la API con notifyError" time="0.1542868">
+        </testcase>
+        <testcase classname="tests/components/NotasViewerClient.test.tsx" name="NotasViewerClient (WEB-09) &gt; sin estudiante asociado no ofrece el boletín" time="0.0290319">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/components/PasswordChecklist.test.tsx" timestamp="2026-11-11T18:41:02.267Z" hostname="Mariana" tests="6" failures="0" errors="0" skipped="0" time="3.3226494">
+        <testcase classname="tests/components/PasswordChecklist.test.tsx" name="WEB-05 · PasswordChecklist (reglas en vivo) &gt; con Colegio2026 la regla «Un carácter especial» aparece como pendiente" time="0.2399317">
+        </testcase>
+        <testcase classname="tests/components/PasswordChecklist.test.tsx" name="WEB-05 · PasswordChecklist (reglas en vivo) &gt; con Colegio#2026 las cinco reglas aparecen cumplidas" time="0.0620204">
+        </testcase>
+        <testcase classname="tests/components/PasswordChecklist.test.tsx" name="WEB-05 · PasswordChecklist (reglas en vivo) &gt; anuncia los cambios con aria-live" time="0.4786707">
+        </testcase>
+        <testcase classname="tests/components/PasswordChecklist.test.tsx" name="WEB-05 · PasswordChecklist (reglas en vivo) &gt; con ocultarSiVacio no dibuja nada mientras el campo está vacío" time="0.0089963">
+        </testcase>
+        <testcase classname="tests/components/PasswordChecklist.test.tsx" name="WEB-05 · página reset-password &gt; el botón está deshabilitado con Colegio2026 y habilitado con Colegio#2026 confirmada" time="1.7575886">
+        </testcase>
+        <testcase classname="tests/components/PasswordChecklist.test.tsx" name="WEB-05 · página reset-password &gt; deshabilitado si las contraseñas no coinciden" time="0.7577727">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/components/RegistroMasivo.test.tsx" timestamp="2026-11-11T18:41:02.272Z" hostname="Mariana" tests="4" failures="0" errors="0" skipped="0" time="2.9051882">
+        <testcase classname="tests/components/RegistroMasivo.test.tsx" name="RegistroMasivo (WEB-06) &gt; lista a cada fallido por nombre con los botones Reintentar y Descartar" time="1.3577769">
+        </testcase>
+        <testcase classname="tests/components/RegistroMasivo.test.tsx" name="RegistroMasivo (WEB-06) &gt; Reintentar reenvía solo al estudiante fallido" time="0.5256266">
+        </testcase>
+        <testcase classname="tests/components/RegistroMasivo.test.tsx" name="RegistroMasivo (WEB-06) &gt; Descartar quita al fallido de la lista sin llamar a la API" time="0.6205539">
+        </testcase>
+        <testcase classname="tests/components/RegistroMasivo.test.tsx" name="RegistroMasivo (WEB-06) &gt; cuando todos ya estaban registrados dice «ya registrado» y no ofrece reintentar" time="0.3946697">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/components/SelectorHijo.test.tsx" timestamp="2026-11-11T18:41:02.277Z" hostname="Mariana" tests="4" failures="0" errors="0" skipped="0" time="0.825258">
+        <testcase classname="tests/components/SelectorHijo.test.tsx" name="SelectorHijo (WEB-03) &gt; con un solo hijo no se ve" time="0.0543388">
+        </testcase>
+        <testcase classname="tests/components/SelectorHijo.test.tsx" name="SelectorHijo (WEB-03) &gt; con dos hijos se ve y al elegir el segundo cambia ?hijo=" time="0.6044322">
+        </testcase>
+        <testcase classname="tests/components/SelectorHijo.test.tsx" name="SelectorHijo (WEB-03) &gt; muestra al hijo activo como seleccionado" time="0.0500591">
+        </testcase>
+        <testcase classname="tests/components/SelectorHijo.test.tsx" name="SelectorHijo (WEB-03) &gt; conserva los demás parámetros de la URL" time="0.1112777">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/hooks/cargaInicial.test.tsx" timestamp="2026-11-11T18:41:02.280Z" hostname="Mariana" tests="15" failures="0" errors="0" skipped="0" time="0.903104">
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useReportes &gt; sin datos del servidor pide los datos una sola vez y apaga loading" time="0.1108206">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useReportes &gt; con datos del servidor no vuelve a pedirlos" time="0.0198598">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useReportes &gt; si la carga falla, el mensaje queda en error y loading se apaga" time="0.0778647">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useNotas &gt; sin datos del servidor pide los datos una sola vez y apaga loading" time="0.074522">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useNotas &gt; con datos del servidor no vuelve a pedirlos" time="0.0148599">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useNotas &gt; si la carga falla, el mensaje queda en error y loading se apaga" time="0.0792482">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useUsuarios &gt; sin datos del servidor pide los datos una sola vez y apaga loading" time="0.0787614">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useUsuarios &gt; con datos del servidor no vuelve a pedirlos" time="0.0110582">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useUsuarios &gt; si la carga falla, el mensaje queda en error y loading se apaga" time="0.0784632">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useAsistencia &gt; sin datos del servidor pide los datos una sola vez y apaga loading" time="0.0813764">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useAsistencia &gt; con datos del servidor no vuelve a pedirlos" time="0.0136562">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useAsistencia &gt; si la carga falla, el mensaje queda en error y loading se apaga" time="0.0887431">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useHorarios &gt; sin datos del servidor pide los datos una sola vez y apaga loading" time="0.0763845">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useHorarios &gt; con datos del servidor no vuelve a pedirlos" time="0.0215623">
+        </testcase>
+        <testcase classname="tests/hooks/cargaInicial.test.tsx" name="carga inicial de los hooks de pantalla &gt; useHorarios &gt; si la carga falla, el mensaje queda en error y loading se apaga" time="0.0691682">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/hooks/usePermissions.test.tsx" timestamp="2026-11-11T18:41:02.291Z" hostname="Mariana" tests="8" failures="0" errors="0" skipped="0" time="0.1173397">
+        <testcase classname="tests/hooks/usePermissions.test.tsx" name="UT-WEB-01 · usePermissions (WEB-04) &gt; admin: el hook devuelve lo mismo que PERMISSIONS para cada recurso y acción" time="0.0523213">
+        </testcase>
+        <testcase classname="tests/hooks/usePermissions.test.tsx" name="UT-WEB-01 · usePermissions (WEB-04) &gt; docente: el hook devuelve lo mismo que PERMISSIONS para cada recurso y acción" time="0.0082918">
+        </testcase>
+        <testcase classname="tests/hooks/usePermissions.test.tsx" name="UT-WEB-01 · usePermissions (WEB-04) &gt; estudiante: el hook devuelve lo mismo que PERMISSIONS para cada recurso y acción" time="0.0069311">
+        </testcase>
+        <testcase classname="tests/hooks/usePermissions.test.tsx" name="UT-WEB-01 · usePermissions (WEB-04) &gt; padre: el hook devuelve lo mismo que PERMISSIONS para cada recurso y acción" time="0.0101531">
+        </testcase>
+        <testcase classname="tests/hooks/usePermissions.test.tsx" name="UT-WEB-01 · usePermissions (WEB-04) &gt; docente no puede borrar asistencia" time="0.0048103">
+        </testcase>
+        <testcase classname="tests/hooks/usePermissions.test.tsx" name="UT-WEB-01 · usePermissions (WEB-04) &gt; docente puede crear asistencia" time="0.0083005">
+        </testcase>
+        <testcase classname="tests/hooks/usePermissions.test.tsx" name="UT-WEB-01 · usePermissions (WEB-04) &gt; padre no puede crear usuarios" time="0.0081265">
+        </testcase>
+        <testcase classname="tests/hooks/usePermissions.test.tsx" name="UT-WEB-01 · usePermissions (WEB-04) &gt; sin rol no puede nada" time="0.0094698">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/services/reportesService.test.tsx" timestamp="2026-11-11T18:41:02.294Z" hostname="Mariana" tests="8" failures="0" errors="0" skipped="0" time="0.0807003">
+        <testcase classname="tests/services/reportesService.test.tsx" name="Servicios · reportesService &gt; fileUrl: vacío, absoluta y relativa" time="0.0115111">
+        </testcase>
+        <testcase classname="tests/services/reportesService.test.tsx" name="Servicios · reportesService &gt; validarArchivoReporte rechaza el formato y el tamaño" time="0.0081906">
+        </testcase>
+        <testcase classname="tests/services/reportesService.test.tsx" name="Servicios · reportesService &gt; getReportes mapea a camelCase; con lista vacía devuelve []" time="0.0139556">
+        </testcase>
+        <testcase classname="tests/services/reportesService.test.tsx" name="Servicios · reportesService &gt; crear, actualizar y borrar un reporte" time="0.0048521">
+        </testcase>
+        <testcase classname="tests/services/reportesService.test.tsx" name="Servicios · reportesService &gt; downloadReporteArchivo lanza con el detail si la API responde error" time="0.008662">
+        </testcase>
+        <testcase classname="tests/services/reportesService.test.tsx" name="Servicios · reportesService &gt; downloadReporteArchivo descarga con el nombre del Content-Disposition" time="0.0176776">
+        </testcase>
+        <testcase classname="tests/services/reportesService.test.tsx" name="Servicios · themeService &gt; lee el tema guardado y, sin nada guardado, el preferido del sistema" time="0.0033431">
+        </testcase>
+        <testcase classname="tests/services/reportesService.test.tsx" name="Servicios · themeService &gt; applyTheme pone la clase dark y persiste" time="0.0033614">
+        </testcase>
+    </testsuite>
+</testsuites>

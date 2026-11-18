@@ -1,0 +1,1165 @@
+<testsuites id="" name="" tests="48" failures="16" skipped="4" errors="4" time="2153.705614">
+<testsuite name="boletin-padre.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="chromium" tests="2" failures="0" skipped="0" time="54.759" errors="0">
+<testcase name="boletín del padre (WEB-09) › el padre descarga un PDF" classname="boletin-padre.spec.ts" time="30.673">
+</testcase>
+<testcase name="boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación" classname="boletin-padre.spec.ts" time="24.086">
+</testcase>
+</testsuite>
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="chromium" tests="8" failures="5" skipped="0" time="183.826" errors="0">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="14.463">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).not.toBeEmpty() failed" type="expect.not.toBeEmpty">
+<![CDATA[  [chromium] › login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardgroupUsuariosfact_checkAsistenciaschoolNotascalendar' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardgroupUsuariosfact_checkAsistenciaschoolNotascalendar' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      23 |
+      24 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 25 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      26 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      27 |     })
+      28 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:25:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="18.093">
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="18.08">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).not.toBeEmpty() failed" type="expect.not.toBeEmpty">
+<![CDATA[  [chromium] › login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      23 |
+      24 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 25 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      26 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      27 |     })
+      28 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:25:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="24.201">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="21.202">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).not.toBeEmpty() failed" type="expect.not.toBeEmpty">
+<![CDATA[  [chromium] › login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      23 |
+      24 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 25 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      26 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      27 |     })
+      28 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:25:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="24.578">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="falta /general" type="expect.toContain">
+<![CDATA[  [chromium] › login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+
+    Error: falta /general
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: "/general"
+    Received array: []
+
+      31 |
+      32 |       const enlaces = await enlacesDelMenu(page)
+    > 33 |       for (const ruta of MENU[rol].debe) expect(enlaces, `falta ${ruta}`).toContain(ruta)
+         |                                                                           ^
+      34 |       for (const ruta of MENU[rol].noDebe) expect(enlaces, `sobra ${ruta}`).not.toContain(ruta)
+      35 |       for (const ruta of enlaces) expect(puedeEntrar(rol, ruta), `sobra ${ruta}: routeRoles no deja entrar al ${rol}`).toBe(true)
+      36 |     })
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:33:75
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="46.554">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).not.toBeEmpty() failed" type="expect.not.toBeEmpty">
+<![CDATA[  [chromium] › login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      23 |
+      24 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 25 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      26 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      27 |     })
+      28 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:25:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="16.655">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="chromium" tests="2" failures="1" skipped="0" time="100.468" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="54.328">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toHaveText(expected) failed" type="expect.toHaveText">
+<![CDATA[  [chromium] › padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('combobox', { name: /estudiante/i }).locator('option')
+    Timeout: 5000ms
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+    -   /Sofía/i,
+    -   /Santiago/i,
+    +   "Estudiante #1",
+    +   "Estudiante #3",
+      ]
+
+    Call log:
+      - Expect "toHaveText" getByRole('combobox', { name: /estudiante/i }).locator('option') with timeout 5000ms
+      - waiting for getByRole('combobox', { name: /estudiante/i }).locator('option')
+        14 × locator resolved to 2 elements
+
+
+      20 |
+      21 |     // Ve solo sus dos hijos.
+    > 22 |     await expect(selector.locator('option')).toHaveText([new RegExp(hijo1, 'i'), new RegExp(hijo2, 'i')])
+         |                                              ^
+      23 |
+      24 |     // Con el primero activo, el módulo habla de él; al cambiar, habla del segundo.
+      25 |     await expect(page.getByText(new RegExp(hijo1, 'i')).first()).toBeVisible()
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:22:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="un padre con un solo hijo no ve el selector" classname="padre-dos-hijos.spec.ts" time="46.14">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="chromium" tests="2" failures="0" skipped="0" time="68.971" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="20.786">
+<properties>
+<property name="fail" value="Requiere BE-08: sin el 409 la API duplica el registro">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="48.185">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="chromium" tests="1" failures="1" skipped="0" time="57.93" errors="0">
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="57.93">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /registered=true/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        20 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+        67 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/"
+
+
+      51 |   // Cuenta creada: vuelve al inicio de sesión (el padre no requiere aprobación).
+      52 |   // El registro y el login son Server Actions: en QA tardan 11–17 s (D-WEB-16).
+    > 53 |   await expect(page).toHaveURL(/registered=true/, { timeout: 45_000 })
+         |                      ^
+      54 |
+      55 |   const vista = page.locator('[data-view="login"]')
+      56 |   await vista.locator('input[type="email"]').fill(correo)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:53:22
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md
+
+    Error Context: ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="chromium" tests="6" failures="1" skipped="2" time="200.987" errors="1">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="40.844">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/\?login=1$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/notas"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        13 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/notas"
+
+
+      19 |     await page.goto('/notas')
+      20 |
+    > 21 |     await expect(page).toHaveURL(/\/\?login=1$/)
+         |                        ^
+      22 |     const cookies = await context.cookies()
+      23 |     expect(cookies.map((c) => c.name)).not.toContain('eys_access')
+      24 |   })
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:21:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="91.192">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-chromium\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [chromium] › sesion.spec.ts:26:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: page.goto: Test timeout of 90000ms exceeded.
+    Call log:
+      - navigating to "https://deploy-preview-34--qaeyesschool.netlify.app/notas", waiting until "load"
+
+
+      28 |
+      29 |     await context.addCookies([{ name: 'eys_access', value: jwtVencido(), url: baseURL!, httpOnly: true }])
+    > 30 |     await page.goto('/notas')
+         |                ^
+      31 |
+      32 |     await expect(page).toHaveURL(/\/notas$/)
+      33 |     const acceso = (await context.cookies()).find((c) => c.name === 'eys_access')
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:30:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript" classname="sesion.spec.ts" time="14.452">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)" classname="sesion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente: falta el dato de QA E2E_SESSION_IDLE_MINUTES">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)" classname="sesion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente: falta el dato de QA E2E_SESSION_IDLE_MINUTES">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="54.49">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="chromium" tests="3" failures="1" skipped="0" time="91.849" errors="0">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="53.987">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('docente.e2e.1794359297629@example.com')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('docente.e2e.1794359297629@example.com') with timeout 5000ms
+      - waiting for getByText('docente.e2e.1794359297629@example.com')
+
+
+      38 |     // Filtrar (CP-SIS-027)
+      39 |     await page.getByPlaceholder('Buscar por nombre, correo o documento...').fill(correo)
+    > 40 |     await expect(page.getByText(correo)).toBeVisible()
+         |                                          ^
+      41 |
+      42 |     // Editar (CP-SIS-022)
+      43 |     await page.getByTitle('Editar').first().click()
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:40:42
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\usuarios-gestión-de-usuari-a882f-iminar-un-docente-de-prueba-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="23.523">
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="14.339">
+</testcase>
+</testsuite>
+<testsuite name="boletin-padre.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="firefox" tests="2" failures="0" skipped="0" time="56.561" errors="0">
+<testcase name="boletín del padre (WEB-09) › el padre descarga un PDF" classname="boletin-padre.spec.ts" time="30.681">
+</testcase>
+<testcase name="boletín del padre (WEB-09) › un periodo sin notas muestra el texto exacto del criterio de aceptación" classname="boletin-padre.spec.ts" time="25.88">
+</testcase>
+</testsuite>
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="firefox" tests="8" failures="4" skipped="0" time="427.104" errors="1">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="34.911">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).not.toBeEmpty() failed" type="expect.not.toBeEmpty">
+<![CDATA[  [firefox] › login-roles.spec.ts:21:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardgroupUsuariosfact_checkAsistenciaschoolNotascalendar' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardgroupUsuariosfact_checkAsistenciaschoolNotascalendar' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      23 |
+      24 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 25 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      26 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      27 |     })
+      28 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:25:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="58.554">
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="53.725">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).not.toBeEmpty() failed" type="expect.not.toBeEmpty">
+<![CDATA[  [firefox] › login-roles.spec.ts:21:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      23 |
+      24 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 25 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      26 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      27 |     })
+      28 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:25:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="57.666">
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="56.197">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).not.toBeEmpty() failed" type="expect.not.toBeEmpty">
+<![CDATA[  [firefox] › login-roles.spec.ts:21:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      23 |
+      24 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 25 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      26 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      27 |     })
+      28 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:25:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="92.258">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [firefox] › login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: page.goto: Test timeout of 90000ms exceeded.
+    Call log:
+      - navigating to "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1", waiting until "load"
+
+
+       at utils.ts:35
+
+      33 |   requiere(`E2E_${rol.toUpperCase()}_EMAIL`, 'E2E_PASSWORD')
+      34 |
+    > 35 |   await page.goto('/?login=1')
+         |              ^
+      36 |   const vista = page.locator('[data-view="login"]')
+      37 |   await vista.locator('input[type="email"]').fill(correo!)
+      38 |   await vista.locator('input[type="password"]').fill(password!)
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:35:14)
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:30:26
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="29.642">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).not.toBeEmpty() failed" type="expect.not.toBeEmpty">
+<![CDATA[  [firefox] › login-roles.spec.ts:21:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+
+    Error: expect(locator).not.toBeEmpty() failed
+
+    Locator: locator('main')
+    Expected: not empty
+    Error: strict mode violation: locator('main') resolved to 2 elements:
+        1) <main class="flex-1">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' })
+        2) <main class="ml-20 min-h-screen overflow-x-hidden">…</main> aka getByRole('main').filter({ hasText: 'visibilitygrid_viewDashboardfact_checkAsistenciaschoolNotascalendar_monthHorario' }).getByRole('main')
+
+    Call log:
+      - Expect "not toBeEmpty" locator('main') with timeout 5000ms
+      - waiting for locator('main')
+
+
+      23 |
+      24 |       // «Con los datos cargados»: ninguna alerta de error y la página no queda en blanco.
+    > 25 |       await expect(page.locator('main')).not.toBeEmpty()
+         |                                              ^
+      26 |       await expect(page.getByText(/error al cargar|HTTP 500/i)).toHaveCount(0)
+      27 |     })
+      28 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:25:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="44.151">
+</testcase>
+</testsuite>
+<testsuite name="padre-dos-hijos.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="firefox" tests="2" failures="1" skipped="0" time="104.459" errors="0">
+<testcase name="el padre de prueba cambia de hijo y cambian notas, asistencia y novedades" classname="padre-dos-hijos.spec.ts" time="57.269">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        72 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+       at utils.ts:42
+
+      40 |
+      41 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 42 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      43 | }
+      44 |
+      45 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:42:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:15:3
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="un padre con un solo hijo no ve el selector" classname="padre-dos-hijos.spec.ts" time="47.19">
+</testcase>
+</testsuite>
+<testsuite name="registro-masivo.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="firefox" tests="2" failures="0" skipped="0" time="101.13" errors="0">
+<testcase name="registro masivo (WEB-06) › la segunda vez con el mismo curso, todos salen «ya registrado»" classname="registro-masivo.spec.ts" time="31.306">
+<properties>
+<property name="fail" value="Requiere BE-08: sin el 409 la API duplica el registro">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\registro-masivo-registro-m-a0cac-todos-salen-«ya-registrado»-firefox\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="registro masivo (WEB-06) › con la red cortada, los fallidos se listan por nombre con Reintentar y Descartar" classname="registro-masivo.spec.ts" time="69.824">
+</testcase>
+</testsuite>
+<testsuite name="registro-padre.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="firefox" tests="1" failures="1" skipped="0" time="82.859" errors="0">
+<testcase name="el padre que se registra ve los datos de su hijo vinculado" classname="registro-padre.spec.ts" time="82.859">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /registered=true/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        9 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+          - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+        51 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/"
+
+
+      51 |   // Cuenta creada: vuelve al inicio de sesión (el padre no requiere aprobación).
+      52 |   // El registro y el login son Server Actions: en QA tardan 11–17 s (D-WEB-16).
+    > 53 |   await expect(page).toHaveURL(/registered=true/, { timeout: 45_000 })
+         |                      ^
+      54 |
+      55 |   const vista = page.locator('[data-view="login"]')
+      56 |   await vista.locator('input[type="email"]').fill(correo)
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:53:22
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    Error Context: ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="sesion.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="firefox" tests="6" failures="1" skipped="2" time="310.987" errors="1">
+<testcase name="sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión" classname="sesion.spec.ts" time="77.718">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [firefox] › sesion.spec.ts:15:7 › sesión (WEB-01) › con 31 minutos sin actividad se cierra la sesión y vuelve al inicio de sesión 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/\?login=1$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/notas"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        12 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/notas"
+
+
+      19 |     await page.goto('/notas')
+      20 |
+    > 21 |     await expect(page).toHaveURL(/\/\?login=1$/)
+         |                        ^
+      22 |     const cookies = await context.cookies()
+      23 |     expect(cookies.map((c) => c.name)).not.toContain('eys_access')
+      24 |   })
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:21:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-con-3-a2e0e--vuelve-al-inicio-de-sesión-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola" classname="sesion.spec.ts" time="99.224">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 90000ms exceeded." type="Error">
+<![CDATA[  [firefox] › sesion.spec.ts:26:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: locator.click: Test timeout of 90000ms exceeded.
+    Call log:
+      - waiting for locator('[data-view="login"]').locator('button').first()
+        - locator resolved to <button style-hover="transform:translateY(-2px);box-shadow:0 0 36px color-mix(in srgb,var(--neon2,#4df0c8) 75%, transparent);">ENTRAR</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> from <section id="plataforma" data-screen-label="Plataforma">…</section> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> from <section id="plataforma" data-screen-label="Plataforma">…</section> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        94 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> from <section id="plataforma" data-screen-label="Plataforma">…</section> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+       at utils.ts:39
+
+      37 |   await vista.locator('input[type="email"]').fill(correo!)
+      38 |   await vista.locator('input[type="password"]').fill(password!)
+    > 39 |   await vista.locator('button').first().click()
+         |                                         ^
+      40 |
+      41 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+      42 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:39:41)
+        at c:\Users\marig\proyecto-eyesschool\e2e\sesion.spec.ts:27:5
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\sesion-sesión-WEB-01-con-e-9f3ec-o-la-sesión-se-renueva-sola-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="sesión (WEB-01) › el token de acceso no se puede leer desde JavaScript" classname="sesion.spec.ts" time="56.862">
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › una sesión usada durante 4 minutos con actividad cada 15 s sigue funcionando (CP-SIS-065)" classname="sesion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente: falta el dato de QA E2E_SESSION_IDLE_MINUTES">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="sesión (WEB-01) › a escala (QA con SESSION_IDLE_MINUTES=1) › 70 s sin actividad cierran la sesión (equivale a los 31 min de la regla real)" classname="sesion.spec.ts">
+<properties>
+<property name="skip" value="Pendiente: falta el dato de QA E2E_SESSION_IDLE_MINUTES">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="una ruta del panel sin sesión pide iniciar sesión" classname="sesion.spec.ts" time="77.161">
+</testcase>
+</testsuite>
+<testsuite name="usuarios.spec.ts" timestamp="2026-11-11T00:55:58.350Z" hostname="firefox" tests="3" failures="0" skipped="0" time="152.531" errors="1">
+<testcase name="gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba" classname="usuarios.spec.ts" time="86.655">
+</testcase>
+<testcase name="gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021)" classname="usuarios.spec.ts" time="8.976">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--firefox\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--firefox\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--firefox\trace.zip]]
+]]>
+</system-out>
+<error message="page.goto: NS_ERROR_ABORT" type="Error">
+<![CDATA[  [firefox] › usuarios.spec.ts:58:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) 
+
+    Error: page.goto: NS_ERROR_ABORT
+    Call log:
+      - navigating to "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1", waiting until "load"
+
+
+       at utils.ts:35
+
+      33 |   requiere(`E2E_${rol.toUpperCase()}_EMAIL`, 'E2E_PASSWORD')
+      34 |
+    > 35 |   await page.goto('/?login=1')
+         |              ^
+      36 |   const vista = page.locator('[data-view="login"]')
+      37 |   await vista.locator('input[type="email"]').fill(correo!)
+      38 |   await vista.locator('input[type="password"]').fill(password!)
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:35:14)
+        at c:\Users\marig\proyecto-eyesschool\e2e\usuarios.spec.ts:59:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\usuarios-gestión-de-usuari-6e931-indica-el-campo-CP-SIS-021--firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="gestión de usuarios (admin) › un filtro sin coincidencias muestra un mensaje informativo (CP-SIS-028)" classname="usuarios.spec.ts" time="56.9">
+</testcase>
+</testsuite>
+</testsuites>

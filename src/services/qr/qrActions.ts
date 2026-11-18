@@ -115,9 +115,19 @@ export async function getEstudiantesConQRAction(): Promise<EstudianteQR[]> {
 export async function getCodigoQRByValueAction(
   codigoTexto: string
 ): Promise<CodigoQRConEstudiante | null> {
-  const data = await apiFetch<Raw[]>(`/estudiantes?codigo_estudiante=${encodeURIComponent(codigoTexto)}&estado=Activo&limit=1`)
-  if (!data.length) return null
-  const est = data[0]
+  // DEF-WEB-18: GET /estudiantes no filtra por código (el contrato solo admite
+  // skip, limit, id_curso y estado). Se recorre la lista y se exige el código
+  // exacto; antes se tomaba el primero y cualquier QR registraba a EST002.
+  const buscado = codigoTexto.trim()
+  if (!buscado) return null
+  const POR_PAGINA = 500
+  let est: Raw | undefined
+  for (let skip = 0; !est; skip += POR_PAGINA) {
+    const pagina = await apiFetch<Raw[]>(`/estudiantes?estado=Activo&skip=${skip}&limit=${POR_PAGINA}`)
+    est = pagina.find((e) => e.codigoEstudiante === buscado)
+    if (pagina.length < POR_PAGINA) break
+  }
+  if (!est) return null
   return {
     idCodigo:         est.idEstudiante as number,
     idEstudiante:     est.idEstudiante as number,
@@ -127,7 +137,7 @@ export async function getCodigoQRByValueAction(
     fechaCreacion:    new Date().toISOString(),
     fechaVencimiento: null,
     creadoPor:        null,
-    nombreCompleto:   '—',
+    nombreCompleto:   nombreDeEstudiante(est) || '—',
     codigoEstudiante: est.codigoEstudiante as string,
     curso:            null,
   }

@@ -1,0 +1,436 @@
+<testsuites id="" name="" tests="8" failures="4" skipped="0" errors="4" time="257.142026">
+<testsuite name="login-roles.spec.ts" timestamp="2026-11-03T15:27:18.469Z" hostname="chromium" tests="8" failures="4" skipped="0" time="236.128" errors="4">
+<testcase name="inicio de sesión · admin › el admin llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="26.627">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › login-roles.spec.ts:15:9 › inicio de sesión · admin › el admin llega a su inicio con los datos cargados 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/admin$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 20000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 20000ms
+        40 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+       at utils.ts:41
+
+      39 |   await vista.locator('button').first().click()
+      40 |
+    > 41 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 20_000 })
+         |                                                            ^
+      42 | }
+      43 |
+      44 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (C:\Users\marig\proyecto-eyesschool\e2e\utils.ts:41:60)
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:16:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-283fd-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · admin › el menú del admin solo trae los módulos de su rol" classname="login-roles.spec.ts" time="28.15">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › login-roles.spec.ts:23:9 › inicio de sesión · admin › el menú del admin solo trae los módulos de su rol 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/admin$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 20000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 20000ms
+        40 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+       at utils.ts:41
+
+      39 |   await vista.locator('button').first().click()
+      40 |
+    > 41 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 20_000 })
+         |                                                            ^
+      42 | }
+      43 |
+      44 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (C:\Users\marig\proyecto-eyesschool\e2e\utils.ts:41:60)
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:24:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-8bc2c--trae-los-módulos-de-su-rol-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · docente › el docente llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="31.972">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [chromium] › login-roles.spec.ts:15:9 › inicio de sesión · docente › el docente llega a su inicio con los datos cargados 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+    Call log:
+      - Expect "toHaveURL" with timeout 20000ms
+        37 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+      - Test timeout of 30000ms exceeded.
+
+
+       at utils.ts:41
+
+      39 |   await vista.locator('button').first().click()
+      40 |
+    > 41 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 20_000 })
+         |                                                            ^
+      42 | }
+      43 |
+      44 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (C:\Users\marig\proyecto-eyesschool\e2e\utils.ts:41:60)
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:16:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-9ca1d-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="inicio de sesión · docente › el menú del docente solo trae los módulos de su rol" classname="login-roles.spec.ts" time="32.259">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [chromium] › login-roles.spec.ts:23:9 › inicio de sesión · docente › el menú del docente solo trae los módulos de su rol 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+    Call log:
+      - Expect "toHaveURL" with timeout 20000ms
+        40 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+      - Test timeout of 30000ms exceeded.
+
+
+       at utils.ts:41
+
+      39 |   await vista.locator('button').first().click()
+      40 |
+    > 41 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 20_000 })
+         |                                                            ^
+      42 | }
+      43 |
+      44 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (C:\Users\marig\proyecto-eyesschool\e2e\utils.ts:41:60)
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:24:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-a6947--trae-los-módulos-de-su-rol-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="31.96">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [chromium] › login-roles.spec.ts:15:9 › inicio de sesión · estudiante › el estudiante llega a su inicio con los datos cargados 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+    Call log:
+      - Expect "toHaveURL" with timeout 20000ms
+        38 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+      - Test timeout of 30000ms exceeded.
+
+
+       at utils.ts:41
+
+      39 |   await vista.locator('button').first().click()
+      40 |
+    > 41 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 20_000 })
+         |                                                            ^
+      42 | }
+      43 |
+      44 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (C:\Users\marig\proyecto-eyesschool\e2e\utils.ts:41:60)
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:16:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-3eebd-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol" classname="login-roles.spec.ts" time="27.391">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › login-roles.spec.ts:23:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 20000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 20000ms
+        41 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+       at utils.ts:41
+
+      39 |   await vista.locator('button').first().click()
+      40 |
+    > 41 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 20_000 })
+         |                                                            ^
+      42 | }
+      43 |
+      44 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (C:\Users\marig\proyecto-eyesschool\e2e\utils.ts:41:60)
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:24:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="inicio de sesión · padre › el padre llega a su inicio con los datos cargados" classname="login-roles.spec.ts" time="31.424">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\trace.zip]]
+]]>
+</system-out>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [chromium] › login-roles.spec.ts:15:9 › inicio de sesión · padre › el padre llega a su inicio con los datos cargados 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+    Call log:
+      - Expect "toHaveURL" with timeout 20000ms
+        38 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+      - Test timeout of 30000ms exceeded.
+
+
+       at utils.ts:41
+
+      39 |   await vista.locator('button').first().click()
+      40 |
+    > 41 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 20_000 })
+         |                                                            ^
+      42 | }
+      43 |
+      44 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (C:\Users\marig\proyecto-eyesschool\e2e\utils.ts:41:60)
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:16:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-a5725-icio-con-los-datos-cargados-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="inicio de sesión · padre › el menú del padre solo trae los módulos de su rol" classname="login-roles.spec.ts" time="26.345">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › login-roles.spec.ts:23:9 › inicio de sesión · padre › el menú del padre solo trae los módulos de su rol 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 20000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 20000ms
+        41 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+       at utils.ts:41
+
+      39 |   await vista.locator('button').first().click()
+      40 |
+    > 41 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 20_000 })
+         |                                                            ^
+      42 | }
+      43 |
+      44 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (C:\Users\marig\proyecto-eyesschool\e2e\utils.ts:41:60)
+        at C:\Users\marig\proyecto-eyesschool\e2e\login-roles.spec.ts:24:7
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\login-roles-inicio-de-sesi-976fb--trae-los-módulos-de-su-rol-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

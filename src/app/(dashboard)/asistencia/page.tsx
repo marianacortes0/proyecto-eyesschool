@@ -3,11 +3,16 @@
 import { redirect } from 'next/navigation'
 import { getServerUser, getServerToken, userToRole } from '@/lib/auth/server'
 import { getAsistenciaBootstrapAction, type AsistenciaBootstrap } from '@/services/asistencia/asistenciaActions'
+import { getAsociadoAction } from '@/services/asociado/asociadoActions'
+import SelectorHijo from '@/components/asociado/SelectorHijo'
+import type { Hijo } from '@/lib/utils/hijoActivo'
 import AsistenciaClient from './AsistenciaClient'
+import { hoyColegio } from '@/lib/utils/fecha'
+import { MSG_SIN_HIJOS } from '@/lib/utils/hijoActivo'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
 
-export default async function AsistenciaPage() {
+export default async function AsistenciaPage({ searchParams }: { searchParams: Promise<{ hijo?: string }> }) {
   const user = await getServerUser()
   if (!user) redirect('/?login=1')
 
@@ -17,6 +22,7 @@ export default async function AsistenciaPage() {
   const token = await getServerToken()
   let idEstudiantePropio: number | undefined
   let nombreEstudiantePropio: string | undefined
+  let hijos: Hijo[] = []
 
   // Estudiante: ve SU propia asistencia (id vía /estudiantes/me; nombre desde la cookie).
   if (role === 'estudiante' && token) {
@@ -35,26 +41,35 @@ export default async function AsistenciaPage() {
     }
   }
 
-  // Padre: ve la asistencia del estudiante asociado (id + nombre vía /dashboard/padre).
-  if (role === 'padre' && token) {
+  // Padre: ve la asistencia del hijo activo (`?hijo=`, o el primero) entre los que tiene vinculados.
+  let sinHijos = false
+  if (role === 'padre') {
     try {
-      const res = await fetch(`${API}/dashboard/padre`, {
-        headers: { Authorization: `Bearer ${token}` },
-        cache: 'no-store',
-      })
-      if (res.ok) {
-        const d = await res.json() as Record<string, unknown>
-        idEstudiantePropio = (d.id_estudiante ?? d.idEstudiante) as number | undefined
-        nombreEstudiantePropio = (d.nombre_estudiante ?? d.nombreEstudiante) as string | undefined
-      }
+      const { hijo } = await searchParams
+      const asociado = await getAsociadoAction(hijo)
+      hijos = asociado.hijos
+      sinHijos = asociado.hijos.length === 0 && !asociado.info
+      idEstudiantePropio = asociado.info?.idEstudiante
+      nombreEstudiantePropio = asociado.info?.nombre
     } catch {
       // leave idEstudiantePropio undefined
+    }
+    // CP-SIS-061 (DEF-WEB-15): sin hijos vinculados no hay asistencia que pedir;
+    // antes la pantalla mostraba «No se pudo cargar la asistencia».
+    if (sinHijos) {
+      return (
+        <div className="p-6">
+          <div className="px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-300 text-sm">
+            <strong>{MSG_SIN_HIJOS}.</strong> No encontramos un estudiante asociado a tu cuenta.
+          </div>
+        </div>
+      )
     }
   }
 
   // Datos del día en el render del servidor (la fecha de hoy coincide con la del
-  // cliente porque ambas usan la fecha UTC vía toISOString).
-  const hoy = new Date().toISOString().split('T')[0]
+  // cliente porque ambas usan hoyColegio(): DEF-WEB-11).
+  const hoy = hoyColegio()
   let initialData: AsistenciaBootstrap | undefined
   try {
     initialData = await getAsistenciaBootstrapAction({ fecha: hoy, estado: 'todos', idEstudiante: idEstudiantePropio })
@@ -63,12 +78,16 @@ export default async function AsistenciaPage() {
   }
 
   return (
-    <AsistenciaClient
-      role={role}
-      idUsuarioRegistrador={user.idUsuario}
-      idEstudiantePropio={idEstudiantePropio}
-      nombreEstudiantePropio={nombreEstudiantePropio}
-      initialData={initialData}
-    />
+    <>
+      <SelectorHijo hijos={hijos} activoId={idEstudiantePropio ?? null} />
+      <AsistenciaClient
+        key={idEstudiantePropio ?? 'sin-hijo'}
+        role={role}
+        idUsuarioRegistrador={user.idUsuario}
+        idEstudiantePropio={idEstudiantePropio}
+        nombreEstudiantePropio={nombreEstudiantePropio}
+        initialData={initialData}
+      />
+    </>
   )
 }

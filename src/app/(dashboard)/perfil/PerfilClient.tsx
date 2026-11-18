@@ -424,6 +424,7 @@ export default function PerfilClient({ role, perfilServer = null, adminDataServe
         <div className="relative group">
           <div className="w-24 h-24 rounded-full border-4 border-primary overflow-hidden bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center shadow-lg">
             {avatarUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element -- imagen dinámica de origen externo (QR de goqr.me o avatar de la API); next/image exigiría configurar dominios remotos
               <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
             ) : (
               <span className="text-3xl font-bold text-primary dark:text-blue-400">

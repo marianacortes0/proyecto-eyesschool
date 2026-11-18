@@ -1,0 +1,93 @@
+Corrida E6 · e2e/registro-padre.spec.ts con el oráculo del aviso (D-WEB-17), commit 360b599 + ese archivo. JUnit: E6_registro-padre.xml.
+Salida de consola de Playwright 1.64.1. Revisada: sin clave, tokens ni llamadas fill().
+
+inicio 2026-11-11T01:54:17Z commit 360b599 + registro-padre.spec.ts sin commit
+
+Running 2 tests using 1 worker
+
+  x  1 [chromium] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado (59.9s)
+  x  2 [firefox] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado (1.6m)
+
+
+  1) [chromium] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('María Rodríguez').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('María Rodríguez').first() with timeout 5000ms
+      - waiting for getByText('María Rodríguez').first()
+
+
+      63 |   for (const modulo of ['/notas', '/asistencia', '/novedades']) {
+      64 |     await page.goto(modulo)
+    > 65 |     await expect(page.getByText(process.env.E2E_ESTUDIANTE_VINCULADO_NOMBRE!).first()).toBeVisible()
+         |                                                                                        ^
+      66 |   }
+      67 | })
+      68 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:65:88
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [firefox] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('María Rodríguez').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('María Rodríguez').first() with timeout 5000ms
+      - waiting for getByText('María Rodríguez').first()
+
+
+      63 |   for (const modulo of ['/notas', '/asistencia', '/novedades']) {
+      64 |     await page.goto(modulo)
+    > 65 |     await expect(page.getByText(process.env.E2E_ESTUDIANTE_VINCULADO_NOMBRE!).first()).toBeVisible()
+         |                                                                                        ^
+      66 |   }
+      67 | })
+      68 |
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:65:88
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+    [firefox] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+salida=1

@@ -27,7 +27,8 @@ export const PERMISSIONS: PermissionMap = {
   },
   docente: {
     'qr:escanear':       ['create'],
-    asistencia:          ['create', 'read', 'update', 'delete'],
+    // Borrar asistencia es solo del admin: DELETE /asistencia/{id} responde 403 al docente.
+    asistencia:          ['create', 'read', 'update'],
     notas:               ['create', 'read', 'update', 'delete'],
     novedades:           ['create', 'read', 'update', 'delete'],
     horarios:            ['read'],
@@ -70,10 +71,10 @@ export function canDelete(role: Role, resource: Resource): boolean {
 }
 
 /**
- * Maps the Supabase role string or numeric idRol to the internal Role key.
- * Supports:
- *   - app_metadata.rol  → 'Administrador' | 'Profesor' | 'Estudiante' | 'Padre'
- *   - user_metadata.idRol → 1 | 2 | 3 | 4
+ * Convierte el nombre de rol del backend (o el id numérico) a la llave interna.
+ * Acepta:
+ *   - nombre: 'Administrador' | 'Profesor' | 'Estudiante' | 'Padre' (o la llave)
+ *   - idRol: 1 | 2 | 3 | 4
  */
 export function mapRolToKey(nombreRol?: string, idRol?: number): Role | null {
   if (nombreRol) {

@@ -17,6 +17,9 @@ import { notifySuccess, notifyInfo } from "@/lib/toast";
 import { LANDING_MARKUP } from "./eyeschoolMarkup";
 import SignupModal from "./SignupModal";
 
+/** Tope de espera del inicio de sesión en el navegador (DEF-WEB-07). */
+const LOGIN_TOPE_MS = 60_000;
+
 type LandingHandlers = {
   onLogin: (correo: string, password: string) => Promise<{ error?: string } | void>;
   navigate: (path: string) => void;
@@ -393,7 +396,12 @@ function createEngine(root: HTMLElement, handlers: LandingHandlers) {
     on(sec.querySelector("[data-ben-close]"), "click", () => (state.benOpen = false));
 
     ben2Panel = sec.querySelector("[data-ben2-panel]");
-    on(sec.querySelector("[data-ben2-open]"), "click", () => (state.ben2Open = true));
+    on(sec.querySelector("[data-ben2-open]"), "click", () => {
+      state.ben2Open = true;
+      // DEF-WEB-06: el reproductor de YouTube se carga al abrir su panel, no con la portada.
+      const yt = sec.querySelector("iframe[data-src]") as HTMLIFrameElement | null;
+      if (yt && !yt.getAttribute("src")) yt.src = yt.dataset.src ?? "";
+    });
     on(sec.querySelector("[data-ben2-close]"), "click", () => (state.ben2Open = false));
 
     cardOverlay = sec.querySelector("[data-card-overlay]");
@@ -462,7 +470,18 @@ function createEngine(root: HTMLElement, handlers: LandingHandlers) {
       submitBtn.style.opacity = "0.7";
       submitBtn.style.pointerEvents = "none";
       try {
-        const res = await handlers.onLogin(correo, password);
+        // DEF-WEB-07: sin tope, si el servidor no respondía el botón quedaba en
+        // «ENTRANDO…» indefinidamente. Si llega después, la redirección sigue igual.
+        let tope: ReturnType<typeof setTimeout> | undefined;
+        const res = await Promise.race([
+          handlers.onLogin(correo, password),
+          new Promise<{ error: string }>((resolver) => {
+            tope = setTimeout(
+              () => resolver({ error: "El inicio de sesión está tardando demasiado. Intenta de nuevo." }),
+              LOGIN_TOPE_MS
+            );
+          }),
+        ]).finally(() => clearTimeout(tope));
         // En éxito, el server action redirige; aquí solo manejamos el error.
         if (res && res.error) errEl.textContent = res.error;
       } catch {
@@ -480,6 +499,11 @@ function createEngine(root: HTMLElement, handlers: LandingHandlers) {
     };
     if (emailInput) on(emailInput, "keydown", onEnter);
     if (passInput) on(passInput, "keydown", onEnter);
+
+    // El formulario ya responde: antes de esto el HTML del servidor se ve listo,
+    // pero un clic en «ENTRAR» no hace nada. Las pruebas E2E esperan esta marca.
+    loginView.dataset.listo = "true";
+    cleanups.push(() => delete loginView.dataset.listo);
   };
 
   // ---- floating dust motes ---------------------------------------------

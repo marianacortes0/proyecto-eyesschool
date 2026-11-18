@@ -1,0 +1,1 @@
+30e4532 fix(horarios): error con reintento si el horario del padre no carga

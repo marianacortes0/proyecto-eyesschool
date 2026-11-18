@@ -1,0 +1,226 @@
+Corrida E5 · repetición de los casos inestables de E4 (Chromium y Firefox), commit 360b599. JUnit: E5_reintento.xml.
+Salida de consola de Playwright 1.64.1. Revisada: sin clave, tokens ni llamadas fill().
+
+inicio 2026-11-11T01:35:53Z commit 360b599
+
+Running 12 tests using 1 worker
+
+  ok  1 [chromium] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (17.1s)
+  x   2 [chromium] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades (36.3s)
+  x   3 [chromium] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado (60.0s)
+  ok  4 [chromium] › e2e\sesion.spec.ts:26:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola (22.2s)
+  ok  5 [chromium] › e2e\usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba (57.1s)
+  ok  6 [chromium] › e2e\usuarios.spec.ts:58:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) (23.6s)
+  x   7 [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol (1.8m)
+  x   8 [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades (1.4m)
+  x   9 [firefox] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado (1.9m)
+  ok 10 [firefox] › e2e\sesion.spec.ts:26:7 › sesión (WEB-01) › con el acceso vencido y un refresco válido la sesión se renueva sola (1.4m)
+  ok 11 [firefox] › e2e\usuarios.spec.ts:27:7 › gestión de usuarios (admin) › crear, filtrar, editar y eliminar un docente de prueba (1.1m)
+  ok 12 [firefox] › e2e\usuarios.spec.ts:58:7 › gestión de usuarios (admin) › crear con un campo vacío no guarda e indica el campo (CP-SIS-021) (29.9s)
+
+
+  1) [chromium] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('combobox', { name: /estudiante/i }).locator('option')
+    Timeout: 5000ms
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+    -   /Sofía/i,
+    -   /Santiago/i,
+    +   "Estudiante #1",
+    +   "Estudiante #3",
+      ]
+
+    Call log:
+      - Expect "toHaveText" getByRole('combobox', { name: /estudiante/i }).locator('option') with timeout 5000ms
+      - waiting for getByRole('combobox', { name: /estudiante/i }).locator('option')
+        14 × locator resolved to 2 elements
+
+
+      20 |
+      21 |     // Ve solo sus dos hijos.
+    > 22 |     await expect(selector.locator('option')).toHaveText([new RegExp(hijo1, 'i'), new RegExp(hijo2, 'i')])
+         |                                              ^
+      23 |
+      24 |     // Con el primero activo, el módulo habla de él; al cambiar, habla del segundo.
+      25 |     await expect(page.getByText(new RegExp(hijo1, 'i')).first()).toBeVisible()
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:22:46
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /registered=true/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        15 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+        71 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/"
+
+
+      51 |   // Cuenta creada: vuelve al inicio de sesión (el padre no requiere aprobación).
+      52 |   // El registro y el login son Server Actions: en QA tardan 11–17 s (D-WEB-16).
+    > 53 |   await expect(page).toHaveURL(/registered=true/, { timeout: 45_000 })
+         |                      ^
+      54 |
+      55 |   const vista = page.locator('[data-view="login"]')
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:53:22
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+
+    Test timeout of 90000ms exceeded.
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\login-roles-inicio-de-sesi-c362f--trae-los-módulos-de-su-rol-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/general$/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+    Timeout: 45000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        10 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+
+
+       at utils.ts:42
+
+      40 |
+      41 |   // El login por la Server Action tarda 14–17 s contra QA (ver playwright.config.ts).
+    > 42 |   if (opciones.esperarInicio !== false) await expect(page).toHaveURL(new RegExp(`${INICIO[rol]}$`), { timeout: 45_000 })
+         |                                                            ^
+      43 | }
+      44 |
+      45 | export async function cerrarSesion(page: Page) {
+        at iniciarSesion (c:\Users\marig\proyecto-eyesschool\e2e\utils.ts:42:60)
+        at c:\Users\marig\proyecto-eyesschool\e2e\padre-dos-hijos.spec.ts:15:3
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\padre-dos-hijos-el-padre-d-64dce-otas-asistencia-y-novedades-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [firefox] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+
+    Test timeout of 90000ms exceeded.
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /registered=true/
+    Received string:  "https://deploy-preview-34--qaeyesschool.netlify.app/"
+
+    Call log:
+      - Expect "toHaveURL" with timeout 45000ms
+        5 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+          - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/?login=1"
+        17 × locator resolved to <html lang="es" class="_9rNIbG_variable _4Xpjma_variable _0bjUvq_variable h-full antialiased">…</html>
+           - unexpected value "https://deploy-preview-34--qaeyesschool.netlify.app/"
+      - Test timeout of 90000ms exceeded.
+
+
+      51 |   // Cuenta creada: vuelve al inicio de sesión (el padre no requiere aprobación).
+      52 |   // El registro y el login son Server Actions: en QA tardan 11–17 s (D-WEB-16).
+    > 53 |   await expect(page).toHaveURL(/registered=true/, { timeout: 45_000 })
+         |                      ^
+      54 |
+      55 |   const vista = page.locator('[data-view="login"]')
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:53:22
+
+    "afterAll" hook timeout of 90000ms exceeded.
+
+      11 | let correoCreado: string | null = null
+      12 |
+    > 13 | test.afterAll(async ({ browser }) => {
+         |      ^
+      14 |   if (!correoCreado) return
+      15 |   const page = await browser.newPage({ baseURL: process.env.E2E_BASE_URL })
+      16 |   try {
+        at c:\Users\marig\proyecto-eyesschool\e2e\registro-padre.spec.ts:13:6
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    Error Context: test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\registro-padre-el-padre-qu-74766--datos-de-su-hijo-vinculado-firefox\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5 failed
+    [chromium] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+    [chromium] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+    [firefox] › e2e\login-roles.spec.ts:29:9 › inicio de sesión · estudiante › el menú del estudiante solo trae los módulos de su rol 
+    [firefox] › e2e\padre-dos-hijos.spec.ts:9:5 › el padre de prueba cambia de hijo y cambian notas, asistencia y novedades 
+    [firefox] › e2e\registro-padre.spec.ts:28:5 › el padre que se registra ve los datos de su hijo vinculado 
+  7 passed (16.1m)
+salida=1
+fin 2026-11-11T01:52:02Z

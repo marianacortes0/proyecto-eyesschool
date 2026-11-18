@@ -1,4 +1,4 @@
-import { apiFetch, getClientToken } from '@/services/api/client'
+import { apiFetch, PROXY_URL } from '@/services/api/client'
 
 // Origen del backend (sin /api/v1) para construir URLs de archivos estáticos.
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1'
@@ -111,9 +111,7 @@ export function uploadArchivoReporte(
     form.append('file', file)
 
     const xhr = new XMLHttpRequest()
-    xhr.open('POST', `${API_BASE}/reportes/archivo`)
-    const token = getClientToken()
-    if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`)
+    xhr.open('POST', `${PROXY_URL}/reportes/archivo`)
 
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100))
@@ -140,10 +138,7 @@ export function uploadArchivoReporte(
  * con el nombre que entrega el backend. Va autenticado con el token de acceso.
  */
 export async function downloadReporteArchivo(idReporte: number, nombreReporte: string): Promise<void> {
-  const token = getClientToken()
-  const res = await fetch(`${API_BASE}/reportes/${idReporte}/archivo`, {
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-  })
+  const res = await fetch(`${PROXY_URL}/reportes/${idReporte}/archivo`)
   if (!res.ok) {
     let msg = `HTTP ${res.status}`
     try { msg = ((await res.json()) as { detail?: string }).detail ?? msg } catch {}

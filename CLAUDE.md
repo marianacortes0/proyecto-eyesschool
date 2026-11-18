@@ -10,9 +10,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev      # start dev server
 npm run build    # production build
 npm run lint     # ESLint
+npm run typecheck  # tsc --noEmit
+npm test         # Vitest (tests/*.test.ts)
 ```
 
-No test suite is configured.
+Tests live in `tests/` and run in Node with Vitest; CI (`.github/workflows/ci.yml`) runs lint, typecheck, tests, build and `npm audit` on every pull request.
 
 ## Architecture
 
@@ -29,7 +31,7 @@ Authentication is **custom JWT** — not Supabase Auth. Three cookies drive sess
 | `eys_user` | JSON-serialized user profile | no |
 
 - **Server Actions** (`src/auth/actions.ts`): `login`, `logout`, `register`, `forgotPassword`, `resetPassword` — hit backend directly and set cookies via `next/headers`.
-- **Middleware** (`src/services/supabase/middleware.ts`): guards `/admin` and `/general` routes, decodes JWT, redirects on expiry or insufficient role. `src/lib/auth/sessionMiddleware.ts` is an alternative version that also handles proactive access token refresh.
+- **Proxy** (`src/proxy.ts`, the Next 16 rename of middleware): calls `updateSession` in `src/lib/auth/sessionMiddleware.ts`, which closes the session after 30 min of inactivity, refreshes an expired access token and guards every panel route with the `routeRoles` map. **It must live in `src/`, next to `src/app`**: Next only loads the proxy at the same level as `app` and silently ignores one at the repo root (DEF-WEB-04, enforced by `tests/arquitectura.test.ts`).
 - **Server Components**: use `getServerUser()` / `getServerToken()` from `src/lib/auth/server.ts`.
 - **Client Components**: use `useAuth()` hook from `src/hooks/useAuth.ts` — reads the `eys_user` cookie directly.
 
