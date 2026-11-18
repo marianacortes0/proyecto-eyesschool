@@ -55,7 +55,7 @@ export function useEscanear(idUsuarioRegistrador: number) {
       setErrorMsg(null)
 
       try {
-        // Decodificar QR con goqr.me
+        // Decodificar el QR en el navegador (jsQR, DEF-WEB-16)
         const codigoTexto = await readQRFromImage(imageBlob)
         if (!codigoTexto) {
           setErrorMsg('No se pudo leer el código QR, intente nuevamente')

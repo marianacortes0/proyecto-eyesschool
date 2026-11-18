@@ -23,6 +23,10 @@ describe('cabeceras de seguridad (WC-06)', () => {
     expect(CSP).not.toMatch(/img-src[^;]* https:(;|\s|$)/)
   })
 
+  it('el navegador solo habla con la propia web: la foto del QR no sale a terceros (DEF-WEB-16)', () => {
+    expect(CSP).toMatch(/connect-src 'self';/)
+  })
+
   it('en desarrollo no hay CSP (Fast Refresh necesita eval)', () => {
     expect(mapa(false)['Content-Security-Policy']).toBeUndefined()
   })

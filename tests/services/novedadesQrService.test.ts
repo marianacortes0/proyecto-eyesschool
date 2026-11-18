@@ -71,24 +71,5 @@ describe('Servicios · qrService', () => {
     expect(q.getQRImageUrl('EST 001', 150)).toBe('https://api.qrserver.com/v1/create-qr-code/?data=EST%20001&size=150x150&ecc=M&margin=2')
     expect(q.getQRImageUrl('A')).toContain('size=200x200')
   })
-
-  it('readQRFromImage devuelve el contenido leído', async () => {
-    stub(() => json(200, [{ symbol: [{ data: 'EST001', error: null }] }]))
-
-    expect(await q.readQRFromImage(new Blob(['x']))).toBe('EST001')
-  })
-
-  it('readQRFromImage devuelve null si no hay símbolo o trae error', async () => {
-    stub(() => json(200, [{ symbol: [{ data: null, error: 'could not find QR code' }] }]))
-    expect(await q.readQRFromImage(new Blob(['x']))).toBeNull()
-
-    stub(() => json(200, []))
-    expect(await q.readQRFromImage(new Blob(['x']))).toBeNull()
-  })
-
-  it('readQRFromImage lanza si el servicio externo falla', async () => {
-    stub(() => json(500, {}))
-
-    await expect(q.readQRFromImage(new Blob(['x']))).rejects.toThrow('Error al contactar la API de lectura QR')
-  })
+  // La lectura del QR (DEF-WEB-16) se prueba en tests/qrLectura.test.ts.
 })

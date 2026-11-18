@@ -2,7 +2,8 @@
 // respuestas. Antes no había ninguna (ni CSP, ni HSTS, ni anti-clickjacking).
 //
 // La CSP permite solo lo que la web usa: Google Fonts (iconos y tipografías),
-// el reproductor de YouTube de la portada y api.qrserver.com (lectura de QR).
+// el reproductor de YouTube de la portada y api.qrserver.com (solo las imágenes
+// de los QR; la lectura se hace en el navegador desde DEF-WEB-16).
 // Next inyecta scripts y estilos en línea, por eso 'unsafe-inline' en script-src
 // y style-src; sin nonces es lo que se puede exigir sin romper la hidratación.
 // En desarrollo (`next dev`) no se aplica: Fast Refresh necesita 'unsafe-eval'.
@@ -24,7 +25,7 @@ export const CSP = [
   // Sin comodín «https:» (alerta de ZAP): solo la API y el generador de QR.
   `img-src 'self' data: blob: https://api.qrserver.com ${origenApi()}`.trim(),
   "media-src 'self' blob:",
-  "connect-src 'self' https://api.qrserver.com",
+  "connect-src 'self'",
   'frame-src https://www.youtube.com https://www.youtube-nocookie.com',
   "frame-ancestors 'none'",
   "base-uri 'self'",
