@@ -77,6 +77,19 @@ describe('useEscanear', () => {
     expect(result.current.recentScans).toHaveLength(1)
   })
 
+  it('si registrar falla, avisa y deja cancelar para volver a escanear', async () => {
+    m.leer.mockResolvedValue('SYN0101')
+    m.buscar.mockResolvedValue(ANA)
+    m.crear.mockRejectedValue(new Error('fetch failed'))
+    const { result } = await escanear()
+
+    await act(() => result.current.confirmRegistration('salida'))
+    expect(result.current).toMatchObject({ status: 'error', errorMsg: 'Error al registrar la asistencia, intente nuevamente' })
+
+    act(() => result.current.cancelPending())
+    expect(result.current).toMatchObject({ status: 'idle', pending: null, errorMsg: null })
+  })
+
   it('una segunda entrada el mismo día se bloquea (CP-SIS-034)', async () => {
     m.leer.mockResolvedValue('SYN0101')
     m.buscar.mockResolvedValue(ANA)
