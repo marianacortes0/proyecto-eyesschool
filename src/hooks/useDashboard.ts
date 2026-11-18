@@ -45,7 +45,7 @@ export const useDashboard = () => {
       }
     };
 
-    fetchData();
+    void fetchData();
   }, []);
 
   return { stats, estudiantesPorCurso, usuariosPorRol, promedioPorMateria, loading };

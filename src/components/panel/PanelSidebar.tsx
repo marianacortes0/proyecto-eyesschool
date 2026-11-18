@@ -20,7 +20,7 @@ export default function PanelSidebar() {
       confirmText: 'Cerrar sesión',
       danger: false,
     });
-    if (ok) signOut();
+    if (ok) void signOut();
   };
 
   // Los enlaces salen de la misma tabla que usa el proxy para proteger las rutas.

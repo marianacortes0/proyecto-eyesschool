@@ -17,6 +17,7 @@ import { notifySuccess, notifyError, notifyWarning } from '@/lib/toast'
 import { getErrorMessage } from '@/lib/errors'
 
 import { hoyColegio } from '@/lib/utils/fecha'
+import { porTexto } from '@/lib/utils/orden'
 type Props = {
   cursos: CursoOption[]
   estudiantes: EstudianteSelector[]
@@ -58,7 +59,7 @@ export default function RegistroMasivo({ cursos, estudiantes, idUsuarioRegistrad
   const [duplicados, setDuplicados] = useState<number[]>([])
 
   const jornadas = useMemo(
-    () => [...new Set(cursos.map((c) => c.jornada).filter((j): j is string => !!j))].sort(),
+    () => [...new Set(cursos.map((c) => c.jornada).filter((j): j is string => !!j))].sort(porTexto),
     [cursos]
   )
   const cursosDeJornada = useMemo(

@@ -7,6 +7,7 @@ import { type CreateRegistroData, type UpdateRegistroData } from '@/services/asi
 import { getErrorMessage } from '@/lib/errors'
 
 import { hoyColegio } from '@/lib/utils/fecha'
+import { porTexto } from '@/lib/utils/orden'
 type Props = {
   mode: ModalMode
   registro: RegistroAsistencia | null
@@ -54,7 +55,7 @@ export default function AsistenciaModal({
         seen.add(j)
       }
     }
-    return [...seen].sort()
+    return [...seen].sort(porTexto)
   }, [estudiantes])
 
   const cursosDeJornada = useMemo(() => {
@@ -69,7 +70,7 @@ export default function AsistenciaModal({
         result.push(e.curso)
       }
     }
-    return result.sort()
+    return result.sort(porTexto)
   }, [estudiantes, jornadaSeleccionada])
 
   const estudiantesFiltrados = useMemo(
