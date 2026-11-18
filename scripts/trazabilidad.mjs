@@ -58,10 +58,15 @@ for (const ruta of archivosExtra) {
 // ── Casos de sistema (PR-06): JUnit de Playwright ─────────────────────────────
 // WC-08: el ID sale del nombre del test («CP-SIS-058 y 059 · …») o, en los specs
 // anteriores a WC-05, del mapa casosSistema. Archivo: TRAZA_E2E o el último JUnit.
-const junit = process.env.TRAZA_E2E ?? 'evidencias/PR-06/web/e2e.xml'
-const sistema = []
-if (existsSync(junit)) {
-  const xml = readFileSync(junit, 'utf-8')
+// TRAZA_E2E admite varias corridas separadas por coma, de la más vieja a la más
+// nueva: para el mismo caso y navegador manda la última (p. ej. la corrida
+// completa y después la repetición de unos specs). Cada fila dice su corrida.
+const junits = (process.env.TRAZA_E2E ?? 'evidencias/PR-06/web/e2e.xml').split(',').map((f) => f.trim()).filter(Boolean)
+const junit = junits.join('`, `')
+const porCaso = new Map()
+for (const archivo of junits.filter((f) => existsSync(f))) {
+  const corrida = archivo.split('/').pop().replace(/\.xml$/, '')
+  const xml = readFileSync(archivo, 'utf-8')
   const attr = (tag, nombre) => (tag.match(new RegExp(nombre + '="([^"]*)"')) ?? [])[1] ?? ''
   const des = (t) => t.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
   for (const suite of xml.split('<testsuite ').slice(1)) {
@@ -77,10 +82,11 @@ if (existsSync(junit)) {
       const ids = m
         ? [m[1], ...(m[2].match(/\d{3}/g) ?? [])].map((n) => 'CP-SIS-' + n).join(', ')
         : mapa.casosSistema?.[spec] ?? nombre.match(/DEF-WEB-\d+|WC-06|CP-NF-\d+/)?.[0] ?? '—'
-      sistema.push({ ids, spec, navegador, nombre, resultado })
+      porCaso.set(`${spec}|${navegador}|${nombre}`, { ids, spec, navegador, nombre, resultado, corrida })
     }
   }
 }
+const sistema = [...porCaso.values()]
 
 const cuenta = (lista) => `${lista.filter((f) => f.estado === 'Sí').length} de ${lista.length} pasan`
 const unit = planeadas('UT-WEB')
@@ -120,11 +126,11 @@ ${tabla(it)}
 
 ## Casos de sistema E2E (PR-06)
 
-${sistema.length ? 'Del JUnit de Playwright `' + junit + '`.' : 'No había JUnit de Playwright al generar este archivo.'}
+${sistema.length ? 'De los JUnit de Playwright `' + junit + '`' + (junits.length > 1 ? ' (para el mismo caso y navegador manda la corrida más nueva).' : '.') : 'No había JUnit de Playwright al generar este archivo.'}
 
-| CP-SIS | Spec | Navegador | Caso | Pasa |
-|---|---|---|---|---|
-${sistema.map((f) => '| ' + f.ids + ' | `e2e/' + f.spec + '` | ' + f.navegador + ' | ' + celda(f.nombre) + ' | ' + f.resultado + ' |').join('\n')}
+| CP-SIS | Spec | Navegador | Caso | Pasa | Corrida |
+|---|---|---|---|---|---|
+${sistema.map((f) => '| ' + f.ids + ' | `e2e/' + f.spec + '` | ' + f.navegador + ' | ' + celda(f.nombre) + ' | ' + f.resultado + ' | ' + f.corrida + ' |').join('\n')}
 `
 
 mkdirSync('docs', { recursive: true })

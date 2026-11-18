@@ -18,6 +18,8 @@ Meta: **≥ 90** en rendimiento, accesibilidad, buenas prácticas y SEO.
 
 Valores «escritorio / móvil». Ejecutado con `node scripts/lighthouse.mjs <base> evidencias/PR-06/web/manuales/lighthouse` (Lighthouse 12.8.2). Cómo, a mano: Chrome → DevTools → Lighthouse, modo «Navegación», dispositivo Escritorio y luego Móvil. Guardar el informe en HTML.
 
+**Después de DEF-WEB-17 (17/11/2026, noche; fuente de iconos con solo los usados):** rendimiento escritorio / móvil `/` 69 / 43 · `/home/beneficios` 98 / 78 · `/admin` 88 / 70 · `/general` docente 82 / 41 · estudiante 83 / 69 · padre 85 / 67 · `/notas` padre 92 / 80. Las demás categorías siguen ≥ 93. **Sigue sin cumplir** el rendimiento (ver `docs/defectos/DEF-WEB-17.md`). Evidencia: `manuales/lighthouse-def17/`.
+
 ## 2. axe DevTools
 
 Meta: **0 violaciones serias o críticas**.
@@ -48,7 +50,7 @@ Ejecutado sin Docker con ZAP 2.17.0 en modo daemon y `node scripts/zap-baseline.
 | Paso | Resultado esperado | Fecha | Ejecutó | Resultado | Evidencia |
 |---|---|---|---|---|---|
 | Docente abre `/qr/escanear` en Chrome móvil y concede la cámara | Se ve la vista de la cámara | 17/11/2026 | QA (cámara falsa de Chromium, no un teléfono) | Cumple | `e2e/qr-camara.spec.ts` |
-| Apunta al QR de un estudiante | Se registra la asistencia con su nombre | 17/11/2026 | QA (cámara falsa) | **FALLA** · DEF-WEB-16: el servicio externo de lectura rechaza las imágenes | `e2e/qr-camara.spec.ts` |
+| Apunta al QR de un estudiante | Se registra la asistencia con su nombre | 17/11/2026 | QA (cámara falsa) | **Cumple** en E27, tras corregir DEF-WEB-16 y DEF-WEB-18 (en E25 fallaba: el servicio externo rechazaba las imágenes) | `e2e/qr-camara.spec.ts`, `E27_qr-camara-jsqr.xml` |
 | Niega el permiso de cámara | Mensaje claro, sin pantalla en blanco | 17/11/2026 | QA (automatizado) | Cumple: «No se pudo acceder a la cámara. Verifica los permisos del navegador.» | `e2e/wc06-manuales.spec.ts` |
 
 ## 5. API caída

@@ -28,6 +28,12 @@ Mariana autorizó `jsqr` y pidió corregir las fallas y el Quality Gate de Sonar
 | Quality Gate del PR #34 | **Failed** en `c17924c`: confiabilidad C y cobertura nueva 72,7 % | **Passed** en `d261b17`: cobertura nueva **80,7 %**; confiabilidad, seguridad y mantenibilidad **A**; duplicación 0,1 %; *hotspots* revisados 100 % | SonarCloud, PR #34 |
 | Unitarias y de componentes | 385 | **435/435** en 57 archivos | `npx vitest run` |
 | `npm audit --omit=dev` | 0 | **0** (con `jsqr`) | — |
+| E2E, juntando E25 + E26 + E27 + E28 | 178 pasan · 3 fallan · 34 omitidas (E25) | **236 ejecuciones → 202 pasan · 0 fallan · 34 omitidas** (todas con motivo en el spec) | `docs/trazabilidad-ut-web.md` |
+| Trazabilidad | 385 pruebas mapeadas, E2E de E25 | **445 pruebas** (130 UT, 291 extra, 24 IT) **y 236 E2E**; cada E2E dice de qué corrida sale | `docs/trazabilidad-ut-web.md` |
+
+**Ojo con el E2E acumulado:** junta cuatro corridas (para el mismo caso y navegador manda la más nueva). La planeación de cierre pide que un caso esté verde **en una corrida completa**, así que CP-SIS-032 a 036 y la guarda de iconos son APROBADO en sus corridas (E27, E28), pero **falta una corrida completa** que los incluya, idealmente en QA cuando vuelva Netlify. `scripts/trazabilidad.mjs` ahora acepta varias corridas: `TRAZA_E2E=E25…,E26…,E27…,E28… npm run trazabilidad`.
+
+**Casos por estado, juntando las corridas** (un caso = un `test()`): de los 108 de E25, **106 APROBADO y 2 OMITIDO**. Las 3 fallas de E25 pasan en E26 y E27, y CP-SIS-035/036, que en E25 no llegaron a correr, pasan en E27. Siguen omitidos CP-SIS-016 y 018, que esperan el buzón de QA (BC-12). E28 suma 10 casos (iconos), todos APROBADO.
 
 ### 0B.2 Defectos
 
@@ -47,19 +53,26 @@ En `c17924c` fallaban dos condiciones:
 
 Queda **1 code smell** (no afecta al gate, que exige mantenibilidad A): `tabIndex` en la lista «Registro del día» del escáner (`QRScannerView.tsx:395`). Está a propósito: axe exige que una región con desplazamiento se pueda recorrer con teclado (`scrollable-region-focusable`, WC-06). No se marcó como falso positivo.
 
-### 0B.4 Notas de entorno
+### 0B.4 Seguridad de las evidencias
+
+- Revisados `evidencias/`, `docs/`, `e2e/`, `tests/`, `scripts/` y `src/`: **0 apariciones de `QA_PASSWORD`, 0 JWT y 0 cookies de sesión sin redactar**. Los 14 informes nuevos de Lighthouse tienen las cuatro cookies como `[redactado]`.
+- **Las capturas de error de Playwright** (`test-results/*/error-context.md`) guardan en texto plano lo escrito en el campo de contraseña: esa carpeta está en `.gitignore`, nunca se versionó y se borró al terminar. La contraseña de QA apareció, sin embargo, en la salida local de una consulta durante esta sesión de trabajo. Refuerza la acción pendiente de **rotar `QA_PASSWORD`** (backend).
+
+### 0B.5 Notas de entorno
 
 - El equipo tenía 1,4–1,8 GB de memoria libre, y `next build` con Turbopack se cayó tres veces («Node.js subprocess crashed», también sin los cambios de hoy). Los builds locales se hicieron con `next build --webpack`. El CI y Netlify usan Turbopack y compilan bien.
 - El CI de `d2159ea` falló por una directiva `eslint-disable` que sobraba en `src/app/layout.tsx`: se quitó en `6f11d54`, y las excepciones de ESLint bajan de 25 a 24.
 - La API de QA tuvo picos de lentitud: el login dio «El servidor no respondió a tiempo» en E27 y en una corrida de E28. Al repetirlas pasaron. Medido al cierre, el login tarda 2–5 s.
 
-### 0B.5 Lo que necesita a otra persona
+### 0B.6 Lo que necesita a otra persona
 
 | Qué | Quién |
 |---|---|
 | **Reactivar el sitio de QA en Netlify** (sigue pausado) y repetir la corrida completa allí | Dueño de la cuenta de Netlify |
 | Decidir qué hacer con el video de la portada (3,9 MB) para DEF-WEB-17 | Equipo / PO |
 | Filtro `codigo_estudiante` o ruta por código en la API (opcional; la web ya no lo necesita) | Backend |
+| Rotar `QA_PASSWORD` (ya pendiente; ver 0B.4) | Backend |
+| Corrida E2E completa que incluya los casos de cámara e iconos | QA, al reactivar Netlify |
 | Lo demás de la sección 0A.10 sigue igual | — |
 
 ---
@@ -76,7 +89,7 @@ Continuación de la planeación de cierre: casos de sistema que faltaban (WC-05)
 
 **E2E de cierre E25** (17/11, 20:34 → 21:40 UTC, 1,1 h; build local con todos los cambios de esta sección, `8b2e335`): **216 ejecuciones → 178 pasan · 3 fallan · 34 omitidas · 1 no corrió**.
 
-- **2 fallas reales: DEF-WEB-16** (CP-SIS-032/034 y 033, cámara). CP-SIS-035/036 no llegaron a correr: el spec de cámara es en serie y se corta tras la primera falla.
+- **2 fallas reales: DEF-WEB-16** (CP-SIS-032/034 y 033, cámara). CP-SIS-035/036 no llegaron a correr: el spec de cámara es en serie y se corta tras la primera falla. → **Después: DEF-WEB-16 corregido; los cinco casos pasan en E27 (sección 0B).**
 - **1 falla de la limpieza, no del caso:** CP-SIS-028 en Firefox. Su `afterAll` usó un token de admin vencido (30 min). En **E26** (usuarios, Firefox, tras renovar el token ante un 401): **9/9**.
 - **34 omitidas**, todas con motivo escrito en el spec:
   - Firefox no corre los casos de cámara, axe, *responsive* ni cookies (son solo de Chromium).
@@ -84,13 +97,13 @@ Continuación de la planeación de cierre: casos de sistema que faltaban (WC-05)
   - Los «a escala» corren una vez por navegador.
 - **Antes:** E23 (19:11 → 20:31 UTC) dio 159 pasan y 19 fallan. Casi todos los fallos venían de una carrera de *keep-alive* entre el `fetch` de Next y `scripts/api-fallas.mjs` («other side closed»), un problema del arnés y no de la app; el proxy ahora responde con `Connection: close`. El resto: 2 de cámara (DEF-WEB-16) y un contraste que dependía de los datos (corregido).
 
-**Defectos:** 10 nuevos (DEF-WEB-08 a 17). **8 corregidos** con pruebas que fallaban antes y verificados en local; 2 esperan una decisión (DEF-WEB-09 del PO, DEF-WEB-16 la dependencia `jsqr`), y DEF-WEB-17 tiene la corrección propuesta.
+**Defectos:** 10 nuevos (DEF-WEB-08 a 17). **8 corregidos** con pruebas que fallaban antes y verificados en local; 2 esperan una decisión (DEF-WEB-09 del PO, DEF-WEB-16 la dependencia `jsqr`), y DEF-WEB-17 tiene la corrección propuesta. → **Después (0B):** DEF-WEB-16 corregido, DEF-WEB-18 nuevo y corregido, DEF-WEB-17 en curso; solo DEF-WEB-09 espera una decisión.
 
-**Unitarias U7:** 385/385. **Integración I5:** 10/10. **gitleaks:** 0 hallazgos nuevos. **npm audit:** 0.
+**Unitarias U7:** 385/385 (435/435 tras la sección 0B). **Integración I5:** 10/10. **gitleaks:** 0 hallazgos nuevos. **npm audit:** 0.
 
 ### 0A.2 Defectos nuevos (DEF-WEB-08 a 17)
 
-Diez defectos nuevos, todos encontrados al automatizar los casos de sistema o al correr las pruebas no funcionales. **Ocho están corregidos**, cada uno con pruebas que fallaban antes; dos esperan una decisión.
+Diez defectos nuevos, todos encontrados al automatizar los casos de sistema o al correr las pruebas no funcionales. **Ocho están corregidos**, cada uno con pruebas que fallaban antes; dos esperan una decisión. (Estado al cierre de la tarde; el de la noche y DEF-WEB-18 están en la **0B.2**.)
 
 | ID | Defecto | Sev. | Caso | Estado | Corrección |
 |---|---|---|---|---|---|
@@ -102,8 +115,8 @@ Diez defectos nuevos, todos encontrados al automatizar los casos de sistema o al
 | DEF-WEB-13 | El historial de novedades **no estaba ordenado** por fecha | Baja | CP-SIS-049 | Corregido (local) | `porFechaReciente` |
 | DEF-WEB-14 | El docente veía en `/horarios` los bloques de **todos** los profesores | Media | CP-SIS-059 | Corregido (local) | Filtro por sus asignaciones, en el servidor |
 | DEF-WEB-15 | El padre sin hijos no veía «No hay estudiantes vinculados»; en `/asistencia`, un **error falso** | Baja | CP-SIS-061 | Corregido (local) | `MSG_SIN_HIJOS` en las vistas |
-| DEF-WEB-16 | **El escaneo QR de la web no funciona**: el servicio externo de lectura rechaza las imágenes (400) | **Alta** | CP-SIS-032–036 | **Nuevo · falta autorizar `jsqr`** | Decodificar en el navegador con `jsqr` (propuesta lista) |
-| DEF-WEB-17 | Rendimiento Lighthouse 33–96: la fuente de iconos pesa **1–3,9 MB** | Media | CP-NF-005 | Nuevo | Subconjunto de iconos (`icon_names=`); exige revisión visual |
+| DEF-WEB-16 | **El escaneo QR de la web no funciona**: el servicio externo de lectura rechaza las imágenes (400) | **Alta** | CP-SIS-032–036 | **Corregido (local)** en la noche (0B) | Lectura en el navegador con `jsqr`; E27 8/8 |
+| DEF-WEB-17 | Rendimiento Lighthouse 33–96: la fuente de iconos pesa **1–3,9 MB** | Media | CP-NF-005 | **En curso** (0B) | Fuente con `icon_names=` (3.934 → 173 KB) y guardas de iconos; el rendimiento aún no llega a 90 |
 
 «Corregido (local)»: verificado con su E2E contra el build local; queda **En verificación** hasta repetirlo en QA. Fichas en `docs/defectos/DEF-WEB-08.md` a `DEF-WEB-17.md`; todos en `docs/defectos/registro.json`, que crea los issues al fusionar.
 
@@ -229,7 +242,7 @@ Resultado de **E25** caso por caso, generado desde `evidencias/PR-06/web/E25_e2e
 | CP-NF-013 | CP-NF-013 · eys_access y eys_refresh son HttpOnly y Secure; eys_user no lleva el token | `wc06-seguridad.spec.ts` | ok | ok | **APROBADO** |
 | WC-06 | WC-06 · las respuestas traen CSP, anti-clickjacking, nosniff, Referrer-Policy, Permissions-Policy y HSTS | `wc06-seguridad.spec.ts` | ok | ok | **APROBADO** |
 
-**Conteo de casos** (un caso = un `test()`; puede cubrir varios CP-SIS): **102 APROBADO · 3 FALLA · 3 OMITIDO** de 108. Las 3 fallas: dos de cámara (DEF-WEB-16) y CP-SIS-028 en Firefox (la limpieza, aprobado en E26).
+**Conteo de casos** (un caso = un `test()`; puede cubrir varios CP-SIS): **102 APROBADO · 3 FALLA · 3 OMITIDO** de 108. Las 3 fallas: dos de cámara (DEF-WEB-16) y CP-SIS-028 en Firefox (la limpieza, aprobado en E26). → Juntando E26 y E27: **106 APROBADO · 0 FALLA · 2 OMITIDO** (0B.1).
 
 **Lo que no se automatizó, con su motivo:**
 
@@ -237,7 +250,7 @@ Resultado de **E25** caso por caso, generado desde `evidencias/PR-06/web/E25_e2e
 |---|---|---|
 | 016, 018 | Necesitan abrir el enlace que llega al correo | Buzón de QA (planeación del backend, BC-12) |
 | 030 | QR de la web leído desde la app | Planeación móvil (MC-05) |
-| 032 a 036 | Automatizados con la cámara falsa de Chromium, pero **FALLAN por DEF-WEB-16** | Autorizar `jsqr` y repetir |
+| 032 a 036 | Automatizados con la cámara falsa de Chromium; fallaban por DEF-WEB-16 y **pasan en E27** tras corregirlo (0B) | Incluirlos en la próxima corrida completa |
 
 **Oráculos adaptados (D-WEB-17), con su causa:**
 
@@ -262,7 +275,7 @@ Todas automatizadas y reproducibles con un comando; evidencias en `evidencias/PR
 | 2 · axe, las 6 pantallas del documento | **0 serias y 0 críticas**, después de corregir nombres y contrastes | `axe-*.json`; `e2e/wc06-accesibilidad.spec.ts` |
 | 3 · ZAP (araña + pasivo, sin escaneo activo ni envío de formularios) | **0 altas**, 0 bajas y 4 medias documentadas: `unsafe-inline` en script-src y style-src (Next lo necesita sin nonces), SRI en Google Fonts (su CSS es dinámico) y anti-CSRF (las Server Actions validan el `Origin`) | `zap-baseline.html`, `zap-baseline-alertas.json`; `scripts/zap-baseline.mjs` |
 | 3 · Cabeceras y cookies (CP-NF-013) | `eys_access` y `eys_refresh` **HttpOnly, Secure y SameSite=Lax**; CSP y demás cabeceras presentes | `e2e/wc06-seguridad.spec.ts` |
-| 4 · Cámara QR | Con la cámara falsa de Chromium: **FALLA** (DEF-WEB-16). Permiso negado: **Cumple**: «No se pudo acceder a la cámara. Verifica los permisos del navegador.» (E25) | `e2e/qr-camara*.spec.ts`, `e2e/wc06-manuales.spec.ts` |
+| 4 · Cámara QR | Con la cámara falsa de Chromium: **FALLA** en E25 (DEF-WEB-16); **Cumple en E27**, tras corregirlo (0B). Permiso negado: **Cumple**: «No se pudo acceder a la cámara. Verifica los permisos del navegador.» (E25) | `e2e/qr-camara*.spec.ts`, `e2e/wc06-manuales.spec.ts` |
 | 5 · API caída | Login (CP-SIS-005), inicio (008), `/notas` y demás pantallas con aviso y «Reintentar». Boletín con la API caída: **Cumple**: aviso y ningún archivo descargado (E25) | specs de cada módulo |
 | 6 · Brave 157 | Login, recarga y boletín: **3/3 OK**, con los escudos **por defecto** (el nivel «Agresivo» no se puede fijar por línea de comandos) | `brave.json`; `scripts/brave.mjs` |
 | 7 · Sesión de 40 min (alternativa C) | No se corrió en tiempo real: CP-SIS-065 a escala la reemplaza (E23) | — |
@@ -271,7 +284,7 @@ Todas automatizadas y reproducibles con un comando; evidencias en `evidencias/PR
 **Observaciones (no son defectos):**
 
 - La descarga del boletín guarda el archivo como `boletin_Santiago_L_pez.pdf`: la «ó» se pierde en el nombre.
-- Las imágenes de QR del estudiante y del admin salen de `api.qrserver.com`: el código del estudiante viaja a un tercero, y si ese servicio falla, la imagen no carga (ver DEF-WEB-16).
+- Las imágenes de QR del estudiante y del admin salen de `api.qrserver.com`: el código del estudiante viaja a un tercero, y si ese servicio falla, la imagen no carga. Desde DEF-WEB-16 la **lectura** ya no sale de la web; la **generación** de las imágenes sigue igual (la web ya tiene `qrcode.react` para hacerla localmente).
 
 ### 0A.5 WC-07 · Análisis estático
 
@@ -309,7 +322,7 @@ Ensayo de QA de los **14 escenarios que solo existen en la web**, con las reglas
 | 035 | Otro usuario intenta ver mi QR | CP-SIS-031 | **Aceptado** |
 | 093 | Registrar un reporte de asistencia | CP-SIS-056 | **Aceptado** |
 
-**11 Aceptado y 3 Aceptado con observación; 0 Rechazado.** Ninguno queda para corregir antes de la sesión, salvo la decisión del PO sobre DEF-WEB-09. Fuera de estos 14, el escaneo QR de la web (escenarios compartidos con la app) está **Rechazado** por DEF-WEB-16.
+**11 Aceptado y 3 Aceptado con observación; 0 Rechazado.** Ninguno queda para corregir antes de la sesión, salvo la decisión del PO sobre DEF-WEB-09. Fuera de estos 14, el escaneo QR de la web (escenarios compartidos con la app) estaba **Rechazado** por DEF-WEB-16; tras corregirlo (y DEF-WEB-18), pasa en E27 y queda para el ensayo con el PO.
 
 La sesión con el PO (S10), las tareas medidas por rol y el SUS con participantes reales **no se hicieron**: las convoca Samuel y las ejecuta el PO.
 
@@ -344,7 +357,7 @@ Solo lectura; producción (`https://proyecto-eyesschool.vercel.app`) sirve el c�
 
 | Qué | Quién | Por qué |
 |---|---|---|
-| Autorizar la dependencia `jsqr` (y `qrcode` para la prueba) | Mariana / equipo | Corrige DEF-WEB-16 (Alta): sin eso, el escaneo QR de la web no funciona |
+| ~~Autorizar la dependencia `jsqr` (y `qrcode` para la prueba)~~ | Mariana / equipo | **Hecho** el 17/11 por la noche: DEF-WEB-16 corregido (0B) |
 | Reactivar el sitio de QA en Netlify | Dueño de la cuenta | Repetir E23 en QA y verificar los defectos «Corregido (local)» |
 | Decidir DEF-WEB-09 (¿se edita el correo?) | PO (Sergio Gómez) | Cambia CP-SIS-022 y 023 |
 | Aprobar el PR #34 | Samuel Sierra | WC-01: issues, `develop` en QA, Sonar de la rama |
