@@ -16,21 +16,31 @@ import { camara, videoDeQR } from './camara'
 
 const CODIGO = process.env.E2E_QR_CODIGO_VALIDO ?? ''
 
-type Registro = { id_asistencia: number; id_estudiante: number; tipo: string | null; observacion: string | null; activo?: boolean }
+type Registro = { id_asistencia: number; id_estudiante: number; fecha: string; tipo: string | null; observacion: string | null; activo?: boolean }
+
+// La API ignora `fecha` en /estudiantes/{id}/asistencia y devuelve todo el
+// historial (E27): los registros de hoy se filtran aquí.
+async function registrosDeHoy(): Promise<Registro[]> {
+  const todos = await apiQA<Registro[]>(`/estudiantes/${idEstudiante}/asistencia?limit=200`)
+  return todos.filter((r) => r.fecha === hoy() && r.activo !== false)
+}
 let idEstudiante = 0
 
 test.beforeAll(async ({ browserName }) => {
   test.skip(browserName !== 'chromium', 'La cámara falsa con archivo solo existe en Chromium')
   requiere('E2E_QR_CODIGO_VALIDO')
   await videoDeQR(CODIGO, 'valido.mjpeg')
-  const [est] = await apiQA<{ id_estudiante: number }[]>(`/estudiantes?codigo_estudiante=${encodeURIComponent(CODIGO)}&limit=1`)
+  // La API no filtra por código (DEF-WEB-18): se busca el exacto en la lista.
+  const todos = await apiQA<{ id_estudiante: number; codigo_estudiante: string }[]>('/estudiantes?limit=500')
+  const est = todos.find((e) => e.codigo_estudiante === CODIGO)
+  if (!est) throw new Error(`No existe un estudiante con el código ${CODIGO} en QA`)
   idEstudiante = est.id_estudiante
 })
 
 test.afterAll(async () => {
   if (!idEstudiante) return
-  const registros = await apiQA<Registro[]>(`/estudiantes/${idEstudiante}/asistencia?fecha=${hoy()}&limit=50`)
-  for (const r of registros.filter((r) => (r.observacion ?? '').startsWith('Registro por QR'))) await borrarQA(`/asistencia/${r.id_asistencia}`)
+  // Solo lo de hoy creado por el escáner: nunca registros de otros días.
+  for (const r of (await registrosDeHoy()).filter((r) => (r.observacion ?? '').startsWith('Registro por QR'))) await borrarQA(`/asistencia/${r.id_asistencia}`)
 })
 
 async function escanear(page: Page) {
@@ -56,7 +66,7 @@ test.describe('con un QR de estudiante', () => {
     await page.getByRole('button', { name: 'Registrar Entrada' }).click()
     await expect(page.getByText(/Entrada registrada: \d{1,2}:\d{2}/).first()).toBeVisible({ timeout: 30_000 })
 
-    const tras = (await apiQA<Registro[]>(`/estudiantes/${idEstudiante}/asistencia?fecha=${hoy()}&limit=50`)).filter((r) => r.activo !== false)
+    const tras = await registrosDeHoy()
     expect(tras.filter((r) => r.tipo === 'entrada')).toHaveLength(1)
 
     // Segunda lectura (pasado el antirrebote de 5 s): entrada otra vez → bloqueada.
@@ -64,7 +74,7 @@ test.describe('con un QR de estudiante', () => {
     await escanear(page)
     await page.getByRole('button', { name: 'Registrar Entrada' }).click()
     await expect(page.getByText('El estudiante ya tiene registro de entrada hoy').first()).toBeVisible({ timeout: 30_000 })
-    const despues = (await apiQA<Registro[]>(`/estudiantes/${idEstudiante}/asistencia?fecha=${hoy()}&limit=50`)).filter((r) => r.activo !== false)
+    const despues = await registrosDeHoy()
     expect(despues.filter((r) => r.tipo === 'entrada')).toHaveLength(1)
   })
 
@@ -81,7 +91,7 @@ test.describe('con un QR de estudiante', () => {
     await page.getByRole('button', { name: /Salida$/ }).first().click()
     await page.getByRole('button', { name: 'Registrar Salida' }).click()
     await expect(page.getByText('El estudiante ya tiene registro de salida hoy').first()).toBeVisible({ timeout: 30_000 })
-    const regs = (await apiQA<Registro[]>(`/estudiantes/${idEstudiante}/asistencia?fecha=${hoy()}&limit=50`)).filter((r) => r.activo !== false)
+    const regs = await registrosDeHoy()
     expect(regs.filter((r) => r.tipo === 'salida')).toHaveLength(1)
   })
 })
