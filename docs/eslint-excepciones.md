@@ -1,6 +1,6 @@
 # Excepciones de ESLint
 
-Generado con `grep -rn "eslint-disable" src`. 25 excepciones; cada una con su motivo en la propia línea (D-WEB-06).
+Generado con `grep -rn "eslint-disable" src`. 24 excepciones (la 5 se quitó el 17/11); cada una con su motivo en la propia línea (D-WEB-06).
 
 | # | Archivo y línea | Regla | Motivo | Decisión |
 |---|---|---|---|---|
@@ -8,7 +8,7 @@ Generado con `grep -rn "eslint-disable" src`. 25 excepciones; cada una con su mo
 | 2 | `src/app/(dashboard)/perfil/PerfilClient.tsx:427` | `@next/next/no-img-element` | imagen dinámica de origen externo (QR de goqr.me o avatar de la API); next/image exigiría configurar dominios remotos | Se deja. La imagen es el QR de un servicio externo o el avatar que sirve la API (origen variable); `next/image` exigiría fijar `remotePatterns` y no aporta optimización en un QR. |
 | 3 | `src/app/(dashboard)/qr/escanear/EscanearClient.tsx:65` | `react-hooks/set-state-in-effect` | carga inicial y recarga de los registros del día desde el servidor | Se deja. Lectura de un valor que solo existe en el navegador (localStorage, cookie, URL) o carga inicial; inicializarlo en el render provoca un hydration mismatch. Pendiente de evaluar `useSyncExternalStore` en una versión con prueba E2E que cubra la hidratación. |
 | 4 | `src/app/(dashboard)/qr/escanear/EscanearClient.tsx:70` | `react-hooks/set-state-in-effect` | carga inicial y recarga de los registros del día desde el servidor | Se deja. Lectura de un valor que solo existe en el navegador (localStorage, cookie, URL) o carga inicial; inicializarlo en el render provoca un hydration mismatch. Pendiente de evaluar `useSyncExternalStore` en una versión con prueba E2E que cubra la hidratación. |
-| 5 | `src/app/layout.tsx:52` | `@next/next/no-page-custom-font` | es el layout raíz del App Router: el link de Material Symbols aplica a todas las páginas | Se deja. Material Symbols es una fuente de iconos con ejes variables; `next/font` no la expone como el CSS de Google Fonts que usa el layout raíz. |
+| 5 | ~~`src/app/layout.tsx:52`~~ | ~~`@next/next/no-page-custom-font`~~ | — | **Quitada el 17/11/2026** (DEF-WEB-17): el `href` sale de `URL_ICONOS` y la regla ya no se dispara. |
 | 6 | `src/components/asistencia/AsistenciaModal.tsx:90` | `react-hooks/set-state-in-effect` | sincroniza el formulario con el registro que se abre en el modal | Se deja. Lectura de un valor que solo existe en el navegador (localStorage, cookie, URL) o carga inicial; inicializarlo en el render provoca un hydration mismatch. Pendiente de evaluar `useSyncExternalStore` en una versión con prueba E2E que cubra la hidratación. |
 | 7 | `src/components/layout/Header.tsx:12` | `react-hooks/set-state-in-effect` | lee el tema guardado en localStorage tras montar (evita hydration mismatch) | Se deja. Lectura de un valor que solo existe en el navegador (localStorage, cookie, URL) o carga inicial; inicializarlo en el render provoca un hydration mismatch. Pendiente de evaluar `useSyncExternalStore` en una versión con prueba E2E que cubra la hidratación. |
 | 8 | `src/components/qr/QRAdminView.tsx:88` | `@next/next/no-img-element` | imagen dinámica de origen externo (QR de goqr.me o avatar de la API); next/image exigiría configurar dominios remotos | Se deja. La imagen es el QR de un servicio externo o el avatar que sirve la API (origen variable); `next/image` exigiría fijar `remotePatterns` y no aporta optimización en un QR. |
@@ -37,7 +37,7 @@ Generado con `grep -rn "eslint-disable" src`. 25 excepciones; cada una con su mo
 | Comprobación | Resultado |
 |---|---|
 | Excepciones en `develop` | 3 (`useDocenteDashboard.ts`, `useEstudianteDashboard.ts`, `usePadreDashboard.ts`, todas `react-hooks/exhaustive-deps`) |
-| Excepciones en esta rama | 25 |
+| Excepciones en esta rama | 24 (la 5 se quitó el 17/11) |
 | Excepciones en archivos **creados** en esta rama (`route.ts` del proxy, `PasswordChecklist.tsx`, `SelectorHijo.tsx`, `cookies.ts`, `decodeRol.ts`, `jwt.ts`, `navItems.ts`, `routeRoles.ts`, `hijoActivo.ts`, `serverFetch.ts`, `FallidosMasivo.tsx`) | **0** |
 
 Las 22 nuevas están todas en archivos que ya existían y aparecen porque el CI pasó a `eslint . --max-warnings=0` (WEB-INF-2): lo que en `develop` eran advertencias de `react-hooks/set-state-in-effect`, `@next/next/no-img-element` y `@next/next/no-page-custom-font` ahora tiene que estar silenciado con su motivo escrito. Por eso no hay nada que corregir por la regla «las que vengan de código nuevo se corrigen»; el refactor de las lecturas del navegador al montar sigue pendiente para después del PR-06.

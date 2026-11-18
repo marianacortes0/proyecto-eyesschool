@@ -41,9 +41,11 @@ async function revisarIconos(page: Page, ruta: string) {
 test.describe('DEF-WEB-17 · iconos con la fuente reducida', () => {
   // Hoy las páginas públicas no usan la fuente (la portada usa emojis): se
   // revisan igual, por si se agrega un icono sin sumarlo a la lista.
-  test('páginas públicas', async ({ page }) => {
-    for (const ruta of PUBLICAS) await revisarIconos(page, ruta)
-  })
+  for (const ruta of PUBLICAS) {
+    test(`página pública ${ruta}`, async ({ page }) => {
+      await revisarIconos(page, ruta)
+    })
+  }
 
   for (const rol of Object.keys(PANEL) as Rol[]) {
     test(`panel del ${rol}`, async ({ page }) => {

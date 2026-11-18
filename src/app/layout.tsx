@@ -50,7 +50,6 @@ export default function RootLayout({
         {/* Material Symbols (icon font): no está en next/font/google, se carga por link y solo con los iconos usados (DEF-WEB-17) */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* eslint-disable-next-line @next/next/no-page-custom-font -- es el layout raíz del App Router: el link de Material Symbols aplica a todas las páginas */}
         <link
           href={URL_ICONOS}
           rel="stylesheet"
