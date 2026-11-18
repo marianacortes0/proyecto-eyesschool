@@ -6,6 +6,7 @@ import PageTransition from "@/components/ui/PageTransition";
 import CookieBanner from "@/components/ui/CookieBanner";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
+import { URL_ICONOS } from "@/lib/iconos";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -46,12 +47,12 @@ export default function RootLayout({
       className={`${poppins.variable} ${hankenGrotesk.variable} ${inter.variable} h-full antialiased`}
     >
       <head>
-        {/* Material Symbols (icon font): no está en next/font/google, se carga por link */}
+        {/* Material Symbols (icon font): no está en next/font/google, se carga por link y solo con los iconos usados (DEF-WEB-17) */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font -- es el layout raíz del App Router: el link de Material Symbols aplica a todas las páginas */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+          href={URL_ICONOS}
           rel="stylesheet"
         />
       </head>

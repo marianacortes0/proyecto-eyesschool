@@ -53,3 +53,4 @@ e2e/.camara/
 
 # Informes JSON de Lighthouse: el HTML y resumen.json bastan como evidencia (6,6 MB menos)
 evidencias/PR-06/web/manuales/lighthouse/*.report.json
+evidencias/PR-06/web/manuales/lighthouse-def17/*.report.json

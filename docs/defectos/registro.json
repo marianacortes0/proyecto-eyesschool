@@ -295,7 +295,7 @@
     "esperado": "Rendimiento ≥ 90 (CP-NF-005).",
     "obtenido": "Rendimiento 33–96; en móvil, FCP ~22,5 s en el panel. La fuente Material Symbols pesa 3.934 KiB.",
     "evidencia": "docs/defectos/DEF-WEB-17.md",
-    "identificado": "17/11/2026", "estado": "nuevo"
+    "identificado": "17/11/2026", "estado": "en-curso"
   },
   {
     "id": "DEF-WEB-18",
