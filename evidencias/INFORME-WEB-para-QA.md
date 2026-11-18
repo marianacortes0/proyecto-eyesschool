@@ -6,9 +6,63 @@
 >
 > Las rutas de evidencia son relativas a la raíz del repositorio. Se abrevian: `U6_*` = `evidencias/PR-04/web/`, `I4_*` = `evidencias/PR-05/web/`, `E3_*` a `E9_*` = `evidencias/PR-06/web/`.
 >
+> **Actualizado el 17/11/2026 por la noche:** ver la **sección 0B** (escaneo QR corregido, DEF-WEB-18 nuevo, fuente de iconos y Quality Gate en Passed). Manda sobre 0A donde no coincidan.
+>
 > **Actualizado el 17/11/2026 por la tarde** con WC-05 a WC-11: ver la **sección 0A** (casos de sistema, defectos DEF-WEB-08 a 17, pruebas manuales, estático, trazabilidad, UAT, producción y cierre). La **sección 0** cubre WC-03 y WC-04 de la mañana. Donde no coincidan, mandan 0A y luego 0 sobre las secciones 3, 5, 9 y 10.
 >
 > **Versión anterior, 11/11/2026 por la tarde.** La base de QA volvió el 10/11 (DEF-WEB-01 cerrado) y se corrieron por primera vez la integración y los 48 E2E. Salieron **14 fallos E2E causados por tres defectos de la web** (DEF-WEB-02, 03 y 04). **Los tres se corrigieron en esta rama y están verificados en QA**: en la corrida E7 y sus repeticiones (E8, E9) hay **0 FALLA**. Queda abierto DEF-WEB-05 (Baja), que no causaba ningún fallo E2E.
+
+---
+
+## 0B. ACTUALIZACIÓN DEL 17/11/2026 (noche) · DEF-WEB-16, DEF-WEB-18, DEF-WEB-17 y Quality Gate
+
+Mariana autorizó `jsqr` y pidió corregir las fallas y el Quality Gate de SonarCloud. Todo corrió contra el **build de producción local**, porque el sitio de QA en Netlify **sigue pausado**: `qaeyesschool.netlify.app` responde 404 y el *deploy preview* 503. Hay que reactivarlo desde la cuenta de Netlify.
+
+### 0B.1 Resultado
+
+| Qué | Antes | Ahora | Evidencia |
+|---|---|---|---|
+| Escaneo QR de la web (CP-SIS-032 a 036) | **FALLA** (DEF-WEB-16) | **APROBADO**: E27, 8/8 (cámara, QR inválido, QR del estudiante, permisos y boletín con la API caída) | `evidencias/PR-06/web/E27_qr-camara-jsqr.xml` |
+| Cualquier QR registraba a EST002 | — (no se veía) | **DEF-WEB-18, nuevo y corregido** | `tests/qrBuscarCodigo.test.ts`, E27 |
+| Fuente de iconos | 3.934 KB | **173 KB**; LCP móvil del panel de ~23,5 s a 4,3–5,2 s | `manuales/lighthouse-def17/`, E28 (20/20) |
+| Quality Gate del PR #34 | **Failed** en `c17924c`: confiabilidad C y cobertura nueva 72,7 % | **Passed** en `d261b17`: cobertura nueva **80,7 %**; confiabilidad, seguridad y mantenibilidad **A**; duplicación 0,1 %; *hotspots* revisados 100 % | SonarCloud, PR #34 |
+| Unitarias y de componentes | 385 | **435/435** en 57 archivos | `npx vitest run` |
+| `npm audit --omit=dev` | 0 | **0** (con `jsqr`) | — |
+
+### 0B.2 Defectos
+
+| ID | Defecto | Sev. | Estado | Corrección |
+|---|---|---|---|---|
+| DEF-WEB-16 | El escaneo QR no funcionaba: `api.qrserver.com` rechaza las imágenes | Alta | **Corregido (local)** | Lectura en el navegador con `jsqr` 1.4.0. Ninguna foto sale a un tercero; la CSP queda en `connect-src 'self'`. 5 pruebas con QR reales generados con `qrcode` |
+| **DEF-WEB-18** | **Cualquier QR, inválido o de otro estudiante, registraba la asistencia de EST002** | **Crítica** | **Corregido (local)** | La web filtraba `/estudiantes` por `codigo_estudiante`, un parámetro que el contrato de la API no tiene; la API lo ignora y la web tomaba el primero. Ahora exige el código exacto, recorriendo la lista por páginas. Apareció en cuanto DEF-WEB-16 dejó leer el QR |
+| DEF-WEB-17 | Rendimiento Lighthouse bajo | Media | **En curso** | Corregida la causa de la fuente (`icon_names=`), con guardas para no dejar iconos rotos. **CP-NF-005 sigue sin cumplirse:** 4 de 14 mediciones ≥ 90. Faltan la respuesta del servidor (3,2 s) y el video de la portada (3,9 MB); ver la ficha |
+
+**Corrección del spec de cámara (D-WEB-17):** `/estudiantes/{id}/asistencia` también ignora `fecha`, así que la prueba filtra los registros de hoy. Su limpieza solo puede borrar registros QR **de hoy**: antes filtraba solo por la observación y podía tocar registros QR reales de otros días; en esta corrida no pasó. QA quedó con **0 registros QR activos** y **110 usuarios**.
+
+### 0B.3 Quality Gate de SonarCloud
+
+En `c17924c` fallaban dos condiciones:
+- **Confiabilidad C:** una promesa sin esperar en `src/hooks/useQR.ts:79`. Se le puso `void`, como en D-WEB-14.
+- **Cobertura del código nuevo 72,7 %, con mínimo 80 %:** se agregaron **pruebas reales** de los caminos de error, con el mensaje que ve la persona y el «Reintentar». **No se excluyó ningún archivo ni se tocó un umbral.** Las pruebas nuevas son `useCargaInicio` (DEF-WEB-08), `getHorariosBootstrapAction` (DEF-WEB-14), `useEscanear`, `useUsuarios` (DEF-WEB-10, CP-SIS-026 y 028), `useNotas` (CP-SIS-046), `useAsistencia` (DEF-WEB-12), `useQR`, `usePagination` y el login con la API caída (CP-SIS-005). Recorrido: 72,7 % (`c17924c`) → 75,8 % (`6f11d54`) → 79,6 % (`1af251e`) → **80,7 % (`d261b17`), Passed**.
+
+Queda **1 code smell** (no afecta al gate, que exige mantenibilidad A): `tabIndex` en la lista «Registro del día» del escáner (`QRScannerView.tsx:395`). Está a propósito: axe exige que una región con desplazamiento se pueda recorrer con teclado (`scrollable-region-focusable`, WC-06). No se marcó como falso positivo.
+
+### 0B.4 Notas de entorno
+
+- El equipo tenía 1,4–1,8 GB de memoria libre, y `next build` con Turbopack se cayó tres veces («Node.js subprocess crashed», también sin los cambios de hoy). Los builds locales se hicieron con `next build --webpack`. El CI y Netlify usan Turbopack y compilan bien.
+- El CI de `d2159ea` falló por una directiva `eslint-disable` que sobraba en `src/app/layout.tsx`: se quitó en `6f11d54`, y las excepciones de ESLint bajan de 25 a 24.
+- La API de QA tuvo picos de lentitud: el login dio «El servidor no respondió a tiempo» en E27 y en una corrida de E28. Al repetirlas pasaron. Medido al cierre, el login tarda 2–5 s.
+
+### 0B.5 Lo que necesita a otra persona
+
+| Qué | Quién |
+|---|---|
+| **Reactivar el sitio de QA en Netlify** (sigue pausado) y repetir la corrida completa allí | Dueño de la cuenta de Netlify |
+| Decidir qué hacer con el video de la portada (3,9 MB) para DEF-WEB-17 | Equipo / PO |
+| Filtro `codigo_estudiante` o ruta por código en la API (opcional; la web ya no lo necesita) | Backend |
+| Lo demás de la sección 0A.10 sigue igual | — |
+
+---
 
 ---
 
