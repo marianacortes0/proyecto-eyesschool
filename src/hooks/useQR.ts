@@ -76,7 +76,7 @@ export function useQR(role: Role | null, initialData?: QRBootstrap) {
       seededRef.current = false
       return
     }
-    fetchAdmin()
+    void fetchAdmin()
   }, [role, fetchAdmin])
 
   // ── Asignar QR ────────────────────────────────────────────────────────────
